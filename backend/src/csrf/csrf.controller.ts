@@ -14,6 +14,7 @@ export class CsrfController {
       secure: true,
       sameSite: 'strict',
     });
+
     // Подтвердить отправку куки иначе не отправиться
     res.send({ guard: csrf });
   }
