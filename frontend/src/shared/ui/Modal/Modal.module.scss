@@ -1,0 +1,65 @@
+.Modal {
+   position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   z-index: 10;
+   opacity: 0;
+   pointer-events: none;
+}
+
+.overlay {
+   height: 100%;
+   width: 100%;
+   background: rgba(247, 210, 45, 0.4);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.opened {
+   opacity: 1;
+   pointer-events: auto;
+
+   .content {
+      transform: scale(1);
+   }
+}
+
+.closing {
+   opacity: 0.7;
+
+   .content {
+      transform: scale(0.9);
+   }
+}
+
+.content {
+   border-radius: 12px;
+   background: #fff;
+   color: var(--color-yellow);
+   padding: 30px 40px;
+   position: relative;
+   transform: scale(0.9);
+   transition: 0.15s transform;
+}
+
+.modalTime {
+   background: var(--color-grey-blue);
+   color: var(--color-grey-blue-dark);
+}
+
+.title {
+   color: inherit;
+}
+
+.close {
+   width: 40px;
+   height: 40px;
+   position: absolute;
+   background: transparent;
+   fill: var(--color-yellow);
+   top: 32px;
+   right: 40px;
+}

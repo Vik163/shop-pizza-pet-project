@@ -1,0 +1,32 @@
+@import '@/app/styles/variables/mixins.scss';
+
+.Navbar {
+   width: 1110px;
+   gap: 60px;
+}
+
+.basket_quantity {
+   display: inline;
+   text-align: end;
+   margin-left: 14px;
+   padding-left: 13px;
+   border-left: 1px solid var(--color-primary);
+}
+
+.links {
+   flex-grow: 1;
+   height: 18px;
+}
+
+.link {
+   @include font(var(--size-15), var(--weight-500), var(--color-primary));
+}
+
+.phoneModal {
+   width: 668px;
+   height: 320px;
+}
+
+.account {
+   fill: var(--color-primary);
+}

@@ -1,0 +1,17 @@
+.Card {
+   cursor: pointer;
+}
+
+.container {
+   gap: 14px;
+}
+
+.image {
+   align-self: start;
+   transition: 0.2s;
+}
+
+.image:hover {
+   transform: translateY(3px);
+   transition: 0.2s;
+}

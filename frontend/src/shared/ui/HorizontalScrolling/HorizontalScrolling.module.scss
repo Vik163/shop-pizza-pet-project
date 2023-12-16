@@ -1,0 +1,102 @@
+@import '../../../app/styles/variables/mixins.scss';
+
+.HorizontalScrolling {
+   display: flex;
+   align-items: center;
+   position: relative;
+   padding: 30px 0;
+}
+
+.curtains {
+   position: absolute;
+   content: '';
+   top: 0;
+   bottom: 0;
+   z-index: 1;
+}
+
+.leftCurtain {
+   background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.6) 95%,
+      rgba(255, 255, 255, 0.5) 97%,
+      transparent
+   );
+}
+
+.rightCurtain {
+   background: linear-gradient(
+      to left,
+      rgba(255, 255, 255, 0.6) 95%,
+      rgba(255, 255, 255, 0.5) 97%,
+      transparent
+   );
+}
+
+.icon {
+   position: absolute;
+   top: calc(50% - 16px);
+   width: 32px;
+   height: 32px;
+   background: #f7d22d;
+   background-image: url('../../assets/icons/arrow.svg');
+   background-repeat: no-repeat;
+   background-position: 55% 55%;
+   border-radius: 50%;
+   border: none;
+   z-index: 3;
+   cursor: pointer;
+}
+
+.iconRightCurtain {
+   left: 60px;
+}
+
+.iconLeftCurtain {
+   right: 60px;
+   transform: rotate(180deg);
+}
+
+.iconBlock {
+   display: flex;
+   justify-content: center;
+   position: absolute;
+   width: 120px;
+   top: 0;
+   z-index: 3;
+   opacity: 0;
+   transition: 0.3s;
+}
+
+.iconBlock:hover {
+   opacity: 1;
+   transition: 0.3s;
+   cursor: pointer;
+}
+
+.iconRight {
+   right: 0;
+}
+
+.iconLeft {
+   left: 0;
+   transform: rotate(180deg);
+}
+.iconInverse {
+   background: #574f51;
+   background-image: url('../../assets/icons/arrow-yellow.svg');
+   background-repeat: no-repeat;
+   background-position: 55% 55%;
+}
+
+.leftHidden {
+   background: linear-gradient(to right, rgb(255, 255, 255) 96%, transparent);
+}
+
+.rightHidden {
+   background: linear-gradient(to left, rgb(255, 255, 255) 96%, transparent);
+}
+
+.hidden {
+   overflow: hidden;
+}

@@ -1,0 +1,145 @@
+.InputWrapper {
+   display: flex;
+   align-items: center;
+   width: 100%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
+}
+
+input[type='number'] {
+   -moz-appearance: textfield;
+}
+
+.buttonRight {
+   &.editActive {
+      color: var(--color-pink);
+   }
+   &.active {
+      color: var(--color-input-active);
+   }
+}
+
+.inputWithButton {
+   position: relative;
+   height: 100%;
+}
+
+.input {
+   background: none;
+   outline: none;
+   height: 100%;
+   padding: 0 19px;
+   border-radius: 8px;
+   letter-spacing: inherit;
+   transition: 0.2s;
+
+   &::placeholder {
+      color: var(--color-input-edit);
+   }
+   &.inputOutline {
+      border: 1px solid var(--color-input-outline);
+   }
+   &.inputClear {
+      border: none;
+   }
+
+   &.active {
+      border: 1px solid blue;
+   }
+
+   &.inActive {
+      cursor: not-allowed;
+      background: var(--color-background-button);
+   }
+
+   &.focused {
+      transition: 0.2s;
+      border: 1px solid var(--color-pink);
+      color: var(--color-primary);
+
+      &::placeholder {
+         color: var(--color-input-edit);
+      }
+
+      &.buttonRight {
+         border: none;
+      }
+   }
+}
+
+.withValue {
+   cursor: not-allowed;
+   cursor: -moz-not-allowed;
+   cursor: -webkit-not-allowed;
+   background: var(--color-background-button);
+   border: none;
+}
+
+.readonly {
+   opacity: 0.7;
+}
+
+.inputEdit {
+   position: absolute;
+   margin-top: auto;
+   margin-bottom: auto;
+   top: 0;
+   bottom: 0;
+   color: var(--color-input-edit);
+   border: none;
+
+   &.editActive {
+      color: var(--color-yellow);
+   }
+}
+
+.switch {
+   opacity: 0;
+}
+
+.checkbox {
+   border-radius: 4px;
+   border: 2px solid var(--color-yellow);
+
+   &.checkedCheckbox {
+      border: 2px solid var(--color-pink);
+   }
+}
+
+.radio {
+   background: content-box var(--color-yellow);
+   border-radius: 50%;
+   border: 2px solid var(--color-yellow);
+   padding: 4px;
+
+   &.checkedRadio {
+      border: 2px solid var(--color-pink);
+      background: content-box var(--color-pink);
+      fill: var(--color-pink);
+   }
+}
+
+.switchIcon {
+   min-width: 100%;
+   height: 100%;
+   fill: var(--color-yellow);
+}
+
+.switchCursor {
+   cursor: pointer;
+}
+
+.checkedIcon {
+   fill: var(--color-pink);
+}
+
+.text {
+   color: inherit;
+   font-weight: inherit;
+   font-size: inherit;
+   letter-spacing: 0;
+}

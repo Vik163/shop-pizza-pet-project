@@ -1,0 +1,38 @@
+.select {
+   position: relative;
+   display: flex;
+   width: 100%;
+   font-size: var(--size-15);
+   font-weight: var(--weight-700);
+}
+
+.selectContainer {
+   border: 1px solid var(--color-input-outline);
+   border-radius: 8px;
+}
+
+.max {
+   width: 100%;
+}
+
+.days {
+   width: 120px;
+   height: 100%;
+
+   border-right: 1px solid var(--color-input-outline);
+}
+
+.months {
+   width: 230px;
+   height: 100%;
+}
+
+.selectEdit {
+   //    position: absolute;
+   //    right: 19px;
+   margin-left: 21px;
+   color: var(--color-input-edit);
+   &.editActive {
+      color: var(--color-input-active);
+   }
+}

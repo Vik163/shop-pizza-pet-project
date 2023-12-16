@@ -1,0 +1,67 @@
+.Footer {
+   width: 100%;
+   height: 450px;
+}
+
+.footerContainer {
+   width: 1110px;
+}
+
+.sidesContainers:first-child {
+   width: 585px;
+   height: 340px;
+}
+
+.sidesContainers:last-child {
+   width: 446px;
+   height: 340px;
+}
+
+.infoLinks {
+   gap: 23px 53px;
+   margin: 43px 0 30px;
+}
+
+.messengersLinks {
+   width: 500px;
+}
+
+.messengers {
+   width: 163px;
+   line-height: 33px;
+}
+
+.infoDate {
+   width: 575px;
+   margin-top: 45px;
+}
+
+.date {
+   width: text;
+}
+
+.payCards {
+   gap: 23px;
+}
+
+.titleRight {
+   margin: 29px 0 33px;
+}
+
+.messengersButtons {
+   gap: 14px;
+}
+
+.messengerButton {
+   width: 101px;
+   height: 52px;
+   border: 2px solid #e3ecf5;
+}
+
+.messengerButton:last-child {
+   width: 216px;
+}
+
+.numberPhon {
+   margin: 47px 0 20px;
+}

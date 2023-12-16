@@ -1,0 +1,111 @@
+import { SyntheticEvent, memo, useCallback, useEffect, useState } from 'react';
+import { classNames } from '@/shared/lib/classNames/classNames';
+
+import cls from './CodeInForm.module.scss';
+import { Input, InputVariant } from '@/shared/ui/Input';
+import { HStack } from '@/shared/ui/Stack';
+import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
+import { Button } from '@/shared/ui/Button';
+import { FlexJustify } from '@/shared/ui/Stack/Flex';
+import { useSelector } from 'react-redux';
+import { getPhoneNumber } from '../../model/selectors/authPhoneSelectors';
+
+interface CodeInFormProps {
+   className?: string;
+   isConfirmCode?: boolean;
+   onEditPhone: () => void;
+   logout: (e: SyntheticEvent) => void;
+   verifyCode: (code: string) => void;
+}
+
+export const CodeInForm = memo((props: CodeInFormProps) => {
+   const { className, onEditPhone, isConfirmCode, verifyCode, logout } = props;
+
+   const [isConfirmCodeError, setIsConfirmCodeError] = useState(false);
+   const [focusInput, setFocusInput] = useState(true);
+   const authPhoneNumber = useSelector(getPhoneNumber);
+
+   // 3 вводим код подтверждения и вызываем верификацию ---------------
+   const onChangeNumberCode = useCallback((value?: string) => {
+      if (value)
+         if (value.length >= 6) {
+            setFocusInput(false);
+            verifyCode(value);
+         }
+      return value;
+   }, []);
+   // -------------------------------------------------------------------
+
+   // кнопка 'получить новый код' ------------
+   const onReqCode = (e: SyntheticEvent) => {
+      e.preventDefault();
+      setFocusInput(true);
+   };
+
+   const inputCodeVariant = focusInput
+      ? InputVariant.INPUT_OUTLINE
+      : InputVariant.INPUT_CLEAR;
+
+   return (
+      <form className={classNames(cls.formByPhone, {}, [])}>
+         <HStack className={cls.phoneContainer} justify={FlexJustify.BETWEEN}>
+            <Text>Номер телефона</Text>
+            <Text
+               className={cls.phone}
+               fontSize={FontSize.SIZE_15}
+               fontColor={FontColor.TEXT_INPUT}
+               fontWeight={FontWeight.TEXT_700}
+            >
+               {authPhoneNumber}
+            </Text>
+            <Button
+               fontColor={FontColor.TEXT_YELLOW}
+               fontWeight={FontWeight.TEXT_500}
+               fontSize={FontSize.SIZE_14}
+               onClick={onEditPhone}
+            >
+               Изменить
+            </Button>
+         </HStack>
+         <HStack
+            className={cls.confirmCodeContainer}
+            justify={FlexJustify.BETWEEN}
+         >
+            <Input
+               className={classNames(cls.confirmCodeInput, {}, [])}
+               widthInput={114}
+               heightInput={48}
+               widthInputAndEditButtonRight={88}
+               name='code'
+               labelLeft='Код из СМС'
+               type='number'
+               error={isConfirmCodeError}
+               focusInput={focusInput}
+               onChange={onChangeNumberCode}
+               variant={inputCodeVariant}
+               value=''
+               disabled={!focusInput}
+            />
+            {isConfirmCodeError && (
+               <div className={cls.errorWarning}>Неверный код</div>
+            )}
+            <Button
+               fontColor={FontColor.TEXT_YELLOW}
+               fontWeight={FontWeight.TEXT_500}
+               fontSize={FontSize.SIZE_14}
+               onClick={onReqCode}
+            >
+               Получить новый код
+            </Button>
+            <Button
+               fontColor={FontColor.TEXT_YELLOW}
+               fontWeight={FontWeight.TEXT_500}
+               fontSize={FontSize.SIZE_14}
+               onClick={logout}
+            >
+               out
+            </Button>
+         </HStack>
+      </form>
+   );
+});

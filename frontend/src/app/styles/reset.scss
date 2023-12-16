@@ -1,0 +1,24 @@
+*,
+*:after,
+*:before {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+li {
+   list-style-type: none;
+}
+
+input,
+button,
+textarea,
+select {
+   border: none;
+   margin: 0;
+   font: inherit;
+}
+
+a {
+   text-decoration: none;
+}

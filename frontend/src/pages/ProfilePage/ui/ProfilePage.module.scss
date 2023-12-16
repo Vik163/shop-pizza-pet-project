@@ -1,0 +1,48 @@
+.Profile {
+   width: 1110px;
+   padding: 57px 0 87px;
+}
+
+.title {
+   margin-bottom: 24px;
+}
+
+.input {
+   height: 82px;
+   width: 446px;
+   margin-bottom: 9px;
+   font-size: var(--size-14);
+   font-weight: var(--weight-700);
+
+   input {
+      font-size: var(--size-14);
+   }
+
+   button {
+      font-size: var(--size-14);
+   }
+}
+
+.checkbox {
+   height: 28px;
+   width: 439px;
+   gap: 16px;
+   font-size: var(--size-14);
+   font-weight: var(--weight-700);
+}
+
+.form {
+   width: 452px;
+}
+
+.dateSelect {
+   margin: 9px 0;
+}
+
+.subscriptions {
+   margin: 30px 0 13px;
+}
+
+.submit {
+   margin-top: 42px;
+}

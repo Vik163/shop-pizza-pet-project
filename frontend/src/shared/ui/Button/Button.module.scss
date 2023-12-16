@@ -1,0 +1,72 @@
+@import '@/app/styles/variables/mixins.scss';
+// подхват стилей из текста
+@import '../Text/Text.module.scss';
+
+.Button {
+   @include flex-center();
+   // position: relative;
+   &:hover {
+      opacity: 0.8;
+      cursor: pointer;
+   }
+}
+
+.disabled {
+   opacity: 0.5;
+   cursor: default;
+}
+
+.none_color {
+   background-color: transparent;
+}
+.button_grey {
+   background-color: var(--color-background-button);
+}
+.button_grey_blue {
+   background-color: var(--color-grey-blue);
+}
+.button_yellow {
+   background-color: var(--color-yellow);
+}
+
+.button_card_yellow {
+   background-color: var(--color-yellow);
+}
+
+.button_card_white {
+   background-color: #fff;
+}
+
+.border_radius_28 {
+   border-radius: 28px;
+   color: var(--color-grey-blue-dark);
+   @include font(
+      var(--size-14),
+      var(--weight-700),
+      var(--color-grey-blue-dark)
+   );
+}
+.border_radius_8 {
+   border-radius: 8px;
+}
+.border_radius_14 {
+   border-radius: 14px;
+}
+.border_radius_7 {
+   border-radius: 7px;
+}
+.border_radius_6 {
+   border-radius: 6px;
+}
+.outline {
+   background: none;
+}
+.filled {
+   border: none;
+   outline: none;
+}
+.clear {
+   background: none;
+   outline: none;
+   border: none;
+}

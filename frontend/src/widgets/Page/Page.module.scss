@@ -1,0 +1,6 @@
+@import '@/app//styles//variables//mixins.scss';
+
+.Page {
+   width: 100%;
+   @include flex-column-center();
+}

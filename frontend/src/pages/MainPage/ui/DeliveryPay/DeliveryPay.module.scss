@@ -1,0 +1,36 @@
+.DeliveryPay {
+   width: 100vw;
+   height: 688px;
+   background-color: #e3ecf5;
+}
+
+.title {
+   margin: 56px 0 35px;
+}
+
+.container {
+   gap: 30px;
+   margin: 35px 0;
+}
+
+.button {
+   position: relative;
+   padding-top: 10px;
+}
+
+.button::before {
+   content: '';
+   position: absolute;
+   background-color: #fff;
+   width: 77px;
+   height: 77px;
+   border-radius: 50%;
+   top: -38px;
+}
+
+.icon {
+   position: absolute;
+   width: 44px;
+   height: 44px;
+   top: -23px;
+}

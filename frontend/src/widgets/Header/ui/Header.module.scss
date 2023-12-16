@@ -1,0 +1,52 @@
+.header {
+   width: 100vw;
+   padding: 13px 0 15px;
+   position: fixed;
+   top: 0;
+   background-color: rgba(255, 255, 255, 0.92);
+   backdrop-filter: blur(4px);
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   z-index: 2;
+}
+
+.headerContainer {
+   width: 1110px;
+}
+
+.text_city {
+   color: var(--color-yellow);
+   margin-left: 6px;
+}
+
+.delivery {
+   margin-left: 52px;
+   height: 48px;
+}
+
+.delivery_info {
+   margin-top: 9px;
+   height: 18px;
+}
+
+.delivery_dot {
+   display: inline-block;
+   width: 4px;
+   height: 4px;
+   background-color: var(--color-pink);
+   border-radius: 50%;
+   margin: 0 7px 2px;
+}
+
+.delivery_text {
+   margin: 0 4px 0 7px;
+}
+
+.delivery_text:last-child {
+   margin-left: 20px;
+}
+
+.button {
+   margin: 0 28px 0 auto;
+}
