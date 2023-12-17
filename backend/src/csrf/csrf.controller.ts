@@ -9,11 +9,11 @@ export class CsrfController {
   async getCsrfToken(@Req() req: Request, @Res() res: Response) {
     const csrf = req.csrfToken(true);
 
-    res.cookie('XSRF-TOKEN', csrf, {
-      httpOnly: false,
-      secure: true,
-      sameSite: 'strict',
-    });
+    // res.cookie('XSRF-TOKEN', csrf, {
+    //   httpOnly: false,
+    //   secure: true,
+    //   sameSite: 'strict',
+    // });
 
     // Подтвердить отправку куки иначе не отправиться
     res.send({ guard: csrf });

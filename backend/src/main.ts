@@ -1,7 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-// import { Request, Response } from 'express';
-
 import { readFileSync } from 'fs';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
@@ -40,6 +38,7 @@ async function bootstrap() {
     }),
   );
   app.useGlobalPipes(new ValidationPipe());
+  // app.useGlobalGuards();
 
   app.use(doubleCsrfProtection);
 

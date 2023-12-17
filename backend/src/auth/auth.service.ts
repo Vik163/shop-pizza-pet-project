@@ -5,7 +5,7 @@ import { User, UserDocument } from './schemas/auth.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { FirebaseAdmin } from '../../firebaseconfig/firebase.setup';
 import { Model } from 'mongoose';
-import { validateRequest } from '../../csrf.config';
+// import { validateRequest } from '../../csrf.config';
 
 @Injectable()
 export class AuthService {
@@ -21,13 +21,6 @@ export class AuthService {
 
     const idToken = req.headers.authorization;
 
-    // Guard against CSRF attacks.
-    const isValidateCsrf = validateRequest(req);
-    // Проверяю валидацию токена csrf.
-    // if (!isValidateCsrf) {
-    //   res.status(401).send('UNAUTHORIZED REQUEST!');
-    //   return;
-    // }
     // Set session expiration to 5 days.
     const expiresIn = 60 * 60 * 24 * 5 * 1000;
     // Create the session cookie. This will also verify the ID token in the process.

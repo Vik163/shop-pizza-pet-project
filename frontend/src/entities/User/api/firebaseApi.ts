@@ -40,12 +40,8 @@ export const firebaseApi = (props: FirebaseApi) => {
 
       onAuthStateChanged(auth, async (user) => {
          if (userId && user) {
-            const guardKey = await $api.get('/guard');
-            if (guardKey) {
-               dispatch(userAction.setToken(guardKey.data.guard));
-               setTokens(user);
-               dispatch(initAuthData());
-            }
+            setTokens(user);
+            dispatch(initAuthData());
          }
       });
    };

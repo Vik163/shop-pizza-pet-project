@@ -1,4 +1,4 @@
-import { UserSchema } from '@/entities/User';
+import { TokenSchema, UserSchema } from '@/entities/User';
 import { AuthPhoneSchema } from '@/features/AuthByPhone/model/types/authPhone';
 import { MainPageShema } from '@/pages/MainPage/model/types/mainPageSchema';
 import { rtkApi } from '@/shared/api/rtkApi';
@@ -18,6 +18,7 @@ export interface StateSchema {
 
    // Асинхронные редюсеры (необязательные)
    authPhone?: AuthPhoneSchema;
+   csrfToken?: TokenSchema;
 }
 
 // типы для ReducerManager (5_1 15min)===================================

@@ -19,5 +19,4 @@ export interface UserSchema {
    authData?: UserData;
 
    _inited: boolean;
-   _token: string;
 }

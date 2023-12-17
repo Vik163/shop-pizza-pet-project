@@ -8,7 +8,6 @@ import { getInited, initAuthData } from '@/entities/User';
 import { firebaseApi } from '@/entities/User/api/firebaseApi';
 import axios from 'axios';
 import { getUserData } from '@/entities/User/model/selectors/userDataSelector';
-import { $apiPostGuard } from '@/shared/api/api';
 
 const App = () => {
    const { getCurrentUser } = firebaseApi({});

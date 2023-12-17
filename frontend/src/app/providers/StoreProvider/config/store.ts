@@ -7,7 +7,6 @@ import {
 import { StateSchema, ThunkExtraArg } from './StateSchema';
 import { mainPageReducer } from '@/pages/MainPage/model/slices/mainPageSlice';
 import { userReducer } from '@/entities/User';
-import { authPhoneReducer } from '@/features/AuthByPhone/model/slice/authPhoneSlice';
 import { $api } from '@/shared/api/api';
 import { rtkApi } from '@/shared/api/rtkApi';
 import { createReducerManager } from './reducerManager';

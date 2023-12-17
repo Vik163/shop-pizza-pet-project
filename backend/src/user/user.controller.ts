@@ -1,16 +1,17 @@
 import { Controller, Get } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Auth } from 'src/decorators/auth.decorator';
-// import { Auth } from 'src/decorators/auth.decorator';
+import { Csrf } from 'src/decorators/csrf.decorator';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @Auth('ADMIN')
+  // @Auth('ADMIN')
+  @Csrf()
   getUser() {
-    console.log('i');
+    console.log('User');
 
     return this.userService.getUser();
   }
