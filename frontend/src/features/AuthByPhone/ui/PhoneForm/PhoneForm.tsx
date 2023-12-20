@@ -27,10 +27,11 @@ import {
    DynamicReducersLoader,
    ReducersList,
 } from '@/shared/lib/components/DynamicReducersLoader';
+import { $api } from '@/shared/api/api';
 
 export interface PhoneFormProps {
    className?: string;
-   onClose: () => void;
+   onClosePopup: () => void;
 }
 
 const initialReducers: ReducersList = {
@@ -38,24 +39,13 @@ const initialReducers: ReducersList = {
 };
 
 const PhoneForm = memo((props: PhoneFormProps) => {
-   const { className, onClose } = props;
+   const { className, onClosePopup } = props;
    const dispatch = useAppDispatch();
    const [isConfirmCode, setIsConfirmCode] = useState(false);
    const [verificationCode, setVerificationCode] = useState('');
    const [isConfirmCodeError, setIsConfirmCodeError] = useState(false);
    const authPhoneNumber = useSelector(getPhoneNumber);
    const inited = useSelector(getInited);
-   const {
-      phoneSignIn,
-      verifyCode,
-      errorAuthPhone,
-      userData,
-      logout,
-      setTokens,
-   } = firebaseApi({
-      createUser,
-      setIsConfirmCode,
-   });
 
    // 1 значение инпута - убираем ненужные символы и отправляем в стейт
    const onChangeNumberPhone = useCallback((phoneNumber?: string) => {
@@ -69,31 +59,9 @@ const PhoneForm = memo((props: PhoneFormProps) => {
 
       const phoneNumber =
          authPhoneNumber && `+${authPhoneNumber.replace(/\D+/g, '')}`;
-      phoneNumber && phoneSignIn(phoneNumber);
+      phoneNumber && firebaseApi.phoneSignIn(phoneNumber, setIsConfirmCode);
    }
    // ---------------------------------------------------------------
-
-   // 3 После верификации создаем пользователя в БД ------------------------
-   async function createUser(user: User) {
-      // добавляем id из firebase в БД
-      const authData = await axios.post<UserData>(
-         'https://localhost:3001/auth',
-         { phoneNumber: user.phoneNumber, role: 'ADMIN', _id: user.uid },
-         {
-            withCredentials: true,
-         },
-      );
-      if (authData.data) {
-         // Получаем из БД ответ и созраняем токены из Firebase
-         // setTokens(user);
-         dispatch(userAction.setAuthData(authData.data));
-
-         onClose();
-      } else {
-         throw new Error();
-      }
-      return authData;
-   }
 
    // кнопка 'изменить' ---------------------------------
    const onEditPhone = useCallback(() => {
@@ -151,8 +119,7 @@ const PhoneForm = memo((props: PhoneFormProps) => {
             <CodeInForm
                isConfirmCode={isConfirmCode}
                onEditPhone={onEditPhone}
-               verifyCode={verifyCode}
-               logout={logout}
+               onClosePopup={onClosePopup}
             />
          )}
          <div className={cls.recaptcha} id='recaptcha-container'></div>

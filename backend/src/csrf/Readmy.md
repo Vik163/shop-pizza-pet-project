@@ -1,7 +1,7 @@
 ### Защита CSRF
 
 1. Защиту реализую только на формы POST- запросов
-2. Использовал _Double CSRF_ :
+2. Использовал [_Double CSRF_](https://www.npmjs.com/package/csrf-csrf) :
 
 ---
 
@@ -22,7 +22,7 @@ app.use(doubleCsrfProtection);
   - при вызове формы на клиенте посылаю запрос на csrf-токен
   - после получения csrf-токена: установка csrf-токена в headers, отправляю форму
 
-- На сервере проверка csrf-токена (в защитнике CsrfGuard c декоратором @Csrf) функцией:
+- На сервере проверка csrf-токена, кроме методов по умолчанию `ignoredMethods: ["GET", "HEAD", "OPTIONS"]` , (в защитнике CsrfGuard c декоратором @Csrf) функцией:
 
 ```javascript
 validateRequest(req); // булевое значение

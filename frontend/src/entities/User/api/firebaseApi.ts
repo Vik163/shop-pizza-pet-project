@@ -1,4 +1,5 @@
 import {
+   Auth,
    deleteUser,
    getAuth,
    onAuthStateChanged,
@@ -16,42 +17,71 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 import axios from 'axios';
 import { $api } from '@/shared/api/api';
 import { userAction } from '../model/slice/userSlice';
+import { StateSchema } from '@/app/providers/StoreProvider';
+import { ThunkExtraArg } from '@/app/providers/StoreProvider/config/StateSchema';
+import { ThunkDispatch, CombinedState, AnyAction } from '@reduxjs/toolkit';
 //! global 'window'  from 'app/types/window.d.ts'
 
-interface FirebaseApi {
-   createUser?: (user: User) => void;
-   setIsConfirmCode?: Dispatch<SetStateAction<boolean>>;
-}
+const { deleteCookie, setCookie } = useCookie();
+initializeApp(firebaseConfig);
 
-export const firebaseApi = (props: FirebaseApi) => {
-   const { createUser, setIsConfirmCode } = props;
+class FirebaseApi {
+   private _auth: Auth;
+   private _userData: User | null;
+   constructor() {
+      this._auth = getAuth();
+      this._userData = this._auth.currentUser;
+   }
 
-   const dispatch = useAppDispatch();
-   const [errorAuthPhone, setErrorAuthPhone] = useState('');
-   const { deleteCookie, setCookie } = useCookie();
-
-   initializeApp(firebaseConfig);
-   const auth = getAuth();
-   const userData = auth.currentUser;
-
-   // инициализация пользователя при запуске
-   const getCurrentUser = async () => {
+   // инициализация пользователя при запуске ===================
+   getCurrentUser(
+      dispatch: ThunkDispatch<
+         CombinedState<StateSchema>,
+         ThunkExtraArg,
+         AnyAction
+      > &
+         Dispatch<AnyAction>,
+   ) {
       const userId = localStorage.getItem('userId');
 
-      onAuthStateChanged(auth, async (user) => {
+      onAuthStateChanged(this._auth, (user) => {
          if (userId && user) {
-            setTokens(user);
+            this._setTokens(user);
             dispatch(initAuthData());
          }
       });
-   };
+   }
+   //================================================================
 
-   // 1  После проверки позволяет запустить [START auth_phone_signin]
+   //* АВТОРИЗАЦИЯ ------------------------------------------
+
+   // 1 получает номер - проверка captcha и отправка номера на верификацию ------
+   phoneSignIn(
+      phoneNumber: string,
+      setIsConfirmCode?: Dispatch<SetStateAction<boolean>>,
+   ) {
+      this._recaptchaInvisible();
+      const appVerifier = window.recaptchaVerifier;
+      // [START auth_phone_signin]
+      signInWithPhoneNumber(this._auth, phoneNumber, appVerifier)
+         .then((confirmationResult) => {
+            setIsConfirmCode && setIsConfirmCode(true);
+            // SMS отправляет. Приходит код подтвержения, меняем окно логина
+            window.confirmationResult = confirmationResult;
+         })
+         .catch((error) => {
+            console.log('sms не отправлена', error);
+            // setErrorAuthPhone(error);
+         });
+   }
+   // ------------------------------------------------------------------
+
+   // 2  После проверки позволяет запустить [START auth_phone_signin]
    // стилизуем контейнер в абсолют и невидимый
    // [START auth_phone_recaptcha_verifier_invisible]
-   const recaptchaInvisible = () => {
+   _recaptchaInvisible() {
       window.recaptchaVerifier = new RecaptchaVerifier(
-         auth,
+         this._auth,
          'recaptcha-container',
          {
             size: 'invisible',
@@ -60,82 +90,11 @@ export const firebaseApi = (props: FirebaseApi) => {
             },
          },
       );
-   };
+   }
    // ------------------------------------------------------------------------
 
-   // 2 получает номер - проверка captcha и отправка номера на верификацию ------
-   const phoneSignIn = (phoneNumber: string) => {
-      recaptchaInvisible();
-      const appVerifier = window.recaptchaVerifier;
-      // [START auth_phone_signin]
-      signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-         .then((confirmationResult) => {
-            setIsConfirmCode && setIsConfirmCode(true);
-            // SMS отправляет. Приходит код подтвержения, меняем окно логина
-            window.confirmationResult = confirmationResult;
-         })
-         .catch((error) => {
-            console.log('sms не отправлена', error);
-            setErrorAuthPhone(error);
-         });
-   };
-   // ------------------------------------------------------------------
-
-   //
-   const logout = (e: SyntheticEvent) => {
-      // e.preventDefault();
-      if (!userData) return;
-      deleteUser(userData)
-         .then((res) => {
-            localStorage.deleteItem('refreshToken');
-            localStorage.deleteItem('userId');
-            deleteCookie('accessToken');
-         })
-         .catch((error) => {
-            console.log(error);
-            // An error ocurred
-            // ...
-         });
-   };
-
-   function recaptchaVerifierVisible() {
-      // [START auth_phone_recaptcha_verifier_visible]
-      const appVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-         size: 'normal',
-         callback: (response: string) => {
-            console.log(response);
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
-            // ...
-         },
-         'expired-callback': () => {
-            // Response expired. Ask user to solve reCAPTCHA again.
-            // ...
-         },
-      });
-      // [END auth_phone_recaptcha_verifier_visible]
-   }
-
-   function recaptchaVerifierSimple() {
-      // [START auth_phone_recaptcha_verifier_simple]
-      window.recaptchaVerifier = new RecaptchaVerifier(
-         auth,
-         'recaptcha-container',
-      );
-      // [END auth_phone_recaptcha_verifier_simple]
-   }
-
-   function recaptchaRender() {
-      const recaptchaVerifier = window.recaptchaVerifier;
-
-      // [START auth_phone_recaptcha_render]
-      recaptchaVerifier.render().then((widgetId) => {
-         window.recaptchaWidgetId = widgetId;
-      });
-      // [END auth_phone_recaptcha_render]
-   }
-
    // 3 получает код подтверждения и верификация --------------------------
-   function verifyCode(code: string) {
+   verifyCode(code: string, createUser?: (user: User) => void) {
       const confirmationResult = window.confirmationResult;
 
       confirmationResult
@@ -146,17 +105,17 @@ export const firebaseApi = (props: FirebaseApi) => {
             // создание пользователя в БД
             const data = user && createUser && createUser(user);
             // user && createUser && createUser(user);
-            data && setTokens(user);
+            data && this._setTokens(user);
          })
          .catch((error: string) => {
             console.log('Неверный код', error);
-            setErrorAuthPhone(error);
+            // setErrorAuthPhone(error);
          });
    }
    // --------------------------------------------------------------------
 
    // устанавливаем токены -----------------------------------------------
-   function setTokens(user: User) {
+   _setTokens(user: User) {
       const rToken = localStorage.getItem('refreshToken');
       !rToken && localStorage.setItem('refreshToken', user.refreshToken);
 
@@ -167,22 +126,41 @@ export const firebaseApi = (props: FirebaseApi) => {
    }
    // --------------------------------------------------------
 
-   // function getRecaptchaResponse() {
-   //    const recaptchaWidgetId = '...';
-   //    const grecaptcha = {};
-
-   //    // [START auth_get_recaptcha_response]
-   //    const recaptchaResponse = grecaptcha.getResponse(recaptchaWidgetId);
-   //    // [END auth_get_recaptcha_response]
+   // function recaptchaVerifierVisible() {
+   //    // [START auth_phone_recaptcha_verifier_visible]
+   //    const appVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+   //       size: 'normal',
+   //       callback: (response: string) => {
+   //          console.log(response);
+   //          // reCAPTCHA solved, allow signInWithPhoneNumber.
+   //          // ...
+   //       },
+   //       'expired-callback': () => {
+   //          // Response expired. Ask user to solve reCAPTCHA again.
+   //          // ...
+   //       },
+   //    });
+   //    // [END auth_phone_recaptcha_verifier_visible]
    // }
 
-   return {
-      phoneSignIn,
-      verifyCode,
-      logout,
-      errorAuthPhone,
-      userData,
-      setTokens,
-      getCurrentUser,
-   };
-};
+   // function recaptchaVerifierSimple() {
+   //    // [START auth_phone_recaptcha_verifier_simple]
+   //    window.recaptchaVerifier = new RecaptchaVerifier(
+   //       auth,
+   //       'recaptcha-container',
+   //    );
+   //    // [END auth_phone_recaptcha_verifier_simple]
+   // }
+
+   // function recaptchaRender() {
+   //    const recaptchaVerifier = window.recaptchaVerifier;
+
+   //    // [START auth_phone_recaptcha_render]
+   //    recaptchaVerifier.render().then((widgetId) => {
+   //       window.recaptchaWidgetId = widgetId;
+   //    });
+   //    // [END auth_phone_recaptcha_render]
+   // }
+}
+
+export const firebaseApi = new FirebaseApi();

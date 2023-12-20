@@ -10,7 +10,6 @@ const csrfTokenSlice = createSlice({
    initialState,
    reducers: {
       setToken: (state, { payload }: PayloadAction<string>) => {
-         console.log(payload);
          state._csrfToken = payload;
       },
    },

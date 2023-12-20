@@ -50,28 +50,25 @@ export class AuthService {
     user && this._setTokens(req, res, user);
   }
 
-  async createUser(userRequest: AuthDto) {
+  async createUser(userRequest: AuthDto, req: Request, res: Response) {
     console.log(userRequest);
     // добавляю в firebase роль
     const app = this.admin.setup();
     app.auth().setCustomUserClaims(userRequest._id, { role: userRequest.role });
 
     const newUser = new this.userModal(userRequest);
+
+    newUser && this._setTokens(req, res, newUser);
+
     console.log(newUser);
     return newUser.save();
+  }
 
-    // try {
-    //   const createdUser = await app.auth().createUser({
-    //     email,
-    //     phoneNumber,
-    //     displayName: name,
-    //   });
-    //   console.log(createdUser);
-    //   await app.auth().setCustomUserClaims(createdUser.uid, { role });
-    //   return createdUser;
-    // } catch (error) {
-    //   console.log(error);
-    //   throw new BadRequestException(error.message);
-    // }
+  async signout(req: Request, res: Response) {
+    console.log(req.cookies);
+    res.cookie('sessionToken', { maxAge: 0 });
+    res.cookie('__Host-psifi.x-csrf-token', { maxAge: 0 });
+    res.cookie('accessToken', { maxAge: 0 });
+    res.end({ status: 'success' });
   }
 }

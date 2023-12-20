@@ -1,4 +1,11 @@
-import { Suspense, memo, useEffect, useMemo, useState } from 'react';
+import {
+   Suspense,
+   memo,
+   useCallback,
+   useEffect,
+   useMemo,
+   useState,
+} from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Navbar.module.scss';
@@ -42,9 +49,9 @@ export const Navbar = memo((props: NavbarProps) => {
       setTitlePopup('Вход на сайт');
    };
 
-   const closePopup = () => {
+   const closePopup = useCallback(() => {
       setIsOpenPopup(false);
-   };
+   }, []);
 
    const itemList = useMemo(
       () =>
@@ -98,7 +105,7 @@ export const Navbar = memo((props: NavbarProps) => {
          >
             Корзина<span className={classNames(cls.basket_quantity)}>1</span>
          </Button>
-         {!inited && (
+         {isOpenPopup && (
             // если нет то модалка не встраивается
             <Modal
                className={cls.phoneModal}
@@ -107,7 +114,7 @@ export const Navbar = memo((props: NavbarProps) => {
                title={titlePopup}
                lazy
             >
-               <PhoneForm onClose={closePopup} />
+               <PhoneForm onClosePopup={closePopup} />
             </Modal>
          )}
 

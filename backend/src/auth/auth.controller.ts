@@ -3,23 +3,53 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private readonly userService: AuthService) {}
 
   // получаем пользователя по id (firebase) из localstorage и создаем сессионный куки
-  @Get(':id')
+  @Get('auth/:id')
   async getInitialUserById(
     @Param('id') id: string,
     @Req() req: Request,
     // если res, то отправка через res.send(), иначе не возвращает значение
     @Res() res: Response,
   ) {
+    // отправляю user в _setTokens (auth.service)
     await this.userService.getInitialUserById(id, req, res);
   }
 
-  @Post()
-  signup(@Body() authRequest: AuthDto) {
-    return this.userService.createUser(authRequest);
+  @Post('auth')
+  signup(
+    @Body() authRequest: AuthDto,
+    @Req() req: Request,
+    // если res, то отправка через res.send(), иначе не возвращает значение
+    @Res() res: Response,
+  ) {
+    // отправляю user в _setTokens (auth.service)
+    this.userService.createUser(authRequest, req, res);
+  }
+
+  @Get('signout')
+  async signout(
+    @Req() req: Request,
+    // если res, то отправка через res.send(), иначе не возвращает значение
+    @Res() res: Response,
+  ) {
+    res.clearCookie('sessionToken', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+    res.clearCookie('__Host-psifi.x-csrf-token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+    // res.clearCookie('accessToken', {
+    //   sameSite: 'strict',
+    //   secure: true,
+    // });
+    res.send({ status: 'success' });
   }
 }

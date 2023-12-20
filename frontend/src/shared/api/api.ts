@@ -13,8 +13,10 @@ export const $api = axios.create({
 });
 
 $api.interceptors.request.use(async (config) => {
-   if (config.headers) {
-      config.headers.authorization = getCookie('accessToken');
+   const token = getCookie('accessToken');
+
+   if (config.headers && token) {
+      config.headers.authorization = token;
    }
    return config;
 });

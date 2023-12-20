@@ -30,6 +30,8 @@ interface ModalProps {
 export const Modal = memo((props: ModalProps) => {
    const { children, className, isOpen, onClose, title, themeGray, lazy } =
       props;
+
+   //* выношу логику в хук
    const { isClosing, handleClose, onContentClick, isMounted } = useModal({
       isOpen,
       onClose,

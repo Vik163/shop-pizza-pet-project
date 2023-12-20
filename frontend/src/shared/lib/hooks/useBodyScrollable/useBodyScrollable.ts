@@ -5,6 +5,7 @@ interface IScroll {
    bodyScrollable: boolean;
 }
 
+// Убирает скролл и высчитывает ширину скрола
 export function useBodyScrollable(): IScroll {
    const [bodyScrollable, setBodyScrollable] = useState<boolean>(
       document.body.scrollHeight > window.innerHeight,

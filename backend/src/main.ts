@@ -38,7 +38,6 @@ async function bootstrap() {
     }),
   );
   app.useGlobalPipes(new ValidationPipe());
-  // app.useGlobalGuards();
 
   app.use(doubleCsrfProtection);
 

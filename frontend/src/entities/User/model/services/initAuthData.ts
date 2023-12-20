@@ -27,6 +27,6 @@ export const initAuthData = createAsyncThunk<
       return response;
    } catch (e) {
       console.log(e);
-      return rejectWithValue('');
+      return rejectWithValue('Некоректный запрос пользователя');
    }
 });

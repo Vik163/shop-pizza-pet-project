@@ -9,32 +9,49 @@ import { Button } from '@/shared/ui/Button';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
 import { useSelector } from 'react-redux';
 import { getPhoneNumber } from '../../model/selectors/authPhoneSelectors';
+import { User } from 'firebase/auth';
+import { $api } from '@/shared/api/api';
+import { UserData } from '@/entities/User/model/types/user';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { userAction } from '@/entities/User';
+import { firebaseApi } from '@/entities/User/api/firebaseApi';
+import { fetchSignupUser } from '../../model/services/fetchSignupUser';
 
 interface CodeInFormProps {
    className?: string;
    isConfirmCode?: boolean;
    onEditPhone: () => void;
-   logout: (e: SyntheticEvent) => void;
-   verifyCode: (code: string) => void;
+   onClosePopup: () => void;
 }
 
 export const CodeInForm = memo((props: CodeInFormProps) => {
-   const { className, onEditPhone, isConfirmCode, verifyCode, logout } = props;
+   const { className, onEditPhone, isConfirmCode, onClosePopup } = props;
 
    const [isConfirmCodeError, setIsConfirmCodeError] = useState(false);
    const [focusInput, setFocusInput] = useState(true);
    const authPhoneNumber = useSelector(getPhoneNumber);
+   const dispatch = useAppDispatch();
 
    // 3 вводим код подтверждения и вызываем верификацию ---------------
    const onChangeNumberCode = useCallback((value?: string) => {
       if (value)
          if (value.length >= 6) {
             setFocusInput(false);
-            verifyCode(value);
+            firebaseApi.verifyCode(value, createUser);
          }
       return value;
    }, []);
    // -------------------------------------------------------------------
+
+   // 3 После верификации создаем пользователя в БД ------------------------
+   async function createUser(user: User) {
+      if (user) {
+         const data = await dispatch(fetchSignupUser(user));
+         if (data) {
+            onClosePopup();
+         }
+      }
+   }
 
    // кнопка 'получить новый код' ------------
    const onReqCode = (e: SyntheticEvent) => {
@@ -96,14 +113,6 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
                onClick={onReqCode}
             >
                Получить новый код
-            </Button>
-            <Button
-               fontColor={FontColor.TEXT_YELLOW}
-               fontWeight={FontWeight.TEXT_500}
-               fontSize={FontSize.SIZE_14}
-               onClick={logout}
-            >
-               out
             </Button>
          </HStack>
       </form>

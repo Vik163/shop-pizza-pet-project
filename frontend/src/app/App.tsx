@@ -1,22 +1,20 @@
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import { Header } from '@/widgets/Header';
 import { AppRouter } from './providers/router';
 import { Footer } from '@/widgets/Footer';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { getInited, initAuthData } from '@/entities/User';
-import { firebaseApi } from '@/entities/User/api/firebaseApi';
-import axios from 'axios';
-import { getUserData } from '@/entities/User/model/selectors/userDataSelector';
+
+import { getInited, firebaseApi } from '@/entities/User';
 
 const App = () => {
-   const { getCurrentUser } = firebaseApi({});
-   const userId = localStorage.getItem('userId');
-   // const user = useSelector(getUserData);
+   const dispatch = useAppDispatch();
+   const inited = useSelector(getInited);
 
    useEffect(() => {
-      if (userId) {
-         getCurrentUser();
+      if (!inited) {
+         firebaseApi.getCurrentUser(dispatch);
       }
    }, []);
 

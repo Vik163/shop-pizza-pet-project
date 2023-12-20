@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Auth } from 'src/decorators/auth.decorator';
-import { Csrf } from 'src/decorators/csrf.decorator';
+// import { Csrf } from 'src/decorators/csrf.decorator';
 
 @Controller('users')
 export class UserController {
@@ -9,7 +9,7 @@ export class UserController {
 
   @Get()
   // @Auth('ADMIN')
-  @Csrf()
+  // @Csrf()
   getUser() {
     console.log('User');
 

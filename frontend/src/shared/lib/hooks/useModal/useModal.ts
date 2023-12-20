@@ -12,6 +12,7 @@ export function useModal(props: UseModalProps) {
    const [isMounted, setIsMounted] = useState(false);
    const timerRef = useRef<ReturnType<typeof setTimeout>>();
    const page = document.querySelector<HTMLElement>('.app');
+   //  высчитывает ширину скрола
    const { scrollbarWidth, bodyScrollable } = useBodyScrollable();
 
    const onContentClick = (e: React.MouseEvent) => {
@@ -41,23 +42,23 @@ export function useModal(props: UseModalProps) {
    };
 
    useEffect(() => {
-      if (page && bodyScrollable) {
-         if (isOpen) {
-            document.body.style.overflow = 'hidden';
+      if (isOpen) {
+         document.addEventListener('keydown', onKeyDown);
+         document.body.style.overflow = 'hidden';
+         if (page) {
             page.style.paddingRight = `${scrollbarWidth - 1}px`;
-
-            document.addEventListener('keydown', onKeyDown);
-         } else {
-            document.body.style.overflow = 'auto';
-            page.style.paddingRight = '0px';
          }
       }
-
+      // скролл добавляю при размонтировании
       return () => {
          clearTimeout(timerRef.current);
          document.removeEventListener('keydown', onKeyDown);
+         document.body.style.overflow = 'auto';
+         if (page) {
+            page.style.paddingRight = '0px';
+         }
       };
-   }, [isOpen, bodyScrollable, page]);
+   }, [isOpen, page]);
 
    return { isClosing, handleClose, onContentClick, isMounted };
 }

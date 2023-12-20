@@ -32,11 +32,14 @@ import { $api } from '@/shared/api/api';
 import { useSelector } from 'react-redux';
 import { getTokenSelector } from '@/entities/User/model/selectors/getTokenSelector';
 import { fetchTokenForm } from '@/entities/User/model/services/fetchTokenForm';
+import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
+
 import {
    DynamicReducersLoader,
    ReducersList,
 } from '@/shared/lib/components/DynamicReducersLoader';
 import { csrfTokenReducer } from '@/entities/User/model/slice/tokenSlice';
+import { fetchLogout } from '../model/services/fetchLogout';
 
 export interface ProfilePageProps {
    className?: string;
@@ -50,33 +53,45 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
-   const token = useSelector(getTokenSelector);
-   console.log(token);
+   const { deleteCookie, setCookie } = useCookie();
+
+   // const token = useSelector(getTokenSelector);
+   // console.log(token);
 
    const onChangeName = useCallback((value: string | number) => {
       // dispatch(profileActions.updateProfile({ age: Number(value || 0) }));
    }, []);
 
-   useEffect(() => {
-      fetchTokenForm(dispatch);
-   }, []);
+   // useEffect(() => {
+   //    fetchTokenForm(dispatch);
+   // }, []);
 
-   useEffect(() => {
-      if (token) {
-         $api
-            .get('/users', { headers: { ['x-csrf-token']: token } })
-            .then((data) => {
-               console.log(data.data);
-            });
-      }
-   }, [token]);
+   // useEffect(() => {
+   //    if (token) {
+   //       $api
+   //          .get('/users', { headers: { ['x-csrf-token']: token } })
+   //          .then((data) => {
+   //             console.log(data.data);
+   //          });
+   //    }
+   // }, [token]);
 
    const onChangeEmail = (value: string | number) => {};
 
    const logout = (e: SyntheticEvent) => {
       e.preventDefault();
-      dispatch(userAction.logout());
-      navigate('/');
+
+      $api.get('/signout').then((data) => {
+         console.log(data);
+         deleteCookie('accessToken');
+         localStorage.removeItem('refreshToken');
+         localStorage.removeItem('userId');
+
+         if (data.status === 200) {
+            dispatch(userAction.logout());
+            navigate('/');
+         }
+      });
    };
 
    return (
