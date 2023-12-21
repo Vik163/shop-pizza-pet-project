@@ -13,10 +13,13 @@ export interface UserData {
    email?: string;
    role: RoleUser;
    userParameters?: UserParameters;
+   message?: string;
 }
 
 export interface UserSchema {
    authData?: UserData;
+   _userUid?: string;
 
-   _inited: boolean;
+   _inited?: boolean;
+   message?: string;
 }

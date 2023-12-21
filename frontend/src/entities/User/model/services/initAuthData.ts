@@ -8,20 +8,24 @@ import { $api } from '@/shared/api/api';
 // через extraReducers (userSlice)
 export const initAuthData = createAsyncThunk<
    UserData,
-   void,
+   string,
    ThunkConfig<string>
->('user/initAuthData', async (_, thunkApi) => {
+>('user/initAuthData', async (id, thunkApi) => {
    const { rejectWithValue, dispatch } = thunkApi;
 
-   const userId = localStorage.getItem('userId');
+   // const userId = localStorage.getItem('userId');
 
-   if (!userId) {
+   if (!id) {
       return rejectWithValue('ErrorInitAuthData');
    }
 
    try {
       // посылаем запрос через rtk (userApi)
-      const response = await dispatch(getUserDataByIdQuery(userId)).unwrap();
+      const response = await dispatch(getUserDataByIdQuery(id)).unwrap();
+
+      if (response.message === 'Пользователь не найден') {
+         return rejectWithValue('Пользователь не найден');
+      }
 
       console.log(response);
       return response;

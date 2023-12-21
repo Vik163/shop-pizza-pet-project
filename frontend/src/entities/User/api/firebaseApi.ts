@@ -33,7 +33,7 @@ class FirebaseApi {
       this._userData = this._auth.currentUser;
    }
 
-   // инициализация пользователя при запуске ===================
+   // инициализация пользователя при запуске по  firebase uid ========
    getCurrentUser(
       dispatch: ThunkDispatch<
          CombinedState<StateSchema>,
@@ -42,12 +42,12 @@ class FirebaseApi {
       > &
          Dispatch<AnyAction>,
    ) {
-      const userId = localStorage.getItem('userId');
-
       onAuthStateChanged(this._auth, (user) => {
-         if (userId && user) {
+         if (user) {
+            dispatch(userAction.setUserUid(user.uid));
+
             this._setTokens(user);
-            dispatch(initAuthData());
+            dispatch(initAuthData(user.uid));
          }
       });
    }
@@ -94,17 +94,17 @@ class FirebaseApi {
    // ------------------------------------------------------------------------
 
    // 3 получает код подтверждения и верификация --------------------------
-   verifyCode(code: string, createUser?: (user: User) => void) {
+   async verifyCode(code: string, createUser?: (user: User) => void) {
       const confirmationResult = window.confirmationResult;
 
       confirmationResult
          .confirm(code)
-         .then((result: { user: User }) => {
+         .then(async (result: { user: User }) => {
             // успешная регистрация в firebase.
             const user = result.user;
-            // создание пользователя в БД
-            const data = user && createUser && createUser(user);
-            // user && createUser && createUser(user);
+            // запрос и если не найден, создание пользователя в БД
+            const data = user && createUser && (await createUser(user));
+
             data && this._setTokens(user);
          })
          .catch((error: string) => {

@@ -28,6 +28,7 @@ import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user.svg';
 import { useNavigate } from 'react-router-dom';
 import { getRouteProfile } from '@/shared/const/router';
+import { getUserUidSelector } from '@/entities/User/model/selectors/getUserUidSelector';
 
 interface NavbarProps {
    className?: string;
@@ -39,7 +40,8 @@ export const Navbar = memo((props: NavbarProps) => {
    const [isOpenPopup, setIsOpenPopup] = useState(false);
    const [titlePopup, setTitlePopup] = useState('');
    const inited = useSelector(getInited);
-   const userId = localStorage.getItem('userId');
+   const userId = useSelector(getUserUidSelector);
+   // const userId = localStorage.getItem('userId');
    const pathProfile = userId && getRouteProfile(userId);
 
    const onAuth = () => {

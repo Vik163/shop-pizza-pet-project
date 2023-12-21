@@ -9,6 +9,8 @@ export const fetchSignupUser = createAsyncThunk(
    'authByPhone/fetchSignup',
    async (user: User, thunkApi) => {
       const { rejectWithValue, dispatch } = thunkApi;
+      console.log(user);
+
       try {
          const csrfToken = await $api.get('/csrf');
          const token = csrfToken.data.csrf;

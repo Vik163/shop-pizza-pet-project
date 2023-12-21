@@ -28,7 +28,7 @@
    background: linear-gradient(
       to left,
       rgba(255, 255, 255, 0.6) 95%,
-      rgba(255, 255, 255, 0.5) 97%,
+      rgba(255, 255, 255, 0.5) 98%,
       transparent
    );
 }
@@ -39,12 +39,9 @@
    width: 32px;
    height: 32px;
    background: #f7d22d;
-   background-image: url('../../assets/icons/arrow.svg');
-   background-repeat: no-repeat;
-   background-position: 55% 55%;
    border-radius: 50%;
    border: none;
-   z-index: 3;
+   z-index: 15;
    cursor: pointer;
 }
 
@@ -84,9 +81,6 @@
 }
 .iconInverse {
    background: #574f51;
-   background-image: url('../../assets/icons/arrow-yellow.svg');
-   background-repeat: no-repeat;
-   background-position: 55% 55%;
 }
 
 .leftHidden {

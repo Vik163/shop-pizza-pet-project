@@ -13,6 +13,7 @@ const App = () => {
    const inited = useSelector(getInited);
 
    useEffect(() => {
+      console.log(inited);
       if (!inited) {
          firebaseApi.getCurrentUser(dispatch);
       }

@@ -7,12 +7,16 @@ import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
 
 const initialState: UserSchema = {
    _inited: false,
+   _userUid: '',
 };
 
 export const userSlice = createSlice({
    name: 'user',
    initialState,
    reducers: {
+      setUserUid: (state, { payload }: PayloadAction<string>) => {
+         state._userUid = payload;
+      },
       setAuthData: (state, { payload }: PayloadAction<UserData>) => {
          state.authData = payload;
          state._inited = true;

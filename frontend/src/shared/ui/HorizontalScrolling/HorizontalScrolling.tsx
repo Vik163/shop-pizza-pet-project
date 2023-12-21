@@ -7,6 +7,9 @@ import cls from './HorizontalScrolling.module.scss';
 
 import { ProductFixPrice } from '@/entities/Product/model/types/product';
 import { HorizontalScrollingCard } from './HorizontalScrollingCard/HorizontalScrollingCard';
+import { Icon } from '../Icon';
+import arrow from '@/shared/assets/icons/arrow.svg';
+import arrowYellow from '@/shared/assets/icons/arrow-yellow.svg';
 
 interface HorizontalScrollingProps {
    className?: string;
@@ -183,7 +186,8 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
    const leftArrowCurtainsActive = indexActiveCard !== -1;
    const rightArrowCurtainsActive = indexActiveCard !== visibleElements + 2;
    const rightArrowActive =
-      cardsVisible.length !== visibleElements + 1 && indexActiveCard !== -1;
+      cardsVisible.length > visibleElements + 1 && indexActiveCard !== -1; //* вместо >  было !==
+
    const leftArrowActive = indexActiveCard !== 0;
 
    return (
@@ -208,7 +212,9 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                <animated.button
                   className={classNames(cls.icon, {}, [cls.iconLeftCurtain])}
                   {...bind()}
-               ></animated.button>
+               >
+                  <Icon Svg={arrow} width={9} />
+               </animated.button>
             )}
          </div>
          <div
@@ -218,7 +224,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                [className, cls.rightCurtain],
             )}
             style={{
-               width: `calc((100vw - ${widthBlock}px) / 2)`,
+               width: `calc((100vw - ${widthBlock - 20}px) / 2)`,
                left: widthBlock + gap / 2,
             }}
          >
@@ -226,7 +232,9 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                <animated.button
                   className={classNames(cls.icon, {}, [cls.iconRightCurtain])}
                   {...bind()}
-               ></animated.button>
+               >
+                  <Icon Svg={arrow} width={9} />
+               </animated.button>
             )}
          </div>
          <div>
@@ -240,7 +248,9 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                   <animated.button
                      className={classNames(cls.icon, {}, [cls.iconInverse])}
                      {...bind()}
-                  ></animated.button>
+                  >
+                     <Icon Svg={arrowYellow} width={9} color='#f7d22d' />
+                  </animated.button>
                </div>
             )}
             {!curtains && rightArrowActive && (
@@ -253,7 +263,9 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                   <animated.button
                      className={classNames(cls.icon, {}, [cls.iconInverse])}
                      {...bind()}
-                  ></animated.button>
+                  >
+                     <Icon Svg={arrowYellow} width={9} color='#f7d22d' />
+                  </animated.button>
                </div>
             )}
          </div>

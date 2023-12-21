@@ -43,11 +43,13 @@ export class AuthService {
       );
   }
 
-  // получаем пользователя по id (firebase) из localstorage и создаем сессионный куки
+  // получаем пользователя по id (firebase) и создаем сессионный куки или возвращаем "не найден"
   async getInitialUserById(id: string, req: Request, res: Response) {
     const user = await this.userModal.findById(id);
 
-    user && this._setTokens(req, res, user);
+    user
+      ? this._setTokens(req, res, user)
+      : res.send({ message: 'Пользователь не найден' });
   }
 
   async createUser(userRequest: AuthDto, req: Request, res: Response) {
@@ -64,11 +66,7 @@ export class AuthService {
     return newUser.save();
   }
 
-  async signout(req: Request, res: Response) {
-    console.log(req.cookies);
-    res.cookie('sessionToken', { maxAge: 0 });
-    res.cookie('__Host-psifi.x-csrf-token', { maxAge: 0 });
-    res.cookie('accessToken', { maxAge: 0 });
-    res.end({ status: 'success' });
-  }
+  // async signout(req: Request, res: Response) {
+
+  // }
 }

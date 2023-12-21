@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useBodyScrollable } from '../useBodyScrollable/useBodyScrollable';
 
 interface UseModalProps {
    isOpen: boolean;
@@ -11,9 +10,12 @@ export function useModal(props: UseModalProps) {
    const [isClosing, setIsClosing] = useState(false);
    const [isMounted, setIsMounted] = useState(false);
    const timerRef = useRef<ReturnType<typeof setTimeout>>();
-   const page = document.querySelector<HTMLElement>('.app');
-   //  высчитывает ширину скрола
-   const { scrollbarWidth, bodyScrollable } = useBodyScrollable();
+
+   //  высчитывает ширину скрола ---------------------------------
+   // нужно было когда .root был {max-width: 100vw}
+   // const page = document.querySelector<HTMLElement>('.app');
+   // const { scrollbarWidth, bodyScrollable } = useBodyScrollable();
+   // ---------------------------------------------------------------
 
    const onContentClick = (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -45,20 +47,15 @@ export function useModal(props: UseModalProps) {
       if (isOpen) {
          document.addEventListener('keydown', onKeyDown);
          document.body.style.overflow = 'hidden';
-         if (page) {
-            page.style.paddingRight = `${scrollbarWidth - 1}px`;
-         }
+         // page.style.paddingRight = `${scrollbarWidth - 10}px`;
       }
       // скролл добавляю при размонтировании
       return () => {
          clearTimeout(timerRef.current);
          document.removeEventListener('keydown', onKeyDown);
          document.body.style.overflow = 'auto';
-         if (page) {
-            page.style.paddingRight = '0px';
-         }
       };
-   }, [isOpen, page]);
+   }, [isOpen]);
 
    return { isClosing, handleClose, onContentClick, isMounted };
 }

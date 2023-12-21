@@ -13,7 +13,7 @@ import { User } from 'firebase/auth';
 import { $api } from '@/shared/api/api';
 import { UserData } from '@/entities/User/model/types/user';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { userAction } from '@/entities/User';
+import { initAuthData, userAction } from '@/entities/User';
 import { firebaseApi } from '@/entities/User/api/firebaseApi';
 import { fetchSignupUser } from '../../model/services/fetchSignupUser';
 
@@ -43,12 +43,18 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
    }, []);
    // -------------------------------------------------------------------
 
-   // 3 После верификации создаем пользователя в БД ------------------------
+   // 3 После верификации запрашиваем пользователя в БД, и если не найден, то создаем
    async function createUser(user: User) {
       if (user) {
-         const data = await dispatch(fetchSignupUser(user));
-         if (data) {
+         const data = await dispatch(initAuthData(user.uid));
+
+         if (data.payload === 'Пользователь не найден') {
+            const signupData = await dispatch(fetchSignupUser(user));
             onClosePopup();
+            return signupData.payload;
+         } else {
+            onClosePopup();
+            return data.payload;
          }
       }
    }
