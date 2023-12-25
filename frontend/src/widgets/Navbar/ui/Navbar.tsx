@@ -23,7 +23,10 @@ import { FlexJustify } from '@/shared/ui/Stack/Flex';
 import { Modal } from '@/shared/ui/Modal';
 import { PhoneForm } from '@/features/AuthByPhone';
 import { useSelector } from 'react-redux';
-import { getInited } from '@/entities/User/model/selectors/userDataSelector';
+import {
+   getInited,
+   getUserData,
+} from '@/entities/User/model/selectors/userDataSelector';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user.svg';
 import { useNavigate } from 'react-router-dom';
@@ -40,9 +43,8 @@ export const Navbar = memo((props: NavbarProps) => {
    const [isOpenPopup, setIsOpenPopup] = useState(false);
    const [titlePopup, setTitlePopup] = useState('');
    const inited = useSelector(getInited);
-   const userId = useSelector(getUserUidSelector);
-   // const userId = localStorage.getItem('userId');
-   const pathProfile = userId && getRouteProfile(userId);
+   const user = useSelector(getUserData);
+   const pathProfile = user?._id && getRouteProfile(user?._id);
 
    const onAuth = () => {
       // if(inited) navigate(getRouteProfile())

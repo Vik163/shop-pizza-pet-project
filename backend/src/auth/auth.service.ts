@@ -27,20 +27,22 @@ export class AuthService {
     // The session cookie will have the same claims as the ID token.
     // To only allow session cookie setting on recent sign-in, auth_time in ID token
     // can be checked to ensure user was recently signed in before creating a session cookie.
-    app
-      .auth()
-      .createSessionCookie(idToken, { expiresIn })
-      .then(
-        (sessionCookie) => {
-          // Set cookie policy for session cookie.
-          const options = { maxAge: expiresIn, httpOnly: true, secure: true };
-          res.cookie('sessionToken', sessionCookie, options);
-          res.send(user);
-        },
-        () => {
-          res.status(401).send('Пользователь не авторизован!');
-        },
-      );
+    if (idToken) {
+      app
+        .auth()
+        .createSessionCookie(idToken, { expiresIn })
+        .then(
+          (sessionCookie) => {
+            // Set cookie policy for session cookie.
+            const options = { maxAge: expiresIn, httpOnly: true, secure: true };
+            res.cookie('sessionToken', sessionCookie, options);
+            res.send(user);
+          },
+          () => {
+            res.status(401).send('Пользователь не авторизован!');
+          },
+        );
+    }
   }
 
   // получаем пользователя по id (firebase) и создаем сессионный куки или возвращаем "не найден"

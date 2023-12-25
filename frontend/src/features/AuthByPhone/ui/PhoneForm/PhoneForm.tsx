@@ -1,4 +1,11 @@
-import { SyntheticEvent, memo, useCallback, useEffect, useState } from 'react';
+import {
+   SyntheticEvent,
+   memo,
+   useCallback,
+   useEffect,
+   useRef,
+   useState,
+} from 'react';
 
 import { Mods, classNames } from '@/shared/lib/classNames/classNames';
 
@@ -19,7 +26,7 @@ import { getPhoneNumber } from '../../model/selectors/authPhoneSelectors';
 import axios from 'axios';
 import { User } from 'firebase/auth';
 import { UserData } from '@/entities/User/model/types/user';
-import { firebaseApi } from '@/entities/User/api/firebaseApi';
+import { firebaseApi } from '@/entities/User';
 import { AppLink } from '@/shared/ui/AppLink';
 import { userAction } from '@/entities/User';
 import { getInited } from '@/entities/User/model/selectors/userDataSelector';
@@ -41,6 +48,7 @@ const initialReducers: ReducersList = {
 const PhoneForm = memo((props: PhoneFormProps) => {
    const { className, onClosePopup } = props;
    const dispatch = useAppDispatch();
+   const captchaRef = useRef(null);
    const [isConfirmCode, setIsConfirmCode] = useState(false);
    const [verificationCode, setVerificationCode] = useState('');
    const [isConfirmCodeError, setIsConfirmCodeError] = useState(false);
@@ -65,6 +73,7 @@ const PhoneForm = memo((props: PhoneFormProps) => {
 
    // кнопка 'изменить' ---------------------------------
    const onEditPhone = useCallback(() => {
+      firebaseApi.resetRecaptcha(captchaRef);
       setIsConfirmCode(false);
    }, []);
 
@@ -122,7 +131,9 @@ const PhoneForm = memo((props: PhoneFormProps) => {
                onClosePopup={onClosePopup}
             />
          )}
-         <div className={cls.recaptcha} id='recaptcha-container'></div>
+         <div ref={captchaRef} className={cls.recaptcha}>
+            <div id='recaptcha-container'></div>
+         </div>
       </DynamicReducersLoader>
    );
 });

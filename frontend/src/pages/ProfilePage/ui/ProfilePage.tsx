@@ -24,7 +24,7 @@ import {
    ButtonVariant,
 } from '@/shared/ui/Button';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { userAction } from '@/entities/User';
+import { firebaseApi, userAction } from '@/entities/User';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserData } from '@/entities/User/model/types/user';
@@ -39,7 +39,7 @@ import {
    ReducersList,
 } from '@/shared/lib/components/DynamicReducersLoader';
 import { csrfTokenReducer } from '@/entities/User/model/slice/tokenSlice';
-import { fetchLogout } from '../model/services/fetchLogout';
+import { fetchLogoutUser } from '../model/services/fetchLogout';
 
 export interface ProfilePageProps {
    className?: string;
@@ -62,36 +62,23 @@ const ProfilePage = memo((props: ProfilePageProps) => {
       // dispatch(profileActions.updateProfile({ age: Number(value || 0) }));
    }, []);
 
-   // useEffect(() => {
-   //    fetchTokenForm(dispatch);
-   // }, []);
-
-   // useEffect(() => {
-   //    if (token) {
-   //       $api
-   //          .get('/users', { headers: { ['x-csrf-token']: token } })
-   //          .then((data) => {
-   //             console.log(data.data);
-   //          });
-   //    }
-   // }, [token]);
-
    const onChangeEmail = (value: string | number) => {};
 
-   const logout = (e: SyntheticEvent) => {
+   const logout = async (e: SyntheticEvent) => {
       e.preventDefault();
+      // выход из firebase
+      const signoutFirebase = await firebaseApi.signout();
 
-      $api.get('/signout').then((data) => {
-         console.log(data);
-         deleteCookie('accessToken');
-         localStorage.removeItem('refreshToken');
-         localStorage.removeItem('userId');
+      if (signoutFirebase) {
+         // выход из БД (возвращает булевое значение)
+         const data = await fetchLogoutUser();
 
-         if (data.status === 200) {
+         if (data) {
+            // удаление токенов
             dispatch(userAction.logout());
             navigate('/');
          }
-      });
+      }
    };
 
    return (

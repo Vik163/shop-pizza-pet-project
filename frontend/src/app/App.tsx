@@ -6,16 +6,25 @@ import { AppRouter } from './providers/router';
 import { Footer } from '@/widgets/Footer';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 
-import { getInited, firebaseApi } from '@/entities/User';
+import { getInited, firebaseApi, initAuthData } from '@/entities/User';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const App = () => {
    const dispatch = useAppDispatch();
    const inited = useSelector(getInited);
+   const auth = getAuth();
 
    useEffect(() => {
       console.log(inited);
       if (!inited) {
-         firebaseApi.getCurrentUser(dispatch);
+         // инициализация пользователя при запуске по  firebase user
+         onAuthStateChanged(auth, (user) => {
+            if (user) {
+               firebaseApi.setTokens(user);
+
+               dispatch(initAuthData(user));
+            }
+         });
       }
    }, []);
 

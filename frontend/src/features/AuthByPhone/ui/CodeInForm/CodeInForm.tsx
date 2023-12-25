@@ -14,8 +14,9 @@ import { $api } from '@/shared/api/api';
 import { UserData } from '@/entities/User/model/types/user';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 import { initAuthData, userAction } from '@/entities/User';
-import { firebaseApi } from '@/entities/User/api/firebaseApi';
+import { firebaseApi } from '@/entities/User';
 import { fetchSignupUser } from '../../model/services/fetchSignupUser';
+import { getUserData } from '@/entities/User/model/selectors/userDataSelector';
 
 interface CodeInFormProps {
    className?: string;
@@ -30,14 +31,16 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
    const [isConfirmCodeError, setIsConfirmCodeError] = useState(false);
    const [focusInput, setFocusInput] = useState(true);
    const authPhoneNumber = useSelector(getPhoneNumber);
+   const userData = useSelector(getUserData);
    const dispatch = useAppDispatch();
 
    // 3 вводим код подтверждения и вызываем верификацию ---------------
-   const onChangeNumberCode = useCallback((value?: string) => {
+   const onChangeNumberCode = useCallback(async (value?: string) => {
       if (value)
          if (value.length >= 6) {
             setFocusInput(false);
-            firebaseApi.verifyCode(value, createUser);
+            const user = await firebaseApi.verifyCode(value);
+            user && createUser(user);
          }
       return value;
    }, []);
@@ -46,15 +49,16 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
    // 3 После верификации запрашиваем пользователя в БД, и если не найден, то создаем
    async function createUser(user: User) {
       if (user) {
-         const data = await dispatch(initAuthData(user.uid));
+         // запрос и если не найден, создание пользователя в БД
+         const data = (await dispatch(initAuthData(user))).payload;
 
-         if (data.payload === 'Пользователь не найден') {
+         if (data === 'Пользователь не найден') {
             const signupData = await dispatch(fetchSignupUser(user));
             onClosePopup();
             return signupData.payload;
          } else {
             onClosePopup();
-            return data.payload;
+            return data;
          }
       }
    }

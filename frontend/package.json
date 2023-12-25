@@ -23,6 +23,7 @@
       "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
       "@svgr/webpack": "^8.1.0",
       "@types/circular-dependency-plugin": "^5.0.5",
+      "@types/grecaptcha": "^3.0.7",
       "@types/lodash.clamp": "^4.0.7",
       "@types/node": "^20.5.6",
       "@types/react": "^18.2.21",
