@@ -7,7 +7,7 @@ import {
    User,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { firebaseConfig } from '../../../shared/config/firebase/firebase';
+import { firebaseConfig } from '../../../shared/config/firebase/firebaseConfig';
 import { Dispatch, SetStateAction } from 'react';
 import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
 
@@ -114,7 +114,6 @@ class FirebaseApi {
 
    resetRecaptcha(captchaRef: React.RefObject<HTMLDivElement>) {
       // Or, if you haven't stored the widget ID:
-      console.log('appVerifier', window.recaptchaVerifier);
       if (captchaRef.current && window.recaptchaVerifier) {
          window.recaptchaVerifier.clear();
          captchaRef.current.innerHTML = `<div id='recaptcha-container'></div>`;

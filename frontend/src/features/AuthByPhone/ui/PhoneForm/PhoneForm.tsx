@@ -35,6 +35,8 @@ import {
    ReducersList,
 } from '@/shared/lib/components/DynamicReducersLoader';
 import { $api } from '@/shared/api/api';
+import { getDataYandex } from '@/entities/User/api/yandexApi';
+import { YandexForm } from '../YandexForm';
 
 export interface PhoneFormProps {
    className?: string;
@@ -51,9 +53,10 @@ const PhoneForm = memo((props: PhoneFormProps) => {
    const captchaRef = useRef(null);
    const [isConfirmCode, setIsConfirmCode] = useState(false);
    const [verificationCode, setVerificationCode] = useState('');
-   const [isConfirmCodeError, setIsConfirmCodeError] = useState(false);
+   const [openYaPopup, setOpenYaPopup] = useState(false);
    const authPhoneNumber = useSelector(getPhoneNumber);
    const inited = useSelector(getInited);
+   const appYaId = process.env.REACT_APP_YA_CLIENT_ID;
 
    // 1 значение инпута - убираем ненужные символы и отправляем в стейт
    const onChangeNumberPhone = useCallback((phoneNumber?: string) => {
@@ -81,49 +84,80 @@ const PhoneForm = memo((props: PhoneFormProps) => {
       ? InputVariant.INPUT_CLEAR
       : InputVariant.INPUT_OUTLINE;
 
+   const onLoginYa = () => {
+      console.log('o');
+      setOpenYaPopup(true);
+
+      // fetch(
+      //    `https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}`,
+      //    {
+      //       mode: 'no-cors',
+      //    },
+      // );
+   };
+
+   const onCloseYaPopup = () => {
+      setOpenYaPopup(false);
+   };
+
    return (
+      // вызывает два рендера
       <DynamicReducersLoader removeAfterUnmount reducers={initialReducers}>
          {!isConfirmCode ? (
-            <form
-               className={classNames(cls.formByPhone, {}, [])}
-               onSubmit={onSubmit}
-            >
-               <Input
-                  className={cls.loginInput}
-                  name='phone'
-                  placeholder={'+7 (999) 999-99-99'}
-                  labelLeft='Номер телефона'
-                  type='tel'
-                  withoutButtons
-                  widthInput={255}
-                  heightInput={48}
-                  variant={inputVariant}
-                  onChange={onChangeNumberPhone}
-                  value={'+7'}
-               />
-
-               <HStack
-                  className={cls.submitCode}
-                  max
-                  justify={FlexJustify.BETWEEN}
-               >
-                  <Button
-                     id='sign-in-button'
-                     width={224}
-                     height={55}
-                     variant={ButtonVariant.FILLED}
-                     bgColor={ButtonBgColor.YELLOW}
-                     fontColor={FontColor.TEXT_WHITE}
-                     fontSize={FontSize.SIZE_15}
+            <>
+               {!openYaPopup ? (
+                  <form
+                     className={classNames(cls.formByPhone, {}, [])}
+                     onSubmit={onSubmit}
                   >
-                     Выслать код
-                  </Button>
-                  <Text className={cls.text} fontSize={FontSize.SIZE_13}>
-                     Продолжая, вы соглашаетесь со сбором и обработкой
-                     персональных данных и пользовательским соглашением
-                  </Text>
-               </HStack>
-            </form>
+                     <Input
+                        className={cls.loginInput}
+                        name='phone'
+                        placeholder={'+7 (999) 999-99-99'}
+                        labelLeft='Номер телефона'
+                        type='tel'
+                        withoutButtons
+                        widthInput={255}
+                        heightInput={48}
+                        variant={inputVariant}
+                        onChange={onChangeNumberPhone}
+                        value={'+7'}
+                     />
+
+                     <a
+                        href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}`}
+                        target='_blank'
+                        onClick={onLoginYa}
+                     >
+                        Яндекс
+                     </a>
+
+                     <HStack
+                        className={cls.submitCode}
+                        max
+                        justify={FlexJustify.BETWEEN}
+                     >
+                        <Button
+                           id='sign-in-button'
+                           width={224}
+                           height={55}
+                           variant={ButtonVariant.FILLED}
+                           bgColor={ButtonBgColor.YELLOW}
+                           fontColor={FontColor.TEXT_WHITE}
+                           fontSize={FontSize.SIZE_15}
+                        >
+                           Выслать код
+                        </Button>
+                        <Text className={cls.text} fontSize={FontSize.SIZE_13}>
+                           Продолжая, вы соглашаетесь со сбором и обработкой
+                           персональных данных и пользовательским соглашением
+                        </Text>
+                     </HStack>
+                  </form>
+               ) : (
+                  <YandexForm onClosePopup={onCloseYaPopup} />
+               )}
+            </>
          ) : (
             <CodeInForm
                isConfirmCode={isConfirmCode}

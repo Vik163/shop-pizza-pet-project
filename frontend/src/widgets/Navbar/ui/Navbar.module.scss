@@ -5,6 +5,11 @@
    gap: 60px;
 }
 
+.loginButton {
+   width: 90px;
+   height: 36px;
+}
+
 .basket_quantity {
    display: inline;
    text-align: end;
@@ -19,7 +24,7 @@
 }
 
 .link {
-   @include font(var(--size-15), var(--weight-500), var(--color-primary));
+   @include font(var(--size-15), var(--weight-700), var(--color-primary));
 }
 
 .phoneModal {

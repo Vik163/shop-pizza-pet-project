@@ -3,6 +3,7 @@ import { ContactsPage } from '@/pages/ContactsPage';
 import { MainPage } from '@/pages/MainPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { ProfilePage } from '@/pages/ProfilePage';
+import { YandexLoginPage } from '@/pages/YandexLoginPage';
 import {
    AppRoutes,
    getRouteActions,
@@ -10,6 +11,7 @@ import {
    getRouteMain,
    getRouteNotFound,
    getRouteProfile,
+   getRouteYaLogin,
 } from '@/shared/const/router';
 import { AppRoutesProps } from '@/shared/types/router';
 
@@ -29,6 +31,10 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
    [AppRoutes.PROFILE]: {
       path: getRouteProfile(':id'),
       element: <ProfilePage />,
+   },
+   [AppRoutes.YA_LOGIN]: {
+      path: getRouteYaLogin(),
+      element: <YandexLoginPage />,
    },
    [AppRoutes.NOT_FOUND]: {
       path: getRouteNotFound(),

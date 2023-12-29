@@ -27,6 +27,7 @@ import { Product } from '@/entities/Product/model/types/product';
 import { MainPageProducts } from '../MainPageProducts/MainPageProducts';
 import { Products } from '../MainPageProducts/model/types/mainPageProducts';
 import { DeliveryPay } from '../DeliveryPay/DeliveryPay';
+import { YandexLoginPage } from '@/pages/YandexLoginPage';
 
 interface MainPageProps {
    className?: string;
@@ -45,6 +46,7 @@ const arrComp = [
 export const MainPage = memo((props: MainPageProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
+
    const [cards, setCards] = useState<Products>([]);
    const [sizePizza, setSizePizza] = useState<string>('average');
 
@@ -122,6 +124,7 @@ export const MainPage = memo((props: MainPageProps) => {
          />
          <img src={Man} className={cls.man} />
          <img src={Woman} className={cls.woman} />
+
          <MainPageProducts cards={cards} />
          <DeliveryPay />
       </Page>

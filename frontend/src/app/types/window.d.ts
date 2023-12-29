@@ -7,3 +7,10 @@ declare global {
       recaptchaWidgetId: number;
    }
 }
+
+declare global {
+   interface Window {
+      YaAuthSuggest: any;
+      YaSendSuggestToken: any;
+   }
+}

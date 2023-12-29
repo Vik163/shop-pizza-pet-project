@@ -6,7 +6,7 @@ export enum AppRoutes {
    // DRINKS = 'drinks',
    // DESSERTS = 'desserts',
    ACTIONS = 'actions',
-   // COMBO = 'combo',
+   YA_LOGIN = 'ya_login',
    PROFILE = 'profile',
    CONTACTS = 'contacts',
    //    FORBIDDEN = 'forbidden',
@@ -20,7 +20,7 @@ export const RoutePath = {
    [AppRoutes.MAIN]: '/',
    [AppRoutes.CONTACTS]: '/contacts',
    [AppRoutes.ACTIONS]: '/actions',
-   // [AppRoutes.COMBO]: '/combo',
+   [AppRoutes.YA_LOGIN]: '/ya_login',
    // [AppRoutes.DESSERTS]: '/desserts',
    // [AppRoutes.DRINKS]: '/drinks',
    [AppRoutes.PROFILE]: '/profile',
@@ -36,7 +36,7 @@ export const getRouteMain = () => '/';
 export const getRouteContacts = () => '/contacts';
 export const getRouteActions = () => '/actions';
 export const getRouteProfile = (id: string) => `/profile/${id}`;
-// export const getRouteArticles = () => '/articles';
+export const getRouteYaLogin = () => '/ya_login';
 // export const getRouteArticleDetails = (id: string) => `/articles/${id}`;
 // export const getRouteArticleCreate = () => '/articles/new';
 // export const getRouteArticleEdit = (id: string) => `/articles/${id}/edit`;
@@ -50,7 +50,7 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
    [getRouteContacts()]: AppRoutes.CONTACTS,
    [getRouteActions()]: AppRoutes.ACTIONS,
    [getRouteProfile(':id')]: AppRoutes.PROFILE,
-   //    [getRouteArticles()]: AppRoutes.ARTICLES,
+   [getRouteYaLogin()]: AppRoutes.YA_LOGIN,
    //    [getRouteArticleDetails(':id')]: AppRoutes.ARTICLE_DETAILS,
    //    [getRouteArticleCreate()]: AppRoutes.ARTICLE_CREATE,
    //    [getRouteArticleEdit(':id')]: AppRoutes.ARTICLE_EDIT,

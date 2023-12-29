@@ -32,6 +32,8 @@ import man from '@/shared/assets/icons/user.svg';
 import { useNavigate } from 'react-router-dom';
 import { getRouteProfile } from '@/shared/const/router';
 import { getUserUidSelector } from '@/entities/User/model/selectors/getUserUidSelector';
+import { getDataYandex, handleLoginPage } from '@/entities/User/api/yandexApi';
+import axios from 'axios';
 
 interface NavbarProps {
    className?: string;
@@ -81,8 +83,9 @@ export const Navbar = memo((props: NavbarProps) => {
          </HStack>
          {!inited ? (
             <Button
+               className={cls.loginButton}
                variant={ButtonVariant.CLEAR}
-               fontColor={FontColor.TEXT_GREY_BLUE_DARK}
+               fontColor={FontColor.TEXT_PRIMARY}
                fontWeight={FontWeight.TEXT_700}
                fontSize={FontSize.SIZE_16}
                onClick={onAuth}
@@ -102,7 +105,7 @@ export const Navbar = memo((props: NavbarProps) => {
             bgColor={ButtonBgColor.YELLOW}
             radius={ButtonRadius.RADIUS_8}
             width={160}
-            height={42}
+            height={36}
             fontColor={FontColor.TEXT_PRIMARY}
             fontWeight={FontWeight.TEXT_700}
             fontSize={FontSize.SIZE_16}
