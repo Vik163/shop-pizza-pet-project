@@ -1,14 +1,22 @@
 import { yandexIdConfig } from '@/shared/config/yandex/yandexConfig';
 
 export function getDataYandex() {
-   window.YaAuthSuggest.init(
-      yandexIdConfig.options,
-      yandexIdConfig.urlPage,
-      yandexIdConfig.buttonOptions,
-   )
-      .then((result: any) => result.handler())
-      .then((data: any) => console.log('Сообщение с токеном', data))
-      .catch((error: any) => console.log('Обработка ошибки', error));
+   window.onload = function () {
+      window.YaAuthSuggest.init(
+         yandexIdConfig.options,
+         yandexIdConfig.urlPage,
+         yandexIdConfig.buttonOptions,
+      )
+         .then(function (result: any) {
+            return result.handler();
+         })
+         .then(function (data: any) {
+            console.log('Сообщение с токеном: ', data);
+         })
+         .catch(function (error: any) {
+            console.log('Что-то пошло не так: ', error);
+         });
+   };
 }
 
 export function handleLoginPage() {
@@ -18,3 +26,18 @@ export function handleLoginPage() {
       kek: true,
    });
 }
+
+// .then(function (result: any) {
+//    return result.handler();
+// })
+// .then(function (data: any) {
+//    console.log('Сообщение с токеном: ', data);
+//    document.body.innerHTML += `Сообщение с токеном: ${JSON.stringify(
+//       data,
+//    )}`;
+// })
+// .catch(function (error: any) {
+//    console.log('Что-то пошло не так: ', error);
+//    document.body.innerHTML += `Что-то пошло не так: ${JSON.stringify(
+//       error,
+//    )}`;

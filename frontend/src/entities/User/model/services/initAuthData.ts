@@ -27,7 +27,7 @@ export const initAuthData = createAsyncThunk<
       const response =
          token &&
          (
-            await axios.get(`https://localhost:3001/auth/${user.uid}`, {
+            await axios.get(`https://pizzashop163.ru/api/auth/${user.uid}`, {
                headers: { authorization: token },
             })
          ).data;

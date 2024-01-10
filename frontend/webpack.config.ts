@@ -13,9 +13,11 @@ function getApiUrl(mode: BuildMode, apiUrl?: string) {
       return '/api';
    }
 
-   return 'https://localhost:3001';
+   return 'https://pizzashop163.ru/api';
+   // return 'https://127.0.0.1:8000';
 }
 
+// env указывается в package.json при запуске скрипта
 export default (env: BuildEnv) => {
    // прописываем пути ---------
    const paths: BuildPaths = {

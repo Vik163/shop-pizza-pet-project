@@ -1,44 +1,44 @@
-### Установка ключей для https
+### Установка сертификатов для https
 
-- создаем папку для ключей в корне -> /security,
-- в папке файл -> req.cnf,
+- Использую [mkcert](https://www.npmjs.com/package/mkcert) `npm i mkcert`
+- или Установка mkcert для Windows
+
+  - использую Chocolatey (устанавливаю на винду, если нет)
+  - в командной строке `choco install mkcert` (устанавливаются сертификаты: rootCA.pem и rootCA-key.pem в папке C:\Users\user\AppData\Local\mkcert)
+
+  ```
+  успешная установка
+  Created a new local CA at "C:\Users\user\AppData\Local\mkcert" 💥
+  The local CA is now installed in the system trust store! ⚡️
+  The local CA is now installed in the Firefox trust store (requires browser restart)! 🦊
+  ```
+
+  - создаем папку для сертификатов в корне -> /security,
+  - заходим в /security и в терминале выполняем команду,
 
 ```
-[req]
-distinguished_name = req_distinguished_name
-x509_extensions = v3_req
-prompt = no
-[req_distinguished_name]
-C = NG
-ST = Lagos
-L = Ikeja
-O = Acme
-OU = Dev
-CN = localhost
-[v3_req]
-keyUsage = critical, digitalSignature, keyAgreement
-extendedKeyUsage = serverAuth
-subjectAltName = @alt_names
-[alt_names]
-DNS.1 = www.localhost.com
-DNS.2 = localhost.com
-DNS.3 = localhost
+mkcert имя_сайта.ru "*.имя_сайта.ru" 127.0.0.1 ::1
 ```
 
-- заходим в /security и в терминале выполняем команду,
+```
+успешная установка
+Using the local CA at "/Users/filippo/Library/Application Support/mkcert" ✨
 
----
+Created a new certificate valid for the following names 📜
+ - "имя_сайта.ru"
+ - "*.имя_сайта.ru"
+ - "127.0.0.1"
+ - "::1"
 
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout cert.key -out cert.pem -config req.cnf -sha256
-
----
+The certificate is at "./имя_сайта.ru+5.pem" and the key at "./имя_сайта.ru+5-key.pem" ✅
+```
 
 - в main.ts добавляем:
 
 ```javascript
 const httpsOptions = {
-  key: readFileSync('./security/cert.key'),
-  cert: readFileSync('./security/cert.pem'),
+  key: readFileSync('./security/имя_сайта.ru+5-key.key'),
+  cert: readFileSync('./security/имя_сайта.ru+5.pem.pem'),
 };
 
 async function bootstrap() {
@@ -49,11 +49,7 @@ async function bootstrap() {
 ```
 
 - выходим в корневую папку и в терминале запускаем приложение,
-
-_Установку сертификата делаем в браузере chrom_
-
-- devTools => security => View Certificate,
-- полученный сертификат экспортируем в любую папку и называем его localhost.cer,
-- переходим в настройки браузера => безопасность => управление сертификатами,
-- импортируем его в доверенные корневые сертификаты,
-- перезагружем браузер
+- mkcert Postman
+  - settings > certifikates
+  - включаем CA certificates и добавляем rootCA.pem из mkcert
+  - добавляем клиентские сертификаты

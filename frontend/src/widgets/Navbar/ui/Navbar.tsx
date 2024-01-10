@@ -34,6 +34,7 @@ import { getRouteProfile } from '@/shared/const/router';
 import { getUserUidSelector } from '@/entities/User/model/selectors/getUserUidSelector';
 import { getDataYandex, handleLoginPage } from '@/entities/User/api/yandexApi';
 import axios from 'axios';
+import { uid } from 'uid';
 
 interface NavbarProps {
    className?: string;
@@ -47,6 +48,8 @@ export const Navbar = memo((props: NavbarProps) => {
    const inited = useSelector(getInited);
    const user = useSelector(getUserData);
    const pathProfile = user?._id && getRouteProfile(user?._id);
+
+   // getDataYandex();
 
    const onAuth = () => {
       // if(inited) navigate(getRouteProfile())
@@ -82,16 +85,19 @@ export const Navbar = memo((props: NavbarProps) => {
             {itemList}
          </HStack>
          {!inited ? (
-            <Button
-               className={cls.loginButton}
-               variant={ButtonVariant.CLEAR}
-               fontColor={FontColor.TEXT_PRIMARY}
-               fontWeight={FontWeight.TEXT_700}
-               fontSize={FontSize.SIZE_16}
-               onClick={onAuth}
-            >
-               Войти
-            </Button>
+            <div className={cls.loginContainer}>
+               <Button
+                  className={cls.loginButton}
+                  variant={ButtonVariant.CLEAR}
+                  fontColor={FontColor.TEXT_PRIMARY}
+                  fontWeight={FontWeight.TEXT_700}
+                  fontSize={FontSize.SIZE_16}
+                  onClick={onAuth}
+               >
+                  Войти
+               </Button>
+               <button id='container_ya'></button>
+            </div>
          ) : (
             <AppLink
                to={pathProfile ? pathProfile : '/'}

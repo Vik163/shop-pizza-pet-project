@@ -5,6 +5,9 @@ import { User, UserDocument } from './schemas/auth.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { FirebaseAdmin } from '../../firebaseconfig/firebase.setup';
 import { Model } from 'mongoose';
+
+// npm install node-fetch@2; import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
 // import { validateRequest } from '../../csrf.config';
 
 @Injectable()
@@ -52,6 +55,44 @@ export class AuthService {
     user
       ? this._setTokens(req, res, user)
       : res.send({ message: 'Пользователь не найден' });
+  }
+
+  async getUserYandex(req: Request, res: Response) {
+    if (req.url.length > 10) {
+      console.log(req.url);
+      const code = req.url.slice(-7);
+      console.log(code);
+      const state = req.headers.state;
+      console.log(state);
+
+      if (code) {
+        const clientSecret = process.env.YA_CLIENT_SECRET;
+        const clientId = process.env.YA_CLIENT_ID;
+
+        const body = `grant_type=authorization_code&code=${code}&client_id=${clientId}&client_secret=${clientSecret}`;
+        const response = await fetch('https://oauth.yandex.ru/token', {
+          method: 'POST',
+          body: body,
+        });
+
+        // console.log(response);
+        const data = await response.json();
+        if (data.access_token) {
+          const userData = await fetch(
+            `https://login.yandex.ru/info?&format=json`,
+            {
+              method: 'GET',
+              headers: { Authorization: `OAuth ${data.access_token}` },
+            },
+          );
+          const user = await userData.json();
+
+          user && res.redirect('https://pizzashop163.ru');
+          console.log(user);
+        }
+        // console.log(data);
+      }
+    }
   }
 
   async createUser(userRequest: AuthDto, req: Request, res: Response) {

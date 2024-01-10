@@ -11,10 +11,10 @@ import { AppModule } from './app.module';
 
 // https сертификаты
 const httpsOptions = {
-  key: readFileSync('./security/cert.key'),
-  cert: readFileSync('./security/cert.pem'),
+  key: readFileSync('./security/pizzashop163.ru+4-key.pem'),
+  cert: readFileSync('./security/pizzashop163.ru+4.pem'),
 };
-const option = ['https://localhost:3000'];
+const option = ['https://pizzashop163.ru, https://127.0.0.1:3000'];
 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -29,7 +29,7 @@ passport.use(
     {
       clientID: process.env.YA_CLIENT_ID,
       clientSecret: process.env.YA_CLIENT_SECRET,
-      callbackURL: 'https://127.0.0.1:3000',
+      callbackURL: 'https://pizzashop163.ru',
     },
     function (accessToken, refreshToken, profile, done) {
       // asynchronous verification, for effect...
@@ -73,7 +73,7 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  await app.listen(3001);
-  console.log('server listen port 3001');
+  await app.listen(8000);
+  console.log('server listen port 8000');
 }
 bootstrap();

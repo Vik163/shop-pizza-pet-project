@@ -35,8 +35,8 @@ import {
    ReducersList,
 } from '@/shared/lib/components/DynamicReducersLoader';
 import { $api } from '@/shared/api/api';
-import { getDataYandex } from '@/entities/User/api/yandexApi';
 import { YandexForm } from '../YandexForm';
+import { uid } from 'uid';
 
 export interface PhoneFormProps {
    className?: string;
@@ -53,10 +53,13 @@ const PhoneForm = memo((props: PhoneFormProps) => {
    const captchaRef = useRef(null);
    const [isConfirmCode, setIsConfirmCode] = useState(false);
    const [verificationCode, setVerificationCode] = useState('');
+   const stateToken = uid(32);
+
    const [openYaPopup, setOpenYaPopup] = useState(false);
    const authPhoneNumber = useSelector(getPhoneNumber);
    const inited = useSelector(getInited);
    const appYaId = process.env.REACT_APP_YA_CLIENT_ID;
+   let ya_window: Window | null;
 
    // 1 значение инпута - убираем ненужные символы и отправляем в стейт
    const onChangeNumberPhone = useCallback((phoneNumber?: string) => {
@@ -73,7 +76,7 @@ const PhoneForm = memo((props: PhoneFormProps) => {
       phoneNumber && firebaseApi.phoneSignIn(phoneNumber, setIsConfirmCode);
    }
    // ---------------------------------------------------------------
-
+   //https://oauth.yandex.ru/verification_code
    // кнопка 'изменить' ---------------------------------
    const onEditPhone = useCallback(() => {
       firebaseApi.resetRecaptcha(captchaRef);
@@ -84,20 +87,31 @@ const PhoneForm = memo((props: PhoneFormProps) => {
       ? InputVariant.INPUT_CLEAR
       : InputVariant.INPUT_OUTLINE;
 
-   const onLoginYa = () => {
+   const onCloseYaPopup = () => {
       console.log('o');
-      setOpenYaPopup(true);
 
-      // fetch(
-      //    `https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}`,
-      //    {
-      //       mode: 'no-cors',
-      //    },
-      // );
+      ya_window && ya_window.close();
+      // setOpenYaPopup(false);
    };
 
-   const onCloseYaPopup = () => {
-      setOpenYaPopup(false);
+   const onLoginYa = async () => {
+      // setOpenYaPopup(true);
+      // ya_window = window.open(
+      //    `https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`,
+      // );
+      const user = await $api
+         .get('/yandex', {
+            headers: { state: stateToken },
+         })
+         .then((data) => {
+            console.log(data);
+
+            if (data.data) {
+               onCloseYaPopup();
+               onClosePopup();
+            }
+         });
+      console.log(user);
    };
 
    return (
@@ -125,8 +139,8 @@ const PhoneForm = memo((props: PhoneFormProps) => {
                      />
 
                      <a
-                        href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}`}
-                        target='_blank'
+                        href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`}
+                        // target='_blank'
                         onClick={onLoginYa}
                      >
                         Яндекс

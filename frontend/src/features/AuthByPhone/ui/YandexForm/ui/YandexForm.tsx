@@ -1,4 +1,5 @@
 import { SyntheticEvent, memo, useCallback, useEffect, useState } from 'react';
+
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import { Input, InputVariant } from '@/shared/ui/Input';
@@ -20,10 +21,11 @@ import cls from './YandexForm.module.scss';
 interface YandexFormProps {
    className?: string;
    onClosePopup: () => void;
+   stateToken?: string;
 }
 
 export const YandexForm = memo((props: YandexFormProps) => {
-   const { className, onClosePopup } = props;
+   const { className, onClosePopup, stateToken } = props;
 
    const [isConfirmCodeError, setIsConfirmCodeError] = useState(false);
    const [focusInput, setFocusInput] = useState(true);
@@ -37,9 +39,10 @@ export const YandexForm = memo((props: YandexFormProps) => {
             setFocusInput(false);
             $api
                .get('/yandex', {
-                  headers: { code: value },
+                  headers: { code: value, state: stateToken },
                })
                .then((data) => {
+                  if (data.data) onClosePopup();
                   console.log(data);
                });
          }

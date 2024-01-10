@@ -47,12 +47,14 @@ export const MainPage = memo((props: MainPageProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
 
+   console.log('o');
+
    const [cards, setCards] = useState<Products>([]);
    const [sizePizza, setSizePizza] = useState<string>('average');
 
    const a = async () => {
       const response = await axios.get<Product[]>(
-         'https://localhost:3001/pizzas',
+         'https://pizzashop163.ru/api/pizzas',
          {
             withCredentials: true,
          },
