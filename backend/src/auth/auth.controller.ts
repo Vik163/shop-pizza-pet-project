@@ -1,15 +1,28 @@
-import { Controller, Post, Body, Get, Param, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Req,
+  Res,
+  ValidationPipe,
+  // UseGuards,
+} from '@nestjs/common';
 
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto/auth.dto';
-// import * as passport from 'passport';
-// import { Strategy } from 'passport-yandex';
-// import { PassportStrategy } from '@nestjs/passport';
+import { UserDto } from 'src/user/dto/user.dto';
+import { StateTokenService } from './stateToken/stateToken.service';
+// import { LocalAuthGuard } from './local.auth.guard';
+// import { AuthGuard } from '@nestjs/passport';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly userService: AuthService) {}
+  constructor(
+    private readonly userService: AuthService,
+    private readonly stateTokenService: StateTokenService,
+  ) {}
 
   // получаем пользователя по id (firebase) из localstorage и создаем сессионный куки
   @Get('auth/:id')
@@ -23,20 +36,27 @@ export class AuthController {
     await this.userService.getInitialUserById(id, req, res);
   }
 
-  @Get('yandex')
-  async getUserYandex(@Res() res: Response, @Req() req: Request) {
-    await this.userService.getUserYandex(req, res);
+  // @UseGuards(LocalAuthGuard)
+  // @UseGuards(AuthGuard('local'))
+  @Get('yatoken')
+  async stateYandex(@Res() res: Response, @Req() req: Request) {
+    await this.stateTokenService.setStateYandex(req);
   }
 
-  @Post('auth')
-  signup(
-    @Body() authRequest: AuthDto,
+  @Get('yandex')
+  async authUserByYandex(@Res() res: Response, @Req() req: Request) {
+    await this.userService.authUserByYandex(req, res);
+  }
+
+  @Post('firebase')
+  async createUser(
+    @Body(ValidationPipe) userRequest: UserDto,
     @Req() req: Request,
     // если res, то отправка через res.send(), иначе не возвращает значение
     @Res() res: Response,
   ) {
     // отправляю user в _setTokens (auth.service)
-    this.userService.createUser(authRequest, req, res);
+    await this.userService.createUser(userRequest, req, res);
   }
 
   @Get('signout')
@@ -55,10 +75,6 @@ export class AuthController {
       secure: true,
       sameSite: 'strict',
     });
-    // res.clearCookie('accessToken', {
-    //   sameSite: 'strict',
-    //   secure: true,
-    // });
     res.send({ status: 'success' });
   }
 }

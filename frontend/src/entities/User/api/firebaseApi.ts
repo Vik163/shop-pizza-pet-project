@@ -75,10 +75,10 @@ class FirebaseApi {
       return confirmationResult
          .confirm(code)
          .then(async (result: { user: User }) => {
-            console.log('verifyCode');
-
             // успешная регистрация в firebase.
             const user = result.user;
+            console.log('verifyCode', user);
+
             user && this.setTokens(user);
 
             return user;

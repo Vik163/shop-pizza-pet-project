@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { AuthDto } from './dto/auth.dto';
-import { User, UserDocument } from './schemas/auth.schema';
+import { User, UserDocument } from '../user/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { FirebaseAdmin } from '../../firebaseconfig/firebase.setup';
 import { Model } from 'mongoose';
-
-// npm install node-fetch@2; import fetch from 'node-fetch';
-// import fetch from 'node-fetch';
-// import { validateRequest } from '../../csrf.config';
+import { UserDto } from 'src/user/dto/user.dto';
+import { v4 as uuidv4 } from 'uuid';
+import { StateTokenService } from './stateToken/stateToken.service';
 
 @Injectable()
 export class AuthService {
@@ -16,13 +14,22 @@ export class AuthService {
     @InjectModel(User.name)
     private readonly userModal: Model<UserDocument>,
     private readonly admin: FirebaseAdmin,
+    private readonly stateTokenService: StateTokenService,
   ) {}
 
   // создаем сессионный куки по accessToken полученному из firebase клиента
-  async _setTokens(req, res, user: User) {
+  async _setTokens(req: Request, res: Response, user: User) {
     const app = this.admin.setup();
 
+    console.log('setTokens user', user);
+    const sess = req.session as any;
+    sess.userId = user._id;
+    console.log(sess);
+    // console.log('sessionID', req.sessionID);
+    // console.log('sessionStore', req.sessionStore);
+
     const idToken = req.headers.authorization;
+    // console.log('idToken', idToken);
 
     // Set session expiration to 5 days.
     const expiresIn = 60 * 60 * 24 * 5 * 1000;
@@ -36,12 +43,15 @@ export class AuthService {
         .createSessionCookie(idToken, { expiresIn })
         .then(
           (sessionCookie) => {
+            console.log('sessionCookie', sessionCookie);
             // Set cookie policy for session cookie.
             const options = { maxAge: expiresIn, httpOnly: true, secure: true };
             res.cookie('sessionToken', sessionCookie, options);
-            res.send(user);
+            res.end(JSON.stringify(user));
           },
-          () => {
+          (error) => {
+            console.log(error);
+
             res.status(401).send('Пользователь не авторизован!');
           },
         );
@@ -50,22 +60,30 @@ export class AuthService {
 
   // получаем пользователя по id (firebase) и создаем сессионный куки или возвращаем "не найден"
   async getInitialUserById(id: string, req: Request, res: Response) {
+    console.log('getInitialUserById', id);
     const user = await this.userModal.findById(id);
 
     user
       ? this._setTokens(req, res, user)
-      : res.send({ message: 'Пользователь не найден' });
+      : res.send({ message: 'Id Пользователь не найден' });
   }
 
-  async getUserYandex(req: Request, res: Response) {
-    if (req.url.length > 10) {
-      console.log(req.url);
-      const code = req.url.slice(-7);
-      console.log(code);
-      const state = req.headers.state;
-      console.log(state);
+  // получаем пользователя по id (firebase) и создаем сессионный куки или возвращаем "не найден"
+  async _getInitialUserByPhone(phone: string) {
+    const user = await this.userModal.findOne({ phoneNumber: phone });
 
-      if (code) {
+    return user;
+  }
+
+  async authUserByYandex(req: Request, res: Response) {
+    if (req.url.length > 10) {
+      const code = req.query.code;
+      const stateQuery = req.query.state;
+      const state = await this.stateTokenService._getAndRemoveStateYandex(
+        stateQuery as string,
+      );
+
+      if (code && state) {
         const clientSecret = process.env.YA_CLIENT_SECRET;
         const clientId = process.env.YA_CLIENT_ID;
 
@@ -75,41 +93,60 @@ export class AuthService {
           body: body,
         });
 
-        // console.log(response);
         const data = await response.json();
         if (data.access_token) {
-          const userData = await fetch(
+          const userYaDataResponse = await fetch(
             `https://login.yandex.ru/info?&format=json`,
             {
               method: 'GET',
               headers: { Authorization: `OAuth ${data.access_token}` },
             },
           );
-          const user = await userData.json();
+          const userYaDataFull = await userYaDataResponse.json();
+          // console.log('userYaDataFull', userYaDataFull);
+          // console.log('data', data);
 
-          user && res.redirect('https://pizzashop163.ru');
-          console.log(user);
+          const userYaData = userYaDataFull && {
+            email: userYaDataFull.default_email,
+            phoneNumber: userYaDataFull.default_phone.number,
+            // role: Roles.CLIENT,
+          };
+
+          if (userYaData) {
+            const newUser = await this.createUser(userYaData, req, res);
+
+            if (newUser) {
+              res.redirect(
+                `https://pizzashop163.ru?user=${JSON.stringify(newUser)}`,
+              );
+            }
+          }
         }
-        // console.log(data);
       }
     }
   }
 
-  async createUser(userRequest: AuthDto, req: Request, res: Response) {
-    console.log(userRequest);
+  async createUser(userRequest: UserDto, req: Request, res: Response) {
     // добавляю в firebase роль
-    const app = this.admin.setup();
-    app.auth().setCustomUserClaims(userRequest._id, { role: userRequest.role });
+    // const app = this.admin.setup();
+    // if (app && userId)
+    //   app.auth().setCustomUserClaims(userId, { role: userRequest.role });
 
-    const newUser = new this.userModal(userRequest);
+    // Ищем в БД, если нет создаем, если есть устанавливаем токены
+    const user = await this._getInitialUserByPhone(userRequest.phoneNumber);
 
-    newUser && this._setTokens(req, res, newUser);
+    if (user) {
+      this._setTokens(req, res, user);
+    } else {
+      userRequest._id = uuidv4();
+      const newUser = new this.userModal(userRequest);
+      newUser && this._setTokens(req, res, newUser);
 
-    console.log(newUser);
-    return newUser.save();
+      return await newUser.save();
+    }
+    return user;
   }
 
   // async signout(req: Request, res: Response) {
-
-  // }
+  //}
 }

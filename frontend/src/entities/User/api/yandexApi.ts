@@ -22,7 +22,7 @@ export function getDataYandex() {
 export function handleLoginPage() {
    console.log('i');
 
-   window.YaSendSuggestToken('https://127.0.0.1:3000', {
+   window.YaSendSuggestToken('https://pizzashop163.ru/actions', {
       kek: true,
    });
 }

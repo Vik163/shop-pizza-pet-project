@@ -20,5 +20,15 @@ export function buildDevServer(options: BuildOptions): DevServerConfiguration {
             port: process.env.WDS_SOCKET_PORT,
          },
       },
+      // Запуск сервера https://webpack.js.org/configuration/dev-server/#devserverhttps
+      // server: {
+      //    type: 'https',
+      //    options: {
+      //       ca: '../../mkcertServer/rootCA.pem',
+      //       cert: '../../mkcertServer/pizzashop163.ru+4.pem',
+      //       key: '../../mkcertServer/pizzashop163.ru+4-key.pem',
+      //       requestCert: true,
+      //    },
+      // },
    };
 }

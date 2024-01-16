@@ -48,19 +48,24 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
 
    // 3 После верификации запрашиваем пользователя в БД, и если не найден, то создаем
    async function createUser(user: User) {
-      if (user) {
-         // запрос и если не найден, создание пользователя в БД
-         const data = (await dispatch(initAuthData(user))).payload;
+      console.log('cU');
 
-         if (data === 'Пользователь не найден') {
-            const signupData = await dispatch(fetchSignupUser(user));
-            onClosePopup();
-            return signupData.payload;
-         } else {
-            onClosePopup();
-            return data;
-         }
+      const signupData = await dispatch(fetchSignupUser(user));
+      if (signupData.payload) {
+         onClosePopup();
+         return signupData.payload;
       }
+      // // запрос и если не найден, создание пользователя в БД
+      // const data = (await dispatch(initAuthData(user))).payload;
+
+      // if (data === 'Пользователь не найден') {
+      //    const signupData = await dispatch(fetchSignupUser(user));
+      //    onClosePopup();
+      //    return signupData.payload;
+      // } else {
+      //    onClosePopup();
+      //    return data;
+      // }
    }
 
    // кнопка 'получить новый код' ------------

@@ -6,10 +6,11 @@ export const yandexIdConfig = {
    options: {
       client_id: process.env.REACT_APP_YA_CLIENT_ID,
       response_type: 'token',
-      redirect_uri: 'https://oauth.yandex.ru/verification_code',
+      redirect_uri: 'https://pizzashop163.ru/actions',
+      // redirect_uri: 'https://oauth.yandex.ru/verification_code',
       state: state,
    },
-   urlPage: 'https://localhost:3000',
+   urlPage: 'https://pizzashop163.ru/',
    buttonOptions: {
       view: 'button',
       parentId: 'container_ya',

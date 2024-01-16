@@ -1,17 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { Permissions } from '../dto/user.dto';
+import { Roles } from '../dto/user.dto';
 
 export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User {
   @Prop()
-  _id: string;
+  _id?: string;
   @Prop()
   name: string;
   @Prop()
-  role: Permissions;
+  role?: Roles;
   @Prop()
   phoneNumber: string;
   @Prop()

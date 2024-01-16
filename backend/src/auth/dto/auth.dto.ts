@@ -9,16 +9,13 @@ import {
   IsOptional,
 } from 'class-validator';
 
-export enum Permissions {
+export enum Roles {
   ADMIN = 'ADMIN',
-  USER = 'USER',
+  STANDART = 'STANDART',
   DEVELOPER = 'DEVELOPER',
 }
 
 export class AuthDto {
-  @IsNotEmpty()
-  _id: string;
-
   @IsOptional()
   @IsEmail()
   // @IsNotEmpty()
@@ -52,6 +49,6 @@ export class AuthDto {
   // lastName: string;
 
   @IsNotEmpty()
-  @IsEnum(Permissions, { each: true })
-  role: Permissions[];
+  @IsEnum(Roles, { each: true })
+  role: Roles[];
 }

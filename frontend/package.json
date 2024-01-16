@@ -4,11 +4,11 @@
    "description": "",
    "main": "index.ts",
    "scripts": {
-      "start": "webpack serve --env port=3000",
+      "dev": "webpack serve --env port=3000",
       "build": "webpack",
       "server": "cd ../backend && nest start --watch",
-      "dev": "vite",
-      "start:dev": "concurrently \"npm run server\" \"npm start\"",
+      "dev:vite": "vite",
+      "dev:server": "concurrently \"npm run server\" \"npm dev\"",
       "start:dev:vite": "concurrently \"npm run start:vite\" \"npm run server\""
    },
    "keywords": [],

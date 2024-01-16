@@ -87,91 +87,70 @@ const PhoneForm = memo((props: PhoneFormProps) => {
       ? InputVariant.INPUT_CLEAR
       : InputVariant.INPUT_OUTLINE;
 
-   const onCloseYaPopup = () => {
-      console.log('o');
-
-      ya_window && ya_window.close();
-      // setOpenYaPopup(false);
-   };
-
    const onLoginYa = async () => {
-      // setOpenYaPopup(true);
-      // ya_window = window.open(
-      //    `https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`,
-      // );
-      const user = await $api
-         .get('/yandex', {
-            headers: { state: stateToken },
-         })
-         .then((data) => {
-            console.log(data);
+      console.log(stateToken);
 
-            if (data.data) {
-               onCloseYaPopup();
-               onClosePopup();
-            }
-         });
-      console.log(user);
+      await axios.get('https://pizzashop163.ru/api/yatoken', {
+         headers: { 'x-yandex-state': stateToken },
+      });
+
+      // setTimeout(function () {
+      //    window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`;
+      // }, 2000);
    };
 
    return (
       // вызывает два рендера
       <DynamicReducersLoader removeAfterUnmount reducers={initialReducers}>
          {!isConfirmCode ? (
-            <>
-               {!openYaPopup ? (
-                  <form
-                     className={classNames(cls.formByPhone, {}, [])}
-                     onSubmit={onSubmit}
+            <form
+               className={classNames(cls.formByPhone, {}, [])}
+               onSubmit={onSubmit}
+            >
+               <Input
+                  className={cls.loginInput}
+                  name='phone'
+                  placeholder={'+7 (999) 999-99-99'}
+                  labelLeft='Номер телефона'
+                  type='tel'
+                  withoutButtons
+                  widthInput={255}
+                  heightInput={48}
+                  variant={inputVariant}
+                  onChange={onChangeNumberPhone}
+                  value={'+7'}
+               />
+
+               <a
+                  // href='#!'
+                  href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`}
+                  onClick={onLoginYa}
+               >
+                  Яндекс
+               </a>
+
+               <HStack
+                  className={cls.submitCode}
+                  max
+                  justify={FlexJustify.BETWEEN}
+               >
+                  <Button
+                     id='sign-in-button'
+                     width={224}
+                     height={55}
+                     variant={ButtonVariant.FILLED}
+                     bgColor={ButtonBgColor.YELLOW}
+                     fontColor={FontColor.TEXT_WHITE}
+                     fontSize={FontSize.SIZE_15}
                   >
-                     <Input
-                        className={cls.loginInput}
-                        name='phone'
-                        placeholder={'+7 (999) 999-99-99'}
-                        labelLeft='Номер телефона'
-                        type='tel'
-                        withoutButtons
-                        widthInput={255}
-                        heightInput={48}
-                        variant={inputVariant}
-                        onChange={onChangeNumberPhone}
-                        value={'+7'}
-                     />
-
-                     <a
-                        href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`}
-                        // target='_blank'
-                        onClick={onLoginYa}
-                     >
-                        Яндекс
-                     </a>
-
-                     <HStack
-                        className={cls.submitCode}
-                        max
-                        justify={FlexJustify.BETWEEN}
-                     >
-                        <Button
-                           id='sign-in-button'
-                           width={224}
-                           height={55}
-                           variant={ButtonVariant.FILLED}
-                           bgColor={ButtonBgColor.YELLOW}
-                           fontColor={FontColor.TEXT_WHITE}
-                           fontSize={FontSize.SIZE_15}
-                        >
-                           Выслать код
-                        </Button>
-                        <Text className={cls.text} fontSize={FontSize.SIZE_13}>
-                           Продолжая, вы соглашаетесь со сбором и обработкой
-                           персональных данных и пользовательским соглашением
-                        </Text>
-                     </HStack>
-                  </form>
-               ) : (
-                  <YandexForm onClosePopup={onCloseYaPopup} />
-               )}
-            </>
+                     Выслать код
+                  </Button>
+                  <Text className={cls.text} fontSize={FontSize.SIZE_13}>
+                     Продолжая, вы соглашаетесь со сбором и обработкой
+                     персональных данных и пользовательским соглашением
+                  </Text>
+               </HStack>
+            </form>
          ) : (
             <CodeInForm
                isConfirmCode={isConfirmCode}

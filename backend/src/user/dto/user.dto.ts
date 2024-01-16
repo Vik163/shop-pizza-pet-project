@@ -9,15 +9,14 @@ import {
   IsOptional,
 } from 'class-validator';
 
-export enum Permissions {
+export enum Roles {
   ADMIN = 'ADMIN',
-  USER = 'USER',
+  CLIENT = 'CLIENT',
   DEVELOPER = 'DEVELOPER',
 }
 
 export class UserDto {
-  @IsNotEmpty()
-  _id: string;
+  _id?: string;
 
   @IsOptional()
   @IsEmail()
@@ -52,6 +51,10 @@ export class UserDto {
   // lastName: string;
 
   @IsNotEmpty()
-  @IsEnum(Permissions, { each: true })
-  role: Permissions[];
+  @IsEnum(Roles, { each: true })
+  role?: Roles;
+}
+
+export class UserFirebaseDto {
+  state: string;
 }

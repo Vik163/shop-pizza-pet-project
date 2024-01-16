@@ -5,8 +5,6 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import { doubleCsrfProtection } from '../csrf.config';
 import * as passport from 'passport';
-import { Strategy as YandexStrategy } from 'passport-yandex';
-
 import { AppModule } from './app.module';
 
 // https сертификаты
@@ -15,34 +13,7 @@ const httpsOptions = {
   cert: readFileSync('./security/pizzashop163.ru+4.pem'),
 };
 const option = ['https://pizzashop163.ru, https://127.0.0.1:3000'];
-
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function (obj, done) {
-  done(null, obj);
-});
-
-passport.use(
-  new YandexStrategy(
-    {
-      clientID: process.env.YA_CLIENT_ID,
-      clientSecret: process.env.YA_CLIENT_SECRET,
-      callbackURL: 'https://pizzashop163.ru',
-    },
-    function (accessToken, refreshToken, profile, done) {
-      // asynchronous verification, for effect...
-      process.nextTick(function () {
-        // To keep the example simple, the user's Yandex profile is returned
-        // to represent the logged-in user.  In a typical application, you would
-        // want to associate the Yandex account with a user record in your
-        // database, and return that user instead.
-        return done(null, profile);
-      });
-    },
-  ),
-);
+const expiresIn = 60 * 60 * 24 * 1000;
 
 async function bootstrap() {
   // c https
@@ -60,11 +31,10 @@ async function bootstrap() {
 
   app.use(
     session({
-      name: 'session',
       secret: 'this is a secret msg',
       resave: false,
       saveUninitialized: false,
-      cookie: {},
+      cookie: { secure: true, maxAge: expiresIn, httpOnly: true },
     }),
   );
   app.useGlobalPipes(new ValidationPipe());

@@ -17,15 +17,17 @@ export const fetchSignupUser = createAsyncThunk(
          if (token) {
             const data = {
                phoneNumber: user.phoneNumber,
-               role: 'ADMIN', //! ?
-               _id: user.uid,
+               role: 'STANDART', //! ?
             };
 
-            const authData = await $api.post<UserData>('/auth', data, {
-               headers: { 'x-csrf-token': token },
+            const authData = await $api.post<UserData>('/firebase', data, {
+               headers: {
+                  'x-csrf-token': token,
+               },
             });
 
             const userData = authData.data;
+            console.log(userData);
 
             dispatch(userAction.setAuthData(userData));
             //! возвращать .data

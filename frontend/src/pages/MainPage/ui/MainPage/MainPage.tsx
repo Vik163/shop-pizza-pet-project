@@ -47,8 +47,6 @@ export const MainPage = memo((props: MainPageProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
 
-   console.log('o');
-
    const [cards, setCards] = useState<Products>([]);
    const [sizePizza, setSizePizza] = useState<string>('average');
 
