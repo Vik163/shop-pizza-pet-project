@@ -93,10 +93,6 @@ const PhoneForm = memo((props: PhoneFormProps) => {
       await axios.get('https://pizzashop163.ru/api/yatoken', {
          headers: { 'x-yandex-state': stateToken },
       });
-
-      // setTimeout(function () {
-      //    window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`;
-      // }, 2000);
    };
 
    return (
@@ -122,7 +118,6 @@ const PhoneForm = memo((props: PhoneFormProps) => {
                />
 
                <a
-                  // href='#!'
                   href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`}
                   onClick={onLoginYa}
                >

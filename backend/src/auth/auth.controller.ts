@@ -7,13 +7,16 @@ import {
   Req,
   Res,
   ValidationPipe,
+  Inject,
   // UseGuards,
 } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { UserDto } from 'src/user/dto/user.dto';
-import { StateTokenService } from './stateToken/stateToken.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+
 // import { LocalAuthGuard } from './local.auth.guard';
 // import { AuthGuard } from '@nestjs/passport';
 
@@ -21,7 +24,7 @@ import { StateTokenService } from './stateToken/stateToken.service';
 export class AuthController {
   constructor(
     private readonly userService: AuthService,
-    private readonly stateTokenService: StateTokenService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   // получаем пользователя по id (firebase) из localstorage и создаем сессионный куки
@@ -39,8 +42,12 @@ export class AuthController {
   // @UseGuards(LocalAuthGuard)
   // @UseGuards(AuthGuard('local'))
   @Get('yatoken')
-  async stateYandex(@Res() res: Response, @Req() req: Request) {
-    await this.stateTokenService.setStateYandex(req);
+  async stateYandex(@Req() req: Request) {
+    const token = {
+      state: req.headers['x-yandex-state'] as string,
+    };
+    // сохраняю в кеше
+    await this.cacheManager.set('state', token.state);
   }
 
   @Get('yandex')

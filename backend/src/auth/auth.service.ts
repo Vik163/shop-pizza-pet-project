@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { User, UserDocument } from '../user/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
@@ -6,7 +6,15 @@ import { FirebaseAdmin } from '../../firebaseconfig/firebase.setup';
 import { Model } from 'mongoose';
 import { UserDto } from 'src/user/dto/user.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { StateTokenService } from './stateToken/stateToken.service';
+import session from 'express-session';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+
+type TSess = session.Session & Partial<session.SessionData>;
+interface ISession extends TSess {
+  userId?: string;
+  visits?: number;
+}
 
 @Injectable()
 export class AuthService {
@@ -14,7 +22,7 @@ export class AuthService {
     @InjectModel(User.name)
     private readonly userModal: Model<UserDocument>,
     private readonly admin: FirebaseAdmin,
-    private readonly stateTokenService: StateTokenService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   // создаем сессионный куки по accessToken полученному из firebase клиента
@@ -22,9 +30,12 @@ export class AuthService {
     const app = this.admin.setup();
 
     console.log('setTokens user', user);
-    const sess = req.session as any;
+    const sess: ISession = req.session;
     sess.userId = user._id;
-    console.log(sess);
+    sess.visits = sess.visits ? sess.visits + 1 : 1;
+    sess.save();
+    // console.log(sess);
+
     // console.log('sessionID', req.sessionID);
     // console.log('sessionStore', req.sessionStore);
 
@@ -77,13 +88,16 @@ export class AuthService {
 
   async authUserByYandex(req: Request, res: Response) {
     if (req.url.length > 10) {
+      // получение кода и токена из query параметров
       const code = req.query.code;
       const stateQuery = req.query.state;
-      const state = await this.stateTokenService._getAndRemoveStateYandex(
-        stateQuery as string,
-      );
+      // верификация state при сравнении с state из кеша
+      const stateHeaders = await this.cacheManager.get('state');
+
+      const state = stateHeaders === stateQuery;
 
       if (code && state) {
+        await this.cacheManager.del('state');
         const clientSecret = process.env.YA_CLIENT_SECRET;
         const clientId = process.env.YA_CLIENT_ID;
 

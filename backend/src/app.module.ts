@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 // import { APP_GUARD } from '@nestjs/core';
 

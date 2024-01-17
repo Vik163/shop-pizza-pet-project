@@ -7,26 +7,17 @@ import { User, UserSchema } from '../user/schemas/user.schema';
 import { UserSerializer } from './session.serializer';
 import { LocalStrategy } from './local.strategy';
 import { PassportModule } from '@nestjs/passport';
-import { StateTokenService } from './stateToken/stateToken.service';
-import { StateToken, StateTokenSchema } from './stateToken/stateToken.schema';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-      { name: StateToken.name, schema: StateTokenSchema },
-    ]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     PassportModule.register({
       session: true,
     }),
+    CacheModule.register(),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    FirebaseAdmin,
-    UserSerializer,
-    LocalStrategy,
-    StateTokenService,
-  ],
+  providers: [AuthService, FirebaseAdmin, UserSerializer, LocalStrategy],
 })
 export class AuthModule {}

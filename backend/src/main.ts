@@ -13,7 +13,8 @@ const httpsOptions = {
   cert: readFileSync('./security/pizzashop163.ru+4.pem'),
 };
 const option = ['https://pizzashop163.ru, https://127.0.0.1:3000'];
-const expiresIn = 60 * 60 * 24 * 1000;
+
+// const expiresIn = 60 * 60 * 24 * 1000;
 
 async function bootstrap() {
   // c https
@@ -31,10 +32,16 @@ async function bootstrap() {
 
   app.use(
     session({
+      name: 'sessPizza',
       secret: 'this is a secret msg',
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: true, maxAge: expiresIn, httpOnly: true },
+      cookie: {
+        secure: true,
+        httpOnly: true,
+        signed: true,
+        sameSite: 'strict',
+      },
     }),
   );
   app.useGlobalPipes(new ValidationPipe());
