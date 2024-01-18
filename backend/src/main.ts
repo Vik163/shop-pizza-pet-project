@@ -6,7 +6,8 @@ import * as session from 'express-session';
 import { doubleCsrfProtection } from '../csrf.config';
 import * as passport from 'passport';
 import { AppModule } from './app.module';
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const MongoStore = require('connect-mongo');
 // https сертификаты
 const httpsOptions = {
   key: readFileSync('./security/pizzashop163.ru+4-key.pem'),
@@ -32,6 +33,9 @@ async function bootstrap() {
 
   app.use(
     session({
+      store: MongoStore.create({
+        mongoUrl: 'mongodb://127.0.0.1:27017/storedb',
+      }),
       name: 'sessPizza',
       secret: 'this is a secret msg',
       resave: false,
@@ -48,7 +52,7 @@ async function bootstrap() {
 
   app.use(doubleCsrfProtection);
   app.use(passport.initialize());
-  app.use(passport.session());
+  // app.use(passport.session());
 
   await app.listen(8000);
   console.log('server listen port 8000');

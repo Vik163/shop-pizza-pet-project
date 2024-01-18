@@ -14,6 +14,7 @@ type TSess = session.Session & Partial<session.SessionData>;
 interface ISession extends TSess {
   userId?: string;
   visits?: number;
+  ertu?: string;
 }
 
 @Injectable()
@@ -31,9 +32,12 @@ export class AuthService {
 
     console.log('setTokens user', user);
     const sess: ISession = req.session;
+    console.log('visits', sess.visits);
+    req.sessionStore.clear();
     sess.userId = user._id;
     sess.visits = sess.visits ? sess.visits + 1 : 1;
-    sess.save();
+
+    // sess.save();
     // console.log(sess);
 
     // console.log('sessionID', req.sessionID);
