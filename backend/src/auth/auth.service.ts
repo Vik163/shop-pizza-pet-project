@@ -26,51 +26,33 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  // создаем сессионный куки по accessToken полученному из firebase клиента
-  async _setTokens(req: Request, res: Response, user: User) {
-    const app = this.admin.setup();
-
-    console.log('setTokens user', user);
+  async _setSession(
+    req: Request,
+    res: Response,
+    user: UserDto,
+    yaAuth?: boolean,
+  ) {
+    console.log('setSession user', user);
     const sess: ISession = req.session;
-    console.log('visits', sess.visits);
-    req.sessionStore.clear();
+    // console.log('visits', sess.visits);
     sess.userId = user._id;
+    console.log(sess.id);
+    console.log(sess.userId);
+
     sess.visits = sess.visits ? sess.visits + 1 : 1;
+
+    console.log(user.yaAuth);
+    if (sess.userId && yaAuth) {
+      res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`);
+    } else {
+      res.send(user);
+    }
 
     // sess.save();
     // console.log(sess);
 
     // console.log('sessionID', req.sessionID);
     // console.log('sessionStore', req.sessionStore);
-
-    const idToken = req.headers.authorization;
-    // console.log('idToken', idToken);
-
-    // Set session expiration to 5 days.
-    const expiresIn = 60 * 60 * 24 * 5 * 1000;
-    // Create the session cookie. This will also verify the ID token in the process.
-    // The session cookie will have the same claims as the ID token.
-    // To only allow session cookie setting on recent sign-in, auth_time in ID token
-    // can be checked to ensure user was recently signed in before creating a session cookie.
-    if (idToken) {
-      app
-        .auth()
-        .createSessionCookie(idToken, { expiresIn })
-        .then(
-          (sessionCookie) => {
-            console.log('sessionCookie', sessionCookie);
-            // Set cookie policy for session cookie.
-            const options = { maxAge: expiresIn, httpOnly: true, secure: true };
-            res.cookie('sessionToken', sessionCookie, options);
-            res.end(JSON.stringify(user));
-          },
-          (error) => {
-            console.log(error);
-
-            res.status(401).send('Пользователь не авторизован!');
-          },
-        );
-    }
   }
 
   // получаем пользователя по id (firebase) и создаем сессионный куки или возвращаем "не найден"
@@ -79,7 +61,7 @@ export class AuthService {
     const user = await this.userModal.findById(id);
 
     user
-      ? this._setTokens(req, res, user)
+      ? this._setSession(req, res, user)
       : res.send({ message: 'Id Пользователь не найден' });
   }
 
@@ -121,23 +103,19 @@ export class AuthService {
             },
           );
           const userYaDataFull = await userYaDataResponse.json();
-          // console.log('userYaDataFull', userYaDataFull);
+          console.log('userYaDataFull', userYaDataFull);
           // console.log('data', data);
 
           const userYaData = userYaDataFull && {
+            yaAuth: true,
             email: userYaDataFull.default_email,
             phoneNumber: userYaDataFull.default_phone.number,
             // role: Roles.CLIENT,
           };
 
           if (userYaData) {
-            const newUser = await this.createUser(userYaData, req, res);
-
-            if (newUser) {
-              res.redirect(
-                `https://pizzashop163.ru?user=${JSON.stringify(newUser)}`,
-              );
-            }
+            console.log(userYaData);
+            await this.createUser(userYaData, req, res);
           }
         }
       }
@@ -145,26 +123,31 @@ export class AuthService {
   }
 
   async createUser(userRequest: UserDto, req: Request, res: Response) {
-    // добавляю в firebase роль
-    // const app = this.admin.setup();
-    // if (app && userId)
-    //   app.auth().setCustomUserClaims(userId, { role: userRequest.role });
-
     // Ищем в БД, если нет создаем, если есть устанавливаем токены
     const user = await this._getInitialUserByPhone(userRequest.phoneNumber);
 
     if (user) {
-      this._setTokens(req, res, user);
+      if (userRequest.yaAuth) {
+        this._setSession(req, res, user, userRequest.yaAuth);
+      } else {
+        this._setSession(req, res, user);
+      }
     } else {
       userRequest._id = uuidv4();
       const newUser = new this.userModal(userRequest);
-      newUser && this._setTokens(req, res, newUser);
+      newUser && this._setSession(req, res, newUser);
 
       return await newUser.save();
     }
     return user;
   }
 
-  // async signout(req: Request, res: Response) {
-  //}
+  async signout(req: Request, res: Response) {
+    res.clearCookie('__Host-psifi.x-csrf-token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+    });
+    res.send({ status: 'success' });
+  }
 }

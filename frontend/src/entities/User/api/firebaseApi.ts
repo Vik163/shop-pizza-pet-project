@@ -69,7 +69,7 @@ class FirebaseApi {
    // ------------------------------------------------------------------------
 
    // 3 получает код подтверждения и верификация --------------------------
-   verifyCode(code: string) {
+   async verifyCode(code: string) {
       const confirmationResult = window.confirmationResult;
 
       return confirmationResult

@@ -16,6 +16,7 @@ export enum Roles {
 }
 
 export class UserDto {
+  yaAuth?: boolean;
   _id?: string;
 
   @IsOptional()

@@ -48,8 +48,6 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
 
    // 3 После верификации запрашиваем пользователя в БД, и если не найден, то создаем
    async function createUser(user: User) {
-      console.log('cU');
-
       const signupData = await dispatch(fetchSignupUser(user));
       if (signupData.payload) {
          onClosePopup();

@@ -17,7 +17,7 @@ export const fetchSignupUser = createAsyncThunk(
          if (token) {
             const data = {
                phoneNumber: user.phoneNumber,
-               role: 'STANDART', //! ?
+               role: 'CLIENT', //! ?
             };
 
             const authData = await $api.post<UserData>('/firebase', data, {

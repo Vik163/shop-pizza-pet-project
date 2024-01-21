@@ -72,16 +72,6 @@ export class AuthController {
     // если res, то отправка через res.send(), иначе не возвращает значение
     @Res() res: Response,
   ) {
-    res.clearCookie('sessionToken', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-    });
-    res.clearCookie('__Host-psifi.x-csrf-token', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-    });
-    res.send({ status: 'success' });
+    await this.signout(req, res);
   }
 }

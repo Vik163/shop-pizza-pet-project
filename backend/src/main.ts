@@ -8,6 +8,7 @@ import * as passport from 'passport';
 import { AppModule } from './app.module';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const MongoStore = require('connect-mongo');
+
 // https сертификаты
 const httpsOptions = {
   key: readFileSync('./security/pizzashop163.ru+4-key.pem'),
@@ -38,7 +39,9 @@ async function bootstrap() {
       }),
       name: 'sessPizza',
       secret: 'this is a secret msg',
+      // указывает, нужно ли пересохранять сессию в хранилище, если она не изменилась (по умолчанию false);
       resave: false,
+      // если true, то в хранилище будут попадать пустые сессии;
       saveUninitialized: false,
       cookie: {
         secure: true,
