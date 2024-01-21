@@ -37,7 +37,6 @@ const App = () => {
          onAuthStateChanged(auth, (user) => {
             if (user) {
                firebaseApi.setTokens(user);
-               console.log('Init');
 
                dispatch(initAuthData(user));
             }

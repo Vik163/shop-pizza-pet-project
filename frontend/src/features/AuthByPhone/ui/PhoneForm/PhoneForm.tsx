@@ -88,10 +88,9 @@ const PhoneForm = memo((props: PhoneFormProps) => {
       : InputVariant.INPUT_OUTLINE;
 
    const onLoginYa = async () => {
-      console.log(stateToken);
-
       await axios.get('https://pizzashop163.ru/api/yatoken', {
          headers: { 'x-yandex-state': stateToken },
+         withCredentials: true,
       });
    };
 

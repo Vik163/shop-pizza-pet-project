@@ -4,7 +4,6 @@ import {
   MaxLength,
   MinLength,
   Matches,
-  IsEnum,
   IsAlpha,
   IsOptional,
 } from 'class-validator';
@@ -51,8 +50,7 @@ export class UserDto {
   // @IsAlpha()
   // lastName: string;
 
-  @IsNotEmpty()
-  @IsEnum(Roles, { each: true })
+  // @IsEnum(Roles, { each: true })
   role?: Roles;
 }
 

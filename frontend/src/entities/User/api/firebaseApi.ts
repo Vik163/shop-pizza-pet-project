@@ -77,7 +77,6 @@ class FirebaseApi {
          .then(async (result: { user: User }) => {
             // успешная регистрация в firebase.
             const user = result.user;
-            console.log('verifyCode', user);
 
             user && this.setTokens(user);
 
@@ -85,15 +84,14 @@ class FirebaseApi {
          })
          .catch((error: string) => {
             console.log('Неверный код', error);
-            // setErrorAuthPhone(error);
          });
    }
    // --------------------------------------------------------------------
 
    // устанавливаем токены -----------------------------------------------
    setTokens(user: User) {
-      const rToken = localStorage.getItem('refreshToken');
-      !rToken && localStorage.setItem('refreshToken', user.refreshToken);
+      // const rToken = localStorage.getItem('refreshToken');
+      // !rToken && localStorage.setItem('refreshToken', user.refreshToken);
 
       user.getIdToken().then((token) => {
          setCookie('accessToken', token, { secure: true, samesite: 'strict' });

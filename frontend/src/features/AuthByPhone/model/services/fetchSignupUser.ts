@@ -9,7 +9,6 @@ export const fetchSignupUser = createAsyncThunk(
    'authByPhone/fetchSignup',
    async (user: User, thunkApi) => {
       const { rejectWithValue, dispatch } = thunkApi;
-      console.log(user);
 
       try {
          const csrfToken = await $api.get('/csrf');
@@ -17,17 +16,17 @@ export const fetchSignupUser = createAsyncThunk(
          if (token) {
             const data = {
                phoneNumber: user.phoneNumber,
-               role: 'CLIENT', //! ?
+               // role: 'CLIENT', //! ?
             };
 
             const authData = await $api.post<UserData>('/firebase', data, {
                headers: {
                   'x-csrf-token': token,
                },
+               withCredentials: true,
             });
 
             const userData = authData.data;
-            console.log(userData);
 
             dispatch(userAction.setAuthData(userData));
             //! возвращать .data

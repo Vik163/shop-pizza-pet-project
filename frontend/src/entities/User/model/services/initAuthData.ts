@@ -6,6 +6,7 @@ import { $api } from '@/shared/api/api';
 import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
 import axios from 'axios';
 import { User } from 'firebase/auth';
+import { userAction } from '../slice/userSlice';
 
 // Запрос на текущего пользователя по id из localStorage
 // через extraReducers (userSlice)
@@ -18,8 +19,10 @@ export const initAuthData = createAsyncThunk<
 >('user/initAuthData', async (user, thunkApi) => {
    const { rejectWithValue, dispatch } = thunkApi;
 
-   if (!user.uid) {
-      return rejectWithValue('ErrorInitAuthData');
+   const userId = localStorage.getItem('userId');
+
+   if (!userId) {
+      return rejectWithValue('Пользователь не авторизован');
    }
 
    try {
@@ -27,7 +30,7 @@ export const initAuthData = createAsyncThunk<
       const response =
          token &&
          (
-            await axios.get(`https://pizzashop163.ru/api/auth/${user.uid}`, {
+            await axios.get(`https://pizzashop163.ru/api/auth/${userId}`, {
                headers: { authorization: token },
             })
          ).data;

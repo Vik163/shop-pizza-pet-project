@@ -48,6 +48,7 @@ export class AuthController {
     };
     // сохраняю в кеше
     await this.cacheManager.set('state', token.state);
+    req.sessionID && (await this.cacheManager.set('sessionId', req.sessionID));
   }
 
   @Get('yandex')
@@ -72,6 +73,6 @@ export class AuthController {
     // если res, то отправка через res.send(), иначе не возвращает значение
     @Res() res: Response,
   ) {
-    await this.signout(req, res);
+    await this.userService.signout(req, res);
   }
 }

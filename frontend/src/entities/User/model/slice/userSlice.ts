@@ -23,7 +23,6 @@ export const userSlice = createSlice({
       logout: (state) => {
          const { deleteCookie } = useCookie();
          state._inited = false;
-         localStorage.removeItem('refreshToken');
          localStorage.removeItem('userId');
          deleteCookie('accessToken');
       },

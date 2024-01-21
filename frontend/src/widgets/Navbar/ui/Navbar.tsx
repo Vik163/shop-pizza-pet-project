@@ -28,13 +28,11 @@ import {
    getUserData,
 } from '@/entities/User/model/selectors/userDataSelector';
 import { Icon } from '@/shared/ui/Icon';
-import man from '@/shared/assets/icons/user.svg';
+import man from '@/shared/assets/icons/user_auth.svg';
 import { useNavigate } from 'react-router-dom';
 import { getRouteProfile } from '@/shared/const/router';
 import { getUserUidSelector } from '@/entities/User/model/selectors/getUserUidSelector';
-import { getDataYandex, handleLoginPage } from '@/entities/User/api/yandexApi';
 import axios from 'axios';
-import { uid } from 'uid';
 
 interface NavbarProps {
    className?: string;

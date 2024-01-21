@@ -18,26 +18,3 @@ export function getDataYandex() {
          });
    };
 }
-
-export function handleLoginPage() {
-   console.log('i');
-
-   window.YaSendSuggestToken('https://pizzashop163.ru/actions', {
-      kek: true,
-   });
-}
-
-// .then(function (result: any) {
-//    return result.handler();
-// })
-// .then(function (data: any) {
-//    console.log('Сообщение с токеном: ', data);
-//    document.body.innerHTML += `Сообщение с токеном: ${JSON.stringify(
-//       data,
-//    )}`;
-// })
-// .catch(function (error: any) {
-//    console.log('Что-то пошло не так: ', error);
-//    document.body.innerHTML += `Что-то пошло не так: ${JSON.stringify(
-//       error,
-//    )}`;

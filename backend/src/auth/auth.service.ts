@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { User, UserDocument } from '../user/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { FirebaseAdmin } from '../../firebaseconfig/firebase.setup';
 import { Model } from 'mongoose';
 import { UserDto } from 'src/user/dto/user.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -14,7 +13,8 @@ type TSess = session.Session & Partial<session.SessionData>;
 interface ISession extends TSess {
   userId?: string;
   visits?: number;
-  ertu?: string;
+  provider?: string;
+  pro?: string;
 }
 
 @Injectable()
@@ -22,7 +22,6 @@ export class AuthService {
   constructor(
     @InjectModel(User.name)
     private readonly userModal: Model<UserDocument>,
-    private readonly admin: FirebaseAdmin,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
@@ -33,36 +32,58 @@ export class AuthService {
     yaAuth?: boolean,
   ) {
     console.log('setSession user', user);
+
     const sess: ISession = req.session;
-    // console.log('visits', sess.visits);
-    sess.userId = user._id;
-    console.log(sess.id);
-    console.log(sess.userId);
+    const sessYaAuth = (await this.cacheManager.get('sessionId')) as string;
+    if (sessYaAuth) {
+      console.log('sessYaAuth:', sessYaAuth);
+      req.sessionStore.get(sessYaAuth, (err, session: ISession) => {
+        console.log('errget', err);
+        console.log('session:', session);
 
-    sess.visits = sess.visits ? sess.visits + 1 : 1;
-
-    console.log(user.yaAuth);
-    if (sess.userId && yaAuth) {
+        if (session) {
+          req.sessionStore.set(req.sessionID, session, (err) => {
+            console.log('errset', err);
+          });
+          req.sessionStore.destroy(sessYaAuth, (err?: any) => {
+            console.log('errdestroy', err);
+          });
+          console.log(session);
+        }
+      });
+      sess.userId = user._id;
+      sess.visits = sess.visits ? sess.visits + 1 : 1;
+      sess.provider = 'yandex';
+      sess.save();
       res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`);
     } else {
-      res.send(user);
+      console.log('sess.id', sess.id);
+      sess.userId = user._id;
+      sess.visits = sess.visits ? sess.visits + 1 : 1;
+
+      if (yaAuth) {
+        sess.provider = 'yandex';
+        sess.save();
+
+        res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`);
+      } else {
+        sess.pro = 'jhsudllkm;lk';
+
+        sess.provider = 'firebase';
+        sess.save();
+
+        res.send(user);
+      }
     }
-
-    // sess.save();
-    // console.log(sess);
-
-    // console.log('sessionID', req.sessionID);
-    // console.log('sessionStore', req.sessionStore);
   }
 
   // получаем пользователя по id (firebase) и создаем сессионный куки или возвращаем "не найден"
   async getInitialUserById(id: string, req: Request, res: Response) {
-    console.log('getInitialUserById', id);
     const user = await this.userModal.findById(id);
 
     user
       ? this._setSession(req, res, user)
-      : res.send({ message: 'Id Пользователь не найден' });
+      : res.send({ message: 'Пользователь по id не найден' });
   }
 
   // получаем пользователя по id (firebase) и создаем сессионный куки или возвращаем "не найден"
@@ -103,8 +124,6 @@ export class AuthService {
             },
           );
           const userYaDataFull = await userYaDataResponse.json();
-          console.log('userYaDataFull', userYaDataFull);
-          // console.log('data', data);
 
           const userYaData = userYaDataFull && {
             yaAuth: true,
@@ -114,7 +133,6 @@ export class AuthService {
           };
 
           if (userYaData) {
-            console.log(userYaData);
             await this.createUser(userYaData, req, res);
           }
         }
@@ -127,15 +145,16 @@ export class AuthService {
     const user = await this._getInitialUserByPhone(userRequest.phoneNumber);
 
     if (user) {
-      if (userRequest.yaAuth) {
-        this._setSession(req, res, user, userRequest.yaAuth);
-      } else {
-        this._setSession(req, res, user);
-      }
+      this._setSession(req, res, user, userRequest.yaAuth);
+
+      // if (userRequest.yaAuth) {
+      // } else {
+      //   this._setSession(req, res, user);
+      // }
     } else {
       userRequest._id = uuidv4();
       const newUser = new this.userModal(userRequest);
-      newUser && this._setSession(req, res, newUser);
+      newUser && this._setSession(req, res, newUser, userRequest.yaAuth);
 
       return await newUser.save();
     }
