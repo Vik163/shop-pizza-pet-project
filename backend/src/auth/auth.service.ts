@@ -25,55 +25,51 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  async _setSession(
-    req: Request,
-    res: Response,
-    user: UserDto,
-    yaAuth?: boolean,
-  ) {
-    console.log('setSession user', user);
+  async setSession(req: Request, res: Response, user: UserDto, ya?: boolean) {
+    // console.log('setSession user', user);
 
     const sess: ISession = req.session;
-    const sessYaAuth = (await this.cacheManager.get('sessionId')) as string;
-    if (sessYaAuth) {
-      console.log('sessYaAuth:', sessYaAuth);
-      req.sessionStore.get(sessYaAuth, (err, session: ISession) => {
-        console.log('errget', err);
-        console.log('session:', session);
+    // console.log('req.session.id.service:', req.session.id);
+    if (ya) {
+      const sessOldYaId = (await this.cacheManager.get('sessionId')) as string;
+      if (sessOldYaId) {
+        req.sessionStore.get(sessOldYaId, async (err, session: ISession) => {
+          console.log('errget', err);
+          if (session) {
+            session.userId = user._id;
+            session.visits = session.visits ? session.visits + 1 : 1;
+            session.provider = 'yandex';
+            // console.log('sessOldYa:', session);
 
-        if (session) {
-          req.sessionStore.set(req.sessionID, session, (err) => {
-            console.log('errset', err);
-          });
-          req.sessionStore.destroy(sessYaAuth, (err?: any) => {
-            console.log('errdestroy', err);
-          });
-          console.log(session);
-        }
-      });
-      sess.userId = user._id;
-      sess.visits = sess.visits ? sess.visits + 1 : 1;
-      sess.provider = 'yandex';
-      sess.save();
-      res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`);
-    } else {
-      console.log('sess.id', sess.id);
-      sess.userId = user._id;
-      sess.visits = sess.visits ? sess.visits + 1 : 1;
-
-      if (yaAuth) {
-        sess.provider = 'yandex';
-        sess.save();
+            console.log('sess.id.token', req.session.id);
+            req.sessionStore.set(req.session.id, session, () => {
+              // console.log('errset', err);
+            });
+            req.sessionStore.destroy(sessOldYaId, (err?: any) => {
+              console.log('errdestroy', err);
+            });
+          }
+        });
 
         res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`);
       } else {
-        sess.pro = 'jhsudllkm;lk';
+        sess.userId = user._id;
+        sess.visits = sess.visits ? sess.visits + 1 : 1;
 
-        sess.provider = 'firebase';
+        sess.provider = 'yandex';
         sess.save();
-
-        res.send(user);
+        res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`);
       }
+      // Обновление новой сессии данными со старой (для яндекса из-за переадресации)
+    } else {
+      sess.userId = user._id;
+      sess.visits = sess.visits ? sess.visits + 1 : 1;
+      sess.pro = 'jhsudllkm;lk';
+
+      sess.provider = 'firebase';
+      sess.save();
+
+      res.send(user);
     }
   }
 
@@ -82,7 +78,7 @@ export class AuthService {
     const user = await this.userModal.findById(id);
 
     user
-      ? this._setSession(req, res, user)
+      ? this.setSession(req, res, user)
       : res.send({ message: 'Пользователь по id не найден' });
   }
 
@@ -94,6 +90,25 @@ export class AuthService {
   }
 
   async authUserByYandex(req: Request, res: Response) {
+    if (req.session.id) {
+      req.sessionStore.get(req.session.id, async (err, session: ISession) => {
+        // console.log('errget', err);
+        if (session) {
+          console.log('session:', req.session.id);
+          const sessOldYaId = (await this.cacheManager.get(
+            'sessionId',
+          )) as string;
+          if (!sessOldYaId)
+            await this.cacheManager.set('sessionId', req.session.id);
+        }
+      });
+    }
+
+    const token = {
+      state: req.headers['x-yandex-state'] as string,
+    };
+    // сохраняю в кеше
+    token.state && (await this.cacheManager.set('state', token.state));
     if (req.url.length > 10) {
       // получение кода и токена из query параметров
       const code = req.query.code;
@@ -124,17 +139,33 @@ export class AuthService {
             },
           );
           const userYaDataFull = await userYaDataResponse.json();
+          // ---------------------------------------------------
 
           const userYaData = userYaDataFull && {
-            yaAuth: true,
+            ya: true,
             email: userYaDataFull.default_email,
             phoneNumber: userYaDataFull.default_phone.number,
             // role: Roles.CLIENT,
           };
 
           if (userYaData) {
+            await this.cacheManager.del('sessionId');
+
             await this.createUser(userYaData, req, res);
           }
+
+          // const userYaData = userYaDataFull && {
+          //   session: sessOldYaId,
+          //   email: userYaDataFull.default_email,
+          //   phoneNumber: userYaDataFull.default_phone.number,
+          //   // role: Roles.CLIENT,
+          // };
+
+          // if (userYaData) {
+          //   await this.cacheManager.del('sessionId');
+
+          //   await this.createUser(userYaData, req, res);
+          // }
         }
       }
     }
@@ -145,16 +176,11 @@ export class AuthService {
     const user = await this._getInitialUserByPhone(userRequest.phoneNumber);
 
     if (user) {
-      this._setSession(req, res, user, userRequest.yaAuth);
-
-      // if (userRequest.yaAuth) {
-      // } else {
-      //   this._setSession(req, res, user);
-      // }
+      this.setSession(req, res, user, userRequest.ya);
     } else {
       userRequest._id = uuidv4();
       const newUser = new this.userModal(userRequest);
-      newUser && this._setSession(req, res, newUser, userRequest.yaAuth);
+      newUser && this.setSession(req, res, newUser, userRequest.ya);
 
       return await newUser.save();
     }

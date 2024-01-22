@@ -20,27 +20,23 @@ const App = () => {
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
    const inited = useSelector(getInited);
-   const auth = getAuth();
    const [searchParams, setSearchParams] = useSearchParams();
    // Yandex query ответ
    const initYaData = searchParams.get('user');
    const userYaData = initYaData && JSON.parse(initYaData);
 
    useEffect(() => {
-      if (initYaData) {
-         dispatch(userAction.setAuthData(userYaData));
-         // убираю query ответ
-         navigate('/');
-      }
-      if (!inited) {
-         // инициализация пользователя при запуске по  firebase user
-         onAuthStateChanged(auth, (user) => {
-            if (user) {
-               firebaseApi.setTokens(user);
+      const userId = localStorage.getItem('userId');
 
-               dispatch(initAuthData(user));
-            }
-         });
+      if (initYaData) {
+         // dispatch(userAction.setAuthData(userYaData));
+         // userId && dispatch(initAuthData(userId));
+         // // убираю query ответ
+         // navigate('/');
+      }
+
+      if (userId && !inited) {
+         dispatch(initAuthData(userId));
       }
    }, []);
 

@@ -7,6 +7,7 @@ import {
   IsAlpha,
   IsOptional,
 } from 'class-validator';
+import session from 'express-session';
 
 export enum Roles {
   ADMIN = 'ADMIN',
@@ -14,8 +15,16 @@ export enum Roles {
   DEVELOPER = 'DEVELOPER',
 }
 
+type TSess = session.Session & Partial<session.SessionData>;
+export interface ISession extends TSess {
+  userId?: string;
+  visits?: number;
+  provider?: string;
+  pro?: string;
+}
+
 export class UserDto {
-  yaAuth?: boolean;
+  ya?: boolean;
   _id?: string;
 
   @IsOptional()

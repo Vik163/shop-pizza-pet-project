@@ -14,26 +14,23 @@ const { getCookie } = useCookie();
 
 export const initAuthData = createAsyncThunk<
    UserData,
-   User,
+   string,
    ThunkConfig<string>
->('user/initAuthData', async (user, thunkApi) => {
+>('user/initAuthData', async (userId, thunkApi) => {
    const { rejectWithValue, dispatch } = thunkApi;
-
-   const userId = localStorage.getItem('userId');
 
    if (!userId) {
       return rejectWithValue('Пользователь не авторизован');
    }
 
    try {
-      const token = await user.getIdToken();
-      const response =
-         token &&
-         (
-            await axios.get(`https://pizzashop163.ru/api/auth/${userId}`, {
-               headers: { authorization: token },
-            })
-         ).data;
+      // const token = await user.getIdToken();
+      const response = (
+         await axios.get(`https://pizzashop163.ru/api/auth/${userId}`, {
+            withCredentials: true,
+            // headers: { authorization: token },
+         })
+      ).data;
 
       if (response.message === 'Пользователь не найден') {
          return rejectWithValue('Пользователь не найден');

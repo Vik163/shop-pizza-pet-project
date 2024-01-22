@@ -78,8 +78,6 @@ class FirebaseApi {
             // успешная регистрация в firebase.
             const user = result.user;
 
-            user && this.setTokens(user);
-
             return user;
          })
          .catch((error: string) => {
@@ -87,18 +85,6 @@ class FirebaseApi {
          });
    }
    // --------------------------------------------------------------------
-
-   // устанавливаем токены -----------------------------------------------
-   setTokens(user: User) {
-      // const rToken = localStorage.getItem('refreshToken');
-      // !rToken && localStorage.setItem('refreshToken', user.refreshToken);
-
-      user.getIdToken().then((token) => {
-         setCookie('accessToken', token, { secure: true, samesite: 'strict' });
-         // document.cookie = `accessToken=${token}; secure; samesite`;
-      });
-   }
-   // --------------------------------------------------------
 
    signout() {
       return signOut(this._auth)

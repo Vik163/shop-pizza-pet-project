@@ -41,15 +41,13 @@ export class AuthController {
 
   // @UseGuards(LocalAuthGuard)
   // @UseGuards(AuthGuard('local'))
-  @Get('yatoken')
-  async stateYandex(@Req() req: Request) {
-    const token = {
-      state: req.headers['x-yandex-state'] as string,
-    };
-    // сохраняю в кеше
-    await this.cacheManager.set('state', token.state);
-    req.sessionID && (await this.cacheManager.set('sessionId', req.sessionID));
-  }
+  // @Get('yatoken')
+  // async stateYandex(@Req() req: Request) {
+  //   if (req.session.id) {
+  //     await this.cacheManager.set('sessionId', req.session.id);
+  //     req.session.save();
+  //   }
+  // }
 
   @Get('yandex')
   async authUserByYandex(@Res() res: Response, @Req() req: Request) {

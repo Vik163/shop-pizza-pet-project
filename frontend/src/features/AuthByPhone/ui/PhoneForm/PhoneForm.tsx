@@ -87,8 +87,10 @@ const PhoneForm = memo((props: PhoneFormProps) => {
       ? InputVariant.INPUT_CLEAR
       : InputVariant.INPUT_OUTLINE;
 
+   // Отправляю лишний запрос для прокидывания токена и создания сессии
+   // Переадресация через яндекс сессию не возвращает
    const onLoginYa = async () => {
-      await axios.get('https://pizzashop163.ru/api/yatoken', {
+      await axios.get('https://pizzashop163.ru/api/yandex', {
          headers: { 'x-yandex-state': stateToken },
          withCredentials: true,
       });
