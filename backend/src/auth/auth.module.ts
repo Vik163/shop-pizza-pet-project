@@ -8,6 +8,7 @@ import { UserSerializer } from './session.serializer';
 import { LocalStrategy } from './local.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { CacheModule } from '@nestjs/cache-manager';
+import { SessionsService } from './sessions.service';
 
 @Module({
   imports: [
@@ -18,6 +19,12 @@ import { CacheModule } from '@nestjs/cache-manager';
     CacheModule.register(),
   ],
   controllers: [AuthController],
-  providers: [AuthService, FirebaseAdmin, UserSerializer, LocalStrategy],
+  providers: [
+    AuthService,
+    FirebaseAdmin,
+    UserSerializer,
+    LocalStrategy,
+    SessionsService,
+  ],
 })
 export class AuthModule {}

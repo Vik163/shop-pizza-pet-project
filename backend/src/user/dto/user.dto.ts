@@ -24,7 +24,6 @@ export interface ISession extends TSess {
 }
 
 export class UserDto {
-  ya?: boolean;
   _id?: string;
 
   @IsOptional()

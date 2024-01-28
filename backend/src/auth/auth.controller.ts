@@ -7,25 +7,19 @@ import {
   Req,
   Res,
   ValidationPipe,
-  Inject,
   // UseGuards,
 } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { UserDto } from 'src/user/dto/user.dto';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
 
 // import { LocalAuthGuard } from './local.auth.guard';
 // import { AuthGuard } from '@nestjs/passport';
 
 @Controller()
 export class AuthController {
-  constructor(
-    private readonly userService: AuthService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  constructor(private readonly userService: AuthService) {}
 
   // получаем пользователя по id (firebase) из localstorage и создаем сессионный куки
   @Get('auth/:id')
@@ -41,13 +35,6 @@ export class AuthController {
 
   // @UseGuards(LocalAuthGuard)
   // @UseGuards(AuthGuard('local'))
-  // @Get('yatoken')
-  // async stateYandex(@Req() req: Request) {
-  //   if (req.session.id) {
-  //     await this.cacheManager.set('sessionId', req.session.id);
-  //     req.session.save();
-  //   }
-  // }
 
   @Get('yandex')
   async authUserByYandex(@Res() res: Response, @Req() req: Request) {
@@ -55,14 +42,14 @@ export class AuthController {
   }
 
   @Post('firebase')
-  async createUser(
+  async handleUser(
     @Body(ValidationPipe) userRequest: UserDto,
     @Req() req: Request,
     // если res, то отправка через res.send(), иначе не возвращает значение
     @Res() res: Response,
   ) {
     // отправляю user в _setTokens (auth.service)
-    await this.userService.createUser(userRequest, req, res);
+    await this.userService.handleUser(userRequest, req, res);
   }
 
   @Get('signout')

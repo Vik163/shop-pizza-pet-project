@@ -29,10 +29,10 @@ const App = () => {
       const userId = localStorage.getItem('userId');
 
       if (initYaData) {
-         // dispatch(userAction.setAuthData(userYaData));
-         // userId && dispatch(initAuthData(userId));
-         // // убираю query ответ
-         // navigate('/');
+         dispatch(userAction.setAuthData(userYaData));
+         userId && dispatch(initAuthData(userId));
+         // убираю query ответ
+         navigate('/');
       }
 
       if (userId && !inited) {

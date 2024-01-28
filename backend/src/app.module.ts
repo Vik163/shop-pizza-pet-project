@@ -13,11 +13,12 @@ import { CsrfModule } from './csrf/csrf.module';
 @Module({
   imports: [
     // вместо localhost 127.0.0.1
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/storedb'),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env`,
+      envFilePath: '.env',
     }),
+    MongooseModule.forRoot(process.env.MONGO_DB),
+
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../public/images'),
     }),

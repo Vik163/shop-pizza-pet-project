@@ -6,6 +6,7 @@ import * as session from 'express-session';
 import { doubleCsrfProtection } from '../csrf.config';
 import * as passport from 'passport';
 import { AppModule } from './app.module';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const MongoStore = require('connect-mongo');
 
@@ -16,7 +17,7 @@ const httpsOptions = {
 };
 const option = ['https://pizzashop163.ru, https://127.0.0.1:3000'];
 
-// const expiresIn = 60 * 60 * 24 * 1000;
+const expiresIn = 60 * 60 * 24 * 1000 * 30;
 
 async function bootstrap() {
   // c https
@@ -35,7 +36,9 @@ async function bootstrap() {
   app.use(
     session({
       store: MongoStore.create({
-        mongoUrl: 'mongodb://127.0.0.1:27017/storedb',
+        mongoUrl: process.env.MONGO_DB,
+        // 30 дней
+        ttl: 30 * 24 * 60 * 60,
       }),
       name: 'sessPizza',
       secret: 'this is a secret msg',
@@ -45,9 +48,10 @@ async function bootstrap() {
       saveUninitialized: false,
       cookie: {
         secure: true,
-        httpOnly: true,
         signed: true,
         sameSite: 'strict',
+        // 30 дней
+        maxAge: expiresIn,
       },
     }),
   );
