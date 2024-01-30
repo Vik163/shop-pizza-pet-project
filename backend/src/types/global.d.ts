@@ -5,6 +5,10 @@ declare global {
       MONGO_DB: string;
       YA_CLIENT_ID: string;
       YA_CLIENT_SECRET: string;
+      SESSION_SECRET_KEY: string;
+      ACCESS_SECRET: string;
+      REFRESH_SECRET: string;
+      TIME_REFRESH: number;
     }
   }
 }

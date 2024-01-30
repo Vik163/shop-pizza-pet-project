@@ -8,6 +8,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import session from 'express-session';
+import { TokenDto } from './token.dto';
 
 export enum Roles {
   ADMIN = 'ADMIN',
@@ -60,6 +61,8 @@ export class UserDto {
 
   // @IsEnum(Roles, { each: true })
   role?: Roles;
+  token?: TokenDto | null;
+  createDate?: Date;
 }
 
 export class UserFirebaseDto {

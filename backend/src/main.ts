@@ -41,7 +41,7 @@ async function bootstrap() {
         ttl: 30 * 24 * 60 * 60,
       }),
       name: 'sessPizza',
-      secret: 'this is a secret msg',
+      secret: process.env.SESSION_SECRET_KEY || 'this is a secret msg',
       // указывает, нужно ли пересохранять сессию в хранилище, если она не изменилась (по умолчанию false);
       resave: false,
       // если true, то в хранилище будут попадать пустые сессии;

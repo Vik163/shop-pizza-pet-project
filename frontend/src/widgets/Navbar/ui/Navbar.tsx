@@ -33,6 +33,7 @@ import { useNavigate } from 'react-router-dom';
 import { getRouteProfile } from '@/shared/const/router';
 import { getUserUidSelector } from '@/entities/User/model/selectors/getUserUidSelector';
 import axios from 'axios';
+import { $api } from '@/shared/api/api';
 
 interface NavbarProps {
    className?: string;
@@ -47,8 +48,12 @@ export const Navbar = memo((props: NavbarProps) => {
    const user = useSelector(getUserData);
    const pathProfile = user?._id && getRouteProfile(user?._id);
 
-   // getDataYandex();
-
+   const getUser = async () => {
+      const a = await $api.get('/refresh');
+      console.log('a:', a);
+      // const users = await $api.get('/users');
+      // console.log('users:', users.data);
+   };
    const onAuth = () => {
       // if(inited) navigate(getRouteProfile())
       // if (inited) navigate('/profile');
@@ -113,6 +118,7 @@ export const Navbar = memo((props: NavbarProps) => {
             fontColor={FontColor.TEXT_PRIMARY}
             fontWeight={FontWeight.TEXT_700}
             fontSize={FontSize.SIZE_16}
+            onClick={getUser}
          >
             Корзина<span className={classNames(cls.basket_quantity)}>1</span>
          </Button>

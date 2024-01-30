@@ -26,6 +26,8 @@ export class SessionsService {
     user: UserDto,
     yaProvider?: boolean,
   ) {
+    user.token = null;
+
     const sess: ISession = req.session;
     if (yaProvider) {
       const sessId = (await this.cacheManager.get('sessionId')) as string;
@@ -44,6 +46,7 @@ export class SessionsService {
             req.sessionStore.destroy(req.session.id, async () => {
               // console.log('errdestroy', err);
               await this.cacheManager.del('sessionId');
+
               res.redirect(
                 `https://pizzashop163.ru?user=${JSON.stringify(user)}`,
               );
@@ -73,8 +76,7 @@ export class SessionsService {
     sess.provider = yaProvider ? 'yandex' : 'firebase';
     sess.save();
 
-    yaProvider
-      ? res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`)
-      : res.send(user);
+    yaProvider &&
+      res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`);
   }
 }

@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { validateRequest } from '../../csrf.config';
+import { validateRequest } from '../../../csrf.config';
 
 @Injectable()
 export class CsrfGuard implements CanActivate {

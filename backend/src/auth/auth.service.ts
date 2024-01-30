@@ -8,6 +8,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { SessionsService } from './sessions.service';
+import { TokensService } from './token.service';
+import { AuthDto } from './dto/auth.dto';
+import { TokensDto } from './dto/tokens.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,107 +18,125 @@ export class AuthService {
     @InjectModel(User.name)
     private readonly userModal: Model<UserDocument>,
     private readonly sesionsService: SessionsService,
+    private readonly tokensService: TokensService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  async authUserByYandex(req: Request, res: Response) {
-    // сохраняю в кеше значение сессионого id и  state -----------------------------
-    // приходят два запроса первый с id и state, второй undefined (из-за переадресации)
-    const sessPizzaId = req.cookies.sessPizza;
-    const sessId = sessPizzaId && sessPizzaId.split(':')[1].split('.')[0];
-    sessId && (await this.cacheManager.set('sessionId', sessId));
+  // Счетчик времени хранения токена в БД
+  private handleTimeToken(date: Date) {
+    //Get 1 day in milliseconds
+    const one_day = 1000 * 60 * 60 * 24;
 
-    const token = {
-      state: req.headers['x-yandex-state'] as string,
-    };
-    token.state && (await this.cacheManager.set('state', token.state));
-    // --------------------------------------------------------------------
+    // Convert both dates to milliseconds
+    const date1_ms = date.getTime();
+    const date2_ms = new Date().getTime();
 
-    if (req.url.length > 10) {
-      // получение кода и токена из query параметров
-      const code = req.query.code;
-      const stateQuery = req.query.state;
+    const difference_ms = date2_ms - date1_ms;
 
-      // верификация state при сравнении с state из кеша
-      const stateHeaders = await this.cacheManager.get('state');
-      const state = stateHeaders === stateQuery;
+    // Convert back to days and return
+    return Math.round(difference_ms / one_day);
+  }
 
-      if (code && state) {
-        await this.cacheManager.del('state');
-        const clientSecret = process.env.YA_CLIENT_SECRET;
-        const clientId = process.env.YA_CLIENT_ID;
+  // получаем пользователя по id или возвращаем "не найден"
+  // получаем время хранения
+  async getInitialUserById(id: string, req: Request, res: Response) {
+    const user: UserDto = await this.userModal.findById(id);
 
-        const body = `grant_type=authorization_code&code=${code}&client_id=${clientId}&client_secret=${clientSecret}`;
-        const response = await fetch('https://oauth.yandex.ru/token', {
-          method: 'POST',
-          body: body,
-        });
+    if (user) {
+      const tokens = await this.tokensService.getTokens(
+        user._id,
+        user.phoneNumber,
+      );
 
-        const data = await response.json();
-        console.log(data);
-        if (data.access_token) {
-          const userYaDataResponse = await fetch(
-            `https://login.yandex.ru/info?&format=json`,
-            {
-              method: 'GET',
-              headers: { Authorization: `OAuth ${data.access_token}` },
-            },
-          );
-          const userYaDataFull = await userYaDataResponse.json();
-          // ---------------------------------------------------
-
-          const userYaData = userYaDataFull && {
-            email: userYaDataFull.default_email,
-            phoneNumber: userYaDataFull.default_phone.number,
-            // role: Roles.CLIENT,
-          };
-          const yaProvider = true;
-
-          if (userYaData) {
-            await this.handleUser(userYaData, req, res, yaProvider);
-          }
-        }
+      const timeToken = this.handleTimeToken(user.token.createToken);
+      // время вышло => обновляем токен в БД и отправляем токены в куки
+      if (timeToken >= process.env.TIME_REFRESH - 1) {
+        await this.tokensService.updateRefreshToken(user, tokens.refreshToken);
+        this.sendTokens(res, tokens);
+      } else {
+        // время не вышло отправляю в куки accessToken
+        res.cookie('accessToken', tokens.accessToken, { secure: true });
       }
+      // устанавливаю сессию и отправляю данные пользователя
+      this.sesionsService.handleSession(req, res, user);
+      user.token = null;
+
+      res.send(user);
+    } else {
+      res.send({ message: 'Пользователь по id не найден' });
     }
   }
 
-  // получаем пользователя по id (firebase) и создаем сессионный куки или возвращаем "не найден"
-  async getInitialUserById(id: string, req: Request, res: Response) {
-    const user = await this.userModal.findById(id);
-
-    user
-      ? this.sesionsService.handleSession(req, res, user)
-      : res.send({ message: 'Пользователь по id не найден' });
-  }
-
-  // получаем пользователя по id (firebase) и создаем сессионный куки или возвращаем "не найден"
-  async _getInitialUserByPhone(phone: string) {
-    const user = await this.userModal.findOne({ phoneNumber: phone });
-
-    return user;
-  }
-
+  // Определить пользователя
+  // Ищем в БД, если нет создаем
+  // устанавливаем токены и сессию
   async handleUser(
     userRequest: UserDto,
     req: Request,
     res: Response,
     yaProvider?: boolean,
   ) {
-    // Ищем в БД, если нет создаем, если есть, устанавливаем токены и сессию
-    const user = await this._getInitialUserByPhone(userRequest.phoneNumber);
+    let userData: AuthDto;
+    // проверяем по телефону в БД
+    const user: UserDto = await this.userModal.findOne({
+      phoneNumber: userRequest.phoneNumber,
+    });
 
+    // Если есть, генерируем токены, обновляем в БД токен и создаем сессию
     if (user) {
-      this.sesionsService.handleSession(req, res, user, yaProvider);
-    } else {
-      userRequest._id = uuidv4();
-      const newUser = new this.userModal(userRequest);
-      newUser &&
-        this.sesionsService.handleSession(req, res, newUser, yaProvider);
+      const tokens = await this.tokensService.getTokens(
+        user._id,
+        user.phoneNumber,
+      );
+      userData = { user, tokens };
+      await this.tokensService.updateRefreshToken(user, tokens.refreshToken);
 
-      return await newUser.save();
+      this.sesionsService.handleSession(req, res, user, yaProvider);
+      // Если нет создаем все
+    } else {
+      const newUserData = await this.createUser(userRequest);
+
+      if (newUserData.user) {
+        userData = newUserData;
+        this.sesionsService.handleSession(req, res, userData.user, yaProvider);
+      }
     }
+    // Возвращаем токены и пользователя
+    return userData;
   }
 
+  sendTokens(res: Response, tokens: TokensDto) {
+    res.cookie('accessToken', tokens.accessToken, { secure: true });
+    res.cookie('refreshToken', tokens.refreshToken, {
+      secure: true,
+      httpOnly: true,
+      maxAge: 60 * 68 * 24 * 1000 * process.env.TIME_REFRESH,
+    });
+  }
+
+  // Создание пользователя
+  private async createUser(user: UserDto) {
+    // Добавляем в БД доп. инфо
+    user._id = uuidv4();
+    user.createDate = new Date();
+
+    const tokens = await this.tokensService.getTokens(
+      user._id,
+      user.phoneNumber,
+    );
+    user.token = {
+      refreshToken: tokens.refreshToken,
+      createToken: new Date(),
+    };
+
+    const newUser = new this.userModal(user);
+
+    await newUser.save();
+
+    return { user: newUser, tokens };
+  }
+
+  // Выход
   async signout(req: Request, res: Response) {
     res.clearCookie('__Host-psifi.x-csrf-token', {
       httpOnly: true,

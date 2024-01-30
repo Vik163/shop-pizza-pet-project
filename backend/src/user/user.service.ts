@@ -3,12 +3,13 @@ import { User, UserDocument } from './schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { FirebaseAdmin } from '../../firebaseconfig/firebase.setup';
 import { Model } from 'mongoose';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name)
-    private readonly userModal: Model<UserDocument>,
+    private readonly userModel: Model<UserDocument>,
     private readonly admin: FirebaseAdmin,
   ) {}
 
@@ -16,7 +17,17 @@ export class UserService {
     // const { email, phoneNumber, name, role } = userRequest;
     // const app = this.admin.setup();
     // console.log(app.auth().listUsers());
-    return this.userModal.find().exec();
+    return this.userModel.find().exec();
+  }
+
+  async update(id: string, updateUserDto: UserDto): Promise<UserDocument> {
+    return this.userModel
+      .findByIdAndUpdate(id, updateUserDto, { new: true })
+      .exec();
+  }
+
+  async findById(id: string): Promise<UserDocument> {
+    return this.userModel.findById(id);
   }
 
   // async getUserById(id: string, req: Request, res: Response) {
