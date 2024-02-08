@@ -1,7 +1,8 @@
-### Регистрация
+### Проверка токенов
 
-- Firebase
-  - Через валидацию запроса body (ValidationPipe)
-  - Поиск в БД пользователя по телефону, если нет, то создаю (\_id в бд создаю свое)
-  - если есть, получаю с клиента через headers.authorization токен, с его помощью устанавливаю сессионый куки и отправляю его и пользователя на клиент
-- Yandex Id
+- Генерируются в token.servise
+- [Использую @nestjs/passport](https://www.elvisduru.com/blog/nestjs-jwt-authentication-refresh-token)
+  - Создаю accessToken.strategy.ts and refreshToken.strategy.ts в папке auth/strategies
+    - refresh достаю `jwtFromRequest: (req: Request) => req.cookies.refreshToken,`
+  - Создаю accessToken.guard.ts and refreshToken.guard.ts в папке src/common/guards
+  - Создаю accessToken.decorator.ts and refreshToken.decorator.ts в папке src/common/decorators

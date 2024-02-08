@@ -13,12 +13,18 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err: any, user: any, info: any) {
+  // добавляется по надобности
+  handleRequest(err: any, user: any, info: any, status: any) {
+    console.log('status:', status.getResponse().statusCode);
     console.log('info:', info);
-    console.log('user:', user);
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
-      throw err || new UnauthorizedException();
+      console.log('AccessTokenGuard', err);
+      status.getResponse().statusCode = 401;
+      console.log('status:', status.getResponse().statusCode);
+      // return status;
+
+      throw err || new UnauthorizedException('lkerjdig');
     }
     return user;
   }

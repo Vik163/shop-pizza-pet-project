@@ -26,7 +26,7 @@ export class SessionsService {
     user: UserDto,
     yaProvider?: boolean,
   ) {
-    user.token = null;
+    user.refreshTokenData = null;
 
     const sess: ISession = req.session;
     if (yaProvider) {

@@ -10,7 +10,6 @@ import { Cache } from 'cache-manager';
 import { SessionsService } from './sessions.service';
 import { TokensService } from './token.service';
 import { AuthDto } from './dto/auth.dto';
-import { TokensDto } from './dto/tokens.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,23 +21,8 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  // Счетчик времени хранения токена в БД
-  private handleTimeToken(date: Date) {
-    //Get 1 day in milliseconds
-    const one_day = 1000 * 60 * 60 * 24;
-
-    // Convert both dates to milliseconds
-    const date1_ms = date.getTime();
-    const date2_ms = new Date().getTime();
-
-    const difference_ms = date2_ms - date1_ms;
-
-    // Convert back to days and return
-    return Math.round(difference_ms / one_day);
-  }
-
   // получаем пользователя по id или возвращаем "не найден"
-  // получаем время хранения
+  // получаем время хранения =====================================================
   async getInitialUserById(id: string, req: Request, res: Response) {
     const user: UserDto = await this.userModal.findById(id);
 
@@ -48,18 +32,20 @@ export class AuthService {
         user.phoneNumber,
       );
 
-      const timeToken = this.handleTimeToken(user.token.createToken);
+      const timeToken = this.tokensService.handleTimeToken(
+        user.refreshTokenData.createToken,
+      );
       // время вышло => обновляем токен в БД и отправляем токены в куки
-      if (timeToken >= process.env.TIME_REFRESH - 1) {
+      if (timeToken > process.env.TIME_REFRESH - 2) {
         await this.tokensService.updateRefreshToken(user, tokens.refreshToken);
-        this.sendTokens(res, tokens);
+        this.tokensService.sendTokens(res, tokens);
       } else {
         // время не вышло отправляю в куки accessToken
         res.cookie('accessToken', tokens.accessToken, { secure: true });
       }
       // устанавливаю сессию и отправляю данные пользователя
       this.sesionsService.handleSession(req, res, user);
-      user.token = null;
+      user.refreshTokenData = null;
 
       res.send(user);
     } else {
@@ -69,7 +55,7 @@ export class AuthService {
 
   // Определить пользователя
   // Ищем в БД, если нет создаем
-  // устанавливаем токены и сессию
+  // устанавливаем токены и сессию ===========================================
   async handleUser(
     userRequest: UserDto,
     req: Request,
@@ -88,9 +74,10 @@ export class AuthService {
         user._id,
         user.phoneNumber,
       );
-      userData = { user, tokens };
+
       await this.tokensService.updateRefreshToken(user, tokens.refreshToken);
 
+      userData = { user, tokens };
       this.sesionsService.handleSession(req, res, user, yaProvider);
       // Если нет создаем все
     } else {
@@ -98,6 +85,7 @@ export class AuthService {
 
       if (newUserData.user) {
         userData = newUserData;
+
         this.sesionsService.handleSession(req, res, userData.user, yaProvider);
       }
     }
@@ -105,27 +93,24 @@ export class AuthService {
     return userData;
   }
 
-  sendTokens(res: Response, tokens: TokensDto) {
-    res.cookie('accessToken', tokens.accessToken, { secure: true });
-    res.cookie('refreshToken', tokens.refreshToken, {
-      secure: true,
-      httpOnly: true,
-      maxAge: 60 * 68 * 24 * 1000 * process.env.TIME_REFRESH,
-    });
-  }
-
-  // Создание пользователя
+  // Создание пользователя =====================================================
   private async createUser(user: UserDto) {
     // Добавляем в БД доп. инфо
     user._id = uuidv4();
     user.createDate = new Date();
 
+    // генерирую токены
     const tokens = await this.tokensService.getTokens(
       user._id,
       user.phoneNumber,
     );
-    user.token = {
-      refreshToken: tokens.refreshToken,
+
+    // хешируем refresh и создаем user.refreshTokenData для БД
+    const hashedRefreshToken = await this.tokensService.hashData(
+      tokens.refreshToken,
+    );
+    user.refreshTokenData = {
+      refreshToken: hashedRefreshToken,
       createToken: new Date(),
     };
 
@@ -136,7 +121,7 @@ export class AuthService {
     return { user: newUser, tokens };
   }
 
-  // Выход
+  // Выход ===================================================================
   async signout(req: Request, res: Response) {
     res.clearCookie('__Host-psifi.x-csrf-token', {
       httpOnly: true,

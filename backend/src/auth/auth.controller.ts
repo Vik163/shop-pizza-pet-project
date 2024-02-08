@@ -26,6 +26,7 @@ export class AuthController {
     private readonly userService: AuthService,
     private readonly authProvidersService: AuthProvidersService,
     private readonly tokensService: TokensService,
+    private readonly authService: AuthService,
   ) {}
 
   @Get('auth/:id')
@@ -39,15 +40,15 @@ export class AuthController {
   }
 
   @RefreshToken()
-  @Get('refresh')
-  refreshTokens(@Req() req: Request) {
-    const userId = req.user['sub'];
-    const refreshToken = req.user['refreshToken'];
-    return this.tokensService.refreshTokens(userId, refreshToken);
+  @Get('refresh/:id')
+  async updateTokens(
+    @Res() res: Response,
+    @Req() req: Request,
+    @Param('id') id: string,
+  ) {
+    await this.tokensService.updateTokens(id, req, res);
+    res.end('Update Tokens');
   }
-
-  // @UseGuards(LocalAuthGuard)
-  // @UseGuards(AuthGuard('local'))
 
   @Get('yandex')
   async authUserByYandex(@Res() res: Response, @Req() req: Request) {

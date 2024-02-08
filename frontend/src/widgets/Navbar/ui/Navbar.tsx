@@ -49,8 +49,14 @@ export const Navbar = memo((props: NavbarProps) => {
    const pathProfile = user?._id && getRouteProfile(user?._id);
 
    const getUser = async () => {
-      const a = await $api.get('/refresh');
-      console.log('a:', a);
+      await $api
+         .get(`/users`)
+         .then((data) => {
+            console.log(data);
+         })
+         .catch((err) => {
+            console.log('err:', err);
+         });
       // const users = await $api.get('/users');
       // console.log('users:', users.data);
    };

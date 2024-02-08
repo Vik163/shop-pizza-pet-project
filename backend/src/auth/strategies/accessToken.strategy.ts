@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { UserDto } from 'src/user/dto/user.dto';
 
+// Получаю токен как bearer из headers (в клиенте добавляю)
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor() {
@@ -11,7 +13,8 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  validate(payload: any) {
+  validate(payload: UserDto) {
+    console.log('payload:', payload);
     return payload;
   }
 }

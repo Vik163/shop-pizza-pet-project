@@ -8,7 +8,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import session from 'express-session';
-import { TokenDto } from './token.dto';
+import { RefreshTokenDto } from './refreshToken.dto';
 
 export enum Roles {
   ADMIN = 'ADMIN',
@@ -61,7 +61,7 @@ export class UserDto {
 
   // @IsEnum(Roles, { each: true })
   role?: Roles;
-  token?: TokenDto | null;
+  refreshTokenData?: RefreshTokenDto | null;
   createDate?: Date;
 }
 

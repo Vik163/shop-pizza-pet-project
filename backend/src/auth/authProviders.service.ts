@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { User, UserDocument } from '../user/schemas/user.schema';
+import { User } from '../user/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { UserDto } from 'src/user/dto/user.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -13,13 +12,12 @@ import { AuthService } from './auth.service';
 export class AuthProvidersService {
   constructor(
     @InjectModel(User.name)
-    private readonly userModal: Model<UserDocument>,
     private readonly authService: AuthService,
     private readonly tokensService: TokensService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  // Авторизация через Яндекс
+  // Авторизация через Яндекс ======================================================
   async authUserByYandex(req: Request, res: Response) {
     // сохраняю в кеше значение сессионого id и  state -----------------------------
     // приходят два запроса первый с id и state, второй undefined (из-за переадресации)
@@ -80,34 +78,23 @@ export class AuthProvidersService {
               yaProvider,
             );
             // Отправка данных клиенту в сессиях (переадресация)
-
-            res.cookie('accessToken', tokens.accessToken, { secure: true });
-            res.cookie('refreshToken', tokens.refreshToken, {
-              secure: true,
-              httpOnly: true,
-              maxAge: 60 * 68 * 24 * 1000 * process.env.TIME_REFRESH,
-            });
+            this.tokensService.sendTokens(res, tokens);
           }
         }
       }
     }
   }
 
-  // Авторизация через Firebase
+  // Авторизация через Firebase ================================================
   async authUserByFirebase(userRequest: UserDto, req: Request, res: Response) {
     const { user, tokens } = await this.authService.handleUser(
       userRequest,
       req,
       res,
     );
-    user.token = null;
+    user.refreshTokenData = null;
 
-    res.cookie('accessToken', tokens.accessToken, { secure: true });
-    res.cookie('refreshToken', tokens.refreshToken, {
-      secure: true,
-      httpOnly: true,
-      maxAge: 60 * 68 * 24 * 1000 * process.env.TIME_REFRESH,
-    });
+    this.tokensService.sendTokens(res, tokens);
     res.send(user);
   }
 }

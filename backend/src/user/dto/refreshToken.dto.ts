@@ -7,7 +7,7 @@ import {} from //   IsEmail,
 //   IsOptional,
 'class-validator';
 
-export class TokenDto {
+export class RefreshTokenDto {
   createToken: Date;
   refreshToken: string | null;
 }
