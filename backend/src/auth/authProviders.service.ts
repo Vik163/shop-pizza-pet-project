@@ -1,7 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { User } from '../user/schemas/user.schema';
-import { InjectModel } from '@nestjs/mongoose';
 import { UserDto } from 'src/user/dto/user.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -11,7 +9,6 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class AuthProvidersService {
   constructor(
-    @InjectModel(User.name)
     private readonly authService: AuthService,
     private readonly tokensService: TokensService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
@@ -77,6 +74,8 @@ export class AuthProvidersService {
               res,
               yaProvider,
             );
+            console.log('userYaData:', userYaData);
+
             // Отправка данных клиенту в сессиях (переадресация)
             this.tokensService.sendTokens(res, tokens);
           }

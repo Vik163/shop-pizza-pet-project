@@ -47,7 +47,7 @@ export class AuthController {
     @Param('id') id: string,
   ) {
     await this.tokensService.updateTokens(id, req, res);
-    res.end('Update Tokens');
+    res.end('Токены');
   }
 
   @Get('yandex')
