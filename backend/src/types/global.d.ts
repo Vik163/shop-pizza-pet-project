@@ -8,6 +8,7 @@ declare global {
       SESSION_SECRET_KEY: string;
       ACCESS_SECRET: string;
       REFRESH_SECRET: string;
+      CSRF_SECRET: string;
       TIME_REFRESH: number;
     }
   }

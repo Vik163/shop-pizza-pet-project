@@ -27,16 +27,19 @@ const App = () => {
 
    useEffect(() => {
       const userId = localStorage.getItem('userId');
+      try {
+         if (initYaData) {
+            dispatch(userAction.setAuthData(userYaData));
+            userId && dispatch(initAuthData(userId));
+            // убираю query ответ
+            navigate('/');
+         }
 
-      if (initYaData) {
-         dispatch(userAction.setAuthData(userYaData));
-         userId && dispatch(initAuthData(userId));
-         // убираю query ответ
-         navigate('/');
-      }
-
-      if (userId && !inited) {
-         dispatch(initAuthData(userId));
+         if (userId && !inited) {
+            dispatch(initAuthData(userId));
+         }
+      } catch (err) {
+         console.log(err);
       }
    }, []);
 

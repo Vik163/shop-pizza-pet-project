@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
-import { doubleCsrfProtection } from '../csrf.config';
+import { doubleCsrfProtection } from './csrf/config/csrf.config';
 import * as passport from 'passport';
 import { AppModule } from './app.module';
 
@@ -59,7 +59,6 @@ async function bootstrap() {
 
   app.use(doubleCsrfProtection);
   app.use(passport.initialize());
-  // app.use(passport.session());
 
   await app.listen(8000);
   console.log('server listen port 8000');

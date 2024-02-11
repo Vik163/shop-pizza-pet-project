@@ -5,6 +5,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { TokensService } from './token.service';
 import { AuthService } from './auth.service';
+import { YandexTokensDto, YandexUserInfoDto } from './dto/auth.dto';
 
 @Injectable()
 export class AuthProvidersService {
@@ -15,10 +16,10 @@ export class AuthProvidersService {
   ) {}
 
   // Авторизация через Яндекс ======================================================
-  async authUserByYandex(req: Request, res: Response) {
+  async authUserByYandex(req: Request, res: Response): Promise<void> {
     // сохраняю в кеше значение сессионого id и  state -----------------------------
     // приходят два запроса первый с id и state, второй undefined (из-за переадресации)
-    const sessPizzaId = req.cookies.sessPizza;
+    const sessPizzaId: string = req.cookies.sessPizza;
     const sessId = sessPizzaId && sessPizzaId.split(':')[1].split('.')[0];
     sessId && (await this.cacheManager.set('sessionId', sessId));
 
@@ -30,12 +31,12 @@ export class AuthProvidersService {
 
     if (req.url.length > 10) {
       // получение кода и токена из query параметров
-      const code = req.query.code;
-      const stateQuery = req.query.state;
+      const code = req.query.code as string;
+      const stateQuery = req.query.state as string;
 
       // верификация state при сравнении с state из кеша
-      const stateHeaders = await this.cacheManager.get('state');
-      const state = stateHeaders === stateQuery;
+      const stateHeaders: string = await this.cacheManager.get('state');
+      const state: boolean = stateHeaders === stateQuery;
 
       if (code && state) {
         await this.cacheManager.del('state');
@@ -48,7 +49,7 @@ export class AuthProvidersService {
           body: body,
         });
 
-        const data = await response.json();
+        const data: YandexTokensDto = await response.json();
         if (data.access_token) {
           const userYaDataResponse = await fetch(
             `https://login.yandex.ru/info?&format=json`,
@@ -57,10 +58,11 @@ export class AuthProvidersService {
               headers: { Authorization: `OAuth ${data.access_token}` },
             },
           );
-          const userYaDataFull = await userYaDataResponse.json();
+          const userYaDataFull: YandexUserInfoDto =
+            await userYaDataResponse.json();
           // ---------------------------------------------------
 
-          const userYaData = userYaDataFull && {
+          const userYaData: UserDto = userYaDataFull && {
             email: userYaDataFull.default_email,
             phoneNumber: userYaDataFull.default_phone.number,
             // role: Roles.CLIENT,
@@ -74,7 +76,6 @@ export class AuthProvidersService {
               res,
               yaProvider,
             );
-            console.log('userYaData:', userYaData);
 
             // Отправка данных клиенту в сессиях (переадресация)
             this.tokensService.sendTokens(res, tokens);
@@ -85,13 +86,16 @@ export class AuthProvidersService {
   }
 
   // Авторизация через Firebase ================================================
-  async authUserByFirebase(userRequest: UserDto, req: Request, res: Response) {
+  async authUserByFirebase(
+    userRequest: UserDto,
+    req: Request,
+    res: Response,
+  ): Promise<void> {
     const { user, tokens } = await this.authService.handleUser(
       userRequest,
       req,
       res,
     );
-    user.refreshTokenData = null;
 
     this.tokensService.sendTokens(res, tokens);
     res.send(user);

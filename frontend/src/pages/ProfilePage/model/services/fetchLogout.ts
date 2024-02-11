@@ -1,8 +1,8 @@
-import { $api } from '@/shared/api/api';
+import axios from 'axios';
 
-export const fetchLogoutUser = () => {
-   return $api
-      .get('/signout')
+export const fetchLogoutUser = async (): Promise<boolean | void> => {
+   return await axios
+      .get('https://pizzashop163.ru/api/signout')
       .then((data) => {
          return data.status === 200 ? true : false;
       })

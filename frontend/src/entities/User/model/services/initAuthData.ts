@@ -1,45 +1,45 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { UserData } from '../types/user';
+import { UserData, UserSchema, ValidationErrors } from '../types/user';
 import { getUserDataByIdQuery } from '../../api/userApi';
 import { ThunkConfig } from '@/app/providers/StoreProvider';
 import { $api } from '@/shared/api/api';
-import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { User } from 'firebase/auth';
 import { userAction } from '../slice/userSlice';
 
 // Запрос на текущего пользователя по id из localStorage
 // через extraReducers (userSlice)
-const { getCookie } = useCookie();
 
 export const initAuthData = createAsyncThunk<
    UserData,
    string,
-   ThunkConfig<string>
+   ThunkConfig<ValidationErrors>
 >('user/initAuthData', async (userId, thunkApi) => {
    const { rejectWithValue, dispatch } = thunkApi;
-
-   if (!userId) {
-      return rejectWithValue('Пользователь не авторизован');
-   }
-
    try {
-      // const token = await user.getIdToken();
+      if (!userId) {
+         return rejectWithValue({
+            errorMessage: 'Пользователь не авторизован',
+         });
+      }
+
       const response = (
          await axios.get(`https://pizzashop163.ru/api/auth/${userId}`, {
             withCredentials: true,
-            // headers: { authorization: token },
          })
       ).data;
 
       if (response.message === 'Пользователь не найден') {
-         return rejectWithValue('Пользователь не найден');
+         return rejectWithValue({ errorMessage: 'Пользователь не найден' });
       }
 
       console.log(response);
       return response;
-   } catch (e) {
-      console.log(e);
-      return rejectWithValue('Некоректный запрос пользователя');
+   } catch (err) {
+      let error = err as AxiosError<ValidationErrors>;
+      if (!error.response) {
+         throw err;
+      }
+      return rejectWithValue(error.response.data);
    }
 });

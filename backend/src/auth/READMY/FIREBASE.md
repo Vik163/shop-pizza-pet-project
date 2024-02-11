@@ -17,81 +17,82 @@
 4. создаем папку firebaseConfig с файлом firebase.setup.ts и используем там где нужно
    [https://www.trpkovski.com/2022/10/07/nestjs-authorisation-with-firebase-auth](https://www.trpkovski.com/2022/10/07/nestjs-authorisation-with-firebase-auth)
 
-```javascript
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import * as admin from 'firebase-admin';
+   ```javascript
+   import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+   import * as admin from 'firebase-admin';
 
-let app: admin.app.App = null;
+   let app: admin.app.App = null;
 
-@Injectable()
-export class FirebaseAdmin implements OnApplicationBootstrap {
-  async onApplicationBootstrap() {
-    if (!app) {
-      const serviceAccount = JSON.parse(
-        process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
-      );
+   @Injectable()
+   export class FirebaseAdmin implements OnApplicationBootstrap {
+     async onApplicationBootstrap() {
+       if (!app) {
+         const serviceAccount = JSON.parse(
+           process.env.FIREBASE_SERVICE_ACCOUNT_KEY,
+         );
 
-      app = admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-      });
-    }
-  }
-  setup() {
-    return app;
-  }
-}
-```
+         app = admin.initializeApp({
+           credential: admin.credential.cert(serviceAccount),
+         });
+       }
+     }
+     setup() {
+       return app;
+     }
+   }
+   ```
 
-5. Использовал [сессионные куки](https://firebase.google.com/docs/auth/admin/manage-cookies)
+5. Пробовал [сессионные куки](https://firebase.google.com/docs/auth/admin/manage-cookies)
    получаю accessToken (firebase) из клиента для создания сессионного токена
 
 6. Для создания сессионного токена нужен csrf токен
+
    - Устанавливаю _csurf_ , _@types/csurf_, _express-session_, _@types/express-session_
    - в main.ts в такой последовательности используются мидлевары
    - (sessionToken - имя сессионного токена, по которому его получать)
 
-```javascript
-import * as cookieParser from 'cookie-parser';
-import * as session from 'express-session';
-import * as csurf from 'csurf';
+   ```javascript
+   import * as cookieParser from 'cookie-parser';
+   import * as session from 'express-session';
+   import * as csurf from 'csurf';
 
-app.use(cookieParser());
+   app.use(cookieParser());
 
-app.use(
-  session({
-    name: 'sessionToken',
-    secret: 'this is a secret msg',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {},
-  }),
-);
+   app.use(
+     session({
+       name: 'sessionToken',
+       secret: 'this is a secret msg',
+       resave: false,
+       saveUninitialized: false,
+       cookie: {},
+     }),
+   );
 
-app.use(csurf());
-```
+   app.use(csurf());
+   ```
 
 7. В защитнике получаю сессионый токен и верифицирую
 
-```javascript
-@Injectable()
-export class AuthGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private readonly admin: FirebaseAdmin,
-  ) {}
+   ```javascript
+   @Injectable()
+   export class AuthGuard implements CanActivate {
+     constructor(
+       private reflector: Reflector,
+       private readonly admin: FirebaseAdmin,
+     ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const app = this.admin.setup();
-    const req = context.switchToHttp().getRequest();
-    try {
-      // sessionToken - имя токена
-      const sessionCookie = req.cookies.sessionToken || '';
-      const claims = await app.auth().verifySessionCookie(sessionCookie, true);
-      if (claims) return true;
-    } catch (error) {
-      console.log('Error', error);
-      throw new UnauthorizedException();
-    }
-  }
-}
-```
+     async canActivate(context: ExecutionContext): Promise<boolean> {
+       const app = this.admin.setup();
+       const req = context.switchToHttp().getRequest();
+       try {
+         // sessionToken - имя токена
+         const sessionCookie = req.cookies.sessionToken || '';
+         const claims = await app.auth().verifySessionCookie(sessionCookie, true);
+         if (claims) return true;
+       } catch (error) {
+         console.log('Error', error);
+         throw new UnauthorizedException();
+       }
+     }
+   }
+   ```

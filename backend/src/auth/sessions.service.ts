@@ -26,8 +26,6 @@ export class SessionsService {
     user: UserDto,
     yaProvider?: boolean,
   ) {
-    user.refreshTokenData = null;
-
     const sess: ISession = req.session;
     if (yaProvider) {
       const sessId = (await this.cacheManager.get('sessionId')) as string;

@@ -8,6 +8,7 @@ import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
 const initialState: UserSchema = {
    _inited: false,
    _userUid: '',
+   error: undefined,
 };
 
 export const userSlice = createSlice({
@@ -43,8 +44,16 @@ export const userSlice = createSlice({
             state._inited = true;
          },
       );
-      builder.addCase(initAuthData.rejected, (state) => {
+      builder.addCase(initAuthData.rejected, (state, action) => {
+         console.log('error:', action.error);
+         console.log('payload:', action.payload);
          state._inited = false;
+         if (action.payload) {
+            // Being that we passed in ValidationErrors to rejectType in `createAsyncThunk`, the payload will be available here.
+            state.error = action.payload.errorMessage;
+         } else {
+            state.error = action.error.message;
+         }
       });
    },
 });

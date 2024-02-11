@@ -21,9 +21,21 @@ export class AuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
+  // отбирает данные пользователя для клиента ===================
+  private selectDataUsers(user: UserDto) {
+    return {
+      _id: user._id,
+      phoneNumber: user.phoneNumber,
+    };
+  }
+
   // получаем пользователя по id или возвращаем "не найден"
   // получаем время хранения =====================================================
-  async getInitialUserById(id: string, req: Request, res: Response) {
+  async getInitialUserById(
+    id: string,
+    req: Request,
+    res: Response,
+  ): Promise<void> {
     const user: UserDto = await this.userModal.findById(id);
 
     if (user) {
@@ -43,83 +55,14 @@ export class AuthService {
         // время не вышло отправляю в куки accessToken
         res.cookie('accessToken', tokens.accessToken, { secure: true });
       }
-      // устанавливаю сессию и отправляю данные пользователя
-      this.sesionsService.handleSession(req, res, user);
-      user.refreshTokenData = null;
 
-      res.send(user);
+      // отбираю нужные данные пользователя для клиента, создаю сессию и отправляю на фронт
+      const selectedUserData: UserDto = this.selectDataUsers(user);
+      this.sesionsService.handleSession(req, res, selectedUserData);
+      res.send(selectedUserData);
     } else {
-      res.send({ message: 'Пользователь по id не найден' });
-    }
-  }
-
-  // Авторизация через Яндекс ======================================================
-  async authUserByYandex(req: Request, res: Response) {
-    // сохраняю в кеше значение сессионого id и  state -----------------------------
-    // приходят два запроса первый с id и state, второй undefined (из-за переадресации)
-    const sessPizzaId = req.cookies.sessPizza;
-    const sessId = sessPizzaId && sessPizzaId.split(':')[1].split('.')[0];
-    sessId && (await this.cacheManager.set('sessionId', sessId));
-
-    const token = {
-      state: req.headers['x-yandex-state'] as string,
-    };
-    token.state && (await this.cacheManager.set('state', token.state));
-    // --------------------------------------------------------------------
-
-    if (req.url.length > 10) {
-      // получение кода и токена из query параметров
-      const code = req.query.code;
-      const stateQuery = req.query.state;
-
-      // верификация state при сравнении с state из кеша
-      const stateHeaders = await this.cacheManager.get('state');
-      const state = stateHeaders === stateQuery;
-
-      if (code && state) {
-        await this.cacheManager.del('state');
-        const clientSecret = process.env.YA_CLIENT_SECRET;
-        const clientId = process.env.YA_CLIENT_ID;
-
-        const body = `grant_type=authorization_code&code=${code}&client_id=${clientId}&client_secret=${clientSecret}`;
-        const response = await fetch('https://oauth.yandex.ru/token', {
-          method: 'POST',
-          body: body,
-        });
-
-        const data = await response.json();
-        if (data.access_token) {
-          const userYaDataResponse = await fetch(
-            `https://login.yandex.ru/info?&format=json`,
-            {
-              method: 'GET',
-              headers: { Authorization: `OAuth ${data.access_token}` },
-            },
-          );
-          const userYaDataFull = await userYaDataResponse.json();
-          // ---------------------------------------------------
-
-          const userYaData = userYaDataFull && {
-            email: userYaDataFull.default_email,
-            phoneNumber: userYaDataFull.default_phone.number,
-            // role: Roles.CLIENT,
-          };
-          const yaProvider = true;
-
-          if (userYaData) {
-            const { tokens } = await this.handleUser(
-              userYaData,
-              req,
-              res,
-              yaProvider,
-            );
-            console.log('userYaData:', userYaData);
-
-            // Отправка данных клиенту в сессиях (переадресация)
-            this.tokensService.sendTokens(res, tokens);
-          }
-        }
-      }
+      // throw new UnauthorizedException('Пользователь не найден');
+      res.send({ message: 'Пользователь не найден' });
     }
   }
 
@@ -131,41 +74,55 @@ export class AuthService {
     req: Request,
     res: Response,
     yaProvider?: boolean,
-  ) {
+  ): Promise<AuthDto> {
     let userData: AuthDto;
-    // проверяем по телефону в БД
-    const user: UserDto = await this.userModal.findOne({
+
+    // проверяем существующего пользователя по телефону в БД
+    let user: UserDto = await this.userModal.findOne({
       phoneNumber: userRequest.phoneNumber,
     });
 
-    // Если есть, генерируем токены, обновляем в БД токен и создаем сессию
-    console.log('user:', user);
+    // Если пользователь есть, генерируем токены, обновляем в БД токен
     if (user) {
       const tokens = await this.tokensService.getTokens(
         user._id,
         user.phoneNumber,
       );
-
       await this.tokensService.updateRefreshToken(user, tokens.refreshToken);
 
+      // отбираю нужные данные пользователя для клиента и создаю сессию отправляю на фронт
+      const selectedUserData: UserDto = this.selectDataUsers(user);
+      user = selectedUserData;
       userData = { user, tokens };
-      this.sesionsService.handleSession(req, res, user, yaProvider);
-      // Если нет создаем все
+      this.sesionsService.handleSession(req, res, selectedUserData, yaProvider);
+
+      // Если пользователя нет создаем все
     } else {
-      const newUserData = await this.createUser(userRequest);
+      const newUserData: AuthDto = await this.createUser(userRequest);
 
       if (newUserData.user) {
+        // отбираю нужные данные пользователя для клиента и создаю сессию отправляю на фронт
+        const selectedUserData: UserDto = this.selectDataUsers(
+          newUserData.user,
+        );
+        newUserData.user = selectedUserData;
         userData = newUserData;
 
-        this.sesionsService.handleSession(req, res, userData.user, yaProvider);
+        this.sesionsService.handleSession(
+          req,
+          res,
+          selectedUserData,
+          yaProvider,
+        );
       }
     }
+
     // Возвращаем токены и пользователя
     return userData;
   }
 
   // Создание пользователя =====================================================
-  private async createUser(user: UserDto) {
+  private async createUser(user: UserDto): Promise<AuthDto> {
     // Добавляем в БД доп. инфо
     user._id = uuidv4();
     user.createDate = new Date();
@@ -185,28 +142,18 @@ export class AuthService {
       createToken: new Date(),
     };
 
-    const newUser = new this.userModal(user);
+    const newUser: UserDocument = new this.userModal(user);
 
-    await newUser.save();
+    const userDto: UserDto = await newUser.save();
 
-    return { user: newUser, tokens };
+    return { user: userDto, tokens };
   }
 
   // Выход ===================================================================
-  async signout(req: Request, res: Response) {
-    res.clearCookie('__Host-psifi.x-csrf-token', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-    });
-    res.clearCookie('refreshToken', {
-      secure: true,
-      httpOnly: true,
-      maxAge: 60 * 68 * 24 * 1000 * process.env.TIME_REFRESH,
-    });
-    res.clearCookie('accessToken', {
-      secure: true,
-    });
+  async signout(res: Response) {
+    res.clearCookie('__Host-psifi.x-csrf-token');
+    res.clearCookie('refreshToken');
+    res.clearCookie('accessToken');
     res.send({ status: 'success' });
   }
 }

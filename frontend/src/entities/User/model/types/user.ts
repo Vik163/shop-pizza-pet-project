@@ -1,3 +1,4 @@
+import { SerializedError } from '@reduxjs/toolkit';
 import { UserParameters } from './userParameters';
 
 enum RoleUser {
@@ -13,7 +14,11 @@ export interface UserData {
    email?: string;
    role: RoleUser;
    userParameters?: UserParameters;
-   message?: string;
+}
+
+export interface ValidationErrors {
+   errorMessage: string;
+   field_errors?: Record<string, string>;
 }
 
 export interface UserSchema {
@@ -22,4 +27,5 @@ export interface UserSchema {
 
    _inited?: boolean;
    message?: string;
+   error: string | null | undefined;
 }

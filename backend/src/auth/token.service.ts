@@ -1,7 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
-// import { UserDto } from 'src/user/dto/user.dto';
 import * as argon2 from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { UserDto } from 'src/user/dto/user.dto';
@@ -16,12 +15,13 @@ export class TokensService {
     private userService: UserService,
   ) {}
 
-  hashData(data: string) {
+  // Хеширование refresh для БД (если будет пароль, то тоже)
+  hashData(data: string): Promise<string> {
     return argon2.hash(data);
   }
 
   // Счетчик времени хранения токена в БД =======================================
-  handleTimeToken(date: Date) {
+  handleTimeToken(date: Date): number {
     //Get 1 day in milliseconds
     const one_day = 1000 * 60 * 60 * 24;
 
@@ -38,22 +38,26 @@ export class TokensService {
   // Получаю токены: из куки запроса и хешированный из БД
   // верифицуруются argon2
   // Проверяю время токена в БД и если вышло то возвращаю новые токены иначе только access
-  async updateTokens(userId: string, req: Request, res: Response) {
-    const refreshToken = req.cookies.refreshToken;
-    const user = await this.userService.findById(userId);
+  async updateTokens(
+    userId: string,
+    req: Request,
+    res: Response,
+  ): Promise<void> {
+    const refreshToken: string = req.cookies.refreshToken;
+    const user: UserDto = await this.userService.findById(userId);
     // хешированный из БД
     const token = user.refreshTokenData.refreshToken;
     if (!user || !token) throw new ForbiddenException('Доступ отклонён');
     // верификация
     const refreshTokenMatches = await argon2.verify(token, refreshToken);
     if (!refreshTokenMatches) throw new ForbiddenException('Доступ отклонён');
-    const tokens = await this.getTokens(user.id, user.phoneNumber);
+    const tokens = await this.getTokens(user._id, user.phoneNumber);
 
     const timeToken = this.handleTimeToken(user.refreshTokenData.createToken);
     console.log('timeToken:', timeToken);
     // время вышло => обновляем токен в БД и отправляем токены в куки
     if (timeToken > process.env.TIME_REFRESH - 2) {
-      await this.updateRefreshToken(user.id, tokens.refreshToken);
+      await this.updateRefreshToken(user, tokens.refreshToken);
       this.sendTokens(res, tokens);
     } else {
       tokens.refreshToken = undefined;
@@ -61,27 +65,31 @@ export class TokensService {
     }
   }
 
-  async updateRefreshToken(user: UserDto, refreshToken: string) {
+  async updateRefreshToken(user: UserDto, refreshToken: string): Promise<void> {
     const hashedRefreshToken = await this.hashData(refreshToken);
     user.refreshTokenData = {
       refreshToken: hashedRefreshToken,
       createToken: new Date(),
     };
 
-    await this.userService.update(user._id, user);
+    await this.userService.updateUserData(user._id, user);
   }
 
-  async getTokens(userId: string, phoneNumber: string) {
+  async getTokens(userId: string, phoneNumber: string): Promise<TokensDto> {
     const payload = { userId, phoneNumber };
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('ACCESS_SECRET'),
+        secret:
+          this.configService.get<string>('ACCESS_SECRET') ||
+          'this is a secret ACCESS_SECRET',
         // secret: process.env.ACCESS_SECRET,
-        expiresIn: '15s',
+        expiresIn: '15m',
       }),
       this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('REFRESH_SECRET'),
+        secret:
+          this.configService.get<string>('REFRESH_SECRET') ||
+          'this is a secret REFRESH_SECRET',
         // secret: process.env.REFRESH_SECRET,
         expiresIn: `${this.configService.get<number>('TIME_REFRESH')}d`,
         // expiresIn: `${process.env.TIME_REFRESH}d`,
@@ -95,7 +103,7 @@ export class TokensService {
   }
 
   // Отправка токенов ========================================================
-  sendTokens(res: Response, tokens: TokensDto) {
+  async sendTokens(res: Response, tokens: TokensDto): Promise<void> {
     res.cookie('accessToken', tokens.accessToken, { secure: true });
     tokens.refreshToken &&
       res.cookie('refreshToken', tokens.refreshToken, {

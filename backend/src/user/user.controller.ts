@@ -10,14 +10,15 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  // защитник
   @AccessToken()
-  getUser() {
-    return this.userService.getUser();
+  getUsers(): Promise<UserDto[]> {
+    return this.userService.getUsers();
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UserDto) {
-    return this.userService.update(id, updateUserDto);
+  updateUserData(@Param('id') id: string, @Body() updateUserDto: UserDto) {
+    return this.userService.updateUserData(id, updateUserDto);
   }
   // @Get(':id')
   // // @Auth('ADMIN')

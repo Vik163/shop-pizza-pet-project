@@ -1,7 +1,8 @@
 import { doubleCsrf } from 'csrf-csrf';
+import { Request } from 'express';
 
 export const doubleCsrfOptions = {
-  getSecret: () => 'Secret', // A function that optionally takes the request and returns a secret
+  getSecret: () => process.env.CSRF_SECRET || 'Secret', // A function that optionally takes the request and returns a secret
   cookieName: '__Host-psifi.x-csrf-token', // The name of the cookie to be used, recommend using Host prefix.
   cookieOptions: {
     path: '/',
@@ -11,7 +12,7 @@ export const doubleCsrfOptions = {
   },
   size: 64, // The size of the generated tokens in bits
   // ignoredMethods: ['HEAD', 'OPTIONS'], // A list of request methods that will not be protected.
-  getTokenFromRequest: (req) => req.headers['x-csrf-token'], // A function that returns the token from the request
+  getTokenFromRequest: (req: Request) => req.headers['x-csrf-token'], // A function that returns the token from the request
 };
 
 export const { validateRequest, doubleCsrfProtection } =

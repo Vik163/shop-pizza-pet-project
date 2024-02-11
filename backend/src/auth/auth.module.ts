@@ -4,7 +4,6 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../user/schemas/user.schema';
-import { UserSerializer } from './session.serializer';
 import { PassportModule } from '@nestjs/passport';
 import { CacheModule } from '@nestjs/cache-manager';
 import { SessionsService } from './sessions.service';
@@ -30,7 +29,6 @@ import { AuthProvidersService } from './authProviders.service';
     AuthService,
     AuthProvidersService,
     FirebaseAdmin,
-    UserSerializer,
     SessionsService,
     TokensService,
     AccessTokenStrategy,
