@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { StateSchema } from '@/app/providers/StoreProvider';
+import { type StateSchema } from '@/app/providers/StoreProvider';
 
 // 13_8 Заменяет useSelector
 // type Selector<T> = (state: StateSchema) => T;

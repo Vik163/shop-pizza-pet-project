@@ -1,4 +1,4 @@
-import { Product } from '@/entities/Product/model/types/product';
+import { type Product } from '@/entities/Product';
 
 type KeysProducts = 'pizzas' | 'combos' | 'snacks' | 'drinks' | 'sauces';
 

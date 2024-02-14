@@ -1,6 +1,6 @@
-import webpack from 'webpack';
+import type webpack from 'webpack';
 import { buildCssLoader } from './loaders/buildCssLoader';
-import { BuildOptions } from './types/config';
+import { type BuildOptions } from './types/config';
 import { buildBabelLoader } from './loaders/buildBabelLoader';
 
 export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {

@@ -1,13 +1,12 @@
 import {
-   InputHTMLAttributes,
-   ReactNode,
-   SyntheticEvent,
+   type InputHTMLAttributes,
+   type SyntheticEvent,
    memo,
    useEffect,
    useRef,
    useState,
 } from 'react';
-import { Mods, classNames } from '@/shared/lib/classNames/classNames';
+import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Input.module.scss';
 import { HStack, VStack } from '../Stack';

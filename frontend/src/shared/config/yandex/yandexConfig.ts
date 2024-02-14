@@ -8,7 +8,7 @@ export const yandexIdConfig = {
       response_type: 'token',
       redirect_uri: 'https://pizzashop163.ru/actions',
       // redirect_uri: 'https://oauth.yandex.ru/verification_code',
-      state: state,
+      state,
    },
    urlPage: 'https://pizzashop163.ru/',
    buttonOptions: {

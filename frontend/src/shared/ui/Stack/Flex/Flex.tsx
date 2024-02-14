@@ -1,5 +1,5 @@
-import { DetailedHTMLProps, HTMLAttributes, ReactNode, memo } from 'react';
-import { Mods, classNames } from '@/shared/lib/classNames/classNames';
+import { type DetailedHTMLProps, type HTMLAttributes, type ReactNode } from 'react';
+import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Flex.module.scss';
 
@@ -92,7 +92,7 @@ export const Flex = (props: FlexProps) => {
 
    return (
       <div
-         style={{ gap: gap }}
+         style={{ gap }}
          className={classNames(cls.Flex, mods, classes)}
          {...otherProps}
       >

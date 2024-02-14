@@ -1,5 +1,6 @@
-import { SyntheticEvent, memo, useCallback, useEffect, useState } from 'react';
+import { type SyntheticEvent, memo, useCallback, useState } from 'react';
 
+import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import { Input, InputVariant } from '@/shared/ui/Input';
@@ -7,14 +8,10 @@ import { HStack } from '@/shared/ui/Stack';
 import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { Button } from '@/shared/ui/Button';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
-import { useSelector } from 'react-redux';
-import { User } from 'firebase/auth';
 import { $api } from '@/shared/api/api';
-import { UserData } from '@/entities/User/model/types/user';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { initAuthData, userAction } from '@/entities/User';
-import { firebaseApi } from '@/entities/User';
-import { getUserData } from '@/entities/User/model/selectors/userDataSelector';
+
+import { getUserData } from '@/entities/User';
 
 import cls from './YandexForm.module.scss';
 

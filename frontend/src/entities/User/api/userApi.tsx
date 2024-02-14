@@ -1,6 +1,6 @@
 import { rtkApi } from '@/shared/api/rtkApi';
-import { UserData } from '../model/types/user';
-import { UserParameters } from '../model/types/userParameters';
+import { type UserData } from '../model/types/user';
+import { type UserParameters } from '../model/types/userParameters';
 
 // 15_5 8min пользовательские json настройки
 interface SetUserParametersArg {

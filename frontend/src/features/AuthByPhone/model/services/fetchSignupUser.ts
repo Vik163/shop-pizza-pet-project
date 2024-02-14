@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { User } from 'firebase/auth';
+import { type User } from 'firebase/auth';
 
 import { userAction } from '@/entities/User';
-import { UserData } from '@/entities/User/model/types/user';
+import { type UserData } from '@/entities/User';
 import { $api } from '@/shared/api/api';
 
 export const fetchSignupUser = createAsyncThunk(

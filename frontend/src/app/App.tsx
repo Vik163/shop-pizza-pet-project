@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Header } from '@/widgets/Header';
 import { AppRouter } from './providers/router';
 import { Footer } from '@/widgets/Footer';
@@ -8,13 +9,9 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch
 
 import {
    getInited,
-   firebaseApi,
    initAuthData,
    userAction,
 } from '@/entities/User';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import axios from 'axios';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 const App = () => {
    const dispatch = useAppDispatch();

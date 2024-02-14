@@ -1,11 +1,11 @@
-import { ReactNode, memo } from 'react';
+import { type ReactNode, memo } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './CardNewProduct.module.scss';
-import { HStack, VStack } from '../Stack';
-import { ProductFixPrice } from '@/entities/Product/model/types/product';
-import { Text, FontColor, FontSize, FontWeight } from '../Text';
-import { FlexAlign, FlexJustify } from '../Stack/Flex';
+import { HStack, VStack } from '@/shared/ui/Stack';
+import { type ProductFixPrice } from '@/entities/Product';
+import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
+import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
 
 interface CardNewProductProps {
    className?: string;

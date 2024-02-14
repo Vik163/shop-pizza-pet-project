@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/app/providers/StoreProvider';
-import { UserParameters } from '../types/userParameters';
+import { type ThunkConfig } from '@/app/providers/StoreProvider';
+import { type UserParameters } from '../types/userParameters';
 import { getUserData } from '../selectors/userDataSelector';
 import { getUserParameters } from '../selectors/userParameters';
 import { setUserParametersMutation } from '../../api/userApi';

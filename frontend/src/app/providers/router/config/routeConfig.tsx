@@ -13,7 +13,7 @@ import {
    getRouteProfile,
    getRouteYaLogin,
 } from '@/shared/const/router';
-import { AppRoutesProps } from '@/shared/types/router';
+import { type AppRoutesProps } from '@/shared/types/router';
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
    [AppRoutes.MAIN]: {

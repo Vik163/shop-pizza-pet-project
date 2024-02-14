@@ -84,7 +84,7 @@ export class TokensService {
           this.configService.get<string>('ACCESS_SECRET') ||
           'this is a secret ACCESS_SECRET',
         // secret: process.env.ACCESS_SECRET,
-        expiresIn: '15m',
+        expiresIn: '10s',
       }),
       this.jwtService.signAsync(payload, {
         secret:

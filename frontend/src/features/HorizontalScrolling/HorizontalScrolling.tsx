@@ -1,15 +1,13 @@
-import { ReactNode, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useSprings, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './HorizontalScrolling.module.scss';
 
-import { ProductFixPrice } from '@/entities/Product/model/types/product';
+import { type ProductFixPrice } from '@/entities/Product';
 import { HorizontalScrollingCard } from './HorizontalScrollingCard/HorizontalScrollingCard';
-import { Icon } from '../Icon';
-import arrow from '@/shared/assets/icons/arrow.svg';
-import arrowYellow from '@/shared/assets/icons/arrow-yellow.svg';
+import arrow from '@/shared/assets/icons/arrow.png';
 
 interface HorizontalScrollingProps {
    className?: string;
@@ -63,6 +61,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
 
    const bind = useDrag(
       ({ xy, currentTarget, target, active, movement: [mx], cancel }) => {
+
          // Добавляю рендер для обновления
          const indexIncrease = () => {
             index.current += 1;
@@ -76,6 +75,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
          // стрелки. Хардкод mx
          // положение стрелки (х) и нажатие (active)
          if (currentTarget === target) {
+
             if (curtains) {
                if (xy[0] > width / 2 && active) {
                   mx = -width;
@@ -84,15 +84,13 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                } else {
                   mx = 0;
                }
-            } else {
-               if (xy[0] > width && active) {
+            } else if (xy[0] > width && active) {
                   mx = -width;
                } else if (xy[0] < width && active) {
                   mx = width;
                } else {
                   mx = 0;
                }
-            }
          }
          // перетаскивание.
          // длина массива меньше или равно видимым картам
@@ -108,21 +106,22 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                   if (indexActiveCard < 0) {
                      cancel();
                      return;
-                  } else {
+                  } 
                      indexDecrease();
-                  }
+                  
                } else {
                   // Не curtains - индекс первого элемента 0
                   if (indexActiveCard <= 0) {
                      cancel();
                      return;
-                  } else {
+                  } 
                      indexDecrease();
-                  }
+                  
                }
                // направление прокрутки влево
             } else {
                // ограничиваем скролл влево
+               // eslint-disable-next-line no-lonely-if
                if (curtains) {
                   // curtains - индекс последнего элемента (elements.length - 3 видимых)
                   // countCardsInBlockCurtains - число элементов в блоке + 1 под шторкой
@@ -130,41 +129,46 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                      curtains && Math.round(widthBlock / width);
 
                   if (
-                     indexActiveCard ==
+                     indexActiveCard ===
                      elements.length - (countCardsInBlockCurtains + 1)
                   ) {
                      cancel();
                      return;
-                  } else {
+                  } 
                      indexIncrease();
-                  }
+                  
                } else {
                   // Не curtains - индекс последнего элемента elements.length - 4 видимых
                   // countCardsInBlock - число элементов в блоке
                   const countCardsInBlock =
                      !curtains && Math.round(widthBlock / width);
-
-                  if (indexActiveCard == elements.length - countCardsInBlock) {
+                  if (indexActiveCard === (elements.length - countCardsInBlock)) {
                      cancel();
                      return;
-                  } else {
+                  } 
                      indexIncrease();
-                  }
+                  
                }
             }
             cancel();
          }
 
          api.start((i) => {
+            
             // mx !== 0 убираем реагирование на щелчок мыши
             if (mx !== 0) {
+
                // Масштаб в зависисмости от движения мышкой
-               const scaleElements =
-                  currentTarget === target // стрелки не уменьшают
-                     ? 1
-                     : scale && active
-                     ? 1 - Math.abs(mx) / 2600 // 2600 - подбором
-                     : 1;
+               const scaleElementsNum = () => {
+                  if(currentTarget === target) { // стрелки не уменьшают
+                     return 1
+                   } 
+                        if(scale && active) {
+                           return 1 - Math.abs(mx) / 2600 // 2600 - подбором
+                         } 
+                           return 1;
+                  }
+               const scaleElements = scaleElementsNum()
 
                // Смещаем на один элемент влево
                const x =
@@ -210,10 +214,10 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
          >
             {curtains && leftArrowCurtainsActive && (
                <animated.button
+                  style={{ backgroundImage: `url(${arrow})` }}
                   className={classNames(cls.icon, {}, [cls.iconLeftCurtain])}
                   {...bind()}
                >
-                  <Icon Svg={arrow} width={9} />
                </animated.button>
             )}
          </div>
@@ -230,10 +234,10 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
          >
             {curtains && rightArrowCurtainsActive && (
                <animated.button
-                  className={classNames(cls.icon, {}, [cls.iconRightCurtain])}
+               style={{ backgroundImage: `url(${arrow})` }}
+               className={classNames(cls.icon, {}, [cls.iconRightCurtain])}
                   {...bind()}
                >
-                  <Icon Svg={arrow} width={9} />
                </animated.button>
             )}
          </div>
@@ -246,10 +250,10 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                   }}
                >
                   <animated.button
+                     style={{ backgroundImage: `url(${arrow})` }}
                      className={classNames(cls.icon, {}, [cls.iconInverse])}
                      {...bind()}
                   >
-                     <Icon Svg={arrowYellow} width={9} color='#f7d22d' />
                   </animated.button>
                </div>
             )}
@@ -261,10 +265,10 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                   }}
                >
                   <animated.button
-                     className={classNames(cls.icon, {}, [cls.iconInverse])}
+                  style={{ backgroundImage: `url(${arrow})` }}
+                  className={classNames(cls.icon, {}, [cls.iconInverse])}
                      {...bind()}
                   >
-                     <Icon Svg={arrowYellow} width={9} color='#f7d22d' />
                   </animated.button>
                </div>
             )}

@@ -1,14 +1,14 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { UserSchema, UserData } from '../types/user';
-import { UserParameters } from '../types/userParameters';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type UserSchema, type UserData } from '../types/user';
+import { type UserParameters } from '../types/userParameters';
 import { saveUserParameters } from '../services/saveUserParameters';
 import { initAuthData } from '../services/initAuthData';
-import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
 
 const initialState: UserSchema = {
    _inited: false,
    _userUid: '',
    error: undefined,
+   authData: null
 };
 
 export const userSlice = createSlice({
@@ -22,10 +22,9 @@ export const userSlice = createSlice({
          localStorage.setItem('userId', payload._id);
       },
       logout: (state) => {
-         const { deleteCookie } = useCookie();
+         
          state._inited = false;
          localStorage.removeItem('userId');
-         deleteCookie('accessToken');
       },
    },
    extraReducers: (builder) => {

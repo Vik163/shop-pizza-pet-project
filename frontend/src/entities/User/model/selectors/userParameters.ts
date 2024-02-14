@@ -1,5 +1,5 @@
 import { buildSelector } from '@/shared/lib/store';
-import { UserParameters } from '../types/userParameters';
+import { type UserParameters } from '../types/userParameters';
 
 const defaultUserParameters: UserParameters = {}; // 15_5 20.40min
 

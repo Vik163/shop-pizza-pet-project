@@ -3,8 +3,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './MainPageProducts.module.scss';
 
-import { Product } from '@/entities/Product/model/types/product';
-import { Products, TypeProducts } from './model/types/mainPageProducts';
+import { type Products, type TypeProducts } from './model/types/mainPageProducts';
 import { VStack } from '@/shared/ui/Stack';
 import { ViewProducts } from '../ViewProducts/ui/ViewProducts';
 

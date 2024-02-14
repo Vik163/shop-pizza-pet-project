@@ -1,14 +1,14 @@
 import {
-   Auth,
+   type Auth,
    getAuth,
    RecaptchaVerifier,
    signInWithPhoneNumber,
    signOut,
-   User,
+   type User,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
+import { type Dispatch, type SetStateAction } from 'react';
 import { firebaseConfig } from '../../../shared/config/firebase/firebaseConfig';
-import { Dispatch, SetStateAction } from 'react';
 import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
 
 //! global 'window'  from 'app/types/window.d.ts'
@@ -17,7 +17,8 @@ initializeApp(firebaseConfig);
 const { deleteCookie, setCookie } = useCookie();
 
 class FirebaseApi {
-   private _auth: Auth;
+   private readonly _auth: Auth;
+
    constructor() {
       this._auth = getAuth();
    }
@@ -70,13 +71,13 @@ class FirebaseApi {
 
    // 3 получает код подтверждения и верификация --------------------------
    async verifyCode(code: string) {
-      const confirmationResult = window.confirmationResult;
+      const {confirmationResult} = window;
 
-      return confirmationResult
+      return await confirmationResult
          .confirm(code)
          .then(async (result: { user: User }) => {
             // успешная регистрация в firebase.
-            const user = result.user;
+            const {user} = result;
 
             return user;
          })
@@ -86,8 +87,8 @@ class FirebaseApi {
    }
    // --------------------------------------------------------------------
 
-   signout() {
-      return signOut(this._auth)
+   async signout() {
+      return await signOut(this._auth)
          .then((data) => {
             return true;
          })

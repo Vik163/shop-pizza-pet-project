@@ -1,4 +1,4 @@
-import { BuildOptions } from "../types/config";
+import { type BuildOptions } from "../types/config";
 
 // 11_10 миграция на babel-loader
 interface BuildBabelLoaderProps extends BuildOptions {

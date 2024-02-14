@@ -1,11 +1,11 @@
-import { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { type MouseEventHandler, useEffect, useRef, useState } from 'react';
 import cls from './Option.module.scss';
 
-type OptionProps = {
+interface OptionProps {
    value: string;
    onClick: (value: string) => void;
    hoverOptionColor?: string;
-};
+}
 export const Option = (props: OptionProps) => {
    const { value, onClick, hoverOptionColor } = props;
    const optionRef = useRef<HTMLLIElement>(null);

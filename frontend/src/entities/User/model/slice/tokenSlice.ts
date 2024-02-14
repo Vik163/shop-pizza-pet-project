@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { TokenSchema } from '../types/token';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type TokenSchema } from '../types/token';
 
 const initialState: TokenSchema = {
    _csrfToken: '',

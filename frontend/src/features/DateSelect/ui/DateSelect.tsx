@@ -1,6 +1,5 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
-import { Months } from '../model/types/date';
 import { months } from '@/shared/const/months';
 
 import cls from './DateSelect.module.scss';
@@ -40,10 +39,10 @@ export const DateSelect = memo((props: DateSelectProps) => {
 
    return (
       <div
-         style={{ height: height }}
+         style={{ height }}
          className={classNames(cls.select, {}, [className])}
       >
-         <HStack style={{ width: width }} className={cls.selectContainer}>
+         <HStack style={{ width }} className={cls.selectContainer}>
             <Select
                placeholder='День'
                className={cls.days}

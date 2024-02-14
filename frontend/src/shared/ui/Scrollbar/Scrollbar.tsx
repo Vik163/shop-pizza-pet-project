@@ -3,9 +3,9 @@ import React, {
    useEffect,
    useRef,
    useCallback,
-   ReactNode,
+   type ReactNode,
 } from 'react';
-import { Mods, classNames } from '@/shared/lib/classNames/classNames';
+import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Scrollbar.module.scss';
 
@@ -245,7 +245,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
                   <button
                      style={{ color: scrollThumbColor }}
                      className={classNames(cls.button, modsButtons, [])}
-                     onClick={(e) => handleScrollButton(e, 'up')}
+                     onClick={(e) => { handleScrollButton(e, 'up'); }}
                   >
                      ᐃ
                   </button>
@@ -276,7 +276,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
                   <button
                      style={{ color: scrollThumbColor }}
                      className={classNames(cls.button, modsButtons, [])}
-                     onClick={(e) => handleScrollButton(e, 'down')}
+                     onClick={(e) => { handleScrollButton(e, 'down'); }}
                   >
                      ᐁ
                   </button>

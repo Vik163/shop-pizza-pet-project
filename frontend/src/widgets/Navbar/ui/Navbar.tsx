@@ -1,11 +1,11 @@
 import {
-   Suspense,
    memo,
    useCallback,
-   useEffect,
    useMemo,
    useState,
 } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Navbar.module.scss';
@@ -22,18 +22,15 @@ import { AppLink } from '@/shared/ui/AppLink';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
 import { Modal } from '@/shared/ui/Modal';
 import { PhoneForm } from '@/features/AuthByPhone';
-import { useSelector } from 'react-redux';
 import {
    getInited,
    getUserData,
-} from '@/entities/User/model/selectors/userDataSelector';
+ UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
-import { useNavigate } from 'react-router-dom';
 import { getRouteProfile } from '@/shared/const/router';
-import { getUserUidSelector } from '@/entities/User/model/selectors/getUserUidSelector';
-import axios from 'axios';
 import { $api } from '@/shared/api/api';
+
 
 interface NavbarProps {
    className?: string;
@@ -45,7 +42,7 @@ export const Navbar = memo((props: NavbarProps) => {
    const [isOpenPopup, setIsOpenPopup] = useState(false);
    const [titlePopup, setTitlePopup] = useState('');
    const inited = useSelector(getInited);
-   const user = useSelector(getUserData);
+   const user = useSelector(getUserData) as UserData;
    const pathProfile = user?._id && getRouteProfile(user?._id);
 
    const getUser = async () => {
@@ -104,11 +101,11 @@ export const Navbar = memo((props: NavbarProps) => {
                >
                   Войти
                </Button>
-               <button id='container_ya'></button>
+               <button aria-label='container_ya' id='container_ya'></button>
             </div>
          ) : (
             <AppLink
-               to={pathProfile ? pathProfile : '/'}
+               to={pathProfile || '/'}
                className={classNames(cls.link)}
             >
                <Icon className={cls.account} Svg={man} />

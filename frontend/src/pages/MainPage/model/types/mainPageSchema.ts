@@ -1,4 +1,4 @@
-import { Product } from '@/entities/Product/model/types/product';
+import { type Product } from '@/entities/Product';
 
 export interface MainPageShema {
    isLoading?: boolean;

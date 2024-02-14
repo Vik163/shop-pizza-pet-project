@@ -1,4 +1,4 @@
-import { ReactNode, memo } from 'react';
+import { type ReactNode, memo } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Page.module.scss';
@@ -6,7 +6,7 @@ import cls from './Page.module.scss';
 interface PageProps {
    className?: string;
    children: ReactNode;
-   onScrollEnd?: () => void;
+   // onScrollEnd?: () => void;
 }
 
 const PAGE_ID = 'PAGE_ID';

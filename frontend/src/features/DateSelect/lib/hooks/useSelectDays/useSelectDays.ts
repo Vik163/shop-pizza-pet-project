@@ -8,15 +8,13 @@ export const useSelectDays = (valueMonth: string) => {
       let day: number;
       if (!valueMonth) {
          day = 31;
-      } else {
-         if (daysInMonths[28].includes(valueMonth)) {
+      } else if (daysInMonths[28].includes(valueMonth)) {
             day = 29;
          } else if (daysInMonths[30].includes(valueMonth)) {
             day = 30;
          } else {
             day = 31;
          }
-      }
 
       const days = () => {
          const arrDays = [];

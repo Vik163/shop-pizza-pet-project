@@ -1,11 +1,11 @@
 import {
-   CombinedState,
-   Reducer,
-   ReducersMapObject,
+   type CombinedState,
+   type Reducer,
+   type ReducersMapObject,
    configureStore,
 } from '@reduxjs/toolkit';
-import { StateSchema, ThunkExtraArg } from './StateSchema';
-import { mainPageReducer } from '@/pages/MainPage/model/slices/mainPageSlice';
+import { type StateSchema, type ThunkExtraArg } from './StateSchema';
+import { mainPageReducer } from '@/pages/MainPage';
 import { userReducer } from '@/entities/User';
 import { $api } from '@/shared/api/api';
 import { rtkApi } from '@/shared/api/rtkApi';
@@ -51,7 +51,7 @@ export function createReduxStore(
    });
 
    // в store поля reducerManager не существует, добавляем его
-   // @ts-ignore
+   // @ts-expect-error не разбираться
    store.reducerManager = reducerManager;
 
    return store;

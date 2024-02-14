@@ -1,8 +1,7 @@
 import { memo } from 'react';
-import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Bonuses.module.scss';
-import { HStack, VStack } from '@/shared/ui/Stack';
+import { VStack } from '@/shared/ui/Stack';
 import {
    HeaderTagType,
    Text,
@@ -12,7 +11,7 @@ import {
    FontWeight,
 } from '@/shared/ui/Text';
 import sale from '@/shared/assets/images/sale.png';
-import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
+import { FlexAlign } from '@/shared/ui/Stack/Flex';
 
 interface BonusesProps {
    className?: string;

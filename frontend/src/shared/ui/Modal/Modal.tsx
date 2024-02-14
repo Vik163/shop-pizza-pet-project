@@ -1,11 +1,6 @@
 import {
-   ReactNode,
+   type ReactNode,
    memo,
-   useCallback,
-   useEffect,
-   useLayoutEffect,
-   useRef,
-   useState,
 } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -37,7 +32,7 @@ export const Modal = memo((props: ModalProps) => {
       onClose,
    });
 
-   const modalTheme = themeGray ? true : false;
+   const modalTheme = !!themeGray;
 
    const mods: Record<string, boolean> = {
       [cls.opened]: isOpen,

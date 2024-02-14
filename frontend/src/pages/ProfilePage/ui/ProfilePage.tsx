@@ -1,22 +1,19 @@
-import { SyntheticEvent, memo, useCallback, useEffect, useState } from 'react';
+import React, { type SyntheticEvent, memo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './ProfilePage.module.scss';
 import { Page } from '@/widgets/Page';
-import { HStack, VStack } from '@/shared/ui/Stack';
 import {
    HeaderTagType,
    Text,
-   TextAlign,
    FontColor,
    FontSize,
    FontWeight,
 } from '@/shared/ui/Text';
-import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
 import { Bonuses } from './Bonuses/Bonuses';
 import { Input } from '@/shared/ui/Input';
 import { DateSelect } from '@/features/DateSelect';
-import { Select } from '@/shared/ui/Select';
 import {
    Button,
    ButtonBgColor,
@@ -24,22 +21,16 @@ import {
    ButtonVariant,
 } from '@/shared/ui/Button';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { firebaseApi, userAction } from '@/entities/User';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { UserData } from '@/entities/User/model/types/user';
-import { $api } from '@/shared/api/api';
-import { useSelector } from 'react-redux';
-import { getTokenSelector } from '@/entities/User/model/selectors/getTokenSelector';
-import { fetchTokenForm } from '@/entities/User/model/services/fetchTokenForm';
-import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
+import { firebaseApi, userAction , csrfTokenReducer } from '@/entities/User';
 
 import {
    DynamicReducersLoader,
-   ReducersList,
+   type ReducersList,
 } from '@/shared/lib/components/DynamicReducersLoader';
-import { csrfTokenReducer } from '@/entities/User/model/slice/tokenSlice';
+
 import { fetchLogoutUser } from '../model/services/fetchLogout';
+import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
+
 
 export interface ProfilePageProps {
    className?: string;
@@ -53,11 +44,13 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
-   const { deleteCookie, setCookie } = useCookie();
+   const { deleteCookie } = useCookie();
+
 
    // const token = useSelector(getTokenSelector);
    // console.log(token);
 
+   // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
    const onChangeName = useCallback((value: string | number) => {
       // dispatch(profileActions.updateProfile({ age: Number(value || 0) }));
    }, []);
@@ -66,6 +59,8 @@ const ProfilePage = memo((props: ProfilePageProps) => {
 
    const logout = async (e: SyntheticEvent) => {
       e.preventDefault();
+      deleteCookie('accessToken');
+
       // выход из firebase
       const signoutFirebase = await firebaseApi.signout();
 
@@ -106,7 +101,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                      heightInput={48}
                      placeholder='sdf'
                      onChange={onChangeName}
-                     value={'sdf'}
+                     value="sdf"
                   />
                   <Input
                      className={cls.input}
@@ -114,10 +109,10 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                      name='phone'
                      type='number'
                      widthInput={350}
-                     placeholder={'+7 999 999-99-99'}
+                     placeholder="+7 999 999-99-99"
                      widthInputAndEditButtonRight={446}
                      heightInput={48}
-                     value={'+7 999 999-99-99'}
+                     value="+7 999 999-99-99"
                   />
                   <Text
                      fontSize={FontSize.SIZE_14}
@@ -138,7 +133,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                      widthInput={350}
                      heightInput={48}
                      onChange={onChangeEmail}
-                     value={'email'}
+                     value="email"
                   />
                   <Text
                      title={HeaderTagType.H_3}

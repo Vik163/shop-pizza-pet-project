@@ -1,4 +1,4 @@
-import { Flex, FlexDirection, FlexProps } from '../Flex';
+import { Flex, FlexDirection, type FlexProps } from '../Flex';
 
 type VStackProps = Omit<FlexProps, 'direction'>;
 

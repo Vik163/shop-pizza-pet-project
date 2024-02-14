@@ -1,4 +1,6 @@
-import { SyntheticEvent, memo, useCallback, useEffect, useState } from 'react';
+import { type SyntheticEvent, memo, useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { type User } from 'firebase/auth';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './CodeInForm.module.scss';
@@ -7,16 +9,13 @@ import { HStack } from '@/shared/ui/Stack';
 import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { Button } from '@/shared/ui/Button';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
-import { useSelector } from 'react-redux';
 import { getPhoneNumber } from '../../model/selectors/authPhoneSelectors';
-import { User } from 'firebase/auth';
-import { $api } from '@/shared/api/api';
-import { UserData } from '@/entities/User/model/types/user';
+import {  firebaseApi , getUserData } from '@/entities/User';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { initAuthData, userAction } from '@/entities/User';
-import { firebaseApi } from '@/entities/User';
+
+
 import { fetchSignupUser } from '../../model/services/fetchSignupUser';
-import { getUserData } from '@/entities/User/model/selectors/userDataSelector';
+
 
 interface CodeInFormProps {
    className?: string;

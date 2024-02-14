@@ -1,4 +1,4 @@
-@import '../../../app/styles/variables/mixins.scss';
+@import '../../app/styles/variables/mixins.scss';
 
 .HorizontalScrolling {
    display: flex;
@@ -36,9 +36,8 @@
 .icon {
    position: absolute;
    top: calc(50% - 16px);
-   width: 32px;
-   height: 32px;
-   background: #f7d22d;
+   width: 31px;
+   height: 31px;
    border-radius: 50%;
    border: none;
    z-index: 15;

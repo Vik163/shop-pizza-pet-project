@@ -1,4 +1,4 @@
-import { ReactNode, memo } from 'react';
+import { type ReactNode, memo } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Text.module.scss';
@@ -98,10 +98,12 @@ export const Text = memo((props: TextProps) => {
    ];
 
    return (
+      <div>
       <HeaderTag
          className={classNames(cls.text, { [cls.max]: max }, additionalClasses)}
       >
          {children}
       </HeaderTag>
+      </div>
    );
 });

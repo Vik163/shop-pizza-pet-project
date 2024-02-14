@@ -1,4 +1,4 @@
-import { Configuration, DefinePlugin, RuleSetRule } from 'webpack';
+import { type Configuration, DefinePlugin, type RuleSetRule } from 'webpack';
 import path from 'path';
 import { buildCssLoader } from '../build/loaders/buildCssLoader';
 
@@ -30,17 +30,17 @@ export default {
 
       // config! - 5_6 - 25 min
       // !. означает, что не равны undefined
-      config!.resolve!.modules!.push(paths.src);
-      config!.resolve!.extensions!.push('.ts', '.tsx');
-      config!.resolve!.alias = {
-         ...config!.resolve!.alias,
+      config.resolve!.modules!.push(paths.src);
+      config.resolve!.extensions!.push('.ts', '.tsx');
+      config.resolve!.alias = {
+         ...config.resolve!.alias,
          '@': paths.src, // 13_1
       };
 
-      config!.module!.rules = config!.module!.rules!.map(
-         // @ts-ignore
+      config.module!.rules = config.module!.rules!.map(
+         // @ts-expect-error
          (rule: RuleSetRule) => {
-            if (/svg/.test(rule.test as string)) {
+            if ((rule.test as string).includes('svg')) {
                return { ...rule, exclude: /\.svg$/i };
             }
 
@@ -48,13 +48,13 @@ export default {
          },
       );
 
-      config!.module!.rules.push({
+      config.module!.rules.push({
          test: /\.svg$/,
          use: ['@svgr/webpack'],
       });
-      config!.module!.rules.push(buildCssLoader(true));
+      config.module!.rules.push(buildCssLoader(true));
 
-      config!.plugins!.push(
+      config.plugins!.push(
          new DefinePlugin({
             __IS_DEV__: JSON.stringify(true),
             __API__: JSON.stringify('https://testapi.ru'), // https://testapi.ru 11_7 18min

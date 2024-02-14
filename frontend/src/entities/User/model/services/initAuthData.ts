@@ -1,11 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { UserData, UserSchema, ValidationErrors } from '../types/user';
-import { getUserDataByIdQuery } from '../../api/userApi';
-import { ThunkConfig } from '@/app/providers/StoreProvider';
-import { $api } from '@/shared/api/api';
-import axios, { AxiosError } from 'axios';
-import { User } from 'firebase/auth';
-import { userAction } from '../slice/userSlice';
+import axios, { type AxiosError } from 'axios';
+import { type UserData, type ValidationErrors } from '../types/user';
+import { type ThunkConfig } from '@/app/providers/StoreProvider';
 
 // Запрос на текущего пользователя по id из localStorage
 // через extraReducers (userSlice)
@@ -36,7 +32,7 @@ export const initAuthData = createAsyncThunk<
       console.log(response);
       return response;
    } catch (err) {
-      let error = err as AxiosError<ValidationErrors>;
+      const error = err as AxiosError<ValidationErrors>;
       if (!error.response) {
          throw err;
       }

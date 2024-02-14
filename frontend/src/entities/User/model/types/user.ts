@@ -1,5 +1,4 @@
-import { SerializedError } from '@reduxjs/toolkit';
-import { UserParameters } from './userParameters';
+import { type UserParameters } from './userParameters';
 
 enum RoleUser {
    ADMIN = 'ADMIN',
@@ -22,7 +21,7 @@ export interface ValidationErrors {
 }
 
 export interface UserSchema {
-   authData?: UserData;
+   authData: UserData | null;
    _userUid?: string;
 
    _inited?: boolean;

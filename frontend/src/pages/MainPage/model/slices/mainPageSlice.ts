@@ -1,7 +1,6 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { fetchProductsList } from '../services/fetchProductsList/fetchProductsList';
-import { Product } from '@/entities/Product/model/types/product';
-import { MainPageShema } from '../types/mainPageSchema';
+import { type MainPageShema } from '../types/mainPageSchema';
 
 // const productAdapter = createEntityAdapter
 

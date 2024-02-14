@@ -1,5 +1,5 @@
-import { ButtonHTMLAttributes, ReactNode, memo } from 'react';
-import { Mods, classNames } from '@/shared/lib/classNames/classNames';
+import { type ButtonHTMLAttributes, memo } from 'react';
+import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Button.module.scss';
 import { FontColor, FontSize, FontWeight } from '../Text';
@@ -76,7 +76,7 @@ export const Button = memo((props: ButtonProps) => {
       <button
          id={id}
          type={type}
-         style={{ width: width, height: height }}
+         style={{ width, height }}
          className={classNames(
             disabled ? '' : cls.Button,
             mods,

@@ -59,9 +59,9 @@ export const useCookie = () => {
    function getCookie(name: string) {
       const matches = document.cookie.match(
          new RegExp(
-            '(?:^|; )' +
-               name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') +
-               '=([^;]*)',
+            `(?:^|; )${ 
+               name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') 
+               }=([^;]*)`,
          ),
       );
 
@@ -84,13 +84,13 @@ export const useCookie = () => {
       }
 
       let updatedCookie =
-         encodeURIComponent(name) + '=' + encodeURIComponent(value);
+         `${encodeURIComponent(name)  }=${  encodeURIComponent(value)}`;
 
-      for (let optionKey in options) {
-         updatedCookie += '; ' + optionKey;
-         let optionValue = (options as any)[optionKey];
+      for (const optionKey in options) {
+         updatedCookie += `; ${  optionKey}`;
+         const optionValue = (options as any)[optionKey];
          if (optionValue !== true) {
-            updatedCookie += '=' + optionValue;
+            updatedCookie += `=${  optionValue}`;
          }
       }
       document.cookie = updatedCookie;

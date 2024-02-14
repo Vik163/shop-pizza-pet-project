@@ -1,17 +1,18 @@
 import { memo, useEffect, useState } from 'react';
 
+import axios from 'axios';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './MainPage.module.scss';
 import { Page } from '@/widgets/Page';
 
-import MainImage_1 from '@/shared/assets/images/image_1.jpg';
-import MainImage_2 from '@/shared/assets/images/image_2.jpg';
-import MainImage_3 from '@/shared/assets/images/image_3.jpg';
+import MainImage1 from '@/shared/assets/images/image_1.jpg';
+import MainImage2 from '@/shared/assets/images/image_2.jpg';
+import MainImage3 from '@/shared/assets/images/image_3.jpg';
 import Man from '@/shared/assets/images/man.png';
 import Woman from '@/shared/assets/images/woman.png';
 
-import { HorizontalScrolling } from '@/shared/ui/HorizontalScrolling/HorizontalScrolling';
+import { HorizontalScrolling } from '@/features/HorizontalScrolling';
 import {
    HeaderTagType,
    Text,
@@ -20,32 +21,28 @@ import {
    FontSize,
    FontWeight,
 } from '@/shared/ui/Text';
-import { fetchProductsList } from '../../model/services/fetchProductsList/fetchProductsList';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import axios from 'axios';
-import { Product } from '@/entities/Product/model/types/product';
+import { type Product } from '@/entities/Product';
 import { MainPageProducts } from '../MainPageProducts/MainPageProducts';
-import { Products } from '../MainPageProducts/model/types/mainPageProducts';
+import { type Products } from '../MainPageProducts/model/types/mainPageProducts';
 import { DeliveryPay } from '../DeliveryPay/DeliveryPay';
-import { YandexLoginPage } from '@/pages/YandexLoginPage';
 
 interface MainPageProps {
    className?: string;
 }
 
 const arrComp = [
-   MainImage_3,
-   MainImage_1,
-   MainImage_2,
-   MainImage_3,
-   MainImage_1,
-   MainImage_2,
-   MainImage_3,
+   MainImage3,
+   MainImage1,
+   MainImage2,
+   MainImage3,
+   MainImage1,
+   MainImage2,
+   MainImage3,
 ];
 
 export const MainPage = memo((props: MainPageProps) => {
    const { className } = props;
-   const dispatch = useAppDispatch();
+   // const dispatch = useAppDispatch();
 
    const [cards, setCards] = useState<Products>([]);
    const [sizePizza, setSizePizza] = useState<string>('average');
@@ -78,11 +75,11 @@ export const MainPage = memo((props: MainPageProps) => {
    const pricePizzaFromSize = cards[0].pizzas.map((card) => {
       if (sizePizza === 'small') {
          return { ...card, price: card.price[0] };
-      } else if (sizePizza === 'average') {
+      } if (sizePizza === 'average') {
          return { ...card, price: card.price[1] };
-      } else {
+      } 
          return { ...card, price: card.price[2] };
-      }
+      
    });
 
    const popularProducts = pricePizzaFromSize.filter((card) => card.popular);
@@ -122,8 +119,8 @@ export const MainPage = memo((props: MainPageProps) => {
             shadowsOpacity={0.06}
             visibleElements={4}
          />
-         <img src={Man} className={cls.man} />
-         <img src={Woman} className={cls.woman} />
+         <img src={Man} className={cls.man} alt='man' />
+         <img src={Woman} className={cls.woman} alt='woman' />
 
          <MainPageProducts cards={cards} />
          <DeliveryPay />

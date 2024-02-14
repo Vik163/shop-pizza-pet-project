@@ -1,12 +1,25 @@
-import { HTMLAttributes, ReactNode, memo } from 'react';
+import { type HTMLAttributes, memo } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Card.module.scss';
-import { Product } from '@/entities/Product/model/types/product';
 import { HStack, VStack } from '../Stack';
 import { Text, FontColor, FontSize, FontWeight } from '../Text';
 import { FlexJustify } from '../Stack/Flex';
 import { Button, ButtonBgColor, ButtonRadius, ButtonVariant } from '../Button';
+
+interface Product {
+   image: string;
+   imageAverage: string;
+   imageSmall: string;
+   structure: string;
+   name: string;
+   type: string;
+   addInfo: string;
+   popular: boolean;
+   price: number[];
+   discount: number;
+}
+
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
    className?: string;
@@ -17,7 +30,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const Card = memo((props: CardProps) => {
-   const { className, dataCard, maxHeight, maxWidth, animated, ...otherProps } =
+   const { className, dataCard, maxHeight, maxWidth, ...otherProps } =
       props;
 
    return (

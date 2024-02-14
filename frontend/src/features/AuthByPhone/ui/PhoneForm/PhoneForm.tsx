@@ -1,19 +1,21 @@
-import {
-   SyntheticEvent,
+import React, {
+   type SyntheticEvent,
    memo,
    useCallback,
-   useEffect,
    useRef,
    useState,
 } from 'react';
 
-import { Mods, classNames } from '@/shared/lib/classNames/classNames';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { uid } from 'uid';
+import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './PhoneForm.module.scss';
-import { HStack, VStack } from '@/shared/ui/Stack';
+import { HStack } from '@/shared/ui/Stack';
 import { Input, InputVariant } from '@/shared/ui/Input';
 import { Text, FontColor, FontSize } from '@/shared/ui/Text';
-import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
+import { FlexJustify } from '@/shared/ui/Stack/Flex';
 import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
 import { CodeInForm } from '../CodeInForm/CodeInForm';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
@@ -21,25 +23,20 @@ import {
    authPhoneActions,
    authPhoneReducer,
 } from '../../model/slice/authPhoneSlice';
-import { useSelector, useStore } from 'react-redux';
 import { getPhoneNumber } from '../../model/selectors/authPhoneSelectors';
-import axios from 'axios';
-import { User } from 'firebase/auth';
-import { UserData } from '@/entities/User/model/types/user';
-import { firebaseApi } from '@/entities/User';
-import { AppLink } from '@/shared/ui/AppLink';
-import { userAction } from '@/entities/User';
-import { getInited } from '@/entities/User/model/selectors/userDataSelector';
+import {  firebaseApi   } from '@/entities/User';
+
+
+
 import {
    DynamicReducersLoader,
-   ReducersList,
+   type ReducersList,
 } from '@/shared/lib/components/DynamicReducersLoader';
-import { $api } from '@/shared/api/api';
-import { YandexForm } from '../YandexForm';
-import { uid } from 'uid';
+import yandexID from '@/shared/assets/icons/yandex.png';
+import { Icon } from '@/shared/ui/Icon';
 
 export interface PhoneFormProps {
-   className?: string;
+   // className?: string;
    onClosePopup: () => void;
 }
 
@@ -48,23 +45,21 @@ const initialReducers: ReducersList = {
 };
 
 const PhoneForm = memo((props: PhoneFormProps) => {
-   const { className, onClosePopup } = props;
+   const { onClosePopup } = props;
    const dispatch = useAppDispatch();
    const captchaRef = useRef(null);
    const [isConfirmCode, setIsConfirmCode] = useState(false);
-   const [verificationCode, setVerificationCode] = useState('');
    const stateToken = uid(32);
 
-   const [openYaPopup, setOpenYaPopup] = useState(false);
    const authPhoneNumber = useSelector(getPhoneNumber);
-   const inited = useSelector(getInited);
+   // const inited = useSelector(getInited);
    const appYaId = process.env.REACT_APP_YA_CLIENT_ID;
-   let ya_window: Window | null;
+
 
    // 1 значение инпута - убираем ненужные символы и отправляем в стейт
    const onChangeNumberPhone = useCallback((phoneNumber?: string) => {
-      phoneNumber && dispatch(authPhoneActions.setPhoneNumber({ phoneNumber }));
-   }, []);
+      if(phoneNumber) dispatch(authPhoneActions.setPhoneNumber({ phoneNumber }));
+   }, [dispatch]);
    // -------------------------------------------------------------------
 
    // 2 получаю инпут и отправляю форму на проверку (firebase) ------
@@ -73,10 +68,10 @@ const PhoneForm = memo((props: PhoneFormProps) => {
 
       const phoneNumber =
          authPhoneNumber && `+${authPhoneNumber.replace(/\D+/g, '')}`;
-      phoneNumber && firebaseApi.phoneSignIn(phoneNumber, setIsConfirmCode);
+      if(phoneNumber) firebaseApi.phoneSignIn(phoneNumber, setIsConfirmCode);
    }
    // ---------------------------------------------------------------
-   //https://oauth.yandex.ru/verification_code
+   // https://oauth.yandex.ru/verification_code
    // кнопка 'изменить' ---------------------------------
    const onEditPhone = useCallback(() => {
       firebaseApi.resetRecaptcha(captchaRef);
@@ -104,27 +99,31 @@ const PhoneForm = memo((props: PhoneFormProps) => {
                className={classNames(cls.formByPhone, {}, [])}
                onSubmit={onSubmit}
             >
-               <Input
-                  className={cls.loginInput}
-                  name='phone'
-                  placeholder={'+7 (999) 999-99-99'}
-                  labelLeft='Номер телефона'
-                  type='tel'
-                  withoutButtons
-                  widthInput={255}
-                  heightInput={48}
-                  variant={inputVariant}
-                  onChange={onChangeNumberPhone}
-                  value={'+7'}
-               />
-
-               <a
-                  href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`}
-                  onClick={onLoginYa}
-               >
-                  Яндекс
-               </a>
-
+               <HStack max justify={FlexJustify.BETWEEN}>
+                  <Input
+                     className={cls.loginInput}
+                     name='phone'
+                     placeholder="+7 (999) 999-99-99"
+                     labelLeft='Номер телефона'
+                     type='tel'
+                     withoutButtons
+                     widthInput={255}
+                     heightInput={48}
+                     variant={inputVariant}
+                     onChange={onChangeNumberPhone}
+                     value="+7"
+                  />
+                  {appYaId && (
+                     <a
+                        aria-label='yandex'
+                        // eslint-disable-next-line max-len
+                        href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`}
+                        onClick={onLoginYa}
+                     >
+                        <Icon src={yandexID} width={73} height={30} />
+                     </a>
+                  )}
+               </HStack>
                <HStack
                   className={cls.submitCode}
                   max

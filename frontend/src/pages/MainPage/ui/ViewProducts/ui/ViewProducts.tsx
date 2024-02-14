@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './ViewProducts.module.scss';
-import { Product } from '@/entities/Product/model/types/product';
+import { type Product } from '@/entities/Product';
 import { HStack, VStack } from '@/shared/ui/Stack';
 import { Card } from '@/shared/ui/Card';
 import {
@@ -17,11 +17,12 @@ import { FlexWrap } from '@/shared/ui/Stack/Flex';
 interface ViewProductsProps {
    className?: string;
    cardsType: Product[];
+   // eslint-disable-next-line react/no-unused-prop-types
    view: string;
 }
 
 export const ViewProducts = memo((props: ViewProductsProps) => {
-   const { className, cardsType, view } = props;
+   const { className, cardsType } = props;
 
    return (
       <VStack className={classNames(cls.ViewProducts, {}, [className])}>

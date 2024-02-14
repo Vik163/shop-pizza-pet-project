@@ -1,5 +1,5 @@
 import { bindActionCreators, createSlice } from '@reduxjs/toolkit';
-import { SliceCaseReducers, CreateSliceOptions } from '@reduxjs/toolkit/dist'; // dist 6:40min
+import { type SliceCaseReducers, type CreateSliceOptions } from '@reduxjs/toolkit/dist'; // dist 6:40min
 import { useDispatch } from 'react-redux';
 import { useMemo } from 'react';
 
@@ -14,9 +14,9 @@ export function buildSlice<
     const useActions = (): typeof slice.actions => {
         const dispatch = useDispatch();
 
-        // @ts-ignore
+        // @ts-expect-error
         return useMemo(
-                    // @ts-ignore
+                    // @ts-expect-error
             () => bindActionCreators(slice.actions, dispatch),
             [dispatch],
         );

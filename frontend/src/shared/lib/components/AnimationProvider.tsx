@@ -1,5 +1,5 @@
 import {
-   ReactNode,
+   type ReactNode,
    createContext,
    useContext,
    useEffect,
@@ -23,7 +23,7 @@ const AnimationContext = createContext<AnimationContextPayload>({});
 
 // Ленивая подгрузка библиотек
 const getAsyncAnimationModules = async () => {
-   return Promise.all([
+   return await Promise.all([
       import('@react-spring/web'),
       import('@use-gesture/react'),
    ]);

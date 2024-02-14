@@ -7,13 +7,13 @@ export function getDataYandex() {
          yandexIdConfig.urlPage,
          yandexIdConfig.buttonOptions,
       )
-         .then(function (result: any) {
+         .then((result: any) => {
             return result.handler();
          })
-         .then(function (data: any) {
+         .then((data: any) => {
             console.log('Сообщение с токеном: ', data);
          })
-         .catch(function (error: any) {
+         .catch((error: any) => {
             console.log('Что-то пошло не так: ', error);
          });
    };

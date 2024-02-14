@@ -1,11 +1,11 @@
-import { ReactNode, useEffect } from 'react';
-import { useAppDispatch } from '../hooks/useAppDispatch/useAppDispatch';
+import { type ReactNode, useEffect } from 'react';
 import { useStore } from 'react-redux';
-import { Reducer } from '@reduxjs/toolkit';
+import { type Reducer } from '@reduxjs/toolkit';
+import { useAppDispatch } from '../hooks/useAppDispatch/useAppDispatch';
 import {
-   StateSchema,
-   ReduxStoreWithManager,
-   StateSchemaKey,
+   type StateSchema,
+   type ReduxStoreWithManager,
+   type StateSchemaKey,
 } from '@/app/providers/StoreProvider';
 
 // ОБорачиваем каждый компонент где нужен ассинхронный редьюсер

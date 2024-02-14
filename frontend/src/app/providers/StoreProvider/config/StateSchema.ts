@@ -1,15 +1,15 @@
-import { TokenSchema, UserSchema } from '@/entities/User';
-import { AuthPhoneSchema } from '@/features/AuthByPhone/model/types/authPhone';
-import { MainPageShema } from '@/pages/MainPage/model/types/mainPageSchema';
-import { rtkApi } from '@/shared/api/rtkApi';
 import {
-   AnyAction,
-   CombinedState,
-   EnhancedStore,
-   Reducer,
-   ReducersMapObject,
+   type AnyAction,
+   type CombinedState,
+   type EnhancedStore,
+   type Reducer,
+   type ReducersMapObject,
 } from '@reduxjs/toolkit';
-import { AxiosInstance } from 'axios';
+import { type AxiosInstance } from 'axios';
+import { type TokenSchema, type UserSchema } from '@/entities/User';
+import { type AuthPhoneSchema } from '@/features/AuthByPhone';
+import { type MainPageShema } from '@/pages/MainPage';
+import { type rtkApi } from '@/shared/api/rtkApi';
 
 export interface StateSchema {
    mainPage: MainPageShema;

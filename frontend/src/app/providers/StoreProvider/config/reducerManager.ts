@@ -1,14 +1,14 @@
 import {
-   AnyAction,
+   type AnyAction,
    combineReducers,
-   Reducer,
-   ReducersMapObject,
+   type Reducer,
+   type ReducersMapObject,
 } from '@reduxjs/toolkit';
 import {
-   MountedReducers,
-   ReducerManager,
-   StateSchema,
-   StateSchemaKey,
+   type MountedReducers,
+   type ReducerManager,
+   type StateSchema,
+   type StateSchemaKey,
 } from './StateSchema';
 
 // Для удаления и добавления ассинхронный редьюсеров 5_1
@@ -22,7 +22,7 @@ export function createReducerManager(
    let combinedReducer = combineReducers(reducers);
 
    // Массив названий редьюсеров, которые хотим удалить. Добавляем имя
-   let keysToRemove: Array<StateSchemaKey> = [];
+   let keysToRemove: StateSchemaKey[] = [];
 
    // 9_1 11 min
    const mountedReducers: MountedReducers = {};

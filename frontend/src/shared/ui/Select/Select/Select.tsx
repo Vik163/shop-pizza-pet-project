@@ -1,12 +1,12 @@
 import {
-   MouseEventHandler,
+   type MouseEventHandler,
    memo,
    useCallback,
    useEffect,
    useRef,
    useState,
 } from 'react';
-import { Mods, classNames } from '@/shared/lib/classNames/classNames';
+import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Select.module.scss';
 
@@ -14,7 +14,7 @@ import { Option } from '../Option/Option';
 import ArrowDown from '@/shared/assets/icons/arrowDown.svg';
 import { Scrollbar } from '../../Scrollbar/Scrollbar';
 
-type SelectProps = {
+interface SelectProps {
    className?: string;
    selected?: string | null;
    heightOptionContainer: string | number;
@@ -31,7 +31,7 @@ type SelectProps = {
    scrollTrackColor?: string;
    scrollRadius?: string | number;
    scrollHover?: boolean;
-};
+}
 
 export const Select = memo((props: SelectProps) => {
    const {

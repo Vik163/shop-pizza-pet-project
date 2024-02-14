@@ -1,8 +1,8 @@
-import webpack from 'webpack';
+import type webpack from 'webpack';
 import path from 'path';
 // декомпозиция конфига --------------
 import { buildWebpackConfig } from './config/build/buildWebpackConfig';
-import { BuildEnv, BuildMode, BuildPaths } from './config/build/types/config';
+import { type BuildEnv, type BuildMode, type BuildPaths } from './config/build/types/config';
 
 // деплой 14_18 7min
 function getApiUrl(mode: BuildMode, apiUrl?: string) {

@@ -1,7 +1,7 @@
-import axios, { InternalAxiosRequestConfig } from 'axios';
-import { useCookie } from '../lib/hooks/useCookie/useCookie';
+import axios, { type InternalAxiosRequestConfig } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import dayjs from 'dayjs';
+import { useCookie } from '../lib/hooks/useCookie/useCookie';
 
 //! useSelector - падает ошибка
 
