@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { type UserSchema, type UserData } from '../types/user';
 import { type UserParameters } from '../types/userParameters';

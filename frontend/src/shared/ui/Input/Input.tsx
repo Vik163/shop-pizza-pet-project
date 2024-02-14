@@ -1,4 +1,4 @@
-import {
+import React, {
    type InputHTMLAttributes,
    type SyntheticEvent,
    memo,
@@ -127,11 +127,11 @@ export const Input = memo((props: InputProps) => {
    }, [isFocused]);
 
    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value =
+      const valueInput =
          type === 'tel' && e.target.value
             ? () => normalizeInput(e.target.value)
             : e.target.value;
-      setIsValue(value);
+      setIsValue(valueInput);
 
       onChange?.(e.target.value);
    };

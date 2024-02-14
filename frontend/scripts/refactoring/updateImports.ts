@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Project } from 'ts-morph'; // для изменения ts кода
 
 // команда для запуска файла: npx ts-node .\scripts\updateImports.ts

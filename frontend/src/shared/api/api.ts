@@ -21,9 +21,11 @@ export const $api = axios.create({
 
 $api.interceptors.request.use(async (config: IRequest) => {
    const token = getCookie('accessToken');
+   // обходим правило eslint (no-param-reassign)
+   const newConfig = { ...config };
 
    if (config.headers && token) {
-      config.headers.authorization = `Bearer ${token}`;
+      newConfig.headers.authorization = `Bearer ${token}`;
    }
 
    // два пакета чтобы определить годность токена
@@ -40,7 +42,7 @@ $api.interceptors.request.use(async (config: IRequest) => {
 
    if (!(response.status === 200))
       throw Error('Не обновлены токены безопасности');
-   config.headers.authorization = `Bearer ${getCookie('accessToken')}`;
+   newConfig.headers.authorization = `Bearer ${getCookie('accessToken')}`;
    return config;
 });
 

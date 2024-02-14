@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchProductsList } from '../services/fetchProductsList/fetchProductsList';
 import { type MainPageShema } from '../types/mainPageSchema';

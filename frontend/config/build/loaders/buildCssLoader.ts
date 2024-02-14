@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 export function buildCssLoader(isDev: boolean) {

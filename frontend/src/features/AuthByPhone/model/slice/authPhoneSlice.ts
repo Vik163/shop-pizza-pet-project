@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { type AuthPhoneSchema } from '../types/authPhone';
 import { fetchSignupUser } from '../services/fetchSignupUser';

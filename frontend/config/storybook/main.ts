@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { type Configuration, DefinePlugin, type RuleSetRule } from 'webpack';
 import path from 'path';
 import { buildCssLoader } from '../build/loaders/buildCssLoader';

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { useRef, useState } from 'react';
 import { useSprings, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
@@ -71,6 +72,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
             index.current -= 1;
             setIndexActiveCard(indexActiveCard - 1);
          };
+
          // стрелки. Хардкод mx
          // положение стрелки (х) и нажатие (active)
          if (currentTarget === target) {
@@ -264,6 +266,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
          </div>
          {cardsVisible.map(({ x, display, scaleElements }, i) => (
             <HorizontalScrollingCard
+               // eslint-disable-next-line react/no-array-index-key
                key={i}
                x={x}
                display={display}

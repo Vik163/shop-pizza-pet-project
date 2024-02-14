@@ -15,6 +15,7 @@ const initialState = {} as StateSchema;
 
 // создаю функцию которая возвращает store (можно переиспользовать)
 export function createReduxStore(
+   // eslint-disable-next-line @typescript-eslint/no-shadow
    initialState?: StateSchema,
    asyncReducers?: ReducersMapObject<StateSchema>,
 ) {

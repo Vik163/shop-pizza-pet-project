@@ -60,26 +60,26 @@ module.exports = {
       '@typescript-eslint/no-unused-vars': 'error',
       'no-unused-vars': 'off',
       'unused-imports/no-unused-imports': 'warn', // 13_8
-      'react/display-name': 'off',
-      'react/require-default-props': 'off',
-      'react/react-in-jsx-scope': 'off',
+      'react/display-name': 'off', // добавлять имя класса или функции
+      'react/require-default-props': 'off', //  к пропсам по умолчанию добавлять isRequired
+      'react/react-in-jsx-scope': 'off', // требует импорт React
       'react/jsx-props-no-spreading': 'off',
       'react/function-component-definition': 'off',
-      'no-shadow': 'off',
-      'consistent-return': 'off',
-      'import/extensions': 'off',
-      'import/no-extraneous-dependencies': 'off',
-      'no-underscore-dangle': 'off',
-      '@typescript-eslint/strict-boolean-expressions': 'off',
-      // 'max-len': ['error', { ignoreComments: true, code: 125 }],
-      'jsx-a11y/no-static-element-interactions': 'off',
-      'jsx-a11y/click-events-have-key-events': 'off',
+      'no-shadow': 'off', // -------------------------------------------
+      '@typescript-eslint/no-shadow': ['error'], // обнаруживает повторное объявление переменных
+      'consistent-return': 'off', // отключать
+      'import/extensions': 'off', // отключать если в импортах не указываются расширения файлов
+      'import/no-extraneous-dependencies': 'off', // ищет зависимости установленные не туда
+      'no-underscore-dangle': 'off', // запрещает нижнее подчеркивание в идентификаторах
+      // '@typescript-eslint/strict-boolean-expressions': 'error',
+      'jsx-a11y/no-static-element-interactions': 'off', // нужно добалять модель поведения для кликабельных элементов
+      'jsx-a11y/click-events-have-key-events': 'off', // , чтобы  люди с нарушениями зрения могли пользоваться
       'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
       'react-hooks/exhaustive-deps': 'error', // Checks effect dependencies,
-      'no-param-reassign': 'off',
-      'no-undef': 'off',
-      'react/no-array-index-key': 'off',
-      'arrow-body-style': 'off',
+      'no-param-reassign': 'error', // запрещает менять значения аргументов функции
+      'no-undef': 'error', // Запрещает использование необъявленных переменных, если они не указаны в /*global */ комментариях
+      'react/no-array-index-key': 'error', // использование индекса массива как ключа
+      'arrow-body-style': 'off', // регулирует правило использования фигурных скобок в строелочных функциях
       'ulbi-tv-plugin/path-checker': ['error', { alias: '@' }], // кастомный плагин 10_2 и 13_2 7min
       'ulbi-tv-plugin/layer-imports': [
          // 13_6 6min
@@ -101,7 +101,7 @@ module.exports = {
             ], // 13_4 1min
          },
       ],
-      'linebreak-style': 'off', // LF
+      'linebreak-style': 'error', // LF
       'react/self-closing-comp': 'off', // сжимает пустой компонент
       'react/jsx-max-props-per-line': ['error', { maximum: 3 }], // 14_12 количество пропсов в строчке
       // "ulbi-eslint-plugin/rule-name": 2,

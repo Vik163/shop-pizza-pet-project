@@ -1,3 +1,4 @@
+import React from 'react';
 import {
    type Auth,
    getAuth,
@@ -105,6 +106,7 @@ class FirebaseApi {
       // Or, if you haven't stored the widget ID:
       if (captchaRef.current && this._recaptchaVerifier) {
          this._recaptchaVerifier.clear();
+         // eslint-disable-next-line no-param-reassign
          captchaRef.current.innerHTML = `<div id='recaptcha-container'></div>`;
       }
    }

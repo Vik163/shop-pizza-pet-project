@@ -75,14 +75,14 @@ export const useCookie = () => {
       value: string,
       options: OptionsCookie = {},
    ) {
-      options = {
+      const newOptions = {
          // path: '/',
          // при необходимости добавьте другие значения по умолчанию
          ...options,
       };
 
       if (options.expires instanceof Date) {
-         options.expires = options.expires.toUTCString();
+         newOptions.expires = options.expires.toUTCString();
       }
 
       let updatedCookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;

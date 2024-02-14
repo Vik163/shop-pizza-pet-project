@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Project } from 'ts-morph';
 import path from 'path';
 

@@ -45,10 +45,10 @@ export const DeliveryPay = memo((props: DeliveryPayProps) => {
             Оплата и доставка
          </Text>
          <HStack className={cls.container}>
-            {arrIcon.map((icon, i) => (
+            {arrIcon.map((icon) => (
                <Button
                   className={classNames(cls.button)}
-                  key={i}
+                  key={icon}
                   width={255}
                   height={104}
                   variant={ButtonVariant.FILLED}

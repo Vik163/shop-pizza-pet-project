@@ -24,6 +24,7 @@ export interface StateSchema {
 // типы для ReducerManager (5_1 15min)===================================
 // ключи названий редьюсеров
 export type StateSchemaKey = keyof StateSchema;
+// eslint-disable-next-line no-undef
 export type MountedReducers = OptionalRecord<StateSchemaKey, boolean>;
 export interface ReducerManager {
    getReducerMap: () => ReducersMapObject<StateSchema>;
