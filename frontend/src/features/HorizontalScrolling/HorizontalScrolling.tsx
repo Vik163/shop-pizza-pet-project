@@ -61,7 +61,6 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
 
    const bind = useDrag(
       ({ xy, currentTarget, target, active, movement: [mx], cancel }) => {
-
          // Добавляю рендер для обновления
          const indexIncrease = () => {
             index.current += 1;
@@ -75,7 +74,6 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
          // стрелки. Хардкод mx
          // положение стрелки (х) и нажатие (active)
          if (currentTarget === target) {
-
             if (curtains) {
                if (xy[0] > width / 2 && active) {
                   mx = -width;
@@ -85,12 +83,12 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                   mx = 0;
                }
             } else if (xy[0] > width && active) {
-                  mx = -width;
-               } else if (xy[0] < width && active) {
-                  mx = width;
-               } else {
-                  mx = 0;
-               }
+               mx = -width;
+            } else if (xy[0] < width && active) {
+               mx = width;
+            } else {
+               mx = 0;
+            }
          }
          // перетаскивание.
          // длина массива меньше или равно видимым картам
@@ -106,17 +104,15 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                   if (indexActiveCard < 0) {
                      cancel();
                      return;
-                  } 
-                     indexDecrease();
-                  
+                  }
+                  indexDecrease();
                } else {
                   // Не curtains - индекс первого элемента 0
                   if (indexActiveCard <= 0) {
                      cancel();
                      return;
-                  } 
-                     indexDecrease();
-                  
+                  }
+                  indexDecrease();
                }
                // направление прокрутки влево
             } else {
@@ -134,41 +130,38 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                   ) {
                      cancel();
                      return;
-                  } 
-                     indexIncrease();
-                  
+                  }
+                  indexIncrease();
                } else {
                   // Не curtains - индекс последнего элемента elements.length - 4 видимых
                   // countCardsInBlock - число элементов в блоке
                   const countCardsInBlock =
                      !curtains && Math.round(widthBlock / width);
-                  if (indexActiveCard === (elements.length - countCardsInBlock)) {
+                  if (indexActiveCard === elements.length - countCardsInBlock) {
                      cancel();
                      return;
-                  } 
-                     indexIncrease();
-                  
+                  }
+                  indexIncrease();
                }
             }
             cancel();
          }
 
          api.start((i) => {
-            
             // mx !== 0 убираем реагирование на щелчок мыши
             if (mx !== 0) {
-
                // Масштаб в зависисмости от движения мышкой
                const scaleElementsNum = () => {
-                  if(currentTarget === target) { // стрелки не уменьшают
-                     return 1
-                   } 
-                        if(scale && active) {
-                           return 1 - Math.abs(mx) / 2600 // 2600 - подбором
-                         } 
-                           return 1;
+                  if (currentTarget === target) {
+                     // стрелки не уменьшают
+                     return 1;
                   }
-               const scaleElements = scaleElementsNum()
+                  if (scale && active) {
+                     return 1 - Math.abs(mx) / 2600; // 2600 - подбором
+                  }
+                  return 1;
+               };
+               const scaleElements = scaleElementsNum();
 
                // Смещаем на один элемент влево
                const x =
@@ -217,8 +210,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                   style={{ backgroundImage: `url(${arrow})` }}
                   className={classNames(cls.icon, {}, [cls.iconLeftCurtain])}
                   {...bind()}
-               >
-               </animated.button>
+               ></animated.button>
             )}
          </div>
          <div
@@ -234,11 +226,10 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
          >
             {curtains && rightArrowCurtainsActive && (
                <animated.button
-               style={{ backgroundImage: `url(${arrow})` }}
-               className={classNames(cls.icon, {}, [cls.iconRightCurtain])}
+                  style={{ backgroundImage: `url(${arrow})` }}
+                  className={classNames(cls.icon, {}, [cls.iconRightCurtain])}
                   {...bind()}
-               >
-               </animated.button>
+               ></animated.button>
             )}
          </div>
          <div>
@@ -253,8 +244,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                      style={{ backgroundImage: `url(${arrow})` }}
                      className={classNames(cls.icon, {}, [cls.iconInverse])}
                      {...bind()}
-                  >
-                  </animated.button>
+                  ></animated.button>
                </div>
             )}
             {!curtains && rightArrowActive && (
@@ -265,11 +255,10 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                   }}
                >
                   <animated.button
-                  style={{ backgroundImage: `url(${arrow})` }}
-                  className={classNames(cls.icon, {}, [cls.iconInverse])}
+                     style={{ backgroundImage: `url(${arrow})` }}
+                     className={classNames(cls.icon, {}, [cls.iconInverse])}
                      {...bind()}
-                  >
-                  </animated.button>
+                  ></animated.button>
                </div>
             )}
          </div>

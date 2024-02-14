@@ -1,8 +1,8 @@
 export const usePhoneValidator = () => {
-   const normalizeInput = (value: string, previousValue: string) => {
+   const normalizeInput = (value: string) => {
       if (!value) return value;
 
-      const currentValue = value.replace(/[^\d\+]/g, '');
+      const currentValue = value.replace(/[^\d+]/g, '');
       const codeCountry = currentValue.slice(0, 2); // +7
       const codeCity = currentValue.slice(2, 5); // (999)
       const firstBlockNumbers = currentValue.slice(5, 8); // 999

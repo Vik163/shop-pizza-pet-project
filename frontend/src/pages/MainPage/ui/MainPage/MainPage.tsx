@@ -45,6 +45,7 @@ export const MainPage = memo((props: MainPageProps) => {
    // const dispatch = useAppDispatch();
 
    const [cards, setCards] = useState<Products>([]);
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const [sizePizza, setSizePizza] = useState<string>('average');
 
    const a = async () => {
@@ -75,11 +76,11 @@ export const MainPage = memo((props: MainPageProps) => {
    const pricePizzaFromSize = cards[0].pizzas.map((card) => {
       if (sizePizza === 'small') {
          return { ...card, price: card.price[0] };
-      } if (sizePizza === 'average') {
+      }
+      if (sizePizza === 'average') {
          return { ...card, price: card.price[1] };
-      } 
-         return { ...card, price: card.price[2] };
-      
+      }
+      return { ...card, price: card.price[2] };
    });
 
    const popularProducts = pricePizzaFromSize.filter((card) => card.popular);

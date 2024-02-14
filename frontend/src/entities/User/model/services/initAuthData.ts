@@ -11,7 +11,7 @@ export const initAuthData = createAsyncThunk<
    string,
    ThunkConfig<ValidationErrors>
 >('user/initAuthData', async (userId, thunkApi) => {
-   const { rejectWithValue, dispatch } = thunkApi;
+   const { rejectWithValue } = thunkApi;
    try {
       if (!userId) {
          return rejectWithValue({

@@ -18,6 +18,7 @@ interface BonusesProps {
 }
 
 export const Bonuses = memo((props: BonusesProps) => {
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const { className } = props;
 
    return (
@@ -36,7 +37,7 @@ export const Bonuses = memo((props: BonusesProps) => {
                Мои бонусы
             </Text>
             <VStack className={cls.emptyCard} gap={32}>
-               <img src={sale} />
+               <img src={sale} alt='распродажа' />
                <Text
                   align={TextAlign.TEXT_CENTER}
                   fontSize={FontSize.SIZE_14}

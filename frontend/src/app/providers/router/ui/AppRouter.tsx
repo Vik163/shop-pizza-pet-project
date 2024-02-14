@@ -5,7 +5,7 @@ import { routeConfig } from '../config/routeConfig';
 
 const AppRouter = () => {
    const renderWithWrapper = useCallback((route: AppRoutesProps) => {
-      const element = <Suspense fallback="ddfgdf">{route.element}</Suspense>;
+      const element = <Suspense fallback='ddfgdf'>{route.element}</Suspense>;
 
       return <Route key={route.path} path={route.path} element={element} />;
    }, []);

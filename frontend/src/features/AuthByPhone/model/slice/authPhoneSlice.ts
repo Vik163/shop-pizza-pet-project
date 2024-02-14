@@ -18,10 +18,10 @@ const authPhoneSlice = createSlice({
    },
    extraReducers: (builder) => {
       builder
-         .addCase(fetchSignupUser.pending, (state, action) => {
+         .addCase(fetchSignupUser.pending, (state) => {
             state.isLoading = true;
          })
-         .addCase(fetchSignupUser.fulfilled, (state, { payload }) => {
+         .addCase(fetchSignupUser.fulfilled, (state) => {
             state.isLoading = false;
          })
          .addCase(fetchSignupUser.rejected, (state, action) => {

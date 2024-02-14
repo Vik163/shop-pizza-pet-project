@@ -47,6 +47,7 @@ export const Icon = memo((props: IconProps) => {
          width={width}
          height={height}
          onClick={undefined}
+         alt='иконка'
       />
    );
 

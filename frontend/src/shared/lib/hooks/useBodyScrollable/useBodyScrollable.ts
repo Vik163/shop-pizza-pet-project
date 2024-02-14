@@ -24,12 +24,6 @@ export function useBodyScrollable(): IScroll {
    // Calculating difference between container's full width and the child width
    const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
 
-   if (!outer.parentNode) {
-      return { bodyScrollable, scrollbarWidth };
-   }
-   // Removing temporary elements from the DOM
-   outer.parentNode.removeChild(outer);
-
    useEffect(() => {
       const resizeObserver = new ResizeObserver(() => {
          setBodyScrollable(document.body.scrollHeight > window.innerHeight);
@@ -39,6 +33,12 @@ export function useBodyScrollable(): IScroll {
          resizeObserver.unobserve(document.body);
       };
    }, []);
+
+   if (!outer.parentNode) {
+      return { bodyScrollable, scrollbarWidth };
+   }
+   // Removing temporary elements from the DOM
+   outer.parentNode.removeChild(outer);
 
    return { bodyScrollable, scrollbarWidth };
 }

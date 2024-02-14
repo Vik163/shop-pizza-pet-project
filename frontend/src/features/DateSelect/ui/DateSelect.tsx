@@ -12,13 +12,11 @@ interface DateSelectProps {
    className?: string;
    height?: number;
    width?: number;
-   max?: boolean;
+   // max?: boolean;
 }
 
 export const DateSelect = memo((props: DateSelectProps) => {
-   const { className, height, width, max } = props;
-   const [value, setValue] = useState('');
-   const [isValue, setIsValue] = useState(false);
+   const { className, height, width } = props;
    const [selectDay, setSelectDay] = useState('');
    const [selectMonth, setSelectMonth] = useState('');
 

@@ -3,7 +3,10 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './MainPageProducts.module.scss';
 
-import { type Products, type TypeProducts } from './model/types/mainPageProducts';
+import {
+   type Products,
+   type TypeProducts,
+} from './model/types/mainPageProducts';
 import { VStack } from '@/shared/ui/Stack';
 import { ViewProducts } from '../ViewProducts/ui/ViewProducts';
 
@@ -17,7 +20,7 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
 
    return (
       <VStack className={classNames(cls.MainPageProducts, {}, [className])}>
-         {cards.map((cardsType: TypeProducts, i) => {
+         {cards.map((cardsType: TypeProducts) => {
             return Object.entries(cardsType).map(([key, value]) => (
                <ViewProducts key={key} view={key} cardsType={value} />
             ));

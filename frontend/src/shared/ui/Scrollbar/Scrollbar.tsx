@@ -118,7 +118,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
 
       const thumb = scrollThumbRef.current;
       thumb.style.top = `${newTop}px`;
-   }, []);
+   }, [thumbHeight]);
 
    // нажал клавишу --------------------------------------------------
    const handleThumbMousedown = useCallback((e: React.MouseEvent) => {
@@ -172,7 +172,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
             contentRef.current.scrollTop = newScrollTop;
          }
       },
-      [isDragging, scrollStartPosition, thumbHeight],
+      [initialScrollTop, isDragging, scrollStartPosition, thumbHeight],
    );
 
    // видимость скрола
@@ -206,7 +206,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
             };
          }
       }
-   }, [isScrollbar]);
+   }, [handleThumbPosition, isScrollbar]);
 
    useEffect(() => {
       if (isScrollbar) {
@@ -219,7 +219,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
             document.removeEventListener('mouseleave', handleThumbMouseup);
          };
       }
-   }, [handleThumbMousemove, handleThumbMouseup]);
+   }, [handleThumbMousemove, handleThumbMouseup, isScrollbar]);
 
    const mods: Mods = {
       [cls.stateCursor]: isDragging,
@@ -243,9 +243,12 @@ export const Scrollbar = (props: ScrollbarProps) => {
             <div className={cls.scrollbar} style={{ width: scrollWidth }}>
                {scrollArrows && (
                   <button
+                     type='button'
                      style={{ color: scrollThumbColor }}
                      className={classNames(cls.button, modsButtons, [])}
-                     onClick={(e) => { handleScrollButton(e, 'up'); }}
+                     onClick={(e) => {
+                        handleScrollButton(e, 'up');
+                     }}
                   >
                      ᐃ
                   </button>
@@ -274,9 +277,12 @@ export const Scrollbar = (props: ScrollbarProps) => {
                </div>
                {scrollArrows && (
                   <button
+                     type='button'
                      style={{ color: scrollThumbColor }}
                      className={classNames(cls.button, modsButtons, [])}
-                     onClick={(e) => { handleScrollButton(e, 'down'); }}
+                     onClick={(e) => {
+                        handleScrollButton(e, 'down');
+                     }}
                   >
                      ᐁ
                   </button>

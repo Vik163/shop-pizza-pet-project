@@ -15,6 +15,7 @@ import {
 } from '@/shared/ui/Button';
 import { HStack, VStack } from '@/shared/ui/Stack';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
+// eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { Navbar } from '@/widgets/Navbar';
 
 interface HeaderProps {
@@ -22,6 +23,7 @@ interface HeaderProps {
 }
 
 export const Header = memo((props: HeaderProps) => {
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const { className } = props;
 
    return (

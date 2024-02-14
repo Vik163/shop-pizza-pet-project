@@ -1,11 +1,5 @@
-import {
-   memo,
-   useCallback,
-   useMemo,
-   useState,
-} from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Navbar.module.scss';
@@ -22,15 +16,11 @@ import { AppLink } from '@/shared/ui/AppLink';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
 import { Modal } from '@/shared/ui/Modal';
 import { PhoneForm } from '@/features/AuthByPhone';
-import {
-   getInited,
-   getUserData,
- UserData } from '@/entities/User';
+import { getInited, getUserData, UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
 import { $api } from '@/shared/api/api';
-
 
 interface NavbarProps {
    className?: string;
@@ -38,7 +28,7 @@ interface NavbarProps {
 
 export const Navbar = memo((props: NavbarProps) => {
    const { className } = props;
-   const navigate = useNavigate();
+   // const navigate = useNavigate();
    const [isOpenPopup, setIsOpenPopup] = useState(false);
    const [titlePopup, setTitlePopup] = useState('');
    const inited = useSelector(getInited);
@@ -90,24 +80,18 @@ export const Navbar = memo((props: NavbarProps) => {
             {itemList}
          </HStack>
          {!inited ? (
-            <div className={cls.loginContainer}>
-               <Button
-                  className={cls.loginButton}
-                  variant={ButtonVariant.CLEAR}
-                  fontColor={FontColor.TEXT_PRIMARY}
-                  fontWeight={FontWeight.TEXT_700}
-                  fontSize={FontSize.SIZE_16}
-                  onClick={onAuth}
-               >
-                  Войти
-               </Button>
-               <button aria-label='container_ya' id='container_ya'></button>
-            </div>
-         ) : (
-            <AppLink
-               to={pathProfile || '/'}
-               className={classNames(cls.link)}
+            <Button
+               className={cls.loginButton}
+               variant={ButtonVariant.CLEAR}
+               fontColor={FontColor.TEXT_PRIMARY}
+               fontWeight={FontWeight.TEXT_700}
+               fontSize={FontSize.SIZE_16}
+               onClick={onAuth}
             >
+               Войти
+            </Button>
+         ) : (
+            <AppLink to={pathProfile || '/'} className={classNames(cls.link)}>
                <Icon className={cls.account} Svg={man} />
             </AppLink>
          )}

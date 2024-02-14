@@ -16,14 +16,14 @@ const mainPageSlice = createSlice({
    reducers: {},
    extraReducers: (builder) => {
       builder
-         .addCase(fetchProductsList.pending, (state, action) => {
+         .addCase(fetchProductsList.pending, (state) => {
             state.isLoading = true;
          })
          .addCase(fetchProductsList.fulfilled, (state, action) => {
             state.isLoading = false;
             state.cards = action.payload;
          })
-         .addCase(fetchProductsList.rejected, (state, action) => {
+         .addCase(fetchProductsList.rejected, (state) => {
             state.isLoading = false;
             // state.error = action.payload
          });

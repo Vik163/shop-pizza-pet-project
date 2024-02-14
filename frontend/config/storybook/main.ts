@@ -38,7 +38,7 @@ export default {
       };
 
       config.module!.rules = config.module!.rules!.map(
-         // @ts-expect-error
+         // @ts-expect-error разобраться
          (rule: RuleSetRule) => {
             if ((rule.test as string).includes('svg')) {
                return { ...rule, exclude: /\.svg$/i };

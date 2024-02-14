@@ -35,6 +35,7 @@ interface SelectProps {
 
 export const Select = memo((props: SelectProps) => {
    const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       mode = 'rows',
       options,
       placeholder,
@@ -90,7 +91,7 @@ export const Select = memo((props: SelectProps) => {
          }
 
          if (target instanceof Node && !rootRef.current?.contains(target)) {
-            isOpen && onClose?.();
+            if (isOpen) onClose?.();
             setIsOpen(false);
             setIsTransition(false);
          }
@@ -104,10 +105,13 @@ export const Select = memo((props: SelectProps) => {
       };
    }, [isOpen, onClose]);
 
-   const handleOptionClick = useCallback((value: string) => {
-      setIsOpen(false);
-      onChange?.(value);
-   }, []);
+   const handleOptionClick = useCallback(
+      (value: string) => {
+         setIsOpen(false);
+         onChange?.(value);
+      },
+      [onChange],
+   );
 
    const handlePlaceHolderClick: MouseEventHandler<HTMLDivElement> =
       useCallback(() => {

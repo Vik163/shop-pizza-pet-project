@@ -8,7 +8,7 @@ interface OptionProps {
 }
 export const Option = (props: OptionProps) => {
    const { value, onClick, hoverOptionColor } = props;
-   const optionRef = useRef<HTMLLIElement>(null);
+   const optionRef = useRef<HTMLOptionElement>(null);
    const [isHover, setIsHover] = useState(false);
 
    const mouseEnter = () => {
@@ -37,13 +37,13 @@ export const Option = (props: OptionProps) => {
    }, [value, onClick]);
 
    const handleClick =
-      (clickedValue: string): MouseEventHandler<HTMLLIElement> =>
+      (clickedValue: string): MouseEventHandler<HTMLOptionElement> =>
       () => {
          onClick(clickedValue);
       };
 
    return (
-      <li
+      <option
          className={cls.option}
          style={{ backgroundColor: isHover ? `${hoverOptionColor}` : '' }}
          onMouseEnter={mouseEnter}
@@ -54,6 +54,6 @@ export const Option = (props: OptionProps) => {
          ref={optionRef}
       >
          {value}
-      </li>
+      </option>
    );
 };

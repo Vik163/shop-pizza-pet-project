@@ -59,9 +59,11 @@ export const useCookie = () => {
    function getCookie(name: string) {
       const matches = document.cookie.match(
          new RegExp(
-            `(?:^|; )${ 
-               name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') 
-               }=([^;]*)`,
+            `(?:^|; )${name.replace(
+               // eslint-disable-next-line no-useless-escape
+               /([\.$?*|{}\(\)\[\]\\\/\+^])/g,
+               '\\$1',
+            )}=([^;]*)`,
          ),
       );
 
@@ -83,16 +85,25 @@ export const useCookie = () => {
          options.expires = options.expires.toUTCString();
       }
 
-      let updatedCookie =
-         `${encodeURIComponent(name)  }=${  encodeURIComponent(value)}`;
+      let updatedCookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
 
-      for (const optionKey in options) {
-         updatedCookie += `; ${  optionKey}`;
+      // for (const optionKey in options) {
+      //    updatedCookie += `; ${optionKey}`;
+      //    const optionValue = (options as any)[optionKey];
+      //    if (optionValue !== true) {
+      //       updatedCookie += `=${optionValue}`;
+      //    }
+      // }
+
+      Object.keys(options).forEach((optionKey) => {
+         updatedCookie += `; ${optionKey}`;
+         // eslint-disable-next-line @typescript-eslint/no-explicit-any
          const optionValue = (options as any)[optionKey];
          if (optionValue !== true) {
-            updatedCookie += `=${  optionValue}`;
+            updatedCookie += `=${optionValue}`;
          }
-      }
+      });
+
       document.cookie = updatedCookie;
    }
 

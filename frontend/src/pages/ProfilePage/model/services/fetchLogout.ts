@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const fetchLogoutUser = async (): Promise<boolean | void> => {
-   return await axios
+   return axios
       .get('https://pizzashop163.ru/api/signout')
       .then((data) => {
          return data.status === 200;

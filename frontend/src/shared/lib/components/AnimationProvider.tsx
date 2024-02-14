@@ -23,7 +23,7 @@ const AnimationContext = createContext<AnimationContextPayload>({});
 
 // Ленивая подгрузка библиотек
 const getAsyncAnimationModules = async () => {
-   return await Promise.all([
+   return Promise.all([
       import('@react-spring/web'),
       import('@use-gesture/react'),
    ]);
@@ -53,7 +53,7 @@ export const AnimationProvider = ({ children }: { children: ReactNode }) => {
          Spring: SpringRef.current,
          isLoaded,
       }),
-      [],
+      [isLoaded],
    );
    return (
       <AnimationContext.Provider value={value}>

@@ -9,6 +9,7 @@ export const classNames = (
       cls,
       ...additional.filter(Boolean),
       ...Object.entries(mods) // с помощью Object.entries можем получить как ключи, так и значения у объекта
+         // eslint-disable-next-line @typescript-eslint/no-unused-vars
          .filter(([_, value]) => Boolean(value))
          .map(([className]) => className),
    ].join(' ');

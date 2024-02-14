@@ -5,8 +5,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './HorizontalScrollingCard.module.scss';
 import { type ProductFixPrice } from '@/entities/Product';
-import { HorizontalScrollingCardWithCurtains } 
-from '../HorizontalScrollingCardWithCurtains/HorizontalScrollingCardWithCurtains';
+import { HorizontalScrollingCardWithCurtains } from '../HorizontalScrollingCardWithCurtains/HorizontalScrollingCardWithCurtains';
 
 interface HorizontalScrollingCardProps {
    className?: string;
@@ -48,17 +47,19 @@ export const HorizontalScrollingCard = memo(
       // индекс каждой карточки независимо от индекса массива cards
       // добавляются пустые карточки
       // если со шторками и index.current < 0, то приравнивается к (i)
-      const indexCardNum  = () => {
-         if(curtains) {
-            if(indexActiveCard < 0) {
-               return i
-            } 
-            return i + indexActiveCard} 
-        return i + indexActiveCard - 1;}
+      const indexCardNum = () => {
+         if (curtains) {
+            if (indexActiveCard < 0) {
+               return i;
+            }
+            return i + indexActiveCard;
+         }
+         return i + indexActiveCard - 1;
+      };
 
-        const indexCard = indexCardNum()
+      const indexCard = indexCardNum();
 
-      // масштаб Y подбором 
+      // масштаб Y подбором
       const hideSidesScaleYElements =
          (i === 0 && indexActiveCard === 0 && 0.89) ||
          (i === 0 && indexActiveCard + 1 && 0.89) ||
@@ -79,7 +80,6 @@ export const HorizontalScrollingCard = memo(
       const card =
          indexCard > -1 && indexCard < elements.length && elements[indexCard];
       if (!card) return;
-      
 
       // const clickCard = (e: MouseEvent) => {
       //    if (e.clientX == mouseMoveX) {
@@ -93,16 +93,15 @@ export const HorizontalScrollingCard = memo(
 
       // определяю что приходит в массиве по типу и выбираю нужное
       const imageCardFun = () => {
-       if (typeof card !== 'string') {
-            if(imageSmall) {
-              return card.imageSmall
-             } 
-               return card.image 
-             
-            } 
-           return elements[indexCard];
+         if (typeof card !== 'string') {
+            if (imageSmall) {
+               return card.imageSmall;
+            }
+            return card.image;
          }
-      const imageCard = imageCardFun()
+         return elements[indexCard];
+      };
+      const imageCard = imageCardFun();
 
       return (
          // Блок с затененными краями */
@@ -122,12 +121,12 @@ export const HorizontalScrollingCard = memo(
             }}
             // eslint-disable-next-line react/no-children-prop
             children={
-               <HorizontalScrollingCardWithCurtains 
-               card={card}
-               curtains={curtains}
-               widthElement={widthElement}
-               heightElement={heightElement}
-               imageCard={imageCard}
+               <HorizontalScrollingCardWithCurtains
+                  card={card}
+                  curtains={curtains}
+                  widthElement={widthElement}
+                  heightElement={heightElement}
+                  imageCard={imageCard}
                />
                // curtains ? (
                //    <div

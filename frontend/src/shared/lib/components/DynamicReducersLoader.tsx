@@ -40,14 +40,14 @@ export const DynamicReducersLoader = (props: DynamicReducersLoaderProps) => {
       });
 
       return () => {
-         Object.entries(reducers).forEach(([name, reducer]) => {
+         Object.entries(reducers).forEach(([name]) => {
             if (removeAfterUnmount) {
                store.reducerManager.remove(name as StateSchemaKey);
                dispatch({ type: `@DESTROY ${name} reducer` });
             }
          });
       };
-   }, []);
+   }, [dispatch, reducers, removeAfterUnmount, store.reducerManager]);
 
-   return <>{children}</>;
+   return <div>{children}</div>;
 };

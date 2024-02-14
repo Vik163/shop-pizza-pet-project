@@ -24,9 +24,7 @@ import {
    authPhoneReducer,
 } from '../../model/slice/authPhoneSlice';
 import { getPhoneNumber } from '../../model/selectors/authPhoneSelectors';
-import {  firebaseApi   } from '@/entities/User';
-
-
+import { firebaseApi } from '@/entities/User';
 
 import {
    DynamicReducersLoader,
@@ -55,11 +53,14 @@ const PhoneForm = memo((props: PhoneFormProps) => {
    // const inited = useSelector(getInited);
    const appYaId = process.env.REACT_APP_YA_CLIENT_ID;
 
-
    // 1 значение инпута - убираем ненужные символы и отправляем в стейт
-   const onChangeNumberPhone = useCallback((phoneNumber?: string) => {
-      if(phoneNumber) dispatch(authPhoneActions.setPhoneNumber({ phoneNumber }));
-   }, [dispatch]);
+   const onChangeNumberPhone = useCallback(
+      (phoneNumber?: string) => {
+         if (phoneNumber)
+            dispatch(authPhoneActions.setPhoneNumber({ phoneNumber }));
+      },
+      [dispatch],
+   );
    // -------------------------------------------------------------------
 
    // 2 получаю инпут и отправляю форму на проверку (firebase) ------
@@ -68,7 +69,7 @@ const PhoneForm = memo((props: PhoneFormProps) => {
 
       const phoneNumber =
          authPhoneNumber && `+${authPhoneNumber.replace(/\D+/g, '')}`;
-      if(phoneNumber) firebaseApi.phoneSignIn(phoneNumber, setIsConfirmCode);
+      if (phoneNumber) firebaseApi.phoneSignIn(phoneNumber, setIsConfirmCode);
    }
    // ---------------------------------------------------------------
    // https://oauth.yandex.ru/verification_code
@@ -103,7 +104,7 @@ const PhoneForm = memo((props: PhoneFormProps) => {
                   <Input
                      className={cls.loginInput}
                      name='phone'
-                     placeholder="+7 (999) 999-99-99"
+                     placeholder='+7 (999) 999-99-99'
                      labelLeft='Номер телефона'
                      type='tel'
                      withoutButtons
@@ -111,7 +112,7 @@ const PhoneForm = memo((props: PhoneFormProps) => {
                      heightInput={48}
                      variant={inputVariant}
                      onChange={onChangeNumberPhone}
-                     value="+7"
+                     value='+7'
                   />
                   {appYaId && (
                      <a

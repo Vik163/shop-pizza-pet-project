@@ -75,6 +75,7 @@ export const Button = memo((props: ButtonProps) => {
    return (
       <button
          id={id}
+         // eslint-disable-next-line react/button-has-type
          type={type}
          style={{ width, height }}
          className={classNames(

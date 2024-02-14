@@ -10,12 +10,10 @@ import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { Button } from '@/shared/ui/Button';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
 import { getPhoneNumber } from '../../model/selectors/authPhoneSelectors';
-import {  firebaseApi , getUserData } from '@/entities/User';
+import { firebaseApi, getUserData } from '@/entities/User';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 
-
 import { fetchSignupUser } from '../../model/services/fetchSignupUser';
-
 
 interface CodeInFormProps {
    className?: string;
@@ -25,45 +23,54 @@ interface CodeInFormProps {
 }
 
 export const CodeInForm = memo((props: CodeInFormProps) => {
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const { className, onEditPhone, isConfirmCode, onClosePopup } = props;
 
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const [isConfirmCodeError, setIsConfirmCodeError] = useState(false);
    const [focusInput, setFocusInput] = useState(true);
    const authPhoneNumber = useSelector(getPhoneNumber);
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const userData = useSelector(getUserData);
    const dispatch = useAppDispatch();
 
-   // 3 вводим код подтверждения и вызываем верификацию ---------------
-   const onChangeNumberCode = useCallback(async (value?: string) => {
-      if (value)
-         if (value.length >= 6) {
-            setFocusInput(false);
-            const user = await firebaseApi.verifyCode(value);
-            user && createUser(user);
-         }
-      return value;
-   }, []);
-   // -------------------------------------------------------------------
-
    // 3 После верификации запрашиваем пользователя в БД, и если не найден, то создаем
-   async function createUser(user: User) {
-      const signupData = await dispatch(fetchSignupUser(user));
-      if (signupData.payload) {
-         onClosePopup();
-         return signupData.payload;
-      }
-      // // запрос и если не найден, создание пользователя в БД
-      // const data = (await dispatch(initAuthData(user))).payload;
+   const createUser = useCallback(
+      async (user: User) => {
+         const signupData = await dispatch(fetchSignupUser(user));
+         if (signupData.payload) {
+            onClosePopup();
+            return signupData.payload;
+         }
+         // // запрос и если не найден, создание пользователя в БД
+         // const data = (await dispatch(initAuthData(user))).payload;
 
-      // if (data === 'Пользователь не найден') {
-      //    const signupData = await dispatch(fetchSignupUser(user));
-      //    onClosePopup();
-      //    return signupData.payload;
-      // } else {
-      //    onClosePopup();
-      //    return data;
-      // }
-   }
+         // if (data === 'Пользователь не найден') {
+         //    const signupData = await dispatch(fetchSignupUser(user));
+         //    onClosePopup();
+         //    return signupData.payload;
+         // } else {
+         //    onClosePopup();
+         //    return data;
+         // }
+      },
+      [dispatch, onClosePopup],
+   );
+
+   // 3 вводим код подтверждения и вызываем верификацию ---------------
+   const onChangeNumberCode = useCallback(
+      async (value?: string) => {
+         if (value)
+            if (value.length >= 6) {
+               setFocusInput(false);
+               const user = await firebaseApi.verifyCode(value);
+               if (user) createUser(user);
+            }
+         return value;
+      },
+      [createUser],
+   );
+   // -------------------------------------------------------------------
 
    // кнопка 'получить новый код' ------------
    const onReqCode = (e: SyntheticEvent) => {

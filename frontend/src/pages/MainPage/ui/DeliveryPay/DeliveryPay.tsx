@@ -3,10 +3,10 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './DeliveryPay.module.scss';
 
-import Delivery_1 from '@/shared/assets/icons/deliv-1.png';
-import Delivery_2 from '@/shared/assets/icons/deliv-2.png';
-import Delivery_3 from '@/shared/assets/icons/deliv-3.png';
-import Delivery_4 from '@/shared/assets/icons/deliv-4.png';
+import Delivery1 from '@/shared/assets/icons/deliv-1.png';
+import Delivery2 from '@/shared/assets/icons/deliv-2.png';
+import Delivery3 from '@/shared/assets/icons/deliv-3.png';
+import Delivery4 from '@/shared/assets/icons/deliv-4.png';
 
 import { HStack, VStack } from '@/shared/ui/Stack';
 import {
@@ -29,7 +29,7 @@ interface DeliveryPayProps {
    className?: string;
 }
 
-const arrIcon = [Delivery_1, Delivery_2, Delivery_3, Delivery_4];
+const arrIcon = [Delivery1, Delivery2, Delivery3, Delivery4];
 
 export const DeliveryPay = memo((props: DeliveryPayProps) => {
    const { className } = props;

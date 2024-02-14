@@ -8,7 +8,7 @@ const initialState: UserSchema = {
    _inited: false,
    _userUid: '',
    error: undefined,
-   authData: null
+   authData: null,
 };
 
 export const userSlice = createSlice({
@@ -22,7 +22,6 @@ export const userSlice = createSlice({
          localStorage.setItem('userId', payload._id);
       },
       logout: (state) => {
-         
          state._inited = false;
          localStorage.removeItem('userId');
       },

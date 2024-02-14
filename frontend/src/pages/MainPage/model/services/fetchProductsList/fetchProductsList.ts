@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+// eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { type ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
 import { type Product } from '@/entities/Product';
 
@@ -9,7 +10,7 @@ export const fetchProductsList = createAsyncThunk<
    FetchProductsListProps,
    ThunkConfig<string>
 >('mainPage/fetchProductsList', async (_props, thunkApi) => {
-   const { extra, rejectWithValue, getState } = thunkApi;
+   const { extra, rejectWithValue } = thunkApi;
 
    try {
       const response = await extra.api.get<Product[]>('/cards');

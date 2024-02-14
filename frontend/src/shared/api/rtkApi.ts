@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { useCookie } from '../lib/hooks/useCookie/useCookie';
 
+// eslint-disable-next-line react-hooks/rules-of-hooks
 const { getCookie } = useCookie();
 
 // 11_2
@@ -17,5 +18,6 @@ export const rtkApi = createApi({
       },
       credentials: 'include',
    }),
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
    endpoints: (builder) => ({}),
 });

@@ -1,7 +1,4 @@
-import {
-   type ReactNode,
-   memo,
-} from 'react';
+import { type ReactNode, memo } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Modal.module.scss';

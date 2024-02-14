@@ -1,5 +1,6 @@
 import { $api } from '@/shared/api/api';
 import { csrfTokenActions } from '../slice/tokenSlice';
+// eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { type AppDispatch } from '@/app/providers/StoreProvider/config/store';
 
 export const fetchTokenForm = (dispatch: AppDispatch): void => {

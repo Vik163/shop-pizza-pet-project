@@ -5,22 +5,26 @@ import {
    signInWithPhoneNumber,
    signOut,
    type User,
+   ConfirmationResult,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { type Dispatch, type SetStateAction } from 'react';
 import { firebaseConfig } from '../../../shared/config/firebase/firebaseConfig';
-import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
 
 //! global 'window'  from 'app/types/window.d.ts'
 initializeApp(firebaseConfig);
 
-const { deleteCookie, setCookie } = useCookie();
-
 class FirebaseApi {
    private readonly _auth: Auth;
 
+   private _confirmationResult: ConfirmationResult;
+
+   private _recaptchaVerifier: RecaptchaVerifier;
+
    constructor() {
       this._auth = getAuth();
+      this._confirmationResult = window.confirmationResult;
+      this._recaptchaVerifier = window.recaptchaVerifier;
    }
 
    //* АВТОРИЗАЦИЯ ------------------------------------------
@@ -32,13 +36,13 @@ class FirebaseApi {
    ) {
       this._recaptchaInvisible();
 
-      const appVerifier = window.recaptchaVerifier;
+      const appVerifier = this._recaptchaVerifier;
       // [START auth_phone_signin]
       signInWithPhoneNumber(this._auth, phoneNumber, appVerifier)
          .then((confirmationResult) => {
-            setIsConfirmCode && setIsConfirmCode(true);
+            if (setIsConfirmCode) setIsConfirmCode(true);
             // SMS отправляет. Приходит код подтвержения, меняем окно логина
-            window.confirmationResult = confirmationResult;
+            this._confirmationResult = confirmationResult;
             if (typeof grecaptcha === 'undefined') {
                console.error('reCAPTCHA API key is incorrect or missing');
             } else {
@@ -56,12 +60,12 @@ class FirebaseApi {
    // стилизуем контейнер в абсолют и невидимый
    // [START auth_phone_recaptcha_verifier_invisible]
    _recaptchaInvisible() {
-      window.recaptchaVerifier = new RecaptchaVerifier(
+      this._recaptchaVerifier = new RecaptchaVerifier(
          this._auth,
          'recaptcha-container',
          {
             size: 'invisible',
-            callback: (response: string) => {
+            callback: () => {
                // reCAPTCHA solved, allow signInWithPhoneNumber.
             },
          },
@@ -71,13 +75,13 @@ class FirebaseApi {
 
    // 3 получает код подтверждения и верификация --------------------------
    async verifyCode(code: string) {
-      const {confirmationResult} = window;
+      // const { confirmationResult } = window;
 
-      return await confirmationResult
+      return this._confirmationResult
          .confirm(code)
          .then(async (result: { user: User }) => {
             // успешная регистрация в firebase.
-            const {user} = result;
+            const { user } = result;
 
             return user;
          })
@@ -88,8 +92,8 @@ class FirebaseApi {
    // --------------------------------------------------------------------
 
    async signout() {
-      return await signOut(this._auth)
-         .then((data) => {
+      return signOut(this._auth)
+         .then(() => {
             return true;
          })
          .catch((error) => {
@@ -99,8 +103,8 @@ class FirebaseApi {
 
    resetRecaptcha(captchaRef: React.RefObject<HTMLDivElement>) {
       // Or, if you haven't stored the widget ID:
-      if (captchaRef.current && window.recaptchaVerifier) {
-         window.recaptchaVerifier.clear();
+      if (captchaRef.current && this._recaptchaVerifier) {
+         this._recaptchaVerifier.clear();
          captchaRef.current.innerHTML = `<div id='recaptcha-container'></div>`;
       }
    }

@@ -65,12 +65,10 @@ export const Input = memo((props: InputProps) => {
       value,
       name,
       error,
-      codePhone,
       disabled,
       focusInput,
       buttonRight,
       pattern,
-      onClick,
       type = 'text',
       placeholder,
       onChange,
@@ -88,7 +86,7 @@ export const Input = memo((props: InputProps) => {
    );
    const [isDisable, setIsDisable] = useState(disabled || false);
    const [isValue, setIsValue] = useState('');
-   const { normalizeInput, validateInput } = usePhoneValidator();
+   const { normalizeInput } = usePhoneValidator();
    // console.log(isValue);
    // const [isChecked, setIsChecked] = useState(true);
    const ref = useRef<HTMLInputElement>(null);
@@ -99,31 +97,39 @@ export const Input = memo((props: InputProps) => {
    useEffect(() => {
       if (name === 'phone') {
          setEditButtonInput('');
+      } else if (placeholder) {
+         setEditButtonInput('Изменить');
       } else {
-         placeholder
-            ? setEditButtonInput('Изменить')
-            : setEditButtonInput('Сохранить');
+         setEditButtonInput('Сохранить');
       }
-   }, []);
+   }, [name, placeholder]);
 
    useEffect(() => {
-      disabled ? setIsDisable(true) : setIsDisable(false);
+      if (disabled) {
+         setIsDisable(true);
+      } else {
+         setIsDisable(false);
+      }
 
       if (value === placeholder) setIsDisable(true);
-   }, [disabled]);
+   }, [disabled, placeholder, value]);
 
    useEffect(() => {
       setIsFocused(false);
    }, [focusInput]);
 
    useEffect(() => {
-      isFocused ? ref.current?.focus() : ref.current?.blur();
+      if (isFocused) {
+         ref.current?.focus();
+      } else {
+         ref.current?.blur();
+      }
    }, [isFocused]);
 
    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value =
          type === 'tel' && e.target.value
-            ? (prev: any) => normalizeInput(e.target.value, prev)
+            ? () => normalizeInput(e.target.value)
             : e.target.value;
       setIsValue(value);
 
@@ -140,9 +146,13 @@ export const Input = memo((props: InputProps) => {
    };
 
    const onFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
-      placeholder
-         ? setIsValue(String(value) || placeholder)
-         : setIsValue(String(value));
+      e.preventDefault();
+
+      if (placeholder) {
+         setIsValue(String(value) || placeholder);
+      } else {
+         setIsValue(String(value));
+      }
 
       setIsFocused(true);
    };
@@ -155,7 +165,7 @@ export const Input = memo((props: InputProps) => {
       setEditButtonRight('Отменить');
       setIsFocused(true);
       setIsDisable(false);
-      placeholder && setIsValue(placeholder);
+      if (placeholder) setIsValue(placeholder);
    };
 
    const clickButtonRight = (e: SyntheticEvent<HTMLButtonElement>) => {

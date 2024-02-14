@@ -9,6 +9,7 @@ interface IRequest extends InternalAxiosRequestConfig {
    _isRetry?: boolean;
 }
 
+// eslint-disable-next-line react-hooks/rules-of-hooks
 const { getCookie } = useCookie();
 // const baseURL = __IS_DEV__ ? 'http://localhost:8000' : 'адрес сервера'; - проще
 // правильнее apiUrl = env.apiUrl || 'http://localhost:8000' - webpack.config
@@ -37,7 +38,7 @@ $api.interceptors.request.use(async (config: IRequest) => {
       `https://pizzashop163.ru/api/refresh/${userId}`,
    );
 
-   if (!(response.status == 200))
+   if (!(response.status === 200))
       throw Error('Не обновлены токены безопасности');
    config.headers.authorization = `Bearer ${getCookie('accessToken')}`;
    return config;

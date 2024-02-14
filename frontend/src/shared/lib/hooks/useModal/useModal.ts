@@ -35,13 +35,16 @@ export function useModal(props: UseModalProps) {
             setIsClosing(false);
          }, 90);
       }
-   }, [isOpen]);
+   }, [isOpen, onClose]);
 
-   const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-         handleClose();
-      }
-   };
+   const onKeyDown = useCallback(
+      (e: KeyboardEvent) => {
+         if (e.key === 'Escape') {
+            handleClose();
+         }
+      },
+      [handleClose],
+   );
 
    useEffect(() => {
       if (isOpen) {
@@ -55,7 +58,7 @@ export function useModal(props: UseModalProps) {
          document.removeEventListener('keydown', onKeyDown);
          document.body.style.overflow = 'auto';
       };
-   }, [isOpen]);
+   }, [isOpen, onKeyDown]);
 
    return { isClosing, handleClose, onContentClick, isMounted };
 }

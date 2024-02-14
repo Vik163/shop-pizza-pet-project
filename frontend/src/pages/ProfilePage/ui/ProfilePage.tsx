@@ -21,7 +21,7 @@ import {
    ButtonVariant,
 } from '@/shared/ui/Button';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { firebaseApi, userAction , csrfTokenReducer } from '@/entities/User';
+import { firebaseApi, userAction, csrfTokenReducer } from '@/entities/User';
 
 import {
    DynamicReducersLoader,
@@ -30,7 +30,6 @@ import {
 
 import { fetchLogoutUser } from '../model/services/fetchLogout';
 import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
-
 
 export interface ProfilePageProps {
    className?: string;
@@ -46,7 +45,6 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    const navigate = useNavigate();
    const { deleteCookie } = useCookie();
 
-
    // const token = useSelector(getTokenSelector);
    // console.log(token);
 
@@ -55,7 +53,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
       // dispatch(profileActions.updateProfile({ age: Number(value || 0) }));
    }, []);
 
-   const onChangeEmail = (value: string | number) => {};
+   // const onChangeEmail = (value: string | number) => {};
 
    const logout = async (e: SyntheticEvent) => {
       e.preventDefault();
@@ -101,7 +99,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                      heightInput={48}
                      placeholder='sdf'
                      onChange={onChangeName}
-                     value="sdf"
+                     value='sdf'
                   />
                   <Input
                      className={cls.input}
@@ -109,10 +107,10 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                      name='phone'
                      type='number'
                      widthInput={350}
-                     placeholder="+7 999 999-99-99"
+                     placeholder='+7 999 999-99-99'
                      widthInputAndEditButtonRight={446}
                      heightInput={48}
-                     value="+7 999 999-99-99"
+                     value='+7 999 999-99-99'
                   />
                   <Text
                      fontSize={FontSize.SIZE_14}
@@ -132,8 +130,8 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                      labelTop='Электронная почта'
                      widthInput={350}
                      heightInput={48}
-                     onChange={onChangeEmail}
-                     value="email"
+                     // onChange={onChangeEmail}
+                     value='email'
                   />
                   <Text
                      title={HeaderTagType.H_3}

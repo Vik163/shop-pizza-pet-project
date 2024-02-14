@@ -20,7 +20,6 @@ interface Product {
    discount: number;
 }
 
-
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
    className?: string;
    maxWidth?: boolean;
@@ -30,8 +29,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const Card = memo((props: CardProps) => {
-   const { className, dataCard, maxHeight, maxWidth, ...otherProps } =
-      props;
+   const { className, dataCard, maxHeight, maxWidth, ...otherProps } = props;
 
    return (
       <VStack
