@@ -1,38 +1,18 @@
 .formByPhone {
    padding-top: 41px;
    width: 587px;
+   height: 200px;
    display: flex;
    flex-direction: column;
+   justify-content: space-between;
    align-items: start;
-   gap: 70px;
    position: relative;
-}
-
-.loginInput {
-   width: 414px;
-   color: var(--color-input);
-   font-size: var(--size-13);
-   font-weight: var(--weight-500);
-
-   & input {
-      font-weight: var(--weight-700);
-      font-size: var(--size-15);
-   }
-
-   & button {
-      font-weight: var(--weight-500);
-      font-size: var(--size-14);
-   }
-}
-
-.text {
-   width: 319px;
-}
-
-.gapForm {
-   gap: 25px;
 }
 
 .recaptcha {
    visibility: hidden;
+}
+
+.error {
+   margin-top: 90px;
 }

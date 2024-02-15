@@ -6,7 +6,8 @@ import { fetchSignupUser } from '../services/fetchSignupUser';
 const initialState: AuthPhoneSchema = {
    phoneNumber: '',
    isLoading: false,
-   error: {},
+   error: null,
+   isConfirmCode: false,
 };
 
 const authPhoneSlice = createSlice({
@@ -15,6 +16,20 @@ const authPhoneSlice = createSlice({
    reducers: {
       setPhoneNumber: (state, { payload }: PayloadAction<AuthPhoneSchema>) => {
          state.phoneNumber = payload.phoneNumber;
+      },
+      setIsLoading: (state, { payload }: PayloadAction<AuthPhoneSchema>) => {
+         state.isLoading = payload.isLoading;
+      },
+      setIsError: (state, { payload }: PayloadAction<AuthPhoneSchema>) => {
+         if (state.error) {
+            state.error.message = payload.error?.message;
+         }
+      },
+      setIsConfirmCode: (
+         state,
+         { payload }: PayloadAction<AuthPhoneSchema>,
+      ) => {
+         state.isConfirmCode = payload.isConfirmCode;
       },
    },
    extraReducers: (builder) => {

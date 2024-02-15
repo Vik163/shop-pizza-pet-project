@@ -1,0 +1,67 @@
+.formByPhone {
+   padding-top: 41px;
+   width: 587px;
+   height: 180px;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   align-items: start;
+}
+
+.phoneContainer {
+   width: 414px;
+}
+
+.phone {
+   margin: 0 28px 0 42px;
+}
+
+.confirmCodeInput {
+   width: 216px;
+   font-size: var(--size-13);
+
+   & input {
+      letter-spacing: 4px;
+      font-weight: var(--weight-700);
+      font-size: var(--size-14);
+   }
+
+   & button {
+      font-weight: var(--weight-500);
+      font-size: var(--size-14);
+   }
+}
+
+.confirmCodeContainer {
+   width: 414px;
+   display: flex;
+   justify-content: space-between;
+
+   gap: 15px;
+   color: var(--color-input);
+}
+
+.errorWarning {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 134px;
+   height: 42px;
+   background: var(--color-pink);
+   color: white;
+   font-size: var(--size-13);
+   font-weight: var(--weight-700);
+   border-radius: 8px;
+   position: relative;
+
+   &::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 40px;
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg);
+      background: var(--color-pink);
+   }
+}

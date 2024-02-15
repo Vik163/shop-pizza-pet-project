@@ -6,6 +6,7 @@ import React, {
    useRef,
    useState,
 } from 'react';
+import { SerializedError } from '@reduxjs/toolkit';
 import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Input.module.scss';
@@ -47,7 +48,7 @@ interface InputProps extends InputTypeProps {
    onClick?: () => void;
    readonly?: boolean;
    buttonRight?: string;
-   error?: boolean;
+   error?: SerializedError | null;
    name: string;
    variant?: InputVariant;
    checked?: boolean;
@@ -197,7 +198,7 @@ export const Input = memo((props: InputProps) => {
    const modsInput: Mods = {
       // [cls.withValue]: value,
       [cls.inActive]: isDisable && !code,
-      [cls.active]: error,
+      [cls.active]: error?.message,
       [cls.focused]: isFocused,
       [cls.editActive]:
          editButtonInput === 'Изменить' ||
