@@ -8,11 +8,13 @@ export type UserDocument = HydratedDocument<User>;
 @Schema()
 export class User {
   @Prop()
-  _id?: string;
+  _id: string;
   @Prop()
   createDate?: Date;
   @Prop()
   name: string;
+  @Prop()
+  birthday?: string;
   @Prop()
   role?: Roles;
   @Prop()

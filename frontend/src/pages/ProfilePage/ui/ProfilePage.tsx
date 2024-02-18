@@ -1,5 +1,6 @@
-import React, { type SyntheticEvent, memo, useCallback } from 'react';
+import React, { type SyntheticEvent, memo, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './ProfilePage.module.scss';
@@ -21,7 +22,12 @@ import {
    ButtonVariant,
 } from '@/shared/ui/Button';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { firebaseApi, userAction, csrfTokenReducer } from '@/entities/User';
+import {
+   firebaseApi,
+   userAction,
+   csrfTokenReducer,
+   getUserName,
+} from '@/entities/User';
 
 import {
    DynamicReducersLoader,
@@ -30,6 +36,7 @@ import {
 
 import { fetchLogoutUser } from '../model/services/fetchLogout';
 import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
+import { $api } from '@/shared/api/api';
 
 export interface ProfilePageProps {
    className?: string;
@@ -43,7 +50,10 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
-   const { deleteCookie } = useCookie();
+   const { deleteCookie, getCookie } = useCookie();
+   const [valueInput, setValueInput] = useState('');
+
+   const userName = useSelector(getUserName);
 
    // const token = useSelector(getTokenSelector);
    // console.log(token);
@@ -54,6 +64,34 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    }, []);
 
    // const onChangeEmail = (value: string | number) => {};
+
+   const saveValue = async (name: string, value: string) => {
+      console.log('name:', name);
+      const userId = localStorage.getItem('userId');
+      if (value) {
+         // имя токена задаю сам
+         const csrf = getCookie('__Host-psifi.x-csrf-token');
+         console.log('csrf:', csrf);
+         if (csrf) {
+            const userUpdate = await $api.put(
+               `/users/${userId}`,
+               {
+                  [name]: value,
+               },
+               {
+                  // x-csrf-token из библиотеки CSURF (бек)
+                  headers: { 'x-csrf-token': csrf },
+               },
+            );
+            console.log(userUpdate);
+
+            setValueInput(value);
+         } else {
+            setValueInput('');
+         }
+         console.log(value);
+      }
+   };
 
    const logout = async (e: SyntheticEvent) => {
       e.preventDefault();
@@ -97,9 +135,10 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                      widthInput={350}
                      widthInputAndEditButtonRight={446}
                      heightInput={48}
-                     placeholder='sdf'
+                     placeholder={userName || 'без имени'}
                      onChange={onChangeName}
-                     value='sdf'
+                     saveValue={saveValue}
+                     value={valueInput || ''}
                   />
                   <Input
                      className={cls.input}

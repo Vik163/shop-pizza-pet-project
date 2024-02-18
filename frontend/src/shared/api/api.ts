@@ -26,6 +26,7 @@ $api.interceptors.request.use(async (config: IRequest) => {
 
    if (config.headers && token) {
       newConfig.headers.authorization = `Bearer ${token}`;
+      // newConfig.headers['x-csrf-token'] = 'csrf';
    }
 
    // два пакета чтобы определить годность токена

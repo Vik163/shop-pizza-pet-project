@@ -4,7 +4,6 @@ import {
   MaxLength,
   MinLength,
   Matches,
-  IsAlpha,
   IsOptional,
 } from 'class-validator';
 import session from 'express-session';
@@ -27,6 +26,7 @@ export interface ISession extends TSess {
 export class UserDto {
   _id?: string;
 
+  @IsNotEmpty()
   @IsOptional()
   @IsEmail()
   // @IsNotEmpty()
@@ -36,7 +36,9 @@ export class UserDto {
   @Matches(/(?:\+|\d)[\d\-\(\) ]{9,}\d/g, {
     message: 'неправильный формат телефона',
   })
-  phoneNumber: string;
+  @IsOptional()
+  phoneNumber?: string;
+  birthday?: string;
 
   // @IsNotEmpty()
   // @MinLength(8)
@@ -45,18 +47,15 @@ export class UserDto {
   //   message: 'password too weak',
   // })
   // password: string;
-
-  // @IsNotEmpty()
-  @IsOptional()
+  @IsNotEmpty()
+  @IsOptional() // @IsOptional() и @IsNotEmpty() указывает, что поле "name", если оно присутствует, не должно быть пустым
   @MinLength(2)
   @MaxLength(20)
-  @IsAlpha()
   name?: string;
 
   // @IsNotEmpty()
   // @MinLength(2)
   // @MaxLength(20)
-  // @IsAlpha()
   // lastName: string;
 
   // @IsEnum(Roles, { each: true })

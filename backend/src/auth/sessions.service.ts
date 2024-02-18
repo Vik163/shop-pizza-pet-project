@@ -11,6 +11,7 @@ interface ISession extends TSess {
   visits?: number;
   provider?: string;
   sessId?: string;
+  csrf?: string;
 }
 
 @Injectable()
@@ -26,7 +27,12 @@ export class SessionsService {
     user: UserDto,
     yaProvider?: boolean,
   ) {
+    const csrf = req.csrfToken();
+    console.log('csrf:', csrf);
+    // console.log('sess:', req.cookies['__Host-psifi.x-csrf-token']);
+
     const sess: ISession = req.session;
+    // sess.csrf = csrf;
     if (yaProvider) {
       const sessId = (await this.cacheManager.get('sessionId')) as string;
       if (sessId) {
@@ -45,19 +51,25 @@ export class SessionsService {
               // console.log('errdestroy', err);
               await this.cacheManager.del('sessionId');
 
+              res.cookie('__Host-psifi.x-csrf-token', csrf, {
+                path: '/',
+                sameSite: true, // Recommend you make this strict if posible
+                secure: true,
+              });
+
               res.redirect(
                 `https://pizzashop163.ru?user=${JSON.stringify(user)}`,
               );
             });
           } else {
-            this._updateSession(res, sess, user, yaProvider);
+            this._updateSession(res, sess, user, csrf, yaProvider);
           }
         });
       } else {
-        this._updateSession(res, sess, user, yaProvider);
+        this._updateSession(res, sess, user, csrf, yaProvider);
       }
     } else {
-      this._updateSession(res, sess, user);
+      this._updateSession(res, sess, user, csrf);
     }
   }
 
@@ -65,6 +77,7 @@ export class SessionsService {
     res: Response,
     sess: ISession,
     user: UserDto,
+    csrf: string,
     yaProvider?: boolean,
   ) {
     sess.userId = user._id;
@@ -73,6 +86,12 @@ export class SessionsService {
 
     sess.provider = yaProvider ? 'yandex' : 'firebase';
     sess.save();
+
+    res.cookie('__Host-psifi.x-csrf-token', csrf, {
+      path: '/',
+      sameSite: true, // Recommend you make this strict if posible
+      secure: true,
+    });
 
     yaProvider &&
       res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`);

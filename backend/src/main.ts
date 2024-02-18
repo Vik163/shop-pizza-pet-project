@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
-import { doubleCsrfProtection } from './csrf/config/csrf.config';
+import * as csurf from 'csurf';
 import * as passport from 'passport';
 import { AppModule } from './app.module';
 
@@ -27,7 +27,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: option,
-    methods: 'HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    methods: 'HEAD,PUT,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
@@ -57,7 +57,21 @@ async function bootstrap() {
   );
   app.useGlobalPipes(new ValidationPipe());
 
-  app.use(doubleCsrfProtection);
+  // csrf ?? спорный, лучше не нашел
+  // куки обновляются вместе с установкой сессии (секрет попадает в сессию)
+  app.use(
+    csurf(),
+    //   {
+    //   cookie: false,
+    //   // value: (req) => req.cookies['__Host-psifi.x-csrf-token'],
+    //   // cookie: {
+    //   //   key: '__Host-psifi.x-csrf-token',
+    //   //   secure: true,
+    //   //   sameSite: 'strict',
+    //   // },
+    // }
+  );
+
   app.use(passport.initialize());
 
   await app.listen(8000);

@@ -26,6 +26,7 @@ export class UserService {
   }
 
   async updateUserData(id: string, updateUserDto: UserDto): Promise<UserDto> {
+    console.log('updateUserDto:', updateUserDto);
     return this.userModel
       .findByIdAndUpdate(id, updateUserDto, { new: true })
       .exec();

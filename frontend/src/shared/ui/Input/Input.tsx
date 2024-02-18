@@ -42,10 +42,10 @@ interface InputProps extends InputTypeProps {
    labelLeft?: string;
    labelTop?: string;
    labelRight?: string;
-   value: string;
+   value?: string;
    codePhone?: string;
    onChange?: (value: string) => void;
-   onClick?: () => void;
+   saveValue?: (name: string, value: string) => void;
    readonly?: boolean;
    buttonRight?: string;
    error?: SerializedError | null;
@@ -73,6 +73,7 @@ export const Input = memo((props: InputProps) => {
       type = 'text',
       placeholder,
       onChange,
+      saveValue,
       checked,
       widthInput,
       withoutButtons,
@@ -160,13 +161,14 @@ export const Input = memo((props: InputProps) => {
 
    const clickEditButtonInput = (e: SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault();
-      console.log('o');
 
       setEditButtonInput('Сохранить');
       setEditButtonRight('Отменить');
       setIsFocused(true);
       setIsDisable(false);
       if (placeholder) setIsValue(placeholder);
+      if (editButtonInput === 'Сохранить') saveValue?.(name, isValue);
+      // if (editButtonInput === 'Отменить') onClickSaveValue?.('');
    };
 
    const clickButtonRight = (e: SyntheticEvent<HTMLButtonElement>) => {
@@ -177,6 +179,7 @@ export const Input = memo((props: InputProps) => {
       setIsFocused(false);
       setIsDisable(true);
       setIsValue('');
+      if (editButtonRight === 'Сохранить') saveValue?.(name, isValue);
    };
 
    const classes = [inputVariantClasses[variant]];

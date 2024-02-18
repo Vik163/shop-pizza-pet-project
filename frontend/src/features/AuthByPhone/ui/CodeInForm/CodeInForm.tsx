@@ -58,8 +58,8 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
 
    const codeFormWithLoading = isLoading ? (
       <form className={cls.formByPhone}>
-         <Skeleton height={55} width={587} />
-         <Skeleton height={55} width={587} />
+         <Skeleton border='10px' height={60} width={587} />
+         <Skeleton border='10px' height={60} width={587} />
       </form>
    ) : (
       <CodeInFormComponent createUser={createUser} onEditPhone={onEditPhone} />

@@ -55,8 +55,8 @@ const PhoneForm = memo((props: PhoneFormProps) => {
 
    const phoneFormWithLoading = isLoading ? (
       <form className={cls.formByPhone}>
-         <Skeleton height={55} width={587} />
-         <Skeleton height={55} width={587} />
+         <Skeleton border='10px' height={65} width={587} />
+         <Skeleton border='10px' height={65} width={587} />
       </form>
    ) : (
       <PhoneFormComponent />

@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 // import { Auth } from 'src/decorators/auth.decorator';
 import { UserDto } from './dto/user.dto';
 import { AccessToken } from 'src/common/decorators/accessToken.decorator';
+// import { Csrf } from 'src/common/decorators/csrf.decorator';
 // import { Csrf } from 'src/decorators/csrf.decorator';
 
 @Controller('users')
@@ -16,8 +17,12 @@ export class UserController {
     return this.userService.getUsers();
   }
 
-  @Patch(':id')
-  updateUserData(@Param('id') id: string, @Body() updateUserDto: UserDto) {
+  @Put(':id')
+  updateUserData(
+    @Req() req: Request,
+    @Param('id') id: string,
+    @Body() updateUserDto: UserDto,
+  ) {
     return this.userService.updateUserData(id, updateUserDto);
   }
   // @Get(':id')
