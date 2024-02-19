@@ -2,8 +2,8 @@
 
 использовал библиотеку [CSURF](https://www.npmjs.com/package/csurf?activeTab=readme) (лучше не нашел)
 
-- в main.ts `app.use(csurf())` по умолчанию `cookie: false` (устанавливать самому)
-- если ставить куки true, то при инициализации куки не обновляются
+- в main.ts `app.use(csurf())` по умолчанию `cookie: false` (куки устанавливать самому)
+- если ставить куки true, то при инициализации пользователя куки не обновляются
 - в опциях можно регулировать куки
   - value откуда получает значение для верификации
 
@@ -17,7 +17,7 @@
 ```
 
 - куки устанавливаю при обновлении сессии при инициализации (в сессию при этом попадает csrfSecret)
-- на клиенте отправляю куки `headers: { 'x-csrf-token': csrf }` из библиотеки по умолчанию
+- на клиенте отправляю куки `headers: { 'x-csrf-token': csrf }` x-csrf-token из библиотеки по умолчанию (описано внизу)
 
 - Options:
   The csurf function takes an optional options object that may contain any of the following keys:

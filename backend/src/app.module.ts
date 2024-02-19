@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PizzaModule } from './products/pizzas/pizza.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { CsrfModule } from './csrf/csrf.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AuthModule } from './auth/auth.module';
     PizzaModule,
     UserModule,
     AuthModule,
+    CsrfModule,
   ],
 })
 export class AppModule {}

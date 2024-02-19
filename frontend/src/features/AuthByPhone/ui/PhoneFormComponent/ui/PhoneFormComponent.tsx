@@ -36,8 +36,6 @@ export const PhoneFormComponent = memo(() => {
    // 1 значение инпута - убираем ненужные символы и отправляем в стейт
    const onChangeNumberPhone = useCallback(
       (phoneNumber?: string) => {
-         console.log('phoneNumber:', phoneNumber);
-
          if (phoneNumber)
             dispatch(authPhoneActions.setPhoneNumber({ phoneNumber }));
       },

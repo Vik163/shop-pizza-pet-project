@@ -1,3 +1,4 @@
 export interface TokenSchema {
-   _csrfToken: string;
+   _csrfToken?: string;
+   errorMessage?: string;
 }

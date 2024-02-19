@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import { type StateSchema, type ThunkExtraArg } from './StateSchema';
 import { mainPageReducer } from '@/pages/MainPage';
-import { userReducer } from '@/entities/User';
+import { csrfTokenReducer, userReducer } from '@/entities/User';
 import { $api } from '@/shared/api/api';
 import { rtkApi } from '@/shared/api/rtkApi';
 import { createReducerManager } from './reducerManager';
@@ -24,6 +24,7 @@ export function createReduxStore(
       ...asyncReducers, // необязательные редьюсеры
       user: userReducer,
       mainPage: mainPageReducer,
+      csrfToken: csrfTokenReducer,
       [rtkApi.reducerPath]: rtkApi.reducer, // 11_2 8min
    };
 

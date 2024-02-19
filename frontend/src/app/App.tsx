@@ -23,7 +23,7 @@ const App = () => {
       try {
          if (initYaData) {
             dispatch(userAction.setAuthData(userYaData));
-            if (userId) dispatch(initAuthData(userId));
+            // if (userId) dispatch(initAuthData(userId));
             // убираю query ответ
             navigate('/');
          }

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { type User } from 'firebase/auth';
 
-import { userAction } from '@/entities/User';
+import { csrfTokenActions, fetchCsrfToken, userAction } from '@/entities/User';
 import { type UserData } from '@/entities/User';
 import { $api } from '@/shared/api/api';
 
@@ -11,9 +11,14 @@ export const fetchSignupUser = createAsyncThunk(
       const { rejectWithValue, dispatch } = thunkApi;
 
       try {
-         const csrfToken = await $api.get('/csrf');
-         const token = csrfToken.data.csrf;
-         if (token) {
+         const csrfToken = await fetchCsrfToken();
+
+         if (csrfToken === 'csrf не получен') {
+            return rejectWithValue('токен csrf не получен');
+         }
+
+         if (csrfToken) {
+            dispatch(csrfTokenActions.setToken(csrfToken));
             const data = {
                phoneNumber: user.phoneNumber,
                // role: 'CLIENT', //! ?
@@ -21,7 +26,7 @@ export const fetchSignupUser = createAsyncThunk(
 
             const authData = await $api.post<UserData>('/firebase', data, {
                headers: {
-                  'x-csrf-token': token,
+                  'x-csrf-token': csrfToken,
                },
                withCredentials: true,
             });

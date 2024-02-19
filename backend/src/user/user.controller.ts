@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 // import { Auth } from 'src/decorators/auth.decorator';
 import { UserDto } from './dto/user.dto';
 import { AccessToken } from 'src/common/decorators/accessToken.decorator';
+import { Csrf } from 'src/common/decorators/csrf.decorator';
 // import { Csrf } from 'src/common/decorators/csrf.decorator';
 // import { Csrf } from 'src/decorators/csrf.decorator';
 
@@ -17,6 +18,7 @@ export class UserController {
     return this.userService.getUsers();
   }
 
+  @Csrf()
   @Put(':id')
   updateUserData(
     @Req() req: Request,

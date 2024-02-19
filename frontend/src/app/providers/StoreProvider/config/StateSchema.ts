@@ -14,11 +14,12 @@ import { type rtkApi } from '@/shared/api/rtkApi';
 export interface StateSchema {
    mainPage: MainPageShema;
    user: UserSchema;
+   csrfToken: TokenSchema;
+
    [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>; // 11_2 9min
 
    // Асинхронные редюсеры (необязательные)
    authPhone?: AuthPhoneSchema;
-   csrfToken?: TokenSchema;
 }
 
 // типы для ReducerManager (5_1 15min)===================================
