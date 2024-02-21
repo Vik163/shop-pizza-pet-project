@@ -6,12 +6,19 @@ enum RoleUser {
    DEVELOPER = 'DEVELOPER',
 }
 
+export interface Birthday {
+   day: string;
+   month: string;
+   year: string;
+}
+
 export interface UserData {
    _id: string;
    name?: string;
    phoneNumber: number;
    email?: string;
-   role: RoleUser;
+   birthday?: Birthday;
+   role?: RoleUser;
    userParameters?: UserParameters;
 }
 

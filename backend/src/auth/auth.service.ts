@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { SessionsService } from './sessions.service';
-import { TokensService } from './token.service';
+import { TokensService } from './tokens.service';
 import { AuthDto } from './dto/auth.dto';
 
 @Injectable()
@@ -26,6 +26,9 @@ export class AuthService {
     return {
       _id: user._id,
       phoneNumber: user.phoneNumber,
+      birthday: user.birthday,
+      name: user.name,
+      email: user.email,
     };
   }
 

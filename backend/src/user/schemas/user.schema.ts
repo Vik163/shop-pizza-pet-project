@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { Roles } from '../dto/user.dto';
+import { Birthday, Roles } from '../dto/user.dto';
 import { RefreshTokenData } from './refreshToken.schema';
 
 export type UserDocument = HydratedDocument<User>;
@@ -13,8 +13,8 @@ export class User {
   createDate?: Date;
   @Prop()
   name: string;
-  @Prop()
-  birthday?: string;
+  @Prop({ type: Object })
+  birthday?: Birthday;
   @Prop()
   role?: Roles;
   @Prop()

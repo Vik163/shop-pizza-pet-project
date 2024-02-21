@@ -5,6 +5,8 @@ import React, {
    useEffect,
    useRef,
    useState,
+   Dispatch,
+   SetStateAction,
 } from 'react';
 import { SerializedError } from '@reduxjs/toolkit';
 import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
@@ -45,9 +47,11 @@ interface InputProps extends InputTypeProps {
    value?: string;
    codePhone?: string;
    onChange?: (value: string) => void;
+   isEdit: string;
+   setIsEdit: Dispatch<SetStateAction<string>>;
    saveValue?: (name: string, value: string) => void;
    readonly?: boolean;
-   buttonRight?: string;
+   // buttonRight?: string;
    error?: SerializedError | null;
    name: string;
    variant?: InputVariant;
@@ -66,9 +70,11 @@ export const Input = memo((props: InputProps) => {
       value,
       name,
       error,
+      isEdit,
+      setIsEdit,
       disabled,
       focusInput,
-      buttonRight,
+      // buttonRight,
       pattern,
       type = 'text',
       placeholder,
@@ -84,10 +90,12 @@ export const Input = memo((props: InputProps) => {
    const [isFocused, setIsFocused] = useState(focusInput || false);
    const [editButtonInput, setEditButtonInput] = useState('');
    const [editButtonRight, setEditButtonRight] = useState(
-      widthInputAndEditButtonRight && (buttonRight || ''),
+      widthInputAndEditButtonRight && '',
    );
    const [isDisable, setIsDisable] = useState(disabled || false);
    const [isValue, setIsValue] = useState('');
+   // console.log('isEdit:', isEdit);
+   // console.log('iname:', name);
    const { normalizeInput } = usePhoneValidator();
    // console.log(isValue);
    // const [isChecked, setIsChecked] = useState(true);
@@ -99,12 +107,18 @@ export const Input = memo((props: InputProps) => {
    useEffect(() => {
       if (name === 'phone') {
          setEditButtonInput('');
-      } else if (placeholder) {
+      } else if (!(isEdit === name)) {
          setEditButtonInput('Изменить');
+         setEditButtonRight('');
+         setIsFocused(false);
+         setIsDisable(true);
       } else {
          setEditButtonInput('Сохранить');
+         setEditButtonRight('Отменить');
+         setIsFocused(true);
+         setIsDisable(false);
       }
-   }, [name, placeholder]);
+   }, [name, isEdit]);
 
    useEffect(() => {
       if (disabled) {
@@ -162,22 +176,22 @@ export const Input = memo((props: InputProps) => {
    const clickEditButtonInput = (e: SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault();
 
-      setEditButtonInput('Сохранить');
-      setEditButtonRight('Отменить');
-      setIsFocused(true);
-      setIsDisable(false);
-      if (placeholder) setIsValue(placeholder);
+      setIsEdit(name);
+      // setEditButtonInput('Сохранить');
+      // setEditButtonRight('Отменить');
+      // setIsFocused(true);
+      // setIsDisable(false);
       if (editButtonInput === 'Сохранить') saveValue?.(name, isValue);
       // if (editButtonInput === 'Отменить') onClickSaveValue?.('');
    };
 
    const clickButtonRight = (e: SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault();
-
-      setEditButtonRight('');
-      setEditButtonInput('Изменить');
-      setIsFocused(false);
-      setIsDisable(true);
+      setIsEdit('');
+      // setEditButtonRight('');
+      // setEditButtonInput('Изменить');
+      // setIsFocused(false);
+      // setIsDisable(true);
       setIsValue('');
       if (editButtonRight === 'Сохранить') saveValue?.(name, isValue);
    };
@@ -203,9 +217,11 @@ export const Input = memo((props: InputProps) => {
       [cls.inActive]: isDisable && !code,
       [cls.active]: error?.message,
       [cls.focused]: isFocused,
-      [cls.editActive]:
-         editButtonInput === 'Изменить' ||
-         (Boolean(isValue) && String(isValue) !== String(placeholder)),
+      [cls.editActive]: isEdit === name,
+
+      // [cls.editActive]:
+      //    editButtonInput === 'Изменить' ||
+      //    (Boolean(isValue) && String(isValue) !== String(placeholder)),
       [cls.switch]: switchButton,
    };
 

@@ -1,4 +1,5 @@
-import { memo, useCallback, useState } from 'react';
+import { SyntheticEvent, memo, useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 import { months } from '@/shared/const/months';
 
@@ -7,32 +8,69 @@ import { Button } from '@/shared/ui/Button';
 import { HStack } from '@/shared/ui/Stack';
 import { Select } from '@/shared/ui/Select';
 import { useSelectDays } from '../lib/hooks/useSelectDays/useSelectDays';
+import { Birthday, getUserBirthday } from '@/entities/User';
 
 interface DateSelectProps {
    className?: string;
    height?: number;
    width?: number;
+   saveValue: (name: string, value: string | Birthday) => void;
    // max?: boolean;
 }
 
 export const DateSelect = memo((props: DateSelectProps) => {
-   const { className, height, width } = props;
-   const [selectDay, setSelectDay] = useState('');
-   const [selectMonth, setSelectMonth] = useState('');
+   const { className, height, width, saveValue } = props;
+   const birthdayData = useSelector(getUserBirthday);
 
-   const { valueDays } = useSelectDays(selectMonth);
+   const [selectData, setSelectData] = useState({
+      day: '',
+      month: '',
+      year: '',
+   });
 
-   const handleChangeDays = useCallback((selected: string) => {
-      setSelectDay(selected);
-   }, []);
+   useEffect(() => {
+      if (birthdayData) setSelectData(birthdayData);
+   }, [birthdayData]);
 
-   const handleChangeMonths = useCallback((selected: string) => {
-      setSelectMonth(selected);
-   }, []);
+   const { valueDays, valueYears } = useSelectDays(selectData.day);
+
+   const handleChangeDays = useCallback(
+      (selected: string) => {
+         setSelectData({ ...selectData, day: selected });
+      },
+      [selectData],
+   );
+
+   const handleChangeMonth = useCallback(
+      (selected: string) => {
+         setSelectData({ ...selectData, month: selected });
+      },
+      [selectData],
+   );
+
+   const handleChangeYears = useCallback(
+      (selected: string) => {
+         setSelectData({ ...selectData, year: selected });
+      },
+      [selectData],
+   );
+
+   const sendSelectedData = (e: SyntheticEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+
+      saveValue('birthday', selectData);
+   };
+
+   const selectedFull = selectData.day && selectData.month && selectData.year;
+   const selectedOne =
+      birthdayData !== selectData &&
+      (selectData.day || selectData.month || selectData.year);
+
+   const editButton = birthdayData ? selectedOne : selectedFull;
 
    const modsInput = {
       // [cls.withValue]: isValue,
-      [cls.editActive]: selectDay && selectMonth,
+      [cls.editActive]: editButton,
    };
 
    return (
@@ -42,9 +80,10 @@ export const DateSelect = memo((props: DateSelectProps) => {
       >
          <HStack style={{ width }} className={cls.selectContainer}>
             <Select
-               placeholder='День'
+               name='day'
+               placeholder={birthdayData?.day || 'День'}
                className={cls.days}
-               selected={selectDay}
+               selected={selectData.day}
                options={valueDays}
                onChange={handleChangeDays}
                scrollWidth={14}
@@ -57,16 +96,38 @@ export const DateSelect = memo((props: DateSelectProps) => {
                heightOptionContainer={350}
             />
             <Select
-               placeholder='Месяц'
+               name='month'
+               placeholder={birthdayData?.month || 'Месяц'}
                className={cls.months}
-               selected={selectMonth}
+               selected={selectData.month}
                options={months}
-               onChange={handleChangeMonths}
+               onChange={handleChangeMonth}
                hoverOptionColor='var(--color-bg-hover)'
-               heightOptionContainer={340}
+               heightOptionContainer={350}
+            />
+            <Select
+               name='year'
+               placeholder={birthdayData?.year || 'Год'}
+               className={cls.years}
+               selected={selectData.year}
+               options={valueYears}
+               onChange={handleChangeYears}
+               scrollWidth={14}
+               scrollTrackColor='transparent'
+               scrollThumbBorder='3px solid transparent'
+               scrollThumbColor='var(--color-input-edit)'
+               scrollRadius={12}
+               scrollHover
+               hoverOptionColor='var(--color-bg-hover)'
+               heightOptionContainer={350}
             />
          </HStack>
-         <Button className={classNames(cls.selectEdit, modsInput, [])}>
+         <Button
+            name='birthday'
+            className={classNames(cls.selectEdit, modsInput, [])}
+            onClick={sendSelectedData}
+            disabled={Boolean(!editButton)}
+         >
             Сохранить
          </Button>
       </div>

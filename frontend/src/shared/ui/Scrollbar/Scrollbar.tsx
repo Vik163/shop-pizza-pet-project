@@ -20,6 +20,7 @@ interface ScrollbarProps {
    scrollTrackColor?: string;
    scrollRadius?: string | number;
    scrollHover?: boolean;
+   name: string;
 }
 
 export const Scrollbar = (props: ScrollbarProps) => {
@@ -34,6 +35,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
       scrollHover,
       heightOptionContainer,
       scrollRadius,
+      name,
       ...otherProps
    } = props;
    const containerRef = useRef<HTMLDivElement>(null);
@@ -236,7 +238,8 @@ export const Scrollbar = (props: ScrollbarProps) => {
          className={classNames(cls.container, {}, [className])}
          ref={containerRef}
       >
-         <ul className={cls.content} ref={contentRef} {...otherProps}>
+         {/* eslint-disable-next-line react/jsx-max-props-per-line */}
+         <ul className={cls.content} ref={contentRef} {...otherProps} id={name}>
             {children}
          </ul>
          {isScrollbar && (

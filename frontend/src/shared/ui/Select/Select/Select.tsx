@@ -31,6 +31,7 @@ interface SelectProps {
    scrollTrackColor?: string;
    scrollRadius?: string | number;
    scrollHover?: boolean;
+   name: string;
 }
 
 export const Select = memo((props: SelectProps) => {
@@ -52,6 +53,7 @@ export const Select = memo((props: SelectProps) => {
       scrollHover,
       hoverOptionColor,
       scrollRadius,
+      name,
    } = props;
    const [isOpen, setIsOpen] = useState<boolean>(false);
    const [isTopScreen, setIsTopScreen] = useState<boolean>(false);
@@ -152,6 +154,7 @@ export const Select = memo((props: SelectProps) => {
                scrollWidth={scrollWidth}
                scrollRadius={scrollRadius}
                scrollHover={scrollHover}
+               name={name}
             >
                {options.map((option) => (
                   <Option

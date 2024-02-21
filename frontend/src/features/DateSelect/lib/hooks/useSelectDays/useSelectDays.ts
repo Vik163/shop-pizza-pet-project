@@ -3,7 +3,10 @@ import { daysInMonths } from '@/shared/const/months';
 
 export const useSelectDays = (valueMonth: string) => {
    const [valueDays, setValueDays] = useState<string[]>([]);
+   const nowYear = new Date().getFullYear();
+   const valueYears = [];
 
+   // числа в зависимости от месяца
    useEffect(() => {
       let day: number;
       if (!valueMonth) {
@@ -27,5 +30,11 @@ export const useSelectDays = (valueMonth: string) => {
       setValueDays(days);
    }, [valueMonth]);
 
-   return { valueDays };
+   // годы
+   for (let i = nowYear; i > 1930; ) {
+      valueYears.push(String(i));
+      i -= 1;
+   }
+
+   return { valueDays, valueYears };
 };

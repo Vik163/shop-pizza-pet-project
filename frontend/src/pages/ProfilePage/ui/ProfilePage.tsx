@@ -27,6 +27,9 @@ import {
    userAction,
    getUserName,
    getTokenSelector,
+   UserData,
+   getUserPhone,
+   Birthday,
 } from '@/entities/User';
 
 import { fetchLogoutUser } from '../model/services/fetchLogout';
@@ -46,9 +49,11 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
    const { deleteCookie } = useCookie();
-   const [valueInput, setValueInput] = useState('');
+   const [isEdit, setIsEdit] = useState('');
+   console.log('isEdit:', isEdit);
 
    const userName = useSelector(getUserName);
+   const userPhone = useSelector(getUserPhone);
    const csrf = useSelector(getTokenSelector);
 
    // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
@@ -58,32 +63,40 @@ const ProfilePage = memo((props: ProfilePageProps) => {
 
    // const onChangeEmail = (value: string | number) => {};
 
-   const saveValue = async (name: string, value: string) => {
-      console.log('name:', name);
-      const userId = localStorage.getItem('userId');
-      if (value) {
-         // имя токена задаю сам
+   const saveValue = useCallback(
+      async (name: string, value: string | Birthday) => {
+         console.log('name:', name);
+         console.log('value:', value);
 
-         if (csrf) {
-            const userUpdate = await $api.put(
-               `/users/${userId}`,
-               {
-                  [name]: value,
-               },
-               {
-                  // x-csrf-token из библиотеки CSRF (бек)
-                  headers: { 'x-csrf-token': csrf },
-               },
-            );
-            console.log(userUpdate);
+         const userId = localStorage.getItem('userId');
+         if (value) {
+            // имя токена задаю сам
 
-            setValueInput(value);
-         } else {
-            setValueInput('');
+            if (csrf) {
+               await $api
+                  .put(
+                     `/users/${userId}`,
+                     {
+                        [name]: value,
+                     },
+                     {
+                        // x-csrf-token из библиотеки CSRF (бек)
+                        headers: { 'x-csrf-token': csrf },
+                     },
+                  )
+                  .then((data) => {
+                     const userData: UserData = data.data;
+                     if (userData) {
+                        dispatch(userAction.setAuthData(userData));
+                        console.log('userData:', userData);
+                        setIsEdit('');
+                     }
+                  });
+            }
          }
-         console.log(value);
-      }
-   };
+      },
+      [csrf, dispatch],
+   );
 
    const logout = async (e: SyntheticEvent) => {
       e.preventDefault();
@@ -130,7 +143,9 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   placeholder={userName || 'без имени'}
                   onChange={onChangeName}
                   saveValue={saveValue}
-                  value={valueInput || ''}
+                  value={userName || ''}
+                  isEdit={isEdit}
+                  setIsEdit={setIsEdit}
                />
                <Input
                   className={cls.input}
@@ -138,10 +153,12 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   name='phone'
                   type='number'
                   widthInput={350}
-                  placeholder='+7 999 999-99-99'
+                  placeholder={String(userPhone) || '+7 999 999-99-99'}
                   widthInputAndEditButtonRight={446}
                   heightInput={48}
-                  value='+7 999 999-99-99'
+                  value={String(userPhone) || '+7 999 999-99-99'}
+                  isEdit={isEdit}
+                  setIsEdit={setIsEdit}
                />
                <Text
                   fontSize={FontSize.SIZE_14}
@@ -154,8 +171,9 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   className={classNames(cls.dateSelect)}
                   height={48}
                   width={350}
+                  saveValue={saveValue}
                />
-               <Input
+               {/* <Input
                   className={cls.input}
                   name='email'
                   labelTop='Электронная почта'
@@ -163,7 +181,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   heightInput={48}
                   // onChange={onChangeEmail}
                   value='email'
-               />
+               /> */}
                <Text
                   title={HeaderTagType.H_3}
                   className={cls.subscriptions}
@@ -173,7 +191,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                >
                   Подписки
                </Text>
-               <Input
+               {/* <Input
                   type='checkbox'
                   name='checkbox'
                   className={cls.checkbox}
@@ -182,7 +200,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   heightInput={19}
                   checked
                   value={' '}
-               />
+               /> */}
 
                <Button
                   className={cls.submit}

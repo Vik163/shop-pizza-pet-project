@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { UserDto } from 'src/user/dto/user.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { TokensService } from './token.service';
+import { TokensService } from './tokens.service';
 import { AuthService } from './auth.service';
 import { YandexTokensDto, YandexUserInfoDto } from './dto/auth.dto';
 

@@ -16,6 +16,9 @@ export class UserService {
     return {
       _id: data._id,
       phoneNumber: data.phoneNumber,
+      email: data.email,
+      birthday: data.birthday,
+      name: data.name,
     };
   }
 
@@ -26,10 +29,13 @@ export class UserService {
   }
 
   async updateUserData(id: string, updateUserDto: UserDto): Promise<UserDto> {
-    console.log('updateUserDto:', updateUserDto);
-    return this.userModel
+    const data: UserDto = await this.userModel
       .findByIdAndUpdate(id, updateUserDto, { new: true })
       .exec();
+
+    const userData = this.selectDataUsers(data);
+
+    return userData;
   }
 
   async findById(id: string): Promise<UserDto> {

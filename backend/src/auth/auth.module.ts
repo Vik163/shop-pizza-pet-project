@@ -8,11 +8,11 @@ import { PassportModule } from '@nestjs/passport';
 import { CacheModule } from '@nestjs/cache-manager';
 import { SessionsService } from './sessions.service';
 import { JwtModule } from '@nestjs/jwt';
-import { TokensService } from './token.service';
 import { AccessTokenStrategy } from './strategies/accessToken.strategy';
 import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
 import { UserService } from 'src/user/user.service';
 import { AuthProvidersService } from './authProviders.service';
+import { TokensService } from 'src/auth/tokens.service';
 
 @Module({
   imports: [
@@ -30,10 +30,10 @@ import { AuthProvidersService } from './authProviders.service';
     AuthProvidersService,
     FirebaseAdmin,
     SessionsService,
-    TokensService,
     AccessTokenStrategy,
     RefreshTokenStrategy,
     UserService,
+    TokensService,
   ],
 })
 export class AuthModule {}

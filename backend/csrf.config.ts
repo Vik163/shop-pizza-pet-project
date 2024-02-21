@@ -15,5 +15,4 @@ export const doubleCsrfOptions = {
   getTokenFromRequest: (req: Request) => req.headers['x-csrf-token'], // A function that returns the token from the request
 };
 
-export const { validateRequest, doubleCsrfProtection, generateToken } =
-  doubleCsrf(doubleCsrfOptions);
+export const { doubleCsrfProtection } = doubleCsrf(doubleCsrfOptions);

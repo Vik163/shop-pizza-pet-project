@@ -7,7 +7,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import session from 'express-session';
-import { RefreshTokenDto } from './refreshToken.dto';
+import { RefreshTokenDto } from 'src/auth/dto/tokens.dto';
 
 export enum Roles {
   ADMIN = 'ADMIN',
@@ -21,6 +21,12 @@ export interface ISession extends TSess {
   visits?: number;
   provider?: string;
   pro?: string;
+}
+
+export interface Birthday {
+  day: string;
+  month: string;
+  year: string;
 }
 
 export class UserDto {
@@ -38,7 +44,7 @@ export class UserDto {
   })
   @IsOptional()
   phoneNumber?: string;
-  birthday?: string;
+  birthday?: Birthday;
 
   // @IsNotEmpty()
   // @MinLength(8)

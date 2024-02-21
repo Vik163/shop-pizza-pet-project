@@ -8,7 +8,7 @@ import { Button } from '@/shared/ui/Button';
 import { HStack } from '@/shared/ui/Stack';
 import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
-import { Input, InputVariant } from '@/shared/ui/Input';
+import { InputVariant } from '@/shared/ui/Input';
 import {
    getIsError,
    getPhoneNumber,
@@ -77,7 +77,7 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
             className={cls.confirmCodeContainer}
             justify={FlexJustify.BETWEEN}
          >
-            <Input
+            {/* <Input
                className={classNames(cls.confirmCodeInput, {}, [])}
                widthInput={114}
                heightInput={48}
@@ -91,7 +91,7 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
                variant={inputCodeVariant}
                value=''
                disabled={!focusInput}
-            />
+            /> */}
             {isError && <div className={cls.errorWarning}>Неверный код</div>}
             <Button
                fontColor={FontColor.TEXT_YELLOW}

@@ -7,7 +7,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './PhoneFormComponent.module.scss';
 import { HStack } from '@/shared/ui/Stack';
-import { Input, InputVariant } from '@/shared/ui/Input';
+import { InputVariant } from '@/shared/ui/Input';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
 import { Icon } from '@/shared/ui/Icon';
 import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
@@ -83,7 +83,7 @@ export const PhoneFormComponent = memo(() => {
    return (
       <form className={classNames(cls.formByPhone, {}, [])} onSubmit={onSubmit}>
          <HStack max justify={FlexJustify.BETWEEN}>
-            <Input
+            {/* <Input
                id='phone'
                className={cls.loginInput}
                name='phone'
@@ -96,7 +96,7 @@ export const PhoneFormComponent = memo(() => {
                variant={inputVariant}
                onChange={onChangeNumberPhone}
                value='+7'
-            />
+            /> */}
             {appYaId && (
                <a
                   className={cls.yaButton}

@@ -10,9 +10,9 @@ import { TokensDto } from './dto/tokens.dto';
 @Injectable()
 export class TokensService {
   constructor(
-    private jwtService: JwtService,
     private configService: ConfigService,
     private userService: UserService,
+    private jwtService: JwtService,
   ) {}
 
   // Хеширование refresh для БД (если будет пароль, то тоже)

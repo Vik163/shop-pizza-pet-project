@@ -13,8 +13,8 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { UserDto } from 'src/user/dto/user.dto';
 import { AuthProvidersService } from './authProviders.service';
-import { TokensService } from './token.service';
 import { RefreshToken } from 'src/common/decorators/refreshToken.decorator';
+import { TokensService } from './tokens.service';
 
 @Controller()
 export class AuthController {
@@ -33,19 +33,6 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<void> {
     await this.authService.getInitialUserById(id, req, res);
-  }
-
-  // Запрос на обновление токенов ===========================
-  // защитник @RefreshToken
-  @RefreshToken()
-  @Get('refresh/:id')
-  async updateTokens(
-    @Res() res: Response,
-    @Req() req: Request,
-    @Param('id') id: string,
-  ): Promise<void> {
-    await this.tokensService.updateTokens(id, req, res);
-    res.end('Токены');
   }
 
   // авторизация через Яндекс ===============================
@@ -74,5 +61,24 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<void> {
     await this.authService.signout(res);
+  }
+
+  @Get('csrf')
+  async csrf(@Req() req: Request): Promise<string> {
+    const csrf = req.csrfToken(true);
+    return csrf;
+  }
+
+  // Запрос на обновление токенов ===========================
+  // защитник @RefreshToken
+  @RefreshToken()
+  @Get('refresh/:id')
+  async updateTokens(
+    @Res() res: Response,
+    @Req() req: Request,
+    @Param('id') id: string,
+  ): Promise<void> {
+    await this.tokensService.updateTokens(id, req, res);
+    res.end('Токены');
   }
 }

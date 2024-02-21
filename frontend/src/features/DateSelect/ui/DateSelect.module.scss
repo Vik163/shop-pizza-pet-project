@@ -16,14 +16,20 @@
 }
 
 .days {
-   width: 120px;
+   width: 95px;
+   height: 100%;
+   border-right: 1px solid var(--color-input-outline);
+}
+
+.months {
+   width: 160px;
    height: 100%;
 
    border-right: 1px solid var(--color-input-outline);
 }
 
-.months {
-   width: 230px;
+.years {
+   width: 95px;
    height: 100%;
 }
 

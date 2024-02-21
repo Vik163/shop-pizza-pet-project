@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
-import { doubleCsrfProtection } from './csrf/config/csrf.config';
+import { doubleCsrfProtection } from '../csrf.config';
 import * as passport from 'passport';
 import { AppModule } from './app.module';
 
