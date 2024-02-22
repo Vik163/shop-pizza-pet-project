@@ -30,6 +30,9 @@ import {
    UserData,
    getUserPhone,
    Birthday,
+   getUserEmail,
+   getUserParameters,
+   UserParameters,
 } from '@/entities/User';
 
 import { fetchLogoutUser } from '../model/services/fetchLogout';
@@ -40,9 +43,7 @@ export interface ProfilePageProps {
    className?: string;
 }
 
-// const initialReducers: ReducersList = {
-//    csrfToken: csrfTokenReducer,
-// };
+type UpdateValue = string | Birthday | UserParameters;
 
 const ProfilePage = memo((props: ProfilePageProps) => {
    const { className } = props;
@@ -50,21 +51,16 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    const navigate = useNavigate();
    const { deleteCookie } = useCookie();
    const [isEdit, setIsEdit] = useState('');
-   console.log('isEdit:', isEdit);
 
    const userName = useSelector(getUserName);
    const userPhone = useSelector(getUserPhone);
+   const userEmail = useSelector(getUserEmail);
    const csrf = useSelector(getTokenSelector);
-
-   // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
-   const onChangeName = useCallback((value: string | number) => {
-      // dispatch(profileActions.updateProfile({ age: Number(value || 0) }));
-   }, []);
-
-   // const onChangeEmail = (value: string | number) => {};
+   const userParameters = useSelector(getUserParameters);
+   const { addAdvertisement } = userParameters;
 
    const saveValue = useCallback(
-      async (name: string, value: string | Birthday) => {
+      async (name: string, value: UpdateValue) => {
          console.log('name:', name);
          console.log('value:', value);
 
@@ -74,7 +70,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
 
             if (csrf) {
                await $api
-                  .put(
+                  .patch(
                      `/users/${userId}`,
                      {
                         [name]: value,
@@ -98,6 +94,15 @@ const ProfilePage = memo((props: ProfilePageProps) => {
       [csrf, dispatch],
    );
 
+   const clickCheckbox = async () => {
+      const newUserParametrs = {
+         ...userParameters,
+         addAdvertisement: !addAdvertisement,
+      };
+
+      saveValue('userParameters', newUserParametrs);
+   };
+
    const logout = async (e: SyntheticEvent) => {
       e.preventDefault();
       deleteCookie('accessToken');
@@ -118,7 +123,6 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    };
 
    return (
-      // <DynamicReducersLoader removeAfterUnmount reducers={initialReducers}>
       <Page className={classNames(cls.ProfilePage, {}, [className])}>
          <Bonuses />
          <section className={cls.Profile}>
@@ -136,12 +140,10 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   className={cls.input}
                   labelTop='Имя'
                   name='name'
-                  // active
                   widthInput={350}
                   widthInputAndEditButtonRight={446}
                   heightInput={48}
                   placeholder={userName || 'без имени'}
-                  onChange={onChangeName}
                   saveValue={saveValue}
                   value={userName || ''}
                   isEdit={isEdit}
@@ -173,15 +175,17 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   width={350}
                   saveValue={saveValue}
                />
-               {/* <Input
+               <Input
                   className={cls.input}
                   name='email'
                   labelTop='Электронная почта'
+                  placeholder={String(userEmail) || 'Email'}
                   widthInput={350}
                   heightInput={48}
-                  // onChange={onChangeEmail}
-                  value='email'
-               /> */}
+                  value={userEmail || ''}
+                  isEdit={isEdit}
+                  setIsEdit={setIsEdit}
+               />
                <Text
                   title={HeaderTagType.H_3}
                   className={cls.subscriptions}
@@ -191,16 +195,18 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                >
                   Подписки
                </Text>
-               {/* <Input
+               <Input
                   type='checkbox'
                   name='checkbox'
                   className={cls.checkbox}
                   labelRight='Сообщать о бонусах, акциях и новых продуктах'
                   widthInput={19}
                   heightInput={19}
-                  checked
+                  onClickCheckbox={clickCheckbox}
+                  checked={addAdvertisement}
                   value={' '}
-               /> */}
+                  disabled={false}
+               />
 
                <Button
                   className={cls.submit}

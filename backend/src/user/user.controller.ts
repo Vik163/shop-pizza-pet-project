@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Put, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 // import { Auth } from 'src/decorators/auth.decorator';
 import { UserDto } from './dto/user.dto';
@@ -15,7 +15,7 @@ export class UserController {
     return this.userService.getUsers();
   }
 
-  @Put(':id')
+  @Patch(':id')
   updateUserData(
     @Req() req: Request,
     @Param('id') id: string,

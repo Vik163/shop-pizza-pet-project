@@ -29,6 +29,7 @@ export class AuthService {
       birthday: user.birthday,
       name: user.name,
       email: user.email,
+      userParameters: user.userParameters,
     };
   }
 

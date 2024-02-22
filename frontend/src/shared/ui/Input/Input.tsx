@@ -47,8 +47,9 @@ interface InputProps extends InputTypeProps {
    value?: string;
    codePhone?: string;
    onChange?: (value: string) => void;
-   isEdit: string;
-   setIsEdit: Dispatch<SetStateAction<string>>;
+   onClickCheckbox?: () => void;
+   isEdit?: string;
+   setIsEdit?: Dispatch<SetStateAction<string>>;
    saveValue?: (name: string, value: string) => void;
    readonly?: boolean;
    // buttonRight?: string;
@@ -57,6 +58,7 @@ interface InputProps extends InputTypeProps {
    variant?: InputVariant;
    checked?: boolean;
    focusInput?: boolean;
+   disabled?: boolean;
 }
 
 export const Input = memo((props: InputProps) => {
@@ -74,7 +76,7 @@ export const Input = memo((props: InputProps) => {
       setIsEdit,
       disabled,
       focusInput,
-      // buttonRight,
+      onClickCheckbox,
       pattern,
       type = 'text',
       placeholder,
@@ -152,11 +154,6 @@ export const Input = memo((props: InputProps) => {
       onChange?.(e.target.value);
    };
 
-   const clickSwitch = () => {
-      if (!switchButton) return;
-      console.log('i');
-   };
-
    const onBlur = () => {
       setIsFocused(false);
    };
@@ -176,22 +173,13 @@ export const Input = memo((props: InputProps) => {
    const clickEditButtonInput = (e: SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault();
 
-      setIsEdit(name);
-      // setEditButtonInput('Сохранить');
-      // setEditButtonRight('Отменить');
-      // setIsFocused(true);
-      // setIsDisable(false);
+      if (setIsEdit) setIsEdit('');
       if (editButtonInput === 'Сохранить') saveValue?.(name, isValue);
-      // if (editButtonInput === 'Отменить') onClickSaveValue?.('');
    };
 
    const clickButtonRight = (e: SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault();
-      setIsEdit('');
-      // setEditButtonRight('');
-      // setEditButtonInput('Изменить');
-      // setIsFocused(false);
-      // setIsDisable(true);
+      if (setIsEdit) setIsEdit('');
       setIsValue('');
       if (editButtonRight === 'Сохранить') saveValue?.(name, isValue);
    };
@@ -305,7 +293,7 @@ export const Input = memo((props: InputProps) => {
                className,
             ])}
             justify={FlexJustify.START}
-            onClick={clickSwitch}
+            onClick={onClickCheckbox}
          >
             {input}
             <Text className={cls.text}>{labelRight}</Text>

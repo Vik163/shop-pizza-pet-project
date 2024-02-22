@@ -21,18 +21,18 @@ interface DateSelectProps {
 export const DateSelect = memo((props: DateSelectProps) => {
    const { className, height, width, saveValue } = props;
    const birthdayData = useSelector(getUserBirthday);
-
    const [selectData, setSelectData] = useState({
       day: '',
       month: '',
       year: '',
    });
+   // готовлю данные в хуке
+   const { valueDays, valueYears } = useSelectDays(selectData.day);
 
+   // Если данные пользователя есть, то устанавливаю в selectData
    useEffect(() => {
       if (birthdayData) setSelectData(birthdayData);
    }, [birthdayData]);
-
-   const { valueDays, valueYears } = useSelectDays(selectData.day);
 
    const handleChangeDays = useCallback(
       (selected: string) => {
@@ -57,19 +57,19 @@ export const DateSelect = memo((props: DateSelectProps) => {
 
    const sendSelectedData = (e: SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault();
-
+      // birthday - ключ в объекте User для отправки данных
       saveValue('birthday', selectData);
    };
 
+   // кнопка сохранить отключение и включение.
    const selectedFull = selectData.day && selectData.month && selectData.year;
    const selectedOne =
       birthdayData !== selectData &&
       (selectData.day || selectData.month || selectData.year);
-
+   // если данных пользователя нет, то вкл когда выбраны все поля, если есть при выборе любого поля
    const editButton = birthdayData ? selectedOne : selectedFull;
 
    const modsInput = {
-      // [cls.withValue]: isValue,
       [cls.editActive]: editButton,
    };
 

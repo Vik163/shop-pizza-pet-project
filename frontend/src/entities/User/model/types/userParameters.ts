@@ -1,4 +1,4 @@
 export interface UserParameters {
    isFirstVisit?: boolean;
-   isArticlesPageWasOpened?: boolean;
+   addAdvertisement?: boolean;
 }

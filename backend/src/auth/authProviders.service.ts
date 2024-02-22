@@ -65,6 +65,10 @@ export class AuthProvidersService {
           const userYaData: UserDto = userYaDataFull && {
             email: userYaDataFull.default_email,
             phoneNumber: userYaDataFull.default_phone.number,
+            userParameters: {
+              isFirstVisit: true,
+              addAdvertisement: false,
+            },
             // role: Roles.CLIENT,
           };
           const yaProvider = true;

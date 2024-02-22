@@ -8,7 +8,7 @@ import { Button } from '@/shared/ui/Button';
 import { HStack } from '@/shared/ui/Stack';
 import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
-import { InputVariant } from '@/shared/ui/Input';
+import { Input, InputVariant } from '@/shared/ui/Input';
 import {
    getIsError,
    getPhoneNumber,
@@ -43,7 +43,7 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
    // -------------------------------------------------------------------
 
    // кнопка 'получить новый код' ------------
-   const onReqCode = (e: SyntheticEvent) => {
+   const onRequestCode = (e: SyntheticEvent) => {
       e.preventDefault();
       setFocusInput(true);
    };
@@ -77,7 +77,7 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
             className={cls.confirmCodeContainer}
             justify={FlexJustify.BETWEEN}
          >
-            {/* <Input
+            <Input
                className={classNames(cls.confirmCodeInput, {}, [])}
                widthInput={114}
                heightInput={48}
@@ -91,13 +91,13 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
                variant={inputCodeVariant}
                value=''
                disabled={!focusInput}
-            /> */}
+            />
             {isError && <div className={cls.errorWarning}>Неверный код</div>}
             <Button
                fontColor={FontColor.TEXT_YELLOW}
                fontWeight={FontWeight.TEXT_500}
                fontSize={FontSize.SIZE_14}
-               onClick={onReqCode}
+               onClick={onRequestCode}
             >
                Получить новый код
             </Button>
