@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+import { MutableRefObject, memo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { type User } from 'firebase/auth';
 
@@ -24,14 +24,15 @@ interface CodeInFormProps {
    className?: string;
    onEditPhone: () => void;
    onClosePopup: () => void;
+   forvardRef: MutableRefObject<null>;
 }
 
 export const CodeInForm = memo((props: CodeInFormProps) => {
-   const { onEditPhone, onClosePopup } = props;
+   const { onEditPhone, onClosePopup, forvardRef } = props;
 
    const dispatch = useAppDispatch();
    const isLoading = useSelector(getIsLoading);
-   const isError = useSelector(getIsError);
+   const error = useSelector(getIsError);
 
    // 3 После верификации запрашиваем пользователя в БД, и если не найден, то создаем
    const createUser = useCallback(
@@ -41,29 +42,25 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
             onClosePopup();
             return signupData.payload;
          }
-         // // запрос и если не найден, создание пользователя в БД
-         // const data = (await dispatch(initAuthData(user))).payload;
-
-         // if (data === 'Пользователь не найден') {
-         //    const signupData = await dispatch(fetchSignupUser(user));
-         //    onClosePopup();
-         //    return signupData.payload;
-         // } else {
-         //    onClosePopup();
-         //    return data;
-         // }
       },
       [dispatch, onClosePopup],
    );
 
+   // -----------------------------------------------------------------------------
    const codeFormWithLoading = isLoading ? (
       <form className={cls.formByPhone}>
          <Skeleton border='10px' height={60} width={587} />
          <Skeleton border='10px' height={60} width={587} />
       </form>
    ) : (
-      <CodeInFormComponent createUser={createUser} onEditPhone={onEditPhone} />
+      <CodeInFormComponent
+         forvardRef={forvardRef}
+         createUser={createUser}
+         onEditPhone={onEditPhone}
+      />
    );
+
+   const isError = error && !(error === 'Неверный код');
 
    const codeInForm = isError ? (
       <Text

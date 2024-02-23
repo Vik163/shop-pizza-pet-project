@@ -155,10 +155,10 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   name='phone'
                   type='number'
                   widthInput={350}
-                  placeholder={String(userPhone) || '+7 999 999-99-99'}
+                  placeholder={String(userPhone) || '+7 (999) 999-99-99'}
                   widthInputAndEditButtonRight={446}
                   heightInput={48}
-                  value={String(userPhone) || '+7 999 999-99-99'}
+                  value={String(userPhone) || '+7 (999) 999-99-99'}
                   isEdit={isEdit}
                   setIsEdit={setIsEdit}
                />
@@ -179,7 +179,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   className={cls.input}
                   name='email'
                   labelTop='Электронная почта'
-                  placeholder={String(userEmail) || 'Email'}
+                  placeholder={userEmail || 'Email'}
                   widthInput={350}
                   heightInput={48}
                   value={userEmail || ''}

@@ -43,16 +43,17 @@ const PhoneForm = memo((props: PhoneFormProps) => {
    const dispatch = useAppDispatch();
    const captchaRef = useRef(null);
    const isLoading = useSelector(getIsLoading);
-   const isError = useSelector(getIsError);
+   const error = useSelector(getIsError);
    const isConfirmCode = useSelector(getIsConfirmCode);
 
-   // https://oauth.yandex.ru/verification_code
-   // кнопка 'изменить' ---------------------------------
+   // кнопка 'изменить' ===================================================
    const onEditPhone = useCallback(() => {
+      // сброс каптчи
       firebaseApi.resetRecaptcha(captchaRef);
       dispatch(authPhoneActions.setIsConfirmCode({ isConfirmCode: false }));
    }, [dispatch]);
 
+   // Загрузка -----------------------------------------------------------
    const phoneFormWithLoading = isLoading ? (
       <form className={cls.formByPhone}>
          <Skeleton border='10px' height={65} width={587} />
@@ -61,6 +62,9 @@ const PhoneForm = memo((props: PhoneFormProps) => {
    ) : (
       <PhoneFormComponent />
    );
+
+   // Общая ошибка ------------------------------------------------------------
+   const isError = error && !(error === 'Неверный код');
 
    const phoneForm = isError ? (
       <Text
@@ -83,7 +87,11 @@ const PhoneForm = memo((props: PhoneFormProps) => {
          {!isConfirmCode ? (
             phoneForm
          ) : (
-            <CodeInForm onEditPhone={onEditPhone} onClosePopup={onClosePopup} />
+            <CodeInForm
+               forvardRef={captchaRef}
+               onEditPhone={onEditPhone}
+               onClosePopup={onClosePopup}
+            />
          )}
          <div ref={captchaRef} className={cls.recaptcha}>
             <div id='recaptcha-container'></div>

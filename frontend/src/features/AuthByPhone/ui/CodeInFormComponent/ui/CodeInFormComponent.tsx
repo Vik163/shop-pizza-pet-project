@@ -1,4 +1,4 @@
-import { SyntheticEvent, memo, useCallback, useState } from 'react';
+import { MutableRefObject, SyntheticEvent, memo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { User } from 'firebase/auth';
 import { classNames } from '@/shared/lib/classNames/classNames';
@@ -8,49 +8,81 @@ import { Button } from '@/shared/ui/Button';
 import { HStack } from '@/shared/ui/Stack';
 import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
-import { Input, InputVariant } from '@/shared/ui/Input';
+import { Input } from '@/shared/ui/Input';
 import {
    getIsError,
    getPhoneNumber,
 } from '../../../model/selectors/authPhoneSelectors';
 import { firebaseApi } from '@/entities/User';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { authPhoneActions } from '../../../model/slice/authPhoneSlice';
+import { lengthConfirmCode } from '../../../model/constants/constants';
 
 interface CodeInFormComponentProps {
    onEditPhone: () => void;
    createUser: (user: User) => void;
+   forvardRef: MutableRefObject<null>;
 }
 
 export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
-   const { onEditPhone, createUser } = props;
-   const [focusInput, setFocusInput] = useState(true);
+   const { onEditPhone, createUser, forvardRef } = props;
+   const dispatch = useAppDispatch();
 
    const authPhoneNumber = useSelector(getPhoneNumber);
-   const isError = useSelector(getIsError);
+   const error = useSelector(getIsError);
 
-   // 3 вводим код подтверждения и вызываем верификацию ---------------
+   // 3 вводим код подтверждения и вызываем верификацию =====================
    const onChangeNumberCode = useCallback(
       async (value?: string) => {
-         if (value)
-            if (value.length >= 6) {
-               setFocusInput(false);
-               const user = await firebaseApi.verifyCode(value);
-               if (user) createUser(user);
-            }
-         return value;
+         try {
+            if (value)
+               if (value.length === lengthConfirmCode) {
+                  const user = await firebaseApi.verifyCode(value);
+                  if (user) createUser(user);
+                  // Если код неверный возвращается null
+                  dispatch(authPhoneActions.setIsError('Неверный код'));
+               }
+            return value;
+         } catch (err) {
+            console.log(err);
+         }
       },
-      [createUser],
+      [createUser, dispatch],
    );
-   // -------------------------------------------------------------------
 
-   // кнопка 'получить новый код' ------------
+   // кнопка 'получить новый код' =========================================
    const onRequestCode = (e: SyntheticEvent) => {
       e.preventDefault();
-      setFocusInput(true);
-   };
+      // сброс каптчи
+      const clearRecaptcha = firebaseApi.resetRecaptcha(forvardRef);
 
-   const inputCodeVariant = focusInput
-      ? InputVariant.INPUT_OUTLINE
-      : InputVariant.INPUT_CLEAR;
+      if (clearRecaptcha) {
+         dispatch(authPhoneActions.setIsError(''));
+         dispatch(authPhoneActions.setIsLoading({ isLoading: true }));
+
+         const phoneNumber =
+            authPhoneNumber && `+${authPhoneNumber.replace(/\D+/g, '')}`;
+         if (phoneNumber)
+            firebaseApi
+               .phoneSignIn(phoneNumber)
+               .then((data: string) => {
+                  if (data) {
+                     dispatch(
+                        authPhoneActions.setIsConfirmCode({
+                           isConfirmCode: true,
+                        }),
+                     );
+                     dispatch(
+                        authPhoneActions.setIsLoading({ isLoading: false }),
+                     );
+                  }
+               })
+               .catch((err) => {
+                  console.log('err:', err);
+                  dispatch(authPhoneActions.setIsError(err.message));
+               });
+      }
+   };
 
    return (
       <form className={classNames(cls.formByPhone, {}, [])}>
@@ -82,17 +114,15 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
                widthInput={114}
                heightInput={48}
                widthInputAndEditButtonRight={88}
-               name='code'
+               name='confirmCode'
                labelLeft='Код из СМС'
                type='number'
-               error={isError}
-               focusInput={focusInput}
+               error={error}
+               focusInput
                onChange={onChangeNumberCode}
-               variant={inputCodeVariant}
                value=''
-               disabled={!focusInput}
+               fixedChangeValue={lengthConfirmCode}
             />
-            {isError && <div className={cls.errorWarning}>Неверный код</div>}
             <Button
                fontColor={FontColor.TEXT_YELLOW}
                fontWeight={FontWeight.TEXT_500}
@@ -101,6 +131,9 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
             >
                Получить новый код
             </Button>
+            {error === 'Неверный код' && (
+               <div className={cls.errorWarning}>Неверный код</div>
+            )}
          </HStack>
       </form>
    );

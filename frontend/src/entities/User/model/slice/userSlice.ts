@@ -17,7 +17,6 @@ export const userSlice = createSlice({
    initialState,
    reducers: {
       setAuthData: (state, { payload }: PayloadAction<UserData>) => {
-         console.log(payload);
          state.authData = payload;
          state._inited = true;
          localStorage.setItem('userId', payload._id);
@@ -25,6 +24,9 @@ export const userSlice = createSlice({
       logout: (state) => {
          state._inited = false;
          localStorage.removeItem('userId');
+      },
+      setError: (state, { payload }: PayloadAction<string>) => {
+         state.error = payload;
       },
    },
    extraReducers: (builder) => {

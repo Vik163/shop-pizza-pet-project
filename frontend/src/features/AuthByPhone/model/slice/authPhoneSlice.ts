@@ -6,7 +6,7 @@ import { fetchSignupUser } from '../services/fetchSignupUser';
 const initialState: AuthPhoneSchema = {
    phoneNumber: '',
    isLoading: false,
-   error: null,
+   error: '',
    isConfirmCode: false,
 };
 
@@ -20,10 +20,8 @@ const authPhoneSlice = createSlice({
       setIsLoading: (state, { payload }: PayloadAction<AuthPhoneSchema>) => {
          state.isLoading = payload.isLoading;
       },
-      setIsError: (state, { payload }: PayloadAction<AuthPhoneSchema>) => {
-         if (state.error) {
-            state.error.message = payload.error?.message;
-         }
+      setIsError: (state, { payload }: PayloadAction<string>) => {
+         state.error = payload;
       },
       setIsConfirmCode: (
          state,
@@ -42,7 +40,7 @@ const authPhoneSlice = createSlice({
          })
          .addCase(fetchSignupUser.rejected, (state, action) => {
             state.isLoading = false;
-            state.error = action.error;
+            state.error = action.error.message;
          });
    },
 });

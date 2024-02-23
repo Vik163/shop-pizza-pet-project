@@ -23,13 +23,15 @@ class FirebaseApi {
 
    constructor() {
       this._auth = getAuth();
+      // отключает проверку recaptcha для тестов (временное решение. при сбросе recaptcha выбрасывает ошибку)
+      // this._auth.settings.appVerificationDisabledForTesting = true;
       this._confirmationResult = window.confirmationResult;
       this._recaptchaVerifier = window.recaptchaVerifier;
    }
 
-   //* АВТОРИЗАЦИЯ ------------------------------------------
+   //* АВТОРИЗАЦИЯ ===================================================
 
-   // 1 получает номер - проверка captcha и отправка номера на верификацию ------
+   // 1 получает номер - проверка captcha и отправка номера на верификацию ======
    async phoneSignIn(phoneNumber: string): Promise<string> {
       this._recaptchaInvisible();
 
@@ -49,9 +51,8 @@ class FirebaseApi {
             return error.message;
          });
    }
-   // ------------------------------------------------------------------
 
-   // 2  После проверки позволяет запустить [START auth_phone_signin]
+   // 2  После проверки позволяет запустить [START auth_phone_signin] =====
    // стилизуем контейнер в абсолют и невидимый
    // [START auth_phone_recaptcha_verifier_invisible]
    _recaptchaInvisible() {
@@ -61,21 +62,15 @@ class FirebaseApi {
             'recaptcha-container',
             {
                size: 'invisible',
-               callback: () => {
-                  // reCAPTCHA solved, allow signInWithPhoneNumber.
-               },
             },
          );
       } catch (err) {
          throw new Error('reCaptchaInvisible');
       }
    }
-   // ------------------------------------------------------------------------
 
-   // 3 получает код подтверждения и верификация --------------------------
+   // 3 получает код подтверждения и верификация =======================
    async verifyCode(code: string) {
-      // const { confirmationResult } = window;
-
       return this._confirmationResult
          .confirm(code)
          .then(async (result: { user: User }) => {
@@ -86,10 +81,12 @@ class FirebaseApi {
          })
          .catch((error: string) => {
             console.log('Неверный код', error);
+            // Для обработки ошибки
+            return null;
          });
    }
-   // --------------------------------------------------------------------
 
+   // ====================================================================
    async signout() {
       return signOut(this._auth)
          .then(() => {
@@ -97,9 +94,11 @@ class FirebaseApi {
          })
          .catch((error) => {
             console.log('Пользователь не удален (firebase)', error);
+            return false;
          });
    }
 
+   // сброс recaptcha ====================================================
    resetRecaptcha(captchaRef: React.RefObject<HTMLDivElement>) {
       try {
          // Or, if you haven't stored the widget ID:
@@ -107,6 +106,8 @@ class FirebaseApi {
             this._recaptchaVerifier.clear();
             // eslint-disable-next-line no-param-reassign
             captchaRef.current.innerHTML = `<div id='recaptcha-container'></div>`;
+
+            return true;
          }
       } catch (err) {
          throw new Error('reCaptcha');

@@ -19,3 +19,4 @@ export { firebaseApi } from './api/firebaseApi';
 export { csrfTokenReducer, csrfTokenActions } from './model/slice/tokenSlice';
 export { fetchCsrfToken } from './model/services/fetchCsrfToken';
 export { getTokenSelector } from './model/selectors/getTokenSelector';
+export { getErrorSelector } from './model/selectors/getErrorSelector';

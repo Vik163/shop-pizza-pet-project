@@ -8,7 +8,6 @@ import React, {
    Dispatch,
    SetStateAction,
 } from 'react';
-import { SerializedError } from '@reduxjs/toolkit';
 import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Input.module.scss';
@@ -37,28 +36,32 @@ const inputVariantClasses: Record<InputVariant, string> = {
 
 interface InputProps extends InputTypeProps {
    className?: string;
+   // размеры -----------------------
    widthInput: number;
    heightInput: number;
-   withoutButtons?: boolean;
    widthInputAndEditButtonRight?: number;
+   // вариант исполнения -------------
+   withoutButtons?: boolean;
    labelLeft?: string;
    labelTop?: string;
    labelRight?: string;
-   value?: string;
-   codePhone?: string;
-   onChange?: (value: string) => void;
-   onClickCheckbox?: () => void;
+   variant?: InputVariant; // стиль инпута
+   // редактирование значения инпута ---------
    isEdit?: string;
    setIsEdit?: Dispatch<SetStateAction<string>>;
    saveValue?: (name: string, value: string) => void;
+   // ------------------------------------------
    readonly?: boolean;
-   // buttonRight?: string;
-   error?: SerializedError | null;
+   error?: string;
    name: string;
-   variant?: InputVariant;
-   checked?: boolean;
-   focusInput?: boolean;
+   focusInput?: boolean; // управляет фокусом
    disabled?: boolean;
+   fixedChangeValue?: number; // ограничивает количество вводимых символов
+   value?: string;
+   onChange?: (value: string) => void;
+   // чекбокс -------------------
+   checked?: boolean;
+   onClickCheckbox?: () => void;
 }
 
 export const Input = memo((props: InputProps) => {
@@ -74,6 +77,7 @@ export const Input = memo((props: InputProps) => {
       error,
       isEdit,
       setIsEdit,
+      fixedChangeValue,
       disabled,
       focusInput,
       onClickCheckbox,
@@ -89,23 +93,23 @@ export const Input = memo((props: InputProps) => {
       heightInput,
       ...otherProps
    } = props;
-   const [isFocused, setIsFocused] = useState(focusInput || false);
+   // название кнопок редактирования
    const [editButtonInput, setEditButtonInput] = useState('');
    const [editButtonRight, setEditButtonRight] = useState(
       widthInputAndEditButtonRight && '',
    );
-   const [isDisable, setIsDisable] = useState(disabled || false);
+   const [isFocused, setIsFocused] = useState<boolean>(focusInput || false);
+   const [isDisable, setIsDisable] = useState<boolean>(disabled || false);
    const [isValue, setIsValue] = useState('');
-   // console.log('isEdit:', isEdit);
-   // console.log('iname:', name);
-   const { normalizeInput } = usePhoneValidator();
-   // console.log(isValue);
-   // const [isChecked, setIsChecked] = useState(true);
-   const ref = useRef<HTMLInputElement>(null);
-   const switchButton = type === 'checkbox' || type === 'radio';
-   const code = name === 'code';
+   const code = name === 'confirmCode';
+   const checkboxButtonsType = type === 'checkbox' || type === 'radio';
    const isCheckbox = type === 'checkbox';
+   const ref = useRef<HTMLInputElement>(null);
 
+   // хук, возвращающий измененный номер телефона (9999999999 -> +7 (999) 999-99-99)
+   const { normalizeInput } = usePhoneValidator();
+
+   // ------------------------------------------
    useEffect(() => {
       if (name === 'phone') {
          setEditButtonInput('');
@@ -121,7 +125,7 @@ export const Input = memo((props: InputProps) => {
          setIsDisable(false);
       }
    }, [name, isEdit]);
-
+   // ----------------------------------------
    useEffect(() => {
       if (disabled) {
          setIsDisable(true);
@@ -132,10 +136,11 @@ export const Input = memo((props: InputProps) => {
       if (value === placeholder) setIsDisable(true);
    }, [disabled, placeholder, value]);
 
+   // TODO:  определиться с focusInput ====================
    useEffect(() => {
       setIsFocused(false);
    }, [focusInput]);
-
+   // ------------------------------------------------------
    useEffect(() => {
       if (isFocused) {
          ref.current?.focus();
@@ -144,20 +149,12 @@ export const Input = memo((props: InputProps) => {
       }
    }, [isFocused]);
 
-   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const valueInput =
-         type === 'tel' && e.target.value
-            ? () => normalizeInput(e.target.value)
-            : e.target.value;
-      setIsValue(valueInput);
-
-      onChange?.(e.target.value);
-   };
-
+   // ===========================================================
    const onBlur = () => {
       setIsFocused(false);
    };
 
+   // Установка value при фокусе ==================================
    const onFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
 
@@ -170,6 +167,22 @@ export const Input = memo((props: InputProps) => {
       setIsFocused(true);
    };
 
+   // ====================================================================
+   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      // телефон
+      if (type === 'tel' && e.target.value) {
+         setIsValue(() => normalizeInput(e.target.value));
+         // фиксированное длина значения инпута
+      } else if (fixedChangeValue) {
+         if (fixedChangeValue >= e.target.value.length)
+            setIsValue(e.target.value);
+      } else {
+         setIsValue(e.target.value);
+      }
+      onChange?.(e.target.value);
+   };
+
+   // Кнопка редактирования в инпуте ============================================
    const clickEditButtonInput = (e: SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault();
 
@@ -177,6 +190,7 @@ export const Input = memo((props: InputProps) => {
       if (editButtonInput === 'Сохранить') saveValue?.(name, isValue);
    };
 
+   // Кнопка редактирования справа инпута =======================================
    const clickButtonRight = (e: SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault();
       if (setIsEdit) setIsEdit('');
@@ -184,6 +198,7 @@ export const Input = memo((props: InputProps) => {
       if (editButtonRight === 'Сохранить') saveValue?.(name, isValue);
    };
 
+   // -----------------------------------------------------------------
    const classes = [inputVariantClasses[variant]];
 
    const editButtonRightColor =
@@ -201,23 +216,18 @@ export const Input = memo((props: InputProps) => {
    };
 
    const modsInput: Mods = {
-      // [cls.withValue]: value,
       [cls.inActive]: isDisable && !code,
-      [cls.active]: error?.message,
+      [cls.active]: error,
       [cls.focused]: isFocused,
       [cls.editActive]: isEdit === name,
-
-      // [cls.editActive]:
-      //    editButtonInput === 'Изменить' ||
-      //    (Boolean(isValue) && String(isValue) !== String(placeholder)),
-      [cls.switch]: switchButton,
+      [cls.switch]: checkboxButtonsType,
    };
 
    const input = (
       <HStack
          style={{
             width:
-               switchButton || withoutButtons
+               checkboxButtonsType || withoutButtons
                   ? widthInput
                   : widthInputAndEditButtonRight,
             height: heightInput,
@@ -252,7 +262,7 @@ export const Input = memo((props: InputProps) => {
                disabled={isDisable}
                {...otherProps}
             />
-            {!withoutButtons && !switchButton && !code && (
+            {!withoutButtons && !checkboxButtonsType && !code && (
                <Button
                   style={{ right: `${20}px` }}
                   className={classNames(cls.inputEdit, modsInput, [])}
@@ -262,7 +272,7 @@ export const Input = memo((props: InputProps) => {
                </Button>
             )}
          </div>
-         {!withoutButtons && editButtonRight && !switchButton && (
+         {!withoutButtons && editButtonRight && !checkboxButtonsType && (
             <Button
                fontColor={editButtonRightColor}
                className={classNames(cls.buttonRight, {}, [])}
@@ -289,9 +299,11 @@ export const Input = memo((props: InputProps) => {
    if (labelRight) {
       return (
          <HStack
-            className={classNames('', { [cls.switchCursor]: switchButton }, [
-               className,
-            ])}
+            className={classNames(
+               '',
+               { [cls.switchCursor]: checkboxButtonsType },
+               [className],
+            )}
             justify={FlexJustify.START}
             onClick={onClickCheckbox}
          >

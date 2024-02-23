@@ -36,7 +36,7 @@
    width: 414px;
    display: flex;
    justify-content: space-between;
-
+   position: relative;
    gap: 15px;
    color: var(--color-input);
 }
@@ -52,7 +52,9 @@
    font-size: var(--size-13);
    font-weight: var(--weight-700);
    border-radius: 8px;
-   position: relative;
+   position: absolute;
+   top: 60px;
+   left: 150px;
 
    &::after {
       content: '';

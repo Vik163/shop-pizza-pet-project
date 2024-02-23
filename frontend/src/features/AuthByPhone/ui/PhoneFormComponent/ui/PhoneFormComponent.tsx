@@ -28,12 +28,7 @@ export const PhoneFormComponent = memo(() => {
    const stateToken = uid(32);
    const isConfirmCode = useSelector(getIsConfirmCode);
 
-   // const handleFocusInput = (e: any) => {
-   //    e.preventDefault();
-   //    if (e.target) console.log('e:', e.target);
-   // };
-
-   // 1 значение инпута - убираем ненужные символы и отправляем в стейт
+   // 1 значение инпута - убираем ненужные символы и отправляем в стейт ======
    const onChangeNumberPhone = useCallback(
       (phoneNumber?: string) => {
          if (phoneNumber)
@@ -41,9 +36,8 @@ export const PhoneFormComponent = memo(() => {
       },
       [dispatch],
    );
-   // -------------------------------------------------------------------
 
-   // 2 получаю инпут и отправляю форму на проверку (firebase) ------
+   // 2 получаю инпут и отправляю форму на проверку (firebase) ============
    async function onSubmit(e: SyntheticEvent) {
       e.preventDefault();
 
@@ -62,16 +56,10 @@ export const PhoneFormComponent = memo(() => {
                   dispatch(authPhoneActions.setIsLoading({ isLoading: false }));
                }
             })
-            .catch((err: Error) =>
-               dispatch(authPhoneActions.setIsError({ error: err })),
-            );
+            .catch((err) => dispatch(authPhoneActions.setIsError(err.message)));
    }
 
-   const inputVariant = isConfirmCode
-      ? InputVariant.INPUT_CLEAR
-      : InputVariant.INPUT_OUTLINE;
-
-   // Отправляю лишний запрос для прокидывания токена и создания сессии
+   // Отправляю лишний запрос для прокидывания токена и создания сессии ================
    // Переадресация через яндекс сессию не возвращает
    const onLoginYa = async () => {
       await axios.get('https://pizzashop163.ru/api/yandex', {
@@ -79,6 +67,11 @@ export const PhoneFormComponent = memo(() => {
          withCredentials: true,
       });
    };
+
+   // -----------------------------------------------------------------------------
+   const inputVariant = isConfirmCode
+      ? InputVariant.INPUT_CLEAR
+      : InputVariant.INPUT_OUTLINE;
 
    return (
       <form className={classNames(cls.formByPhone, {}, [])} onSubmit={onSubmit}>
