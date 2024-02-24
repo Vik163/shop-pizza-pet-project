@@ -1,23 +1,13 @@
-import { type MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { type MouseEventHandler, useEffect, useRef } from 'react';
 import cls from './Option.module.scss';
 
 interface OptionProps {
    value: string;
    onClick: (value: string) => void;
-   hoverOptionColor?: string;
 }
 export const Option = (props: OptionProps) => {
-   const { value, onClick, hoverOptionColor } = props;
+   const { value, onClick } = props;
    const optionRef = useRef<HTMLOptionElement>(null);
-   const [isHover, setIsHover] = useState(false);
-
-   const mouseEnter = () => {
-      setIsHover(true);
-   };
-
-   const mouseLeave = () => {
-      setIsHover(false);
-   };
 
    useEffect(() => {
       const option = optionRef.current;
@@ -45,9 +35,6 @@ export const Option = (props: OptionProps) => {
    return (
       <option
          className={cls.option}
-         style={{ backgroundColor: isHover ? `${hoverOptionColor}` : '' }}
-         onMouseEnter={mouseEnter}
-         onMouseLeave={mouseLeave}
          value={value}
          onClick={handleClick(value)}
          tabIndex={0}

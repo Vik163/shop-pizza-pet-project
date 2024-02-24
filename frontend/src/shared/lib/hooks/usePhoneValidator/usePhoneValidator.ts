@@ -1,5 +1,5 @@
 export const usePhoneValidator = () => {
-   const normalizeInput = (value: string) => {
+   const phoneValidator = (value: string) => {
       if (!value) return value;
 
       const currentValue = value.replace(/[^\d+]/g, '');
@@ -27,14 +27,14 @@ export const usePhoneValidator = () => {
       return `${codeCountry} (${codeCity}) ${firstBlockNumbers}-${secondBlockNumbers}-${thirdBlockNumbers}`;
    };
 
-   const validateInput = (value: string) => {
+   const checkValidate = (value: string) => {
       let error = '';
 
       if (!value) error = 'Required!';
-      else if (value.length !== 14)
-         error = 'Invalid phone format. ex: +7 (999) 999-99-99';
+      else if (value.length !== 18)
+         error = 'Неправильный формат телефона. Ожидается: +7 (999) 999-99-99';
 
       return error;
    };
-   return { normalizeInput, validateInput };
+   return { phoneValidator, checkValidate };
 };

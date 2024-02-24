@@ -30,8 +30,8 @@ export interface Birthday {
 }
 
 export interface UserParameters {
-  isFirstVisit?: boolean;
-  addAdvertisement?: boolean;
+  isFirstVisit: boolean;
+  addAdvertisement: boolean;
 }
 
 export class UserDto {

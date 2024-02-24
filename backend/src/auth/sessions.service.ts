@@ -4,6 +4,7 @@ import { UserDto } from 'src/user/dto/user.dto';
 import session from 'express-session';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { UserService } from 'src/user/user.service';
 
 type TSess = session.Session & Partial<session.SessionData>;
 interface ISession extends TSess {
@@ -19,6 +20,7 @@ export class SessionsService {
   constructor(
     @Inject(CACHE_MANAGER)
     private cacheManager: Cache,
+    private readonly userService: UserService,
   ) {}
 
   async handleSession(
@@ -34,6 +36,11 @@ export class SessionsService {
         req.sessionStore.get(sessId, async (err, session: ISession) => {
           // console.log('errget', err);
           if (session) {
+            // второй визит
+            if (sess.visits === 2) {
+              const data = await this.setSecondVisit(user);
+              if (data) user = data;
+            }
             session.userId = user._id;
             session.sessId = sessId;
             session.visits = session.visits ? session.visits + 1 : 1;
@@ -62,12 +69,17 @@ export class SessionsService {
     }
   }
 
-  _updateSession(
+  async _updateSession(
     res: Response,
     sess: ISession,
     user: UserDto,
     yaProvider?: boolean,
   ) {
+    // второй визит
+    if (sess.visits === 2) {
+      const data = await this.setSecondVisit(user);
+      if (data) user = data;
+    }
     sess.userId = user._id;
     sess.sessId = sess.id;
     sess.visits = sess.visits ? sess.visits + 1 : 1;
@@ -77,5 +89,19 @@ export class SessionsService {
 
     yaProvider &&
       res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`);
+  }
+
+  setSecondVisit(user: UserDto) {
+    const secondVisit = {
+      ...user,
+      ...user.userParameters,
+      isFirstVisit: false,
+    };
+
+    const newData = this.userService.updateUserData(user._id, secondVisit);
+
+    if (newData) return newData;
+
+    return null;
   }
 }

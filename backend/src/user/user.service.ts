@@ -30,13 +30,18 @@ export class UserService {
   }
 
   async updateUserData(id: string, updateUserDto: UserDto): Promise<UserDto> {
-    const data: UserDto = await this.userModel
-      .findByIdAndUpdate(id, updateUserDto, { new: true })
-      .exec();
+    try {
+      const data: UserDto = await this.userModel
+        .findByIdAndUpdate(id, updateUserDto, { new: true })
+        .exec();
+      if (data) {
+        const userData = this.selectDataUsers(data);
 
-    const userData = this.selectDataUsers(data);
-
-    return userData;
+        return userData;
+      }
+    } catch (err) {
+      console.log('updateUserData', err);
+    }
   }
 
   async findById(id: string): Promise<UserDto> {

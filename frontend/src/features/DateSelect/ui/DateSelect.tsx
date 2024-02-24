@@ -1,6 +1,6 @@
 import { SyntheticEvent, memo, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { classNames } from '@/shared/lib/classNames/classNames';
+import { Mods, classNames } from '@/shared/lib/classNames/classNames';
 import { months } from '@/shared/const/months';
 
 import cls from './DateSelect.module.scss';
@@ -69,9 +69,21 @@ export const DateSelect = memo((props: DateSelectProps) => {
    // если данных пользователя нет, то вкл когда выбраны все поля, если есть при выборе любого поля
    const editButton = birthdayData ? selectedOne : selectedFull;
 
-   const modsInput = {
-      [cls.editActive]: editButton,
+   // При выборе меняется фон
+   const modDays: Mods = {
+      [cls.selected]:
+         selectData.day !== '' && selectData.day !== birthdayData?.day,
    };
+   const modMonth: Mods = {
+      [cls.selected]:
+         selectData.month !== '' && selectData.month !== birthdayData?.month,
+   };
+   const modYears: Mods = {
+      [cls.selected]:
+         selectData.year !== '' && selectData.year !== birthdayData?.year,
+   };
+
+   const addClasses = [cls.hover, cls.scroll];
 
    return (
       <div
@@ -82,49 +94,39 @@ export const DateSelect = memo((props: DateSelectProps) => {
             <Select
                name='day'
                placeholder={birthdayData?.day || 'День'}
-               className={cls.days}
+               className={classNames(cls.days, modDays, addClasses)}
                selected={selectData.day}
                options={valueDays}
                onChange={handleChangeDays}
-               scrollWidth={14}
-               scrollTrackColor='transparent'
-               scrollThumbBorder='3px solid transparent'
-               scrollThumbColor='var(--color-input-edit)'
-               scrollRadius={12}
-               scrollHover
-               hoverOptionColor='var(--color-bg-hover)'
                heightOptionContainer={350}
+               // scrollVariant={ScrollbarVariant.SELECT} - по умолчанию
             />
             <Select
                name='month'
                placeholder={birthdayData?.month || 'Месяц'}
-               className={cls.months}
+               className={classNames(cls.months, modMonth, [])}
                selected={selectData.month}
                options={months}
                onChange={handleChangeMonth}
-               hoverOptionColor='var(--color-bg-hover)'
                heightOptionContainer={350}
             />
             <Select
                name='year'
                placeholder={birthdayData?.year || 'Год'}
-               className={cls.years}
+               className={classNames(cls.years, modYears, [])}
                selected={selectData.year}
                options={valueYears}
                onChange={handleChangeYears}
-               scrollWidth={14}
-               scrollTrackColor='transparent'
-               scrollThumbBorder='3px solid transparent'
-               scrollThumbColor='var(--color-input-edit)'
-               scrollRadius={12}
-               scrollHover
-               hoverOptionColor='var(--color-bg-hover)'
                heightOptionContainer={350}
             />
          </HStack>
          <Button
             name='birthday'
-            className={classNames(cls.selectEdit, modsInput, [])}
+            className={classNames(
+               cls.selectEdit,
+               { [cls.editActive]: editButton },
+               [],
+            )}
             onClick={sendSelectedData}
             disabled={Boolean(!editButton)}
          >

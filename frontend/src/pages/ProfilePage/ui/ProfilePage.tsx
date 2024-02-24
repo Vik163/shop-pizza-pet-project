@@ -13,7 +13,7 @@ import {
    FontWeight,
 } from '@/shared/ui/Text';
 import { Bonuses } from './Bonuses/Bonuses';
-import { Input } from '@/shared/ui/Input';
+import { Input, InputVariant } from '@/shared/ui/Input';
 import { DateSelect } from '@/features/DateSelect';
 import {
    Button,
@@ -61,9 +61,6 @@ const ProfilePage = memo((props: ProfilePageProps) => {
 
    const saveValue = useCallback(
       async (name: string, value: UpdateValue) => {
-         console.log('name:', name);
-         console.log('value:', value);
-
          const userId = localStorage.getItem('userId');
          if (value) {
             // имя токена задаю сам
@@ -148,6 +145,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   value={userName || ''}
                   isEdit={isEdit}
                   setIsEdit={setIsEdit}
+                  disabled
                />
                <Input
                   className={cls.input}
@@ -156,11 +154,12 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   type='number'
                   widthInput={350}
                   placeholder={String(userPhone) || '+7 (999) 999-99-99'}
-                  widthInputAndEditButtonRight={446}
                   heightInput={48}
-                  value={String(userPhone) || '+7 (999) 999-99-99'}
+                  // value={String(userPhone) || '+7 (999) 999-99-99'}
                   isEdit={isEdit}
                   setIsEdit={setIsEdit}
+                  withoutButtons
+                  disabled
                />
                <Text
                   fontSize={FontSize.SIZE_14}
@@ -185,6 +184,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   value={userEmail || ''}
                   isEdit={isEdit}
                   setIsEdit={setIsEdit}
+                  disabled
                />
                <Text
                   title={HeaderTagType.H_3}
@@ -198,14 +198,13 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                <Input
                   type='checkbox'
                   name='checkbox'
-                  className={cls.checkbox}
+                  className={classNames(cls.checkbox, {}, [])}
                   labelRight='Сообщать о бонусах, акциях и новых продуктах'
                   widthInput={19}
                   heightInput={19}
+                  variant={InputVariant.INPUT_CHECKBOX}
                   onClickCheckbox={clickCheckbox}
                   checked={addAdvertisement}
-                  value={' '}
-                  disabled={false}
                />
 
                <Button

@@ -127,9 +127,14 @@ export class AuthService {
 
   // Создание пользователя =====================================================
   private async createUser(user: UserDto): Promise<AuthDto> {
+    const userParameters = {
+      isFirstVisit: true,
+      addAdvertisement: false,
+    };
     // Добавляем в БД доп. инфо
     user._id = uuidv4();
     user.createDate = new Date();
+    user.userParameters = userParameters;
 
     // генерирую токены
     const tokens = await this.tokensService.getTokens(

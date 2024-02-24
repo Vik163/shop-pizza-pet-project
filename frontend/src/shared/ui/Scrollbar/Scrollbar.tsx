@@ -9,8 +9,17 @@ import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Scrollbar.module.scss';
 
+export enum ScrollbarVariant {
+   SELECT = 'selectScroll',
+}
+
+const scrollbarVariant: Record<ScrollbarVariant, string> = {
+   selectScroll: cls.selectScroll,
+};
+
 interface ScrollbarProps {
    className?: string;
+   variant?: ScrollbarVariant;
    scrollArrows?: boolean;
    children: ReactNode;
    heightOptionContainer: string | number;
@@ -26,6 +35,7 @@ interface ScrollbarProps {
 export const Scrollbar = (props: ScrollbarProps) => {
    const {
       children,
+      variant = ScrollbarVariant.SELECT,
       className,
       scrollArrows,
       scrollThumbColor,
@@ -232,6 +242,8 @@ export const Scrollbar = (props: ScrollbarProps) => {
       [cls.hover]: scrollHover,
    };
 
+   const classes = [scrollbarVariant[variant]];
+
    return (
       <div
          style={{ height: `${heightOptionContainer}px` }}
@@ -243,12 +255,15 @@ export const Scrollbar = (props: ScrollbarProps) => {
             {children}
          </ul>
          {isScrollbar && (
-            <div className={cls.scrollbar} style={{ width: scrollWidth }}>
+            <div
+               className={classNames(cls.scrollbar, {}, classes)}
+               style={{ width: scrollWidth }}
+            >
                {scrollArrows && (
                   <button
                      type='button'
                      style={{ color: scrollThumbColor }}
-                     className={classNames(cls.button, modsButtons, [])}
+                     className={classNames(cls.button, modsButtons, classes)}
                      onClick={(e) => {
                         handleScrollButton(e, 'up');
                      }}
@@ -262,12 +277,12 @@ export const Scrollbar = (props: ScrollbarProps) => {
                         backgroundColor: scrollTrackColor,
                         borderRadius: `${scrollRadius}px`,
                      }}
-                     className={classNames(cls.track, mods, [])}
+                     className={classNames(cls.track, mods, classes)}
                      ref={scrollTrackRef}
                      onClick={handleTrackClick}
                   ></div>
                   <div
-                     className={classNames(cls.thumb, mods, [])}
+                     className={classNames(cls.thumb, mods, classes)}
                      ref={scrollThumbRef}
                      onMouseDown={handleThumbMousedown}
                      style={{
@@ -282,7 +297,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
                   <button
                      type='button'
                      style={{ color: scrollThumbColor }}
-                     className={classNames(cls.button, modsButtons, [])}
+                     className={classNames(cls.button, modsButtons, classes)}
                      onClick={(e) => {
                         handleScrollButton(e, 'down');
                      }}

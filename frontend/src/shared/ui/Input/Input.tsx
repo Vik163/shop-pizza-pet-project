@@ -27,11 +27,15 @@ type InputTypeProps = Omit<
 export enum InputVariant {
    INPUT_OUTLINE = 'outline',
    INPUT_CLEAR = 'clear',
+   INPUT_CHECKBOX = 'checkbox',
+   INPUT_RADIO = 'radio',
 }
 
 const inputVariantClasses: Record<InputVariant, string> = {
    outline: cls.inputOutline,
    clear: cls.inputClear,
+   checkbox: cls.checkbox,
+   radio: cls.radio,
 };
 
 interface InputProps extends InputTypeProps {
@@ -93,6 +97,7 @@ export const Input = memo((props: InputProps) => {
       heightInput,
       ...otherProps
    } = props;
+
    // название кнопок редактирования
    const [editButtonInput, setEditButtonInput] = useState('');
    const [editButtonRight, setEditButtonRight] = useState(
@@ -100,6 +105,7 @@ export const Input = memo((props: InputProps) => {
    );
    const [isFocused, setIsFocused] = useState<boolean>(focusInput || false);
    const [isDisable, setIsDisable] = useState<boolean>(disabled || false);
+   // console.log('isDisable:', isDisable);
    const [isValue, setIsValue] = useState('');
    const code = name === 'confirmCode';
    const checkboxButtonsType = type === 'checkbox' || type === 'radio';
@@ -107,34 +113,29 @@ export const Input = memo((props: InputProps) => {
    const ref = useRef<HTMLInputElement>(null);
 
    // хук, возвращающий измененный номер телефона (9999999999 -> +7 (999) 999-99-99)
-   const { normalizeInput } = usePhoneValidator();
+   const { phoneValidator } = usePhoneValidator();
+   // console.log('isEdit:', isEdit);
 
    // ------------------------------------------
    useEffect(() => {
-      if (name === 'phone') {
-         setEditButtonInput('');
-      } else if (!(isEdit === name)) {
+      if (!(isEdit === name)) {
          setEditButtonInput('Изменить');
          setEditButtonRight('');
-         setIsFocused(false);
-         setIsDisable(true);
+         if (disabled) {
+            setIsFocused(false);
+            setIsDisable(true);
+         }
       } else {
          setEditButtonInput('Сохранить');
          setEditButtonRight('Отменить');
          setIsFocused(true);
          setIsDisable(false);
       }
-   }, [name, isEdit]);
+   }, [name, isEdit, disabled]);
    // ----------------------------------------
-   useEffect(() => {
-      if (disabled) {
-         setIsDisable(true);
-      } else {
-         setIsDisable(false);
-      }
-
-      if (value === placeholder) setIsDisable(true);
-   }, [disabled, placeholder, value]);
+   // useEffect(() => {
+   //    if (!disabled) setIsDisable(false);
+   // }, [disabled]);
 
    // TODO:  определиться с focusInput ====================
    useEffect(() => {
@@ -169,13 +170,17 @@ export const Input = memo((props: InputProps) => {
 
    // ====================================================================
    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-      // телефон
-      if (type === 'tel' && e.target.value) {
-         setIsValue(() => normalizeInput(e.target.value));
-         // фиксированное длина значения инпута
-      } else if (fixedChangeValue) {
-         if (fixedChangeValue >= e.target.value.length)
-            setIsValue(e.target.value);
+      // ограниченная длина значения инпута
+      if (fixedChangeValue) {
+         if (fixedChangeValue && fixedChangeValue > e.target.value.length - 1) {
+            if (type === 'tel' && e.target.value) {
+               setIsValue(() => phoneValidator(e.target.value));
+            } else {
+               setIsValue(e.target.value);
+            }
+         }
+      } else if (type === 'tel' && e.target.value) {
+         setIsValue(() => phoneValidator(e.target.value));
       } else {
          setIsValue(e.target.value);
       }
@@ -186,7 +191,7 @@ export const Input = memo((props: InputProps) => {
    const clickEditButtonInput = (e: SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault();
 
-      if (setIsEdit) setIsEdit('');
+      if (setIsEdit) setIsEdit(name);
       if (editButtonInput === 'Сохранить') saveValue?.(name, isValue);
    };
 
@@ -250,11 +255,11 @@ export const Input = memo((props: InputProps) => {
                ref={ref}
                style={{ width: widthInput }}
                className={classNames(cls.input, modsInput, classes)}
-               value={isValue}
+               value={isValue || ''}
                type={type}
                pattern={pattern}
                name={name}
-               checked={checked}
+               // checked={checked} падает ошибка неконтролируемый инпут (checked реализую по-другому)
                placeholder={placeholder}
                onChange={onChangeHandler}
                onBlur={onBlur}
