@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { classNames } from '@/shared/lib/classNames/classNames';
+
 import { Header } from '@/widgets/Header';
 import { AppRouter } from './providers/router';
 import { Footer } from '@/widgets/Footer';
@@ -14,6 +15,7 @@ import {
    initAuthData,
    userAction,
 } from '@/entities/User';
+import { useTheme } from '@/shared/lib/hooks/useTheme';
 
 const App = () => {
    const dispatch = useAppDispatch();
@@ -23,6 +25,7 @@ const App = () => {
    // Yandex query ответ
    const initYaData = searchParams.get('user');
    const userYaData = initYaData && JSON.parse(initYaData);
+   const { theme } = useTheme();
 
    useEffect(() => {
       const userId = localStorage.getItem('userId');
@@ -55,7 +58,7 @@ const App = () => {
    }, [dispatch, initYaData, inited, navigate, userYaData]);
 
    return (
-      <div className='app'>
+      <div className={classNames('app', {}, [theme])}>
          <Header />
          <AppRouter />
          <Footer />

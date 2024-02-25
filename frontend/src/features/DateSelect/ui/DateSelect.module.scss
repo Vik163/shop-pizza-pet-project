@@ -41,15 +41,9 @@
 }
 
 .selectEdit {
-   //    position: absolute;
-   //    right: 19px;
    margin-left: 21px;
    color: var(--color-input-edit);
    &.editActive {
       color: var(--color-input-active);
    }
-}
-
-.hover {
-   background: var(--color-bg-hover);
 }

@@ -105,7 +105,6 @@ export const Input = memo((props: InputProps) => {
    );
    const [isFocused, setIsFocused] = useState<boolean>(focusInput || false);
    const [isDisable, setIsDisable] = useState<boolean>(disabled || false);
-   // console.log('isDisable:', isDisable);
    const [isValue, setIsValue] = useState('');
    const code = name === 'confirmCode';
    const checkboxButtonsType = type === 'checkbox' || type === 'radio';
@@ -114,7 +113,6 @@ export const Input = memo((props: InputProps) => {
 
    // хук, возвращающий измененный номер телефона (9999999999 -> +7 (999) 999-99-99)
    const { phoneValidator } = usePhoneValidator();
-   // console.log('isEdit:', isEdit);
 
    // ------------------------------------------
    useEffect(() => {
@@ -132,15 +130,6 @@ export const Input = memo((props: InputProps) => {
          setIsDisable(false);
       }
    }, [name, isEdit, disabled]);
-   // ----------------------------------------
-   // useEffect(() => {
-   //    if (!disabled) setIsDisable(false);
-   // }, [disabled]);
-
-   // TODO:  определиться с focusInput ====================
-   useEffect(() => {
-      setIsFocused(false);
-   }, [focusInput]);
    // ------------------------------------------------------
    useEffect(() => {
       if (isFocused) {

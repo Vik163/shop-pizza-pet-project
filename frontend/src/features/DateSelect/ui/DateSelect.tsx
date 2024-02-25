@@ -83,8 +83,6 @@ export const DateSelect = memo((props: DateSelectProps) => {
          selectData.year !== '' && selectData.year !== birthdayData?.year,
    };
 
-   const addClasses = [cls.hover, cls.scroll];
-
    return (
       <div
          style={{ height }}
@@ -94,12 +92,12 @@ export const DateSelect = memo((props: DateSelectProps) => {
             <Select
                name='day'
                placeholder={birthdayData?.day || 'День'}
-               className={classNames(cls.days, modDays, addClasses)}
+               className={classNames(cls.days, modDays, [])}
                selected={selectData.day}
                options={valueDays}
                onChange={handleChangeDays}
                heightOptionContainer={350}
-               // scrollVariant={ScrollbarVariant.SELECT} - по умолчанию
+               // scrollVariant={ScrollbarVariant.SELECT} - по умолчанию в Scrollbar
             />
             <Select
                name='month'

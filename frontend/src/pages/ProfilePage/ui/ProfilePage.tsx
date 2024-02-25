@@ -38,6 +38,8 @@ import {
 import { fetchLogoutUser } from '../model/services/fetchLogout';
 import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
 import { $api } from '@/shared/api/api';
+import { Switch } from '@/shared/ui/Switch';
+import { HStack } from '@/shared/ui/Stack';
 
 export interface ProfilePageProps {
    className?: string;
@@ -123,6 +125,16 @@ const ProfilePage = memo((props: ProfilePageProps) => {
       <Page className={classNames(cls.ProfilePage, {}, [className])}>
          <Bonuses />
          <section className={cls.Profile}>
+            <HStack className={cls.theme}>
+               <Switch width={50} />
+               <Text
+                  fontSize={FontSize.SIZE_14}
+                  fontWeight={FontWeight.TEXT_700}
+               >
+                  Выбрать цветовую тему
+               </Text>
+            </HStack>
+
             <Text
                title={HeaderTagType.H_2}
                className={cls.title}
@@ -206,7 +218,6 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                   onClickCheckbox={clickCheckbox}
                   checked={addAdvertisement}
                />
-
                <Button
                   className={cls.submit}
                   variant={ButtonVariant.FILLED}
