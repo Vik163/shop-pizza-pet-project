@@ -1,4 +1,10 @@
-import React, { type SyntheticEvent, memo, useCallback, useState } from 'react';
+import React, {
+   type SyntheticEvent,
+   memo,
+   useCallback,
+   useState,
+   useEffect,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
@@ -40,6 +46,7 @@ import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
 import { $api } from '@/shared/api/api';
 import { Switch } from '@/shared/ui/Switch';
 import { HStack } from '@/shared/ui/Stack';
+import { useTheme } from '@/shared/lib/hooks/useTheme';
 
 export interface ProfilePageProps {
    className?: string;
@@ -53,6 +60,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    const navigate = useNavigate();
    const { deleteCookie } = useCookie();
    const [isEdit, setIsEdit] = useState('');
+   const [isToggled, setIsToggled] = useState(true);
 
    const userName = useSelector(getUserName);
    const userPhone = useSelector(getUserPhone);
@@ -60,6 +68,15 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    const csrf = useSelector(getTokenSelector);
    const userParameters = useSelector(getUserParameters);
    const { addAdvertisement } = userParameters;
+   const { theme, toggleTheme } = useTheme();
+
+   useEffect(() => {
+      if (theme === 'app_dark_theme') {
+         setIsToggled(false);
+      } else {
+         setIsToggled(true);
+      }
+   }, [theme]);
 
    const saveValue = useCallback(
       async (name: string, value: UpdateValue) => {
@@ -121,12 +138,16 @@ const ProfilePage = memo((props: ProfilePageProps) => {
       }
    };
 
+   const onToggle = () => {
+      toggleTheme();
+   };
+
    return (
       <Page className={classNames(cls.ProfilePage, {}, [className])}>
          <Bonuses />
          <section className={cls.Profile}>
             <HStack className={cls.theme}>
-               <Switch width={50} />
+               <Switch width={50} onToggle={onToggle} isChecked={isToggled} />
                <Text
                   fontSize={FontSize.SIZE_14}
                   fontWeight={FontWeight.TEXT_700}

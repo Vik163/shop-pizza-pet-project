@@ -91,7 +91,7 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
             <Text
                className={cls.phone}
                fontSize={FontSize.SIZE_15}
-               fontColor={FontColor.TEXT_INPUT}
+               fontColor={FontColor.TEXT_PRIMARY}
                fontWeight={FontWeight.TEXT_700}
             >
                {authPhoneNumber}

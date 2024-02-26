@@ -6,6 +6,7 @@ import { StrictMode } from 'react';
 import App from './app/App';
 import '@/app/styles/index.scss';
 import { StoreProvider } from './app/providers/StoreProvider';
+import { ThemeProvider } from './app/providers/ThemeProvider';
 
 const container = document.getElementById('root');
 
@@ -19,12 +20,14 @@ const root = createRoot(container);
 
 root.render(
    <StrictMode>
-      <StoreProvider>
-         <BrowserRouter>
-            <YMaps>
-               <App />
-            </YMaps>
-         </BrowserRouter>
-      </StoreProvider>
+      <BrowserRouter>
+         <StoreProvider>
+            <ThemeProvider>
+               <YMaps>
+                  <App />
+               </YMaps>
+            </ThemeProvider>
+         </StoreProvider>
+      </BrowserRouter>
    </StrictMode>,
 );

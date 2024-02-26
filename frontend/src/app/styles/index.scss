@@ -14,6 +14,7 @@ body {
    // чтобы не дергался экран из-за скрола (max-width не пойдет)
    padding: 0 calc(20px - (100vw - 100%)) 0 0;
    overflow-x: hidden;
+   background-color: var(--color-bg-primary);
 }
 
 .app {

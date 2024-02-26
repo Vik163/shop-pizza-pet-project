@@ -8,8 +8,8 @@
    position: absolute;
    width: 100%;
    height: 100%;
-   background-color: var(--color-card-button-dark);
-   border: 1px solid var(--color-input-outline);
+   background-color: var(--color-grey-blue-dark);
+   border: 1px solid var(--color-grey-blue);
    border-radius: 50px;
    cursor: pointer;
 }
@@ -40,12 +40,12 @@
    height: calc(var(--switch) * 0.34);
    border-radius: 50%;
    box-shadow: inset calc(var(--switch) * 0.125) -4px 0px 0px var(--color-bg-hover);
-   background-color: var(--color-card-button-dark);
+   background-color: var(--color-grey-blue-dark);
    transition: 0.3s;
 }
 
 .input:checked ~ .slider::before {
    transform: translateX(calc(var(--switch) * 0.475));
-   background-color: var(--color-card-button-dark);
+   background-color: var(--color-grey-blue-dark);
    box-shadow: none;
 }

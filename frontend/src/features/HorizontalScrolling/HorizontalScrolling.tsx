@@ -75,6 +75,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
 
          // стрелки. Хардкод mx
          // положение стрелки (х) и нажатие (active)
+
          if (currentTarget === target) {
             if (curtains) {
                if (xy[0] > width / 2 && active) {

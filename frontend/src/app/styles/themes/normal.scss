@@ -1,17 +1,26 @@
-:root {
+.app_light_theme {
    --color-primary: #231f20;
+   --block-bg-primary: #fff;
+   --color-bg-primary: #fff;
+
+   --color-background-button: #e9e9ed;
+   --color-bg-bonuse: #e3ecf5;
+   --color-bg-card-bonuse: #e6eef4;
+
+   --color-text-button: #231f20;
+
+   --color-input-edit: #6c6c6c;
+   --color-modal-input-edit: #6c6c6c;
+
    --color-card-text: #797979;
    --color-grey-blue-dark: #696f7a;
    --color-grey-blue: #e3ecf5;
    --color-input-outline: #e2e2e9;
    --color-input: #686466;
-   --color-background-button: #f3f3f7;
    --color-card-button-dark: #473e43;
    --color-yellow: #f7d22d;
-   --color-bg-primary: #fff;
    --color-bg-inverted: #ff9a2e;
    --color-pink: #ff2e65;
    --color-input-active: #ff9a2e;
-   --color-input-edit: #9d9d9b;
    --color-bg-hover: #ededea;
 }

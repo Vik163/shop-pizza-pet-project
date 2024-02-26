@@ -15,12 +15,13 @@
    height: 100%;
    cursor: pointer;
    padding: 0 15px;
-   color: var(--color-primary);
+   color: var(--color-input-edit);
 }
 
 .select {
    position: absolute;
-   width: 100%;
+   left: -1px;
+   width: 102%;
    border-radius: 8px;
    border: 1px solid var(--color-input-outline);
    transition: 0.2s;

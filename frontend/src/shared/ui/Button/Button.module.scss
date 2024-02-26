@@ -39,12 +39,12 @@
 
 .border_radius_28 {
    border-radius: 28px;
-   color: var(--color-grey-blue-dark);
-   @include font(
-      var(--size-14),
-      var(--weight-700),
-      var(--color-grey-blue-dark)
-   );
+   // color: var(--color-grey-blue-dark);
+   // @include font(
+   //    var(--size-14),
+   //    var(--weight-700),
+   //    var(--color-grey-blue-dark)
+   // );
 }
 .border_radius_8 {
    border-radius: 8px;

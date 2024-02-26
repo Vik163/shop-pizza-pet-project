@@ -47,7 +47,7 @@ export const Button = memo((props: ButtonProps) => {
       variant = ButtonVariant.OUTLINE,
       radius = ButtonRadius.RADIUS_8,
       bgColor = ButtonBgColor.NONE,
-      fontColor = FontColor.TEXT_CARD_BUTTON_DARK,
+      fontColor = FontColor.TEXT_PRIMARY,
       fontSize = FontSize.SIZE_13,
       fontWeight = FontWeight.TEXT_700,
       width,

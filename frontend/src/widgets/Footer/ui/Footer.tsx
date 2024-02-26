@@ -72,7 +72,7 @@ export const Footer = memo((props: FooterProps) => {
                      className={cls.messengers}
                      fontSize={FontSize.SIZE_16}
                      fontWeight={FontWeight.TEXT_700}
-                     fontColor={FontColor.TEXT_GREY_BLUE_DARK}
+                     fontColor={FontColor.TEXT_PRIMARY}
                   >
                      YouTube <br /> Instagram
                   </Text>
@@ -80,7 +80,7 @@ export const Footer = memo((props: FooterProps) => {
                      className={cls.messengers}
                      fontSize={FontSize.SIZE_16}
                      fontWeight={FontWeight.TEXT_700}
-                     fontColor={FontColor.TEXT_GREY_BLUE_DARK}
+                     fontColor={FontColor.TEXT_PRIMARY}
                   >
                      Facebook <br /> ВКонтакте
                   </Text>
@@ -88,7 +88,7 @@ export const Footer = memo((props: FooterProps) => {
                      className={cls.messengers}
                      fontSize={FontSize.SIZE_14}
                      fontWeight={FontWeight.TEXT_500}
-                     fontColor={FontColor.TEXT_GREY_BLUE_DARK}
+                     fontColor={FontColor.TEXT_PRIMARY}
                   >
                      Москва ул. Проспект Вернадского 86В
                   </Text>
@@ -182,10 +182,12 @@ export const Footer = memo((props: FooterProps) => {
                </Text>
 
                <Button
-                  className={cls.messengerButton}
                   variant={ButtonVariant.FILLED}
                   bgColor={ButtonBgColor.GREY}
                   radius={ButtonRadius.RADIUS_28}
+                  fontColor={FontColor.TEXT_BUTTON}
+                  fontSize={FontSize.SIZE_14}
+                  fontWeight={FontWeight.TEXT_700}
                   width={180}
                   height={42}
                >

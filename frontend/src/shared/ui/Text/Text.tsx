@@ -6,6 +6,7 @@ import cls from './Text.module.scss';
 export enum FontColor {
    TEXT_PRIMARY = 'text_primary',
    TEXT_YELLOW = 'text_yellow',
+   TEXT_BUTTON = 'text_button',
    TEXT_WHITE = 'text_white',
    TEXT_PINK = 'text_pink',
    TEXT_INPUT = 'text_input',

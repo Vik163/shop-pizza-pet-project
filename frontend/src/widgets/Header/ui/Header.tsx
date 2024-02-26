@@ -69,6 +69,9 @@ export const Header = memo((props: HeaderProps) => {
                className={classNames(cls.button)}
                variant={ButtonVariant.FILLED}
                bgColor={ButtonBgColor.GREY}
+               fontColor={FontColor.TEXT_BUTTON}
+               fontSize={FontSize.SIZE_14}
+               fontWeight={FontWeight.TEXT_700}
                width={180}
                height={42}
                radius={ButtonRadius.RADIUS_28}

@@ -1,17 +1,30 @@
 .app_dark_theme {
-   --color-primary: #231f20;
+   // --color-primary: #231f20;
+   --color-primary: #d3d3d3;
+   --color-bg-primary: #555a5f;
+   --block-bg-primary: #3f4044;
+
+   --color-background-button: #bbbbbb;
+
+   --color-bg-bonuse: #7a7b7f;
+   --color-bg-card-bonuse: #848589;
+   --color-modal-input-edit: #848589;
+   --color-grey-blue: #bbbbbb;
+
+   --color-grey-blue-dark: #35393e;
+   --color-text-button: #231f20;
+
+   --color-card-button-dark: #473e43;
+
+   --color-input-edit: #4b4b4b;
+
    --color-card-text: #797979;
-   --color-grey-blue-dark: #696f7a;
-   --color-grey-blue: #e3ecf5;
    --color-input-outline: #e2e2e9;
    --color-input: #686466;
-   --color-background-button: #f3f3f7;
-   --color-card-button-dark: #473e43;
-   --color-yellow: #f7d22d;
-   --color-bg-primary: #fff;
+   --color-yellow: #fbd00f;
    --color-bg-inverted: #ff9a2e;
    --color-pink: #ff2e65;
    --color-input-active: #ff9a2e;
-   --color-input-edit: #9d9d9b;
    --color-bg-hover: #ededea;
+   --color-bg-card: #ededea;
 }

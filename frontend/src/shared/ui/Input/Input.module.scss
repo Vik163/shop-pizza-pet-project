@@ -38,10 +38,11 @@ input[type='number'] {
    transition: 0.2s;
 
    &::placeholder {
-      color: var(--color-input-edit);
+      color: var(--color-modal-input-edit);
    }
    &.inputOutline {
       border: 1px solid var(--color-input-outline);
+      color: var(--color-primary);
    }
    &.inputClear {
       border: none;
@@ -59,7 +60,7 @@ input[type='number'] {
 
    &.focused {
       transition: 0.2s;
-      border: 1px solid var(--color-pink);
+      border: 1px solid var(--color-primary);
       color: var(--color-primary);
 
       &::placeholder {
@@ -140,7 +141,7 @@ input[type='number'] {
 }
 
 .text {
-   color: inherit;
+   color: var(--color-primary);
    font-weight: inherit;
    font-size: inherit;
    letter-spacing: 0;

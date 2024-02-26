@@ -101,7 +101,7 @@ export const Navbar = memo((props: NavbarProps) => {
             radius={ButtonRadius.RADIUS_8}
             width={160}
             height={36}
-            fontColor={FontColor.TEXT_PRIMARY}
+            fontColor={FontColor.TEXT_BUTTON}
             fontWeight={FontWeight.TEXT_700}
             fontSize={FontSize.SIZE_16}
             onClick={getUser}

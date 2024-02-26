@@ -18,7 +18,8 @@
 .days {
    width: 95px;
    height: 100%;
-   border-right: 1px solid var(--color-input-outline);
+   border-radius: 8px 0 0 8px;
+   border-right: 1px solid var(--color-bg-bonuse);
    background: var(--color-background-button);
 }
 
@@ -26,23 +27,24 @@
    width: 160px;
    height: 100%;
 
-   border-right: 1px solid var(--color-input-outline);
+   border-right: 1px solid var(--color-bg-bonuse);
    background: var(--color-background-button);
 }
 
 .years {
    width: 95px;
    height: 100%;
+   border-radius: 0 8px 8px 0;
    background: var(--color-background-button);
 }
 
 .selected {
-   background: var(--color-bg-primary);
+   background: var(--color-background-button);
 }
 
 .selectEdit {
    margin-left: 21px;
-   color: var(--color-input-edit);
+   color: var(--color-primary);
    &.editActive {
       color: var(--color-input-active);
    }
