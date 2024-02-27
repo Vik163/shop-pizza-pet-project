@@ -47,8 +47,8 @@ export const DeliveryPay = memo((props: DeliveryPayProps) => {
          <HStack className={cls.container}>
             {arrIcon.map((icon) => (
                <Button
-                  className={classNames(cls.button)}
                   key={icon}
+                  className={classNames(cls.button)}
                   width={255}
                   height={104}
                   variant={ButtonVariant.FILLED}

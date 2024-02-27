@@ -1,7 +1,7 @@
 .DeliveryPay {
    width: 100vw;
    height: 688px;
-   background-color: #e3ecf5;
+   background-color: var(--color-bg-bonuse);
 }
 
 .title {
@@ -11,17 +11,21 @@
 .container {
    gap: 30px;
    margin: 35px 0;
+   filter: drop-shadow(0 0 7px var(--color-shadow));
 }
 
 .button {
    position: relative;
    padding-top: 10px;
+   width: 255px;
+   height: 100px;
+   background-color: var(--color-delivery-info);
 }
 
 .button::before {
    content: '';
    position: absolute;
-   background-color: #fff;
+   background-color: var(--color-delivery-info);
    width: 77px;
    height: 77px;
    border-radius: 50%;

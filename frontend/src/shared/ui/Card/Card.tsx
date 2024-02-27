@@ -48,14 +48,16 @@ export const Card = memo((props: CardProps) => {
                alt={dataCard?.name}
             />
             <Text
+               className={cls.title}
                fontSize={FontSize.SIZE_24}
                fontWeight={FontWeight.TEXT_900}
-               fontColor={FontColor.TEXT_GREY_BLUE_DARK}
+               fontColor={FontColor.TEXT_TITLE_CARD}
                max
             >
                {dataCard?.name}
             </Text>
             <Text
+               className={cls.text}
                fontSize={FontSize.SIZE_13}
                fontWeight={FontWeight.TEXT_500}
                fontColor={FontColor.TEXT_CARD}
@@ -64,7 +66,11 @@ export const Card = memo((props: CardProps) => {
                {dataCard?.structure}
             </Text>
          </VStack>
-         <HStack justify={FlexJustify.BETWEEN} max>
+         <HStack
+            justify={FlexJustify.BETWEEN}
+            className={cls.priceContainer}
+            max
+         >
             <Text
                fontSize={FontSize.SIZE_22}
                fontWeight={FontWeight.TEXT_700}
@@ -76,6 +82,7 @@ export const Card = memo((props: CardProps) => {
                variant={ButtonVariant.FILLED}
                bgColor={ButtonBgColor.YELLOW}
                radius={ButtonRadius.RADIUS_8}
+               fontColor={FontColor.TEXT_BUTTON}
                width={126}
                height={36}
             >

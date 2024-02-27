@@ -11,6 +11,7 @@ export enum FontColor {
    TEXT_PINK = 'text_pink',
    TEXT_INPUT = 'text_input',
    TEXT_CARD = 'text_card',
+   TEXT_TITLE_CARD = 'text_title_card',
    TEXT_GREY_BLUE_DARK = 'text_grey_blue_dark',
    TEXT_CARD_BUTTON_DARK = 'text_card_button_dark',
    TEXT_INPUT_EDIT = 'text_input_edit',
