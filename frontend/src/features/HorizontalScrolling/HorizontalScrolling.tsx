@@ -78,9 +78,9 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
 
          if (currentTarget === target) {
             if (curtains) {
-               if (xy[0] > width / 2 && active) {
+               if (xy[0] > width && active) {
                   mx = -width;
-               } else if (xy[0] < width / 2 && active) {
+               } else if (xy[0] < width && active) {
                   mx = width;
                } else {
                   mx = 0;

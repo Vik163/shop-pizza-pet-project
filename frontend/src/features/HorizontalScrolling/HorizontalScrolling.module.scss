@@ -15,23 +15,25 @@
    z-index: 1;
 }
 
-// .leftCurtain {
-//    background: linear-gradient(
-//       to right,
-//       rgba(255, 255, 255, 0.6) 95%,
-//       rgba(255, 255, 255, 0.5) 97%,
-//       transparent
-//    );
-// }
+.leftCurtain {
+   background: linear-gradient(
+      to right,
+      var(--color-bg-primary-scrolling) 93%,
+      var(--color-bg-primary-scrolling-light) 98%,
+      transparent
+   );
+   backdrop-filter: blur(4px);
+}
 
-// .rightCurtain {
-//    background: linear-gradient(
-//       to left,
-//       rgba(255, 255, 255, 0.6) 95%,
-//       rgba(255, 255, 255, 0.5) 98%,
-//       transparent
-//    );
-// }
+.rightCurtain {
+   background: linear-gradient(
+      to left,
+      var(--color-bg-primary-scrolling) 93%,
+      var(--color-bg-primary-scrolling-light) 98%,
+      transparent
+   );
+   backdrop-filter: blur(4px);
+}
 
 .icon {
    position: absolute;
@@ -83,11 +85,19 @@
 }
 
 .leftHidden {
-   background: linear-gradient(to right, rgb(255, 255, 255) 96%, transparent);
+   background: linear-gradient(
+      to right,
+      var(--color-bg-primary) 96%,
+      transparent
+   );
 }
 
 .rightHidden {
-   background: linear-gradient(to left, rgb(255, 255, 255) 96%, transparent);
+   background: linear-gradient(
+      to left,
+      var(--color-bg-primary) 96%,
+      transparent
+   );
 }
 
 .hidden {
