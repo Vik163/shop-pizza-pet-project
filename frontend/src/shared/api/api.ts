@@ -2,6 +2,7 @@ import axios, { type InternalAxiosRequestConfig } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import dayjs from 'dayjs';
 import { useCookie } from '../lib/hooks/useCookie/useCookie';
+import { USER_LOCALSTORAGE_KEY } from '../const/localstorage';
 
 //! useSelector - падает ошибка
 
@@ -32,7 +33,7 @@ $api.interceptors.request.use(async (config: IRequest) => {
    const user = token && jwtDecode(token);
    const isExpired = user && user.exp && dayjs.unix(user.exp).diff(dayjs()) < 1;
 
-   const userId = localStorage.getItem('userId');
+   const userId = localStorage.getItem(USER_LOCALSTORAGE_KEY);
 
    if (!isExpired) return config;
 

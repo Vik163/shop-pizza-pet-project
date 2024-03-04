@@ -1,15 +1,15 @@
-// import React from 'react';
-// import { useJsonSettings } from '@/entities/User';
-// import ThemeProvider from './ThemeProvider';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import ThemeProvider from './ThemeProvider';
+import { getUserSettings } from '@/entities/User';
 
-// // 16_22 3min
-// export const withTheme = (Component: React.ComponentType) => {
-//    return () => {
-//       const { theme: defaultTheme } = useJsonSettings();
-//       return (
-//          <ThemeProvider initialTheme={defaultTheme}>
-//             <Component />
-//          </ThemeProvider>
-//       );
-//    };
-// };
+export const withTheme = (Component: React.ComponentType) => {
+   return () => {
+      const { theme: defaultTheme } = useSelector(getUserSettings);
+      return (
+         <ThemeProvider initialTheme={defaultTheme}>
+            <Component />
+         </ThemeProvider>
+      );
+   };
+};

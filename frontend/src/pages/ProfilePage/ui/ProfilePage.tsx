@@ -1,10 +1,4 @@
-import React, {
-   type SyntheticEvent,
-   memo,
-   useCallback,
-   useState,
-   useEffect,
-} from 'react';
+import React, { type SyntheticEvent, memo, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
@@ -37,8 +31,9 @@ import {
    getUserPhone,
    Birthday,
    getUserEmail,
-   getUserParameters,
-   UserParameters,
+   UserSettings,
+   saveUserSettings,
+   getUserSettings,
 } from '@/entities/User';
 
 import { fetchLogoutUser } from '../model/services/fetchLogout';
@@ -47,12 +42,13 @@ import { $api } from '@/shared/api/api';
 import { Switch } from '@/shared/ui/Switch';
 import { HStack } from '@/shared/ui/Stack';
 import { useTheme } from '@/shared/lib/hooks/useTheme';
+import { USER_LOCALSTORAGE_KEY } from '@/shared/const/localstorage';
 
 export interface ProfilePageProps {
    className?: string;
 }
 
-type UpdateValue = string | Birthday | UserParameters;
+type UpdateValue = string | Birthday | UserSettings;
 
 const ProfilePage = memo((props: ProfilePageProps) => {
    const { className } = props;
@@ -60,27 +56,18 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    const navigate = useNavigate();
    const { deleteCookie } = useCookie();
    const [isEdit, setIsEdit] = useState('');
-   const [isToggled, setIsToggled] = useState(true);
 
    const userName = useSelector(getUserName);
    const userPhone = useSelector(getUserPhone);
    const userEmail = useSelector(getUserEmail);
    const csrf = useSelector(getTokenSelector);
-   const userParameters = useSelector(getUserParameters);
-   const { addAdvertisement } = userParameters;
+   const userSettings = useSelector(getUserSettings);
+   const { addAdvertisement } = userSettings;
    const { theme, toggleTheme } = useTheme();
-
-   useEffect(() => {
-      if (theme === 'app_dark_theme') {
-         setIsToggled(false);
-      } else {
-         setIsToggled(true);
-      }
-   }, [theme]);
 
    const saveValue = useCallback(
       async (name: string, value: UpdateValue) => {
-         const userId = localStorage.getItem('userId');
+         const userId = localStorage.getItem(USER_LOCALSTORAGE_KEY);
          if (value) {
             // имя токена задаю сам
 
@@ -112,11 +99,11 @@ const ProfilePage = memo((props: ProfilePageProps) => {
 
    const clickCheckbox = async () => {
       const newUserParametrs = {
-         ...userParameters,
+         ...userSettings,
          addAdvertisement: !addAdvertisement,
       };
 
-      saveValue('userParameters', newUserParametrs);
+      saveValue('userSettings', newUserParametrs);
    };
 
    const logout = async (e: SyntheticEvent) => {
@@ -138,8 +125,15 @@ const ProfilePage = memo((props: ProfilePageProps) => {
       }
    };
 
-   const onToggle = () => {
-      toggleTheme();
+   const onToggleTheme = () => {
+      toggleTheme((newTheme) => {
+         dispatch(
+            saveUserSettings({
+               ...userSettings,
+               theme: newTheme,
+            }),
+         );
+      });
    };
 
    return (
@@ -147,7 +141,11 @@ const ProfilePage = memo((props: ProfilePageProps) => {
          <Bonuses />
          <section className={cls.Profile}>
             <HStack className={cls.theme}>
-               <Switch width={50} onToggle={onToggle} isChecked={isToggled} />
+               <Switch
+                  width={50}
+                  onToggle={onToggleTheme}
+                  isChecked={theme !== 'app_dark_theme'}
+               />
                <Text
                   fontSize={FontSize.SIZE_14}
                   fontWeight={FontWeight.TEXT_700}

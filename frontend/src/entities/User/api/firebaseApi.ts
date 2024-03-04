@@ -9,7 +9,7 @@ import {
    ConfirmationResult,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-import { firebaseConfig } from '../../../shared/config/firebase/firebaseConfig';
+import { firebaseConfig } from '@/shared/config/firebase/firebaseConfig';
 
 //! global 'window'  from 'app/types/window.d.ts'
 initializeApp(firebaseConfig);

@@ -1,4 +1,4 @@
-import { type UserParameters } from './userParameters';
+import { type UserSettings } from './userSettings';
 
 enum RoleUser {
    ADMIN = 'ADMIN',
@@ -19,7 +19,7 @@ export interface UserData {
    email?: string;
    birthday?: Birthday;
    role?: RoleUser;
-   userParameters?: UserParameters;
+   userSettings?: UserSettings;
 }
 
 export interface ValidationErrors {

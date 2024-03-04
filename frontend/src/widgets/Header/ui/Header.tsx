@@ -52,7 +52,12 @@ export const Header = memo((props: HeaderProps) => {
                      <span className={classNames(cls.delivery_dot)} />
                      4.8
                   </Text>
-                  <Icon Svg={Star} width={14} height={16} />
+                  <Icon
+                     className={cls.star}
+                     Svg={Star}
+                     width={14}
+                     height={16}
+                  />
                   <Text
                      fontWeight={FontWeight.TEXT_700}
                      fontSize={FontSize.SIZE_13}

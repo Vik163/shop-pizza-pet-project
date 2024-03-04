@@ -37,7 +37,9 @@ export class SessionsService {
           // console.log('errget', err);
           if (session) {
             // второй визит
-            if (sess.visits === 2) {
+            if (session.visits === 1) {
+              user.userSettings.isFirstVisit = false;
+
               const data = await this.setSecondVisit(user);
               if (data) user = data;
             }
@@ -76,7 +78,8 @@ export class SessionsService {
     yaProvider?: boolean,
   ) {
     // второй визит
-    if (sess.visits === 2) {
+    if (sess.visits === 1) {
+      user.userSettings.isFirstVisit = false;
       const data = await this.setSecondVisit(user);
       if (data) user = data;
     }
@@ -92,13 +95,7 @@ export class SessionsService {
   }
 
   setSecondVisit(user: UserDto) {
-    const secondVisit = {
-      ...user,
-      ...user.userParameters,
-      isFirstVisit: false,
-    };
-
-    const newData = this.userService.updateUserData(user._id, secondVisit);
+    const newData = this.userService.updateUserData(user._id, user);
 
     if (newData) return newData;
 

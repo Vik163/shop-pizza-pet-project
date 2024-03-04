@@ -1,21 +1,22 @@
 import { rtkApi } from '@/shared/api/rtkApi';
 import { type UserData } from '../model/types/user';
-import { type UserParameters } from '../model/types/userParameters';
+import { type UserSettings } from '../model/types/userSettings';
 
 // 15_5 8min пользовательские json настройки
-interface SetUserParametersArg {
+interface SetUserSettingsArg {
    userId: string;
-   userParameters: UserParameters;
+   userSettings: UserSettings;
 }
 
 const userApi = rtkApi.injectEndpoints({
    endpoints: (build) => ({
-      setUserParameters: build.mutation<UserData, SetUserParametersArg>({
-         query: ({ userId, userParameters }) => ({
+      setUserSettings: build.mutation<UserData, SetUserSettingsArg>({
+         query: ({ userId, userSettings }) => ({
             url: `/users/${userId}`,
+
             method: 'PATCH',
             body: {
-               userParameters,
+               userSettings,
             },
          }),
       }),
@@ -28,7 +29,7 @@ const userApi = rtkApi.injectEndpoints({
    }),
 });
 
-export const setUserParametersMutation =
-   userApi.endpoints.setUserParameters.initiate;
+export const setUserSettingsMutation =
+   userApi.endpoints.setUserSettings.initiate;
 
 export const getUserDataByIdQuery = userApi.endpoints.getUserDataById.initiate;

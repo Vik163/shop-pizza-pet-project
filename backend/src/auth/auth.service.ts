@@ -29,7 +29,7 @@ export class AuthService {
       birthday: user.birthday,
       name: user.name,
       email: user.email,
-      userParameters: user.userParameters,
+      userSettings: user.userSettings,
     };
   }
 
@@ -63,6 +63,7 @@ export class AuthService {
       // отбираю нужные данные пользователя для клиента, создаю сессию и отправляю на фронт
       const selectedUserData: UserDto = this.selectDataUsers(user);
       this.sesionsService.handleSession(req, res, selectedUserData);
+
       res.send(selectedUserData);
     } else {
       // throw new UnauthorizedException('Пользователь не найден');
@@ -127,14 +128,15 @@ export class AuthService {
 
   // Создание пользователя =====================================================
   private async createUser(user: UserDto): Promise<AuthDto> {
-    const userParameters = {
+    const userSettings = {
       isFirstVisit: true,
       addAdvertisement: false,
+      theme: 'app_light_theme',
     };
     // Добавляем в БД доп. инфо
     user._id = uuidv4();
     user.createDate = new Date();
-    user.userParameters = userParameters;
+    user.userSettings = userSettings;
 
     // генерирую токены
     const tokens = await this.tokensService.getTokens(

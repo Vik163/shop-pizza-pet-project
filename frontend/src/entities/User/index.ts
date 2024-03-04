@@ -1,6 +1,6 @@
 export { userReducer, userAction } from './model/slice/userSlice';
 export type { UserData, UserSchema, Birthday } from './model/types/user';
-export type { UserParameters } from './model/types/userParameters';
+export type { UserSettings } from './model/types/userSettings';
 export type { TokenSchema } from './model/types/token';
 export {
    getInited,
@@ -10,11 +10,9 @@ export {
    getUserBirthday,
    getUserPhone,
 } from './model/selectors/userDataSelector';
-export {
-   getUserParameters,
-   useUserParameters,
-} from './model/selectors/userParameters';
+export { getUserSettings } from './model/selectors/userSettingsSelector';
 export { initAuthData } from './model/services/initAuthData';
+export { saveUserSettings } from './model/services/saveUserSettings';
 export { firebaseApi } from './api/firebaseApi';
 export { csrfTokenReducer, csrfTokenActions } from './model/slice/tokenSlice';
 export { fetchCsrfToken } from './model/services/fetchCsrfToken';

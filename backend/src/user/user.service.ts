@@ -19,7 +19,7 @@ export class UserService {
       email: data.email,
       birthday: data.birthday,
       name: data.name,
-      userParameters: data.userParameters,
+      userSettings: data.userSettings,
     };
   }
 

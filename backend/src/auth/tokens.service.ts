@@ -112,4 +112,9 @@ export class TokensService {
         maxAge: 60 * 68 * 24 * 1000 * process.env.TIME_REFRESH,
       });
   }
+
+  setCsrfToken(req: Request) {
+    const csrf = req.csrfToken(true);
+    return csrf;
+  }
 }

@@ -1,9 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { type UserSchema, type UserData } from '../types/user';
-import { type UserParameters } from '../types/userParameters';
-import { saveUserParameters } from '../services/saveUserParameters';
+import { type UserSettings } from '../types/userSettings';
+import { saveUserSettings } from '../services/saveUserSettings';
 import { initAuthData } from '../services/initAuthData';
+import { USER_LOCALSTORAGE_KEY } from '@/shared/const/localstorage';
 
 const initialState: UserSchema = {
    _inited: false,
@@ -17,13 +18,14 @@ export const userSlice = createSlice({
    initialState,
    reducers: {
       setAuthData: (state, { payload }: PayloadAction<UserData>) => {
+         console.log('setAuthData:', payload);
          state.authData = payload;
          state._inited = true;
-         localStorage.setItem('userId', payload._id);
+         localStorage.setItem(USER_LOCALSTORAGE_KEY, payload._id);
       },
       logout: (state) => {
          state._inited = false;
-         localStorage.removeItem('userId');
+         localStorage.removeItem(USER_LOCALSTORAGE_KEY);
       },
       setError: (state, { payload }: PayloadAction<string>) => {
          state.error = payload;
@@ -31,10 +33,10 @@ export const userSlice = createSlice({
    },
    extraReducers: (builder) => {
       builder.addCase(
-         saveUserParameters.fulfilled, // дополнительные параметры user (какой-то)
-         (state, { payload }: PayloadAction<UserParameters>) => {
+         saveUserSettings.fulfilled, // дополнительные параметры user (какой-то)
+         (state, { payload }: PayloadAction<UserSettings>) => {
             if (state.authData) {
-               state.authData.userParameters = payload;
+               state.authData.userSettings = payload;
             }
          },
       );

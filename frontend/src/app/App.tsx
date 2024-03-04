@@ -15,7 +15,8 @@ import {
    initAuthData,
    userAction,
 } from '@/entities/User';
-import { useTheme } from '@/shared/lib/hooks/useTheme';
+import { withTheme } from './providers/ThemeProvider/ui/withTheme';
+import { USER_LOCALSTORAGE_KEY } from '@/shared/const/localstorage';
 
 const App = () => {
    const dispatch = useAppDispatch();
@@ -25,17 +26,15 @@ const App = () => {
    // Yandex query ответ
    const initYaData = searchParams.get('user');
    const userYaData = initYaData && JSON.parse(initYaData);
-   const { theme } = useTheme();
 
    useEffect(() => {
-      const userId = localStorage.getItem('userId');
+      const userId = localStorage.getItem(USER_LOCALSTORAGE_KEY);
       // Авторизация Яндекс
       if (initYaData) {
          fetchCsrfToken()
             .then((csrfToken) => {
                if (csrfToken) dispatch(csrfTokenActions.setToken(csrfToken));
                dispatch(userAction.setAuthData(userYaData));
-               // if (userId) dispatch(initAuthData(userId));
                // убираю query ответ
                navigate('/');
             })
@@ -46,19 +45,14 @@ const App = () => {
 
       // Обновление сессии по пользователю
       if (userId && !inited) {
-         fetchCsrfToken()
-            .then((csrfToken) => {
-               if (csrfToken) dispatch(csrfTokenActions.setToken(csrfToken));
-               dispatch(initAuthData(userId));
-            })
-            .catch((err) => {
-               console.log(err);
-            });
+         dispatch(initAuthData(userId)).catch((err) => {
+            console.log(err);
+         });
       }
    }, [dispatch, initYaData, inited, navigate, userYaData]);
 
    return (
-      <div className={classNames('app', {}, [theme])}>
+      <div className={classNames('app', {}, [])}>
          <Header />
          <AppRouter />
          <Footer />
@@ -66,4 +60,4 @@ const App = () => {
    );
 };
 
-export default App;
+export default withTheme(App);

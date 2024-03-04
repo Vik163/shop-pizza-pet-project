@@ -29,9 +29,10 @@ export interface Birthday {
   year: string;
 }
 
-export interface UserParameters {
+export interface UserSettings {
   isFirstVisit: boolean;
   addAdvertisement: boolean;
+  theme: string;
 }
 
 export class UserDto {
@@ -50,7 +51,7 @@ export class UserDto {
   @IsOptional()
   phoneNumber?: string;
   birthday?: Birthday;
-  userParameters: UserParameters;
+  userSettings: UserSettings;
 
   // @IsNotEmpty()
   // @MinLength(8)

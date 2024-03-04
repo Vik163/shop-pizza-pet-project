@@ -3,13 +3,12 @@ import { ThemeContext } from '../context/ThemeContext';
 import { Theme } from '../../const/theme';
 
 interface UseThemeResult {
-   toggleTheme: (saveAction?: (theme: Theme) => void) => void; // 15_5 6min
+   toggleTheme: (saveAction?: (theme: Theme) => void) => void;
    theme: Theme;
 }
 
-// Создаем пользовательский hook
 // Получаем из контекста данные, описываем логику
-// Возвращаем объект и сохраняем тему в localStorage
+// Возвращаем объект
 export function useTheme(): UseThemeResult {
    const { theme, setTheme } = useContext(ThemeContext);
 
@@ -27,8 +26,7 @@ export function useTheme(): UseThemeResult {
       }
       setTheme?.(newTheme);
 
-      saveAction?.(newTheme); // 15_5 6min
-      // localStorage.setItem(LOCAL_STORAGE_THEME_KEY, newTheme);
+      saveAction?.(newTheme);
    };
 
    return {

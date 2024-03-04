@@ -1,7 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios, { type AxiosError } from 'axios';
+import { type AxiosError } from 'axios';
 import { type UserData, type ValidationErrors } from '../types/user';
 import { type ThunkConfig } from '@/app/providers/StoreProvider';
+import { getUserDataByIdQuery } from '../../api/userApi';
+import { fetchCsrfToken } from './fetchCsrfToken';
+import { csrfTokenActions } from '../slice/tokenSlice';
 
 // Запрос на текущего пользователя по id из localStorage
 // через extraReducers (userSlice)
@@ -11,7 +14,7 @@ export const initAuthData = createAsyncThunk<
    string,
    ThunkConfig<ValidationErrors>
 >('user/initAuthData', async (userId, thunkApi) => {
-   const { rejectWithValue } = thunkApi;
+   const { rejectWithValue, dispatch } = thunkApi;
    try {
       if (!userId) {
          return rejectWithValue({
@@ -19,24 +22,24 @@ export const initAuthData = createAsyncThunk<
          });
       }
 
-      const response = (
-         await axios.get(`https://pizzashop163.ru/api/auth/${userId}`, {
-            withCredentials: true,
-         })
-      ).data;
+      const response: UserData = await dispatch(
+         getUserDataByIdQuery(userId),
+      ).unwrap();
 
-      if (response.message === 'Пользователь не найден') {
-         return rejectWithValue({ errorMessage: 'Пользователь не найден' });
+      if (!response.phoneNumber) {
+         return rejectWithValue({
+            errorMessage: 'Пользователь не авторизован',
+         });
       }
 
-      // const csrfToken = await fetchCsrfToken();
+      const csrfToken = await fetchCsrfToken();
 
-      // if (csrfToken === 'csrf не получен') {
-      //    return rejectWithValue({ errorMessage: 'токен csrf не получен' });
-      // }
-      // if (csrfToken) {
-      //    dispatch(csrfTokenActions.setToken(csrfToken));
-      // }
+      if (csrfToken === 'csrf не получен') {
+         return rejectWithValue({ errorMessage: 'токен csrf не получен' });
+      }
+      if (csrfToken) {
+         dispatch(csrfTokenActions.setToken(csrfToken));
+      }
 
       console.log(response);
       return response;

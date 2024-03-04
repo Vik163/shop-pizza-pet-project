@@ -1,20 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { type ThunkConfig } from '@/app/providers/StoreProvider';
-import { type UserParameters } from '../types/userParameters';
+import { type UserSettings } from '../types/userSettings';
 import { getUserData } from '../selectors/userDataSelector';
-import { getUserParameters } from '../selectors/userParameters';
-import { setUserParametersMutation } from '../../api/userApi';
+import { getUserSettings } from '../selectors/userSettingsSelector';
+import { setUserSettingsMutation } from '../../api/userApi';
 
 // устанавливает доп параметры пользователя ()
 // extraReducers (userSlice)
-export const saveUserParameters = createAsyncThunk<
-   UserParameters,
-   UserParameters,
+export const saveUserSettings = createAsyncThunk<
+   UserSettings,
+   UserSettings,
    ThunkConfig<string>
->('user/saveUserParameters', async (newUserParameters, thunkApi) => {
+>('user/saveUserSettings', async (newUserSettings, thunkApi) => {
    const { rejectWithValue, getState, dispatch } = thunkApi;
    const userData = getUserData(getState());
-   const currentParameters = getUserParameters(getState());
+   const currentSettings = getUserSettings(getState());
 
    if (!userData) {
       return rejectWithValue('');
@@ -23,20 +23,21 @@ export const saveUserParameters = createAsyncThunk<
    // rtkQuery
    try {
       const response = await dispatch(
-         setUserParametersMutation({
+         setUserSettingsMutation({
             userId: userData._id,
-            userParameters: {
-               ...currentParameters,
-               ...newUserParameters,
+            // объединяет текуций объект и объект с новыми данными
+            userSettings: {
+               ...currentSettings,
+               ...newUserSettings,
             },
          }),
       ).unwrap();
 
-      if (!response.userParameters) {
+      if (!response.userSettings) {
          return rejectWithValue('');
       }
 
-      return response.userParameters;
+      return response.userSettings;
    } catch (e) {
       console.log(e);
       return rejectWithValue('');
