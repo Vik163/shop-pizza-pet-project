@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 
-import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './MainPage.module.scss';
@@ -21,10 +21,12 @@ import {
    FontSize,
    FontWeight,
 } from '@/shared/ui/Text';
-import { type Product } from '@/entities/Product';
-import { MainPageProducts } from '../MainPageProducts/MainPageProducts';
-import { type Products } from '../MainPageProducts/model/types/mainPageProducts';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useProductsFilters } from '../../lib/hooks/useProductsFilter';
+import { ProductView } from '@/entities/Product';
+import { fetchViewProducts } from '../../model/services/fetchViewProducts';
 import { DeliveryPay } from '../DeliveryPay/DeliveryPay';
+import { MainPageProducts } from '../MainPageProducts/MainPageProducts';
 
 interface MainPageProps {
    className?: string;
@@ -42,48 +44,53 @@ const arrComp = [
 
 export const MainPage = memo((props: MainPageProps) => {
    const { className } = props;
-   // const dispatch = useAppDispatch();
+   const dispatch = useAppDispatch();
+   const { pathname } = useLocation();
+   const { onChangeView } = useProductsFilters();
 
-   const [cards, setCards] = useState<Products>([]);
+   // const [cards, setCards] = useState<Products>([]);
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const [sizePizza, setSizePizza] = useState<string>('average');
+   // console.log('cards:', cards);
 
-   const a = async () => {
-      const response = await axios.get<Product[]>(
-         'https://pizzashop163.ru/api/pizzas',
-         {
-            withCredentials: true,
-         },
-      );
-      if (!response.data) {
-         throw new Error();
-      }
-      setCards([{ pizzas: response.data }]);
-   };
+   // const a = async () => {
+   //    const response = await axios.get<Product[]>(
+   //       'https://pizzashop163.ru/api/pizzas',
+   //       {
+   //          withCredentials: true,
+   //       },
+   //    );
+   //    if (!response.data) {
+   //       throw new Error();
+   //    }
+   //    setCards([{ pizzas: response.data }]);
+   // };
 
    useEffect(() => {
-      a();
-   }, []);
+      const viewProduct = pathname.slice(1) as ProductView;
+      onChangeView(viewProduct);
+      dispatch(fetchViewProducts({}));
+   }, [dispatch, onChangeView, pathname]);
 
-   if (!cards[0]) {
-      return;
-   }
+   // if (!cards[0]) {
+   //    return;
+   // }
 
-   if (!cards[0].pizzas) {
-      return;
-   }
+   // if (!cards[0].pizzas) {
+   //    return;
+   // }
 
-   const pricePizzaFromSize = cards[0].pizzas.map((card) => {
-      if (sizePizza === 'small') {
-         return { ...card, price: card.price[0] };
-      }
-      if (sizePizza === 'average') {
-         return { ...card, price: card.price[1] };
-      }
-      return { ...card, price: card.price[2] };
-   });
+   // const pricePizzaFromSize = cards[0].pizzas.map((card) => {
+   //    if (sizePizza === 'small') {
+   //       return { ...card, price: card.price[0] };
+   //    }
+   //    if (sizePizza === 'average') {
+   //       return { ...card, price: card.price[1] };
+   //    }
+   //    return { ...card, price: card.price[2] };
+   // });
 
-   const popularProducts = pricePizzaFromSize.filter((card) => card.popular);
+   // const popularProducts = pricePizzaFromSize.filter((card) => card.popular);
 
    return (
       <Page className={classNames(cls.MainPage, {}, [className])}>
@@ -109,7 +116,7 @@ export const MainPage = memo((props: MainPageProps) => {
          >
             Новинки
          </Text>
-         <HorizontalScrolling
+         {/* <HorizontalScrolling
             elements={popularProducts}
             widthBlock={1110}
             heightBlock={108}
@@ -119,11 +126,11 @@ export const MainPage = memo((props: MainPageProps) => {
             gap={30}
             shadowsOpacity={0.06}
             visibleElements={4}
-         />
+         /> */}
          <img src={Man} className={cls.man} alt='man' />
          <img src={Woman} className={cls.woman} alt='woman' />
 
-         <MainPageProducts cards={cards} />
+         <MainPageProducts />
          <DeliveryPay />
       </Page>
    );

@@ -16,7 +16,7 @@ import {
    userAction,
 } from '@/entities/User';
 import { withTheme } from './providers/ThemeProvider/ui/withTheme';
-import { USER_LOCALSTORAGE_KEY } from '@/shared/const/localstorage';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 
 const App = () => {
    const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ const App = () => {
    const userYaData = initYaData && JSON.parse(initYaData);
 
    useEffect(() => {
-      const userId = localStorage.getItem(USER_LOCALSTORAGE_KEY);
+      const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
       // Авторизация Яндекс
       if (initYaData) {
          fetchCsrfToken()

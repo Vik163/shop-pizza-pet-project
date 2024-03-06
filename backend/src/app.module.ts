@@ -5,9 +5,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 // import { APP_GUARD } from '@nestjs/core';
 
-import { PizzaModule } from './products/pizzas/pizza.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ProductsModule } from './products/products/products.module';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../public/images'),
     }),
-    PizzaModule,
+    ProductsModule,
     UserModule,
     AuthModule,
   ],

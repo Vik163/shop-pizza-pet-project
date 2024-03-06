@@ -8,11 +8,11 @@ import {
 import { type AxiosInstance } from 'axios';
 import { type TokenSchema, type UserSchema } from '@/entities/User';
 import { type AuthPhoneSchema } from '@/features/AuthByPhone';
-import { type MainPageShema } from '@/pages/MainPage';
 import { type rtkApi } from '@/shared/api/rtkApi';
+import { type MainPageSchema } from '@/pages/MainPage';
 
 export interface StateSchema {
-   mainPage: MainPageShema;
+   mainPage: MainPageSchema;
    user: UserSchema;
    csrfToken: TokenSchema;
 

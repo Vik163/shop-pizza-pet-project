@@ -5,7 +5,7 @@ import { LOCAL_STORAGE_THEME_KEY } from '@/shared/const/localstorage';
 
 interface ThemeProviderProps {
    initialTheme?: Theme;
-   children: ReactNode; // 11_7 3min
+   children: ReactNode;
 }
 
 // чтобы при перезагрузке не переключались темы

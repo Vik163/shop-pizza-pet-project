@@ -10,12 +10,37 @@ import {
    getRouteMain,
    getRouteNotFound,
    getRouteProfile,
+   getRouteCombos,
+   getRouteDrinks,
+   getRoutePizzas,
+   getRouteSauces,
+   getRouteSnacks,
 } from '@/shared/const/router';
 import { type AppRoutesProps } from '@/shared/types/router';
 
 export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
    [AppRoutes.MAIN]: {
       path: getRouteMain(),
+      element: <MainPage />,
+   },
+   [AppRoutes.COMBOS]: {
+      path: getRouteCombos(),
+      element: <MainPage />,
+   },
+   [AppRoutes.DRINKS]: {
+      path: getRouteDrinks(),
+      element: <MainPage />,
+   },
+   [AppRoutes.PIZZAS]: {
+      path: getRoutePizzas(),
+      element: <MainPage />,
+   },
+   [AppRoutes.SAUCES]: {
+      path: getRouteSauces(),
+      element: <MainPage />,
+   },
+   [AppRoutes.SNACKS]: {
+      path: getRouteSnacks(),
       element: <MainPage />,
    },
    [AppRoutes.ACTIONS]: {

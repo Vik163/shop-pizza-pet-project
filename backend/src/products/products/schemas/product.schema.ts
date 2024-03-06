@@ -3,10 +3,10 @@ import { HydratedDocument } from 'mongoose';
 import { Ingredients } from '../../ingredients/schemas/ingredients.schema';
 import { IngredientsView } from '../../ingredients/schemas/ingredients-view.schema';
 
-export type PizzaDocument = HydratedDocument<Pizza>;
+export type ProductDocument = HydratedDocument<Product>;
 
 @Schema()
-export class Pizza {
+export class Product {
   @Prop()
   image: string;
   @Prop()
@@ -30,4 +30,4 @@ export class Pizza {
   ingredients?: Ingredients | IngredientsView;
 }
 
-export const PizzaSchema = SchemaFactory.createForClass(Pizza);
+export const ProductsSchema = SchemaFactory.createForClass(Product);

@@ -7,23 +7,23 @@ export interface NavbarItemType {
 
 export const navbarItems = [
    {
-      path: RoutePath.main,
+      path: RoutePath.pizzas,
       text: 'Пиццы',
    },
    {
-      path: RoutePath.main,
+      path: RoutePath.snacks,
       text: 'Закуски',
    },
    {
-      path: RoutePath.main,
+      path: RoutePath.sauces,
       text: 'Соусы',
    },
    {
-      path: RoutePath.main,
+      path: RoutePath.drinks,
       text: 'Напитки',
    },
    {
-      path: RoutePath.main,
+      path: RoutePath.combos,
       text: 'Комбо',
    },
    {

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 declare module '*.scss' {
    type IClassNames = Record<string, string>;
    const classNames: IClassNames;

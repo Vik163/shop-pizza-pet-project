@@ -30,6 +30,7 @@ export const Navbar = memo((props: NavbarProps) => {
    const { className } = props;
    // const navigate = useNavigate();
    const [isOpenPopup, setIsOpenPopup] = useState(false);
+
    const [titlePopup, setTitlePopup] = useState('');
    const inited = useSelector(getInited);
    const user = useSelector(getUserData) as UserData;

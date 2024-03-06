@@ -1,24 +1,24 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { type ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
-import { type Product } from '@/entities/Product';
+import { Products } from '../../types/product';
 
-interface FetchProductsListProps {}
+// interface FetchProductsListProps {}
 
 export const fetchProductsList = createAsyncThunk<
-   Product[],
-   FetchProductsListProps,
+   Products,
+   void,
    ThunkConfig<string>
->('mainPage/fetchProductsList', async (_props, thunkApi) => {
+>('product/fetchProductsList', async (_, thunkApi) => {
    const { extra, rejectWithValue } = thunkApi;
 
    try {
-      const response = await extra.api.get<Product[]>('/cards');
+      const response = await extra.api.get<Products>('/pizzas');
       if (!response.data) {
-         throw new Error();
+         rejectWithValue('Товары не найдены');
       }
 
-      console.log(response.data);
+      // console.log(response.data);
       return response.data;
    } catch (e) {
       return rejectWithValue('error');

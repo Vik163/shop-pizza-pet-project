@@ -27,6 +27,20 @@ export interface Product {
       | IngredientsView;
 }
 
+type KeysProducts = 'pizzas' | 'combos' | 'snacks' | 'drinks' | 'sauces';
+
+export type TypeProducts = {
+   [K in KeysProducts]?: Product[];
+};
+
+export type Products = TypeProducts[];
+
+export interface ProductShema {
+   isLoading?: boolean;
+   error?: string;
+   cards: Products;
+}
+
 export type ProductFixPrice = Omit<Product, 'price'> & {
    price: number;
 };

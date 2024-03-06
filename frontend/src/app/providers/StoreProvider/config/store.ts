@@ -5,11 +5,11 @@ import {
    configureStore,
 } from '@reduxjs/toolkit';
 import { type StateSchema, type ThunkExtraArg } from './StateSchema';
-import { mainPageReducer } from '@/pages/MainPage';
 import { csrfTokenReducer, userReducer } from '@/entities/User';
 import { $api } from '@/shared/api/api';
 import { rtkApi } from '@/shared/api/rtkApi';
 import { createReducerManager } from './reducerManager';
+import { mainPageReducer } from '@/pages/MainPage';
 
 const initialState = {} as StateSchema;
 

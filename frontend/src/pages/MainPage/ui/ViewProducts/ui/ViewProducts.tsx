@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './ViewProducts.module.scss';
@@ -13,16 +14,18 @@ import {
    FontWeight,
 } from '@/shared/ui/Text';
 import { FlexWrap } from '@/shared/ui/Stack/Flex';
+import { getMainPageProducts } from '../../../model/selectors/mainPageSelectors';
 
 interface ViewProductsProps {
    className?: string;
-   cardsType: Product[];
    // eslint-disable-next-line react/no-unused-prop-types
-   view: string;
+   view?: string;
 }
 
 export const ViewProducts = memo((props: ViewProductsProps) => {
-   const { className, cardsType } = props;
+   const { className } = props;
+   const cards: Product[] = useSelector(getMainPageProducts);
+   console.log('cards:', cards[0].type);
 
    return (
       <VStack className={classNames(cls.ViewProducts, {}, [className])}>
@@ -34,10 +37,10 @@ export const ViewProducts = memo((props: ViewProductsProps) => {
             fontColor={FontColor.TEXT_YELLOW}
             max
          >
-            {cardsType[0].type}
+            {cards[0].type}
          </Text>
          <HStack wrap={FlexWrap.WPAP} className={cls.container}>
-            {cardsType.map((card) => (
+            {cards.map((card) => (
                <Card key={card.name} dataCard={card} className={cls.card} />
             ))}
          </HStack>

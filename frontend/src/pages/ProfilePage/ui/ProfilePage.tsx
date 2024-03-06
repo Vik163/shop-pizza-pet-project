@@ -42,7 +42,7 @@ import { $api } from '@/shared/api/api';
 import { Switch } from '@/shared/ui/Switch';
 import { HStack } from '@/shared/ui/Stack';
 import { useTheme } from '@/shared/lib/hooks/useTheme';
-import { USER_LOCALSTORAGE_KEY } from '@/shared/const/localstorage';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 
 export interface ProfilePageProps {
    className?: string;
@@ -67,7 +67,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
 
    const saveValue = useCallback(
       async (name: string, value: UpdateValue) => {
-         const userId = localStorage.getItem(USER_LOCALSTORAGE_KEY);
+         const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
          if (value) {
             // имя токена задаю сам
 

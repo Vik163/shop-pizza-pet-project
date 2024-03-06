@@ -41,7 +41,7 @@ export const initAuthData = createAsyncThunk<
          dispatch(csrfTokenActions.setToken(csrfToken));
       }
 
-      console.log(response);
+      // console.log(response);
       return response;
    } catch (err) {
       const error = err as AxiosError<ValidationErrors>;

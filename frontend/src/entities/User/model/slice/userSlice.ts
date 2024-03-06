@@ -4,7 +4,7 @@ import { type UserSchema, type UserData } from '../types/user';
 import { type UserSettings } from '../types/userSettings';
 import { saveUserSettings } from '../services/saveUserSettings';
 import { initAuthData } from '../services/initAuthData';
-import { USER_LOCALSTORAGE_KEY } from '@/shared/const/localstorage';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 
 const initialState: UserSchema = {
    _inited: false,
@@ -21,11 +21,11 @@ export const userSlice = createSlice({
          console.log('setAuthData:', payload);
          state.authData = payload;
          state._inited = true;
-         localStorage.setItem(USER_LOCALSTORAGE_KEY, payload._id);
+         localStorage.setItem(LOCALSTORAGE_USER_KEY, payload._id);
       },
       logout: (state) => {
          state._inited = false;
-         localStorage.removeItem(USER_LOCALSTORAGE_KEY);
+         localStorage.removeItem(LOCALSTORAGE_USER_KEY);
       },
       setError: (state, { payload }: PayloadAction<string>) => {
          state.error = payload;

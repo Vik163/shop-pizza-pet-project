@@ -1,30 +1,55 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './MainPageProducts.module.scss';
-
+import { type Product } from '@/entities/Product';
+import { HStack, VStack } from '@/shared/ui/Stack';
+import { Card } from '@/shared/ui/Card';
 import {
-   type Products,
-   type TypeProducts,
-} from './model/types/mainPageProducts';
-import { VStack } from '@/shared/ui/Stack';
-import { ViewProducts } from '../ViewProducts/ui/ViewProducts';
+   HeaderTagType,
+   Text,
+   FontColor,
+   FontSize,
+   FontWeight,
+} from '@/shared/ui/Text';
+import { FlexWrap } from '@/shared/ui/Stack/Flex';
+import { getMainPageProducts } from '../../model/selectors/mainPageSelectors';
 
 interface MainPageProductsProps {
    className?: string;
-   cards: Products;
 }
 
 export const MainPageProducts = memo((props: MainPageProductsProps) => {
-   const { className, cards } = props;
+   const { className } = props;
+   const products: Product[] = useSelector(getMainPageProducts);
+   const [cards, setCards] = useState<Product[]>([]);
+
+   useEffect(() => {
+      setCards(products);
+   }, [products]);
+
+   if (!cards[0]) return;
+
+   console.log('cards:', cards[0].type);
 
    return (
       <VStack className={classNames(cls.MainPageProducts, {}, [className])}>
-         {cards.map((cardsType: TypeProducts) => {
-            return Object.entries(cardsType).map(([key, value]) => (
-               <ViewProducts key={key} view={key} cardsType={value} />
-            ));
-         })}
+         <Text
+            className={classNames(cls.title)}
+            title={HeaderTagType.H_3}
+            fontSize={FontSize.SIZE_32}
+            fontWeight={FontWeight.TEXT_900}
+            fontColor={FontColor.TEXT_YELLOW}
+            max
+         >
+            {cards[0].type}
+         </Text>
+         <HStack wrap={FlexWrap.WPAP} className={cls.container}>
+            {cards.map((card) => (
+               <Card key={card.name} dataCard={card} className={cls.card} />
+            ))}
+         </HStack>
       </VStack>
    );
 });
