@@ -23,7 +23,7 @@ export function useProductsFilters() {
 
    // const debouncedFetchData = useDebounce(fetchData, 500);
 
-   const onChangeView = useCallback(
+   const onChangeViewProducts = useCallback(
       (view: ProductView) => {
          dispatch(mainPageActions.setView(view));
       },
@@ -62,7 +62,7 @@ export function useProductsFilters() {
       // sort,
       search,
       // type,
-      onChangeView,
+      onChangeViewProducts,
       // onChangeSort,
       // onChangeSearch,
       // onChangeType,

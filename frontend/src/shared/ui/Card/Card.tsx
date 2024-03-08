@@ -1,5 +1,5 @@
 import { type HTMLAttributes, memo } from 'react';
-import { classNames } from '@/shared/lib/classNames/classNames';
+import { Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Card.module.scss';
 import { HStack, VStack } from '../Stack';
@@ -7,29 +7,38 @@ import { Text, FontColor, FontSize, FontWeight } from '../Text';
 import { FlexJustify } from '../Stack/Flex';
 import { Button, ButtonBgColor, ButtonRadius, ButtonVariant } from '../Button';
 
-interface Product {
-   image: string;
-   imageAverage: string;
-   imageSmall: string;
-   structure: string;
-   name: string;
-   type: string;
-   addInfo: string;
-   popular: boolean;
-   price: number[];
-   discount: number;
-}
-
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
    className?: string;
    maxWidth?: boolean;
    maxHeight?: boolean;
-   dataCard?: Product;
    animated?: boolean;
+   title: string;
+   price: number;
+   structure: string;
+   buttonText: string;
+   image: string;
+   addInfo?: string;
 }
 
 export const Card = memo((props: CardProps) => {
-   const { className, dataCard, maxHeight, maxWidth, ...otherProps } = props;
+   const {
+      className,
+      maxHeight,
+      maxWidth,
+      title,
+      price,
+      structure,
+      image,
+      addInfo,
+      buttonText,
+      ...otherProps
+   } = props;
+
+   const mods: Mods = {
+      [cls.new]: addInfo === 'Новинка',
+   };
+
+   console.log(addInfo);
 
    return (
       <VStack
@@ -42,19 +51,20 @@ export const Card = memo((props: CardProps) => {
          {...otherProps}
       >
          <VStack className={cls.container}>
-            <img
-               className={cls.image}
-               src={dataCard?.imageAverage}
-               alt={dataCard?.name}
-            />
+            {addInfo && (
+               <div className={classNames(cls.addInfo, mods, [])}>
+                  {addInfo}
+               </div>
+            )}
+            <img className={cls.image} src={image} alt={title} />
             <Text
                className={cls.title}
-               fontSize={FontSize.SIZE_24}
-               fontWeight={FontWeight.TEXT_900}
+               fontSize={FontSize.SIZE_20}
+               fontWeight={FontWeight.TEXT_700}
                fontColor={FontColor.TEXT_TITLE_CARD}
                max
             >
-               {dataCard?.name}
+               {title}
             </Text>
             <Text
                className={cls.text}
@@ -63,7 +73,7 @@ export const Card = memo((props: CardProps) => {
                fontColor={FontColor.TEXT_CARD}
                max
             >
-               {dataCard?.structure}
+               {structure}
             </Text>
          </VStack>
          <HStack
@@ -72,11 +82,11 @@ export const Card = memo((props: CardProps) => {
             max
          >
             <Text
-               fontSize={FontSize.SIZE_22}
+               fontSize={FontSize.SIZE_20}
                fontWeight={FontWeight.TEXT_700}
                fontColor={FontColor.TEXT_PRIMARY}
             >
-               от {dataCard?.price[0]} &#8381;
+               от {price} &#8381;
             </Text>
             <Button
                variant={ButtonVariant.FILLED}
@@ -86,7 +96,7 @@ export const Card = memo((props: CardProps) => {
                width={126}
                height={36}
             >
-               В корзину
+               {buttonText}
             </Button>
          </HStack>
       </VStack>

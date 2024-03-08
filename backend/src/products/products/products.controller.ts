@@ -28,8 +28,14 @@ export class ProductsController {
 
   @Get()
   // @Auth('ADMIN')
-  getPpoducts(@Req() req: Request): Promise<CardItem[]> {
+  getProducts(@Req() req: Request): Promise<CardItem[]> {
     return this.productsService.getProducts(req);
+  }
+
+  @Get('popular')
+  // @Auth('ADMIN')
+  getPopularProducts(): Promise<CardItem[]> {
+    return this.productsService.getPopularProducts();
   }
 
   // @Post()

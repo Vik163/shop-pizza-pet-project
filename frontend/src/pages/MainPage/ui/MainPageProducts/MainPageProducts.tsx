@@ -31,7 +31,9 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
 
    if (!cards[0]) return;
 
-   console.log('cards:', cards[0].type);
+   const editCards = cards.map((card) => {
+      return { ...card, price: card.price[0] };
+   });
 
    return (
       <VStack className={classNames(cls.MainPageProducts, {}, [className])}>
@@ -46,8 +48,17 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
             {cards[0].type}
          </Text>
          <HStack wrap={FlexWrap.WPAP} className={cls.container}>
-            {cards.map((card) => (
-               <Card key={card.name} dataCard={card} className={cls.card} />
+            {editCards.map((card) => (
+               <Card
+                  key={card.name}
+                  className={cls.card}
+                  title={card.name}
+                  price={card.price}
+                  structure={card.structure}
+                  buttonText='В корзину'
+                  image={card.imageAverage}
+                  addInfo={card.addInfo}
+               />
             ))}
          </HStack>
       </VStack>

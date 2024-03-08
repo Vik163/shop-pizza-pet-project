@@ -48,7 +48,7 @@ export const fetchViewProducts = createAsyncThunk<
          throw new Error();
       }
 
-      console.log('response.data:', response.data);
+      // console.log('response.data:', response.data);
       return response.data;
    } catch (e) {
       return rejectWithValue('error');

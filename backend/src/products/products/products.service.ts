@@ -14,6 +14,7 @@ import { ProductsModels } from './types/products';
 import { Drinks, DrinksDocument } from './schemas/drinks.schema';
 import { Sauces, SaucesDocument } from './schemas/sauces.schema';
 import { Snacks, SnacksDocument } from './schemas/snacks.schema';
+import { Populars, PopularsDocument } from './schemas/populars.schema';
 
 @Injectable()
 export class ProductsService {
@@ -29,6 +30,8 @@ export class ProductsService {
     private readonly saucesModel: Model<SaucesDocument>,
     @InjectModel(Snacks.name)
     private readonly snacksModel: Model<SnacksDocument>,
+    @InjectModel(Populars.name)
+    private readonly popularsModel: Model<PopularsDocument>,
   ) {
     this._productsModels = {
       pizzas: this.pizzasModel,
@@ -43,11 +46,11 @@ export class ProductsService {
     const params: ReqParamDto = req.query;
     const viewProduct = params.view || DataBasesProducts.PIZZAS;
 
-    console.log(
-      'this.productsModel.find().exec():',
-      await this._productsModels[viewProduct].find().exec(),
-    );
     return await this._productsModels[viewProduct].find().exec();
+  }
+
+  async getPopularProducts(): Promise<CardItem[]> {
+    return await this.popularsModel.find().exec();
   }
 
   // async addPizza(createPizzaDTO: CreateCardDto): Promise<CardItem> {

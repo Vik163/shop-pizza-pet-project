@@ -6,13 +6,13 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './HorizontalScrolling.module.scss';
 
-import { type ProductFixPrice } from '@/entities/Product';
+import { Product } from '@/entities/Product';
 import { HorizontalScrollingCard } from './HorizontalScrollingCard/HorizontalScrollingCard';
 import arrow from '@/shared/assets/icons/arrow.png';
 
 interface HorizontalScrollingProps {
    className?: string;
-   elements: ProductFixPrice[] | string[];
+   elements: Product[] | string[];
    imageSmall?: boolean;
    curtains?: boolean;
    arrows?: boolean;

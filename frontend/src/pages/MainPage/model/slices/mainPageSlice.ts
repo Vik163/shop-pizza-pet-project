@@ -4,6 +4,8 @@ import { LOCALSTORAGE_PRODUCTS_VIEW_KEY } from '@/shared/const/localstorage';
 import { fetchViewProducts } from '../../model/services/fetchViewProducts';
 import { MainPageSchema } from '../types/mainPageSchema';
 import { ProductView } from '@/entities/Product';
+import { fetchPopularProducts } from '../services/fetchPopularProducts';
+import { fetchActions } from '../services/fetchActions';
 
 // 8_4
 const initialState: MainPageSchema = {
@@ -14,6 +16,8 @@ const initialState: MainPageSchema = {
    //    hasMore: true,
    //    _inited: false,
    cards: [],
+   popularProducts: [],
+   actionCards: [],
    //    limit: 9,
    //    sort: ArticleSortField.CREATED,
    //    search: '',
@@ -63,13 +67,37 @@ const mainPageSlice = createSlice({
                action, // 9_3 27min
             ) => {
                state.isLoading = false;
-               console.log('state.cards:', state.cards);
                state.cards = action.payload;
                // 8_5 21:12min
                //    state.hasMore = action.payload.length >= state.limit;
             },
          )
          .addCase(fetchViewProducts.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload;
+         })
+         .addCase(fetchPopularProducts.pending, (state) => {
+            state.error = undefined;
+            state.isLoading = true;
+         })
+         .addCase(fetchPopularProducts.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.popularProducts = action.payload;
+         })
+         .addCase(fetchPopularProducts.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload;
+         })
+         .addCase(fetchActions.pending, (state) => {
+            state.error = undefined;
+            state.isLoading = true;
+         })
+         .addCase(fetchActions.fulfilled, (state, action) => {
+            state.isLoading = false;
+            console.log('actionCards:', state.actionCards);
+            state.actionCards = action.payload;
+         })
+         .addCase(fetchActions.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.payload;
          });

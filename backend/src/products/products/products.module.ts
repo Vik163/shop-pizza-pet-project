@@ -8,6 +8,7 @@ import { Combos, CombosSchema } from './schemas/combos.schema';
 import { Snacks, SnacksSchema } from './schemas/snacks.schema';
 import { Sauces, SaucesSchema } from './schemas/sauces.schema';
 import { Drinks, DrinksSchema } from './schemas/drinks.schema';
+import { Populars, PopularsSchema } from './schemas/populars.schema';
 import { FirebaseAdmin } from 'firebaseconfig/firebase.setup';
 
 @Module({
@@ -17,6 +18,9 @@ import { FirebaseAdmin } from 'firebaseconfig/firebase.setup';
     MongooseModule.forFeature([{ name: Snacks.name, schema: SnacksSchema }]),
     MongooseModule.forFeature([{ name: Sauces.name, schema: SaucesSchema }]),
     MongooseModule.forFeature([{ name: Drinks.name, schema: DrinksSchema }]),
+    MongooseModule.forFeature([
+      { name: Populars.name, schema: PopularsSchema },
+    ]),
   ],
   controllers: [ProductsController],
   providers: [ProductsService, FirebaseAdmin],

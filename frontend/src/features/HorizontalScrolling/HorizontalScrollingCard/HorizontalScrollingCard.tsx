@@ -4,7 +4,7 @@ import { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/typ
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './HorizontalScrollingCard.module.scss';
-import { type ProductFixPrice } from '@/entities/Product';
+import { Product } from '@/entities/Product';
 import { HorizontalScrollingCardWithCurtains } from '../HorizontalScrollingCardWithCurtains/HorizontalScrollingCardWithCurtains';
 
 interface HorizontalScrollingCardProps {
@@ -22,7 +22,8 @@ interface HorizontalScrollingCardProps {
    shadowsOpacity?: number;
    visibleElements?: number;
    children?: ReactNode;
-   elements: ProductFixPrice[] | string[];
+   elements: Product[] | string[];
+
    indexActiveCard: number;
 }
 

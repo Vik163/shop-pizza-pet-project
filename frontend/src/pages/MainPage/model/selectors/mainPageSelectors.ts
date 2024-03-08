@@ -14,5 +14,9 @@ export const getMainPageInited = (state: StateSchema) =>
 export const getMainPageSearch = (state: StateSchema) =>
    state.mainPage?.search ?? '';
 export const getMainPageProducts = (state: StateSchema) => state.mainPage.cards;
+export const getMainPageActions = (state: StateSchema) =>
+   state.mainPage.actionCards || null;
+export const getMainPagePopularProducts = (state: StateSchema) =>
+   state.mainPage.popularProducts || null;
 export const getMainPageView = (state: StateSchema) =>
    state.mainPage.view || ProductView.PIZZAS;

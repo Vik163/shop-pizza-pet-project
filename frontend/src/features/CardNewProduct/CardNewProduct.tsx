@@ -3,13 +3,14 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './CardNewProduct.module.scss';
 import { HStack, VStack } from '@/shared/ui/Stack';
-import { type ProductFixPrice } from '@/entities/Product';
+import { Product } from '@/entities/Product';
 import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
 
 interface CardNewProductProps {
    className?: string;
-   card: ProductFixPrice;
+   // card: ProductFixPrice;
+   card: Product;
    children: ReactNode;
 }
 
@@ -38,7 +39,7 @@ export const CardNewProduct = memo((props: CardNewProductProps) => {
                fontWeight={FontWeight.TEXT_700}
                fontColor={FontColor.TEXT_YELLOW}
             >
-               от {card.price} &#8381;
+               от {card.price[0]} &#8381;
             </Text>
          </VStack>
       </HStack>

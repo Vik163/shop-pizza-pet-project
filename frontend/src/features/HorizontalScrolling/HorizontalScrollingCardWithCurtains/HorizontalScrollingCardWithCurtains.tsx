@@ -4,14 +4,14 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import cls from './HorizontalScrollingCardWithCurtains.module.scss';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { CardNewProduct } from '@/features/CardNewProduct';
-import { ProductFixPrice } from '@/entities/Product';
+import { Product } from '@/entities/Product';
 
 interface HorizontalScrollingCardWithCurtainsProps {
-   card: ProductFixPrice | string;
+   card: Product | string;
    curtains?: boolean;
    widthElement: number;
    heightElement: number;
-   imageCard: ProductFixPrice | string;
+   imageCard: Product | string;
 }
 
 export const HorizontalScrollingCardWithCurtains = memo(

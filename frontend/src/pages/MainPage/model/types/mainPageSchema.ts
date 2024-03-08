@@ -3,12 +3,15 @@ import {
    type ProductSortField,
    type ProductType,
    Product,
+   ActionCards,
 } from '@/entities/Product';
 
 export interface MainPageSchema {
    isLoading?: boolean;
    error?: string;
    cards: Product[];
+   popularProducts?: Product[];
+   actionCards?: ActionCards[];
 
    // pagination
    page?: number;
