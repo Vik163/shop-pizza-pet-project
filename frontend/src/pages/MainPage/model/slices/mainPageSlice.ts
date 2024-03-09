@@ -18,6 +18,7 @@ const initialState: MainPageSchema = {
    cards: [],
    popularProducts: [],
    actionCards: [],
+   blockTopScroll: '',
    //    limit: 9,
    //    sort: ArticleSortField.CREATED,
    //    search: '',
@@ -31,6 +32,9 @@ const mainPageSlice = createSlice({
       setView: (state, action: PayloadAction<ProductView>) => {
          state.view = action.payload;
          localStorage.setItem(LOCALSTORAGE_PRODUCTS_VIEW_KEY, action.payload);
+      },
+      setBlockTopScroll: (state, action: PayloadAction<string>) => {
+         state.blockTopScroll = action.payload;
       },
       //   setPage: (state, action: PayloadAction<number>) => {
       //      state.page = action.payload;

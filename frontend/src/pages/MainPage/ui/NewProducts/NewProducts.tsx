@@ -19,7 +19,7 @@ export const NewProducts = memo(() => {
 
    return (
       popularProducts && (
-         <div>
+         <div className={cls.NewProducts}>
             <Text
                className={classNames(cls.titleNewProduct)}
                title={HeaderTagType.H_3}

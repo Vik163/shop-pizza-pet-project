@@ -12,6 +12,7 @@ export interface MainPageSchema {
    cards: Product[];
    popularProducts?: Product[];
    actionCards?: ScrollingCards[];
+   blockTopScroll?: string;
 
    // pagination
    page?: number;

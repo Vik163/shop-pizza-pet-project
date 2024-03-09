@@ -20,3 +20,5 @@ export const getMainPagePopularProducts = (state: StateSchema) =>
    state.mainPage.popularProducts || null;
 export const getMainPageView = (state: StateSchema) =>
    state.mainPage.view || ProductView.PIZZAS;
+export const getBlockTopScroll = (state: StateSchema) =>
+   state.mainPage.blockTopScroll || '';

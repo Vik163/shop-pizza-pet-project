@@ -34,7 +34,6 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
       widthElement,
       widthBlock,
       gap,
-      // curtains,
       heightElement,
       heightBlock,
       shadowsOpacity = 0,

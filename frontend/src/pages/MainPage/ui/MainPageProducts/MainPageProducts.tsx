@@ -1,10 +1,10 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './MainPageProducts.module.scss';
-import { type Product } from '@/entities/Product';
-import { HStack, VStack } from '@/shared/ui/Stack';
+import { ProductView, type Product } from '@/entities/Product';
+import { HStack } from '@/shared/ui/Stack';
 import { Card } from '@/shared/ui/Card';
 import {
    HeaderTagType,
@@ -14,7 +14,14 @@ import {
    FontWeight,
 } from '@/shared/ui/Text';
 import { FlexWrap } from '@/shared/ui/Stack/Flex';
-import { getMainPageProducts } from '../../model/selectors/mainPageSelectors';
+import {
+   getBlockTopScroll,
+   getMainPageIsLoading,
+   getMainPageProducts,
+} from '../../model/selectors/mainPageSelectors';
+import { useProductsFilters } from '../../lib/hooks/useProductsFilter';
+import { fetchViewProducts } from '../../model/services/fetchViewProducts';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 
 interface MainPageProductsProps {
    className?: string;
@@ -22,21 +29,34 @@ interface MainPageProductsProps {
 
 export const MainPageProducts = memo((props: MainPageProductsProps) => {
    const { className } = props;
+   const dispatch = useAppDispatch();
    const products: Product[] = useSelector(getMainPageProducts);
-   const [cards, setCards] = useState<Product[]>([]);
+   const isLoading = useSelector(getMainPageIsLoading);
+   const blockTopScroll = useSelector(getBlockTopScroll) as ProductView;
+   const refProducts = useRef<HTMLDivElement>(null);
+   const { onChangeViewProducts } = useProductsFilters();
 
    useEffect(() => {
-      setCards(products);
-   }, [products]);
+      onChangeViewProducts(blockTopScroll);
+      dispatch(fetchViewProducts({})).then((data) => {
+         if (data.payload) {
+            window.scrollTo({
+               top: 600,
+               behavior: 'smooth',
+            });
+         }
+      });
+   }, [blockTopScroll, dispatch, onChangeViewProducts]);
 
-   if (!cards[0]) return;
-
-   const editCards = cards.map((card) => {
+   const editCards = products.map((card) => {
       return { ...card, price: card.price[0] };
    });
 
    return (
-      <VStack className={classNames(cls.MainPageProducts, {}, [className])}>
+      <div
+         ref={refProducts}
+         className={classNames(cls.MainPageProducts, {}, [className])}
+      >
          <Text
             className={classNames(cls.title)}
             title={HeaderTagType.H_3}
@@ -45,7 +65,7 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
             fontColor={FontColor.TEXT_YELLOW}
             max
          >
-            {cards[0].type}
+            {products[0] && products[0].type}
          </Text>
          <HStack wrap={FlexWrap.WPAP} className={cls.container}>
             {editCards.map((card) => (
@@ -61,6 +81,6 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
                />
             ))}
          </HStack>
-      </VStack>
+      </div>
    );
 });
