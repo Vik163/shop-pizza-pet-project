@@ -11,8 +11,8 @@ export interface Product {
    image: string;
    imageAverage: string;
    imageSmall: string;
-   structure: string;
-   name: string;
+   description: string;
+   title: string;
    type: string;
    addInfo: string;
    popular: boolean;

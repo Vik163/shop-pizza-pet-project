@@ -4,8 +4,9 @@ import { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/typ
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './HorizontalScrollingCard.module.scss';
-import { Product } from '@/entities/Product';
-import { HorizontalScrollingCardWithCurtains } from '../HorizontalScrollingCardWithCurtains/HorizontalScrollingCardWithCurtains';
+import { ScrollingCards } from '../../model/types/scrollingCards';
+// eslint-disable-next-line ulbi-tv-plugin/layer-imports
+import { CardNewProduct } from '@/features/CardNewProduct';
 
 interface HorizontalScrollingCardProps {
    className?: string;
@@ -15,15 +16,13 @@ interface HorizontalScrollingCardProps {
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
    bind: (...args: any[]) => ReactDOMAttributes;
    i: number;
-   imageSmall?: boolean;
    curtains?: boolean;
    widthElement: number;
    heightElement: number;
    shadowsOpacity?: number;
    visibleElements?: number;
    children?: ReactNode;
-   elements: Product[] | string[];
-
+   elements: ScrollingCards[];
    indexActiveCard: number;
 }
 
@@ -33,7 +32,6 @@ export const HorizontalScrollingCard = memo(
          x,
          scaleElements,
          i,
-         imageSmall,
          curtains,
          widthElement,
          elements,
@@ -82,36 +80,12 @@ export const HorizontalScrollingCard = memo(
          indexCard > -1 && indexCard < elements.length && elements[indexCard];
       if (!card) return;
 
-      // const clickCard = (e: MouseEvent) => {
-      //    if (e.clientX == mouseMoveX) {
-      //       console.log('yes');
-      //    }
-      // };
-
-      // const clickDownMouse = (e: MouseEvent) => {
-      //    setMouseMoveX(e.clientX);
-      // };
-
-      // определяю что приходит в массиве по типу и выбираю нужное
-      const imageCardFun = () => {
-         if (typeof card !== 'string') {
-            if (imageSmall) {
-               return card.imageSmall;
-            }
-            return card.image;
-         }
-         return elements[indexCard];
-      };
-      const imageCard = imageCardFun();
-
       return (
          // Блок с затененными краями */
          <animated.div
             className={classNames(cls.cards)}
             {...bind()}
             key={i}
-            // onClick={(e) => clickCard(e)}
-            // onMouseDown={(e) => { clickDownMouse(e); }}
             style={{
                boxShadow: styleShadow,
                width: widthElement,
@@ -120,39 +94,28 @@ export const HorizontalScrollingCard = memo(
                scaleY,
                scaleX,
             }}
-            // eslint-disable-next-line react/no-children-prop
-            children={
-               <HorizontalScrollingCardWithCurtains
-                  card={card}
-                  curtains={curtains}
-                  widthElement={widthElement}
-                  heightElement={heightElement}
-                  imageCard={imageCard}
-               />
-               // curtains ? (
-               //    <div
-               //       className={cls.Card}
-               //       style={{ width: widthElement, height: heightElement }}
-               //    >
-               //       <div
-               //          style={{
-               //             backgroundImage: `url(${imageCard})`,
-               //          }}
-               //       />
-               //    </div>
-               // ) : (
-               //    typeof card !== 'string' && (
-               //       <CardNewProduct className={cls.Card} card={card}>
-               //          <div
-               //             style={{
-               //                backgroundImage: `url(${imageCard})`,
-               //             }}
-               //          />
-               //       </CardNewProduct>
-               //    )
-               // )
-            }
-         />
+         >
+            {!card.price ? (
+               <div
+                  className={cls.Card}
+                  style={{ width: widthElement, height: heightElement }}
+               >
+                  <div
+                     style={{
+                        backgroundImage: `url(${card.image})`,
+                     }}
+                  />
+               </div>
+            ) : (
+               <CardNewProduct className={cls.Card} card={card}>
+                  <div
+                     style={{
+                        backgroundImage: `url(${card.imageSmall})`,
+                     }}
+                  />
+               </CardNewProduct>
+            )}
+         </animated.div>
       );
    },
 );

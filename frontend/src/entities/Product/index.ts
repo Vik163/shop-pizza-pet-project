@@ -5,7 +5,6 @@ export type {
    ProductShema,
    Products,
 } from './model/types/product';
-export type { ActionCards } from './model/types/actions';
 
 export { productActions, productReducer } from './model/slice/productsSlice';
 // export {

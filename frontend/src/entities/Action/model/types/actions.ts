@@ -1,4 +1,4 @@
-export interface ActionCards {
+export interface Action {
    image: string;
    title: string;
    description: string;

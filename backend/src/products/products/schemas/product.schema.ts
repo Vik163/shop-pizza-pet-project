@@ -14,9 +14,9 @@ export class Product {
   @Prop()
   imageAverage: string;
   @Prop()
-  name: string;
+  title: string;
   @Prop()
-  structure: string;
+  description: string;
   @Prop()
   addInfo: string;
   @Prop()

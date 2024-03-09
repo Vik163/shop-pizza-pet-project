@@ -50,11 +50,11 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
          <HStack wrap={FlexWrap.WPAP} className={cls.container}>
             {editCards.map((card) => (
                <Card
-                  key={card.name}
+                  key={card.title}
                   className={cls.card}
-                  title={card.name}
+                  title={card.title}
                   price={card.price}
-                  structure={card.structure}
+                  structure={card.description}
                   buttonText='В корзину'
                   image={card.imageAverage}
                   addInfo={card.addInfo}

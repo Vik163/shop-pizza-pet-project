@@ -38,8 +38,6 @@ export const Card = memo((props: CardProps) => {
       [cls.new]: addInfo === 'Новинка',
    };
 
-   console.log(addInfo);
-
    return (
       <VStack
          className={classNames(

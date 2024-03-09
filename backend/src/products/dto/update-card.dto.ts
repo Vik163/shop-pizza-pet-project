@@ -4,8 +4,8 @@ export class UpdateCardDto {
   readonly image: string;
   readonly imageAverage: string;
   readonly imageSmall: string;
-  readonly structure: string;
-  readonly name: string;
+  readonly description: string;
+  readonly title: string;
   readonly type: string;
   readonly addInfo: string;
   readonly popular: boolean;

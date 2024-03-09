@@ -1,10 +1,20 @@
-@import '../../app/styles/variables/mixins.scss';
-
 .HorizontalScrolling {
    display: flex;
    align-items: center;
    position: relative;
    padding: 30px 0;
+
+   &:hover .iconBlock {
+      opacity: 1;
+      transition: 0.3s;
+      cursor: pointer;
+   }
+
+   // &:hover .icon {
+   //    opacity: 1;
+   //    transition: 0.3s;
+   //    cursor: pointer;
+   // }
 }
 
 .curtains {
@@ -44,6 +54,8 @@
    border: none;
    z-index: 15;
    cursor: pointer;
+   // opacity: 0;
+   // transition: 0.3s;
 }
 
 .iconRightCurtain {
@@ -64,12 +76,6 @@
    z-index: 3;
    opacity: 0;
    transition: 0.3s;
-}
-
-.iconBlock:hover {
-   opacity: 1;
-   transition: 0.3s;
-   cursor: pointer;
 }
 
 .iconRight {

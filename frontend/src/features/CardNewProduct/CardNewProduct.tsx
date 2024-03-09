@@ -9,7 +9,6 @@ import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
 
 interface CardNewProductProps {
    className?: string;
-   // card: ProductFixPrice;
    card: Product;
    children: ReactNode;
 }
@@ -31,7 +30,7 @@ export const CardNewProduct = memo((props: CardNewProductProps) => {
                fontWeight={FontWeight.TEXT_700}
                fontColor={FontColor.TEXT_PRIMARY}
             >
-               {card.name}
+               {card.title}
             </Text>
             <Text
                className={cls.text}

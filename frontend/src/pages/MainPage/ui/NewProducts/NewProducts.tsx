@@ -38,7 +38,6 @@ export const NewProducts = memo(() => {
                heightBlock={108}
                widthElement={255}
                heightElement={99}
-               imageSmall
                gap={30}
                shadowsOpacity={0.06}
                visibleElements={4}

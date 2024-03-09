@@ -6,14 +6,13 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './HorizontalScrolling.module.scss';
 
-import { Product } from '@/entities/Product';
 import { HorizontalScrollingCard } from './HorizontalScrollingCard/HorizontalScrollingCard';
 import arrow from '@/shared/assets/icons/arrow.png';
+import { ScrollingCards } from '../model/types/scrollingCards';
 
 interface HorizontalScrollingProps {
    className?: string;
-   elements: Product[] | string[];
-   imageSmall?: boolean;
+   elements: ScrollingCards[];
    curtains?: boolean;
    arrows?: boolean;
    scale?: boolean;
@@ -27,15 +26,15 @@ interface HorizontalScrollingProps {
 }
 
 export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
+   let { curtains } = props;
    const {
       className,
       elements,
-      imageSmall,
-      curtains,
       scale,
       widthElement,
       widthBlock,
       gap,
+      // curtains,
       heightElement,
       heightBlock,
       shadowsOpacity = 0,
@@ -44,11 +43,16 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
    const index = useRef(0);
    // width + gap
    const width = widthElement + gap;
+   // коэффициент ширины смещения элемента для стрелок
+   const indexWidthElements = Math.floor(widthBlock / (widthElement * 2));
+   const widthForArrow = width * indexWidthElements;
    const [indexActiveCard, setIndexActiveCard] = useState(0);
    const sizeBlock = {
       width: widthBlock + gap,
       height: heightBlock,
    };
+
+   if (curtains && elements.length <= visibleElements) curtains = false;
 
    // Добавляем длину из-за смешения влево на 1
    const [obj, api] = useSprings(elements.length + 1, (i) => {
@@ -78,16 +82,16 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
 
          if (currentTarget === target) {
             if (curtains) {
-               if (xy[0] > width && active) {
+               if (xy[0] > widthForArrow && active) {
                   mx = -width;
-               } else if (xy[0] < width && active) {
+               } else if (xy[0] < widthForArrow && active) {
                   mx = width;
                } else {
                   mx = 0;
                }
-            } else if (xy[0] > width && active) {
+            } else if (xy[0] > widthForArrow && active) {
                mx = -width;
-            } else if (xy[0] < width && active) {
+            } else if (xy[0] < widthForArrow && active) {
                mx = width;
             } else {
                mx = 0;
@@ -184,7 +188,9 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
       return i <= indexActiveCard + visibleElements + 1 && i >= indexActiveCard;
    });
    const leftArrowCurtainsActive = indexActiveCard !== -1;
-   const rightArrowCurtainsActive = indexActiveCard !== visibleElements + 2;
+   const rightArrowCurtainsActive =
+      indexActiveCard !== elements.length - visibleElements - 1 &&
+      elements.length >= cardsVisible.length; // если нет боковых
    const rightArrowActive =
       cardsVisible.length > visibleElements + 1 && indexActiveCard !== -1; //* вместо >  было !==
 
@@ -273,7 +279,6 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                display={display}
                scaleElements={scaleElements}
                i={i}
-               imageSmall={imageSmall}
                curtains={curtains}
                widthElement={widthElement}
                elements={elements}

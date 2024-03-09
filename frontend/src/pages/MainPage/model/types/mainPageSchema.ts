@@ -3,15 +3,15 @@ import {
    type ProductSortField,
    type ProductType,
    Product,
-   ActionCards,
 } from '@/entities/Product';
+import { ScrollingCards } from '@/features/HorizontalScrolling';
 
 export interface MainPageSchema {
    isLoading?: boolean;
    error?: string;
    cards: Product[];
    popularProducts?: Product[];
-   actionCards?: ActionCards[];
+   actionCards?: ScrollingCards[];
 
    // pagination
    page?: number;

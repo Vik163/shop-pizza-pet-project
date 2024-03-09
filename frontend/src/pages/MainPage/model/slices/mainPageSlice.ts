@@ -94,7 +94,6 @@ const mainPageSlice = createSlice({
          })
          .addCase(fetchActions.fulfilled, (state, action) => {
             state.isLoading = false;
-            console.log('actionCards:', state.actionCards);
             state.actionCards = action.payload;
          })
          .addCase(fetchActions.rejected, (state, action) => {
