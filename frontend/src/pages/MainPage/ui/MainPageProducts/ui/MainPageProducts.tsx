@@ -5,7 +5,6 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import cls from './MainPageProducts.module.scss';
 import { ProductView, type Product } from '@/entities/Product';
 import { HStack } from '@/shared/ui/Stack';
-import { Card } from '@/shared/ui/Card';
 import {
    HeaderTagType,
    Text,
@@ -14,14 +13,16 @@ import {
    FontWeight,
 } from '@/shared/ui/Text';
 import { FlexWrap } from '@/shared/ui/Stack/Flex';
+import { getMainPageIsLoading } from '../../../model/selectors/mainPageSelectors';
+import { useProductsFilters } from '../../../lib/hooks/useProductsFilter';
+import { fetchViewProducts } from '../../../model/services/fetchViewProducts';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { Card } from '@/shared/ui/Card';
+import { ProductsSkeleton } from './ProductsSkeleton/ProductsSkeleton';
 import {
    getBlockTopScroll,
-   getMainPageIsLoading,
-   getMainPageProducts,
-} from '../../model/selectors/mainPageSelectors';
-import { useProductsFilters } from '../../lib/hooks/useProductsFilter';
-import { fetchViewProducts } from '../../model/services/fetchViewProducts';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+   getProducts,
+} from '../../../model/selectors/productsSelector';
 
 interface MainPageProductsProps {
    className?: string;
@@ -30,7 +31,7 @@ interface MainPageProductsProps {
 export const MainPageProducts = memo((props: MainPageProductsProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
-   const products: Product[] = useSelector(getMainPageProducts);
+   const products: Product[] = useSelector(getProducts);
    const isLoading = useSelector(getMainPageIsLoading);
    const blockTopScroll = useSelector(getBlockTopScroll) as ProductView;
    const refProducts = useRef<HTMLDivElement>(null);
@@ -39,7 +40,7 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
    useEffect(() => {
       onChangeViewProducts(blockTopScroll);
       dispatch(fetchViewProducts({})).then((data) => {
-         if (data.payload) {
+         if (data.payload && blockTopScroll) {
             window.scrollTo({
                top: 600,
                behavior: 'smooth',
@@ -68,18 +69,22 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
             {products[0] && products[0].type}
          </Text>
          <HStack wrap={FlexWrap.WPAP} className={cls.container}>
-            {editCards.map((card) => (
-               <Card
-                  key={card.title}
-                  className={cls.card}
-                  title={card.title}
-                  price={card.price}
-                  structure={card.description}
-                  buttonText='В корзину'
-                  image={card.imageAverage}
-                  addInfo={card.addInfo}
-               />
-            ))}
+            {isLoading ? (
+               <ProductsSkeleton className={cls.card} elements={4} />
+            ) : (
+               editCards.map((card) => (
+                  <Card
+                     key={card.title}
+                     className={cls.card}
+                     title={card.title}
+                     price={card.price}
+                     structure={card.description}
+                     buttonText='В корзину'
+                     image={card.imageAverage}
+                     addInfo={card.addInfo}
+                  />
+               ))
+            )}
          </HStack>
       </div>
    );

@@ -8,6 +8,8 @@ import { ScrollingCards } from '@/features/HorizontalScrolling';
 
 export interface MainPageSchema {
    isLoading?: boolean;
+   isLoadingProducts?: boolean;
+   isLoadingPopularProducts?: boolean;
    error?: string;
    cards: Product[];
    popularProducts?: Product[];

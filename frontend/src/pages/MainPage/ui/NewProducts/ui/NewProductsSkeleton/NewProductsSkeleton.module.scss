@@ -1,0 +1,16 @@
+.NewProductsSkeleton {
+   width: 1140px;
+}
+
+.CardSkeleton {
+   gap: 25px;
+   height: 110px;
+   width: 255px;
+   border-radius: 12px;
+   padding: 0 17px;
+   background-color: var(--block-bg-primary);
+
+   &:first-child {
+      margin-left: 15px;
+   }
+}

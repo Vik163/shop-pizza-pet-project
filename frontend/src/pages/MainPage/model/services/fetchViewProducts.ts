@@ -1,13 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/StoreProvider';
-import {
-   // getMainPageLimit,
-   // getMainPageNum,
-   // getMainPageSearch,
-   getMainPageView,
-} from '../selectors/mainPageSelectors';
+import {} from // getMainPageLimit,
+// getMainPageNum,
+// getMainPageSearch,
+'../selectors/mainPageSelectors';
 import { Product } from '@/entities/Product';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
+import { getViewProducts } from '../selectors/productsSelector';
 
 // 8_5 3min пагинация
 interface FetchViewProductsProps {
@@ -25,7 +24,8 @@ export const fetchViewProducts = createAsyncThunk<
    // const limit = getMainPageLimit(getState());
    // const search = getMainPageSearch(getState());
    // const page = getMainPageNum(getState());
-   const view = getMainPageView(getState());
+
+   const view = getViewProducts(getState());
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
 
    try {

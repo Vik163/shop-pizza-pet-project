@@ -1,18 +1,16 @@
 import { useSelector } from 'react-redux';
 import { useCallback } from 'react';
-import {
-   getMainPageSearch,
-   getMainPageView,
-} from '../../model/selectors/mainPageSelectors';
+import { getMainPageSearch } from '../../model/selectors/mainPageSelectors';
 import { ProductView } from '@/entities/Product';
 import { mainPageActions } from '../../model/slices/mainPageSlice';
 import { useAppDispatch } from '../../../../shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { getViewProducts } from '../../model/selectors/productsSelector';
 // import { fetchMainList } from '../../model/services/fetchMainList/fetchMainList';
 // import { useDebounce } from './useDebounce/useDebounce';
 
 // 16_6 18min
 export function useProductsFilters() {
-   const viewProduct = useSelector(getMainPageView);
+   const viewProduct = useSelector(getViewProducts);
    const search = useSelector(getMainPageSearch);
 
    const dispatch = useAppDispatch();

@@ -10,6 +10,8 @@ import { fetchActions } from '../services/fetchActions';
 // 8_4
 const initialState: MainPageSchema = {
    isLoading: false,
+   isLoadingProducts: false,
+   isLoadingPopularProducts: false,
    error: undefined,
    view: ProductView.PIZZAS,
    //    page: 1,
@@ -62,7 +64,7 @@ const mainPageSlice = createSlice({
       builder
          .addCase(fetchViewProducts.pending, (state) => {
             state.error = undefined;
-            state.isLoading = true;
+            state.isLoadingProducts = true;
          })
          .addCase(
             fetchViewProducts.fulfilled,
@@ -70,26 +72,26 @@ const mainPageSlice = createSlice({
                state,
                action, // 9_3 27min
             ) => {
-               state.isLoading = false;
+               state.isLoadingProducts = false;
                state.cards = action.payload;
                // 8_5 21:12min
                //    state.hasMore = action.payload.length >= state.limit;
             },
          )
          .addCase(fetchViewProducts.rejected, (state, action) => {
-            state.isLoading = false;
+            state.isLoadingProducts = false;
             state.error = action.payload;
          })
          .addCase(fetchPopularProducts.pending, (state) => {
             state.error = undefined;
-            state.isLoading = true;
+            state.isLoadingPopularProducts = true;
          })
          .addCase(fetchPopularProducts.fulfilled, (state, action) => {
-            state.isLoading = false;
+            state.isLoadingPopularProducts = false;
             state.popularProducts = action.payload;
          })
          .addCase(fetchPopularProducts.rejected, (state, action) => {
-            state.isLoading = false;
+            state.isLoadingPopularProducts = false;
             state.error = action.payload;
          })
          .addCase(fetchActions.pending, (state) => {

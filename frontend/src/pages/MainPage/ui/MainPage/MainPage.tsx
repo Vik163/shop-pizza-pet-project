@@ -10,10 +10,10 @@ import Woman from '@/shared/assets/images/woman.png';
 
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 import { DeliveryPay } from '../DeliveryPay/DeliveryPay';
-import { MainPageProducts } from '../MainPageProducts/MainPageProducts';
+import { MainPageProducts } from '../MainPageProducts/ui/MainPageProducts';
 import { fetchPopularProducts } from '../../model/services/fetchPopularProducts';
-import { NewProducts } from '../NewProducts/NewProducts';
-import { ActionCards } from '../ActionCards/ActionCards';
+import { NewProducts } from '../NewProducts/ui/NewProducts';
+import { ActionCards } from '../ActionCards/ui/ActionCards';
 import { fetchActions } from '../../model/services/fetchActions';
 
 interface MainPageProps {
