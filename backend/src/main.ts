@@ -36,11 +36,11 @@ async function bootstrap() {
   app.use(
     session({
       store: MongoStore.create({
-        mongoUrl: process.env.MONGO_DB,
+        mongoUrl: process.env.DB_MONGO,
         // 30 дней
         ttl: 30 * 24 * 60 * 60,
       }),
-      name: 'sessPizza',
+      name: process.env.SESSION_NAME,
       secret: process.env.SESSION_SECRET_KEY || 'this is a secret msg',
       // указывает, нужно ли пересохранять сессию в хранилище, если она не изменилась (по умолчанию false);
       resave: false,

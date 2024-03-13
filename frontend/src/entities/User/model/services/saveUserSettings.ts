@@ -24,7 +24,7 @@ export const saveUserSettings = createAsyncThunk<
    try {
       const response = await dispatch(
          setUserSettingsMutation({
-            userId: userData._id,
+            userId: userData.userId,
             // объединяет текуций объект и объект с новыми данными
             userSettings: {
                ...currentSettings,

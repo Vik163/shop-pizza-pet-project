@@ -32,6 +32,7 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
    const products: Product[] = useSelector(getProducts);
+   console.log('products:', products);
    const isLoading = useSelector(getMainPageIsLoading);
    const blockTopScroll = useSelector(getBlockTopScroll) as ProductView;
    const refProducts = useRef<HTMLDivElement>(null);

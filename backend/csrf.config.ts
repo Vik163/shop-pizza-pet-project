@@ -11,7 +11,7 @@ export const doubleCsrfOptions = {
     // maxAge: 60 * 60 * 24 * 1000, // See cookieOptions below (24 часа)
   },
   size: 64, // The size of the generated tokens in bits
-  // ignoredMethods: ['HEAD', 'OPTIONS'], // A list of request methods that will not be protected.
+  // ignoredMethods: ['HEAD', 'POST', 'OPTIONS'], // A list of request methods that will not be protected.
   getTokenFromRequest: (req: Request) => req.headers['x-csrf-token'], // A function that returns the token from the request
 };
 

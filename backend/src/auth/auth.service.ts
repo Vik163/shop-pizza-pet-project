@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { User, UserDocument } from '../user/schemas/user.schema';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+// import { User, UserDocument } from '../user/schemas/user.schema';
+// import { InjectModel } from '@nestjs/mongoose';
+// import { Model } from 'mongoose';
 import { UserDto } from 'src/user/dto/user.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -10,12 +10,17 @@ import { Cache } from 'cache-manager';
 import { SessionsService } from './sessions.service';
 import { TokensService } from './tokens.service';
 import { AuthDto } from './dto/auth.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Users as UsersEntity } from 'src/user/enities/users.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name)
-    private readonly userModal: Model<UserDocument>,
+    @InjectRepository(UsersEntity)
+    private readonly userRepository: Repository<UsersEntity>,
+    // @InjectModel(User.name)
+    // private readonly userModal: Model<UserDocument>,
     private readonly sesionsService: SessionsService,
     private readonly tokensService: TokensService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
@@ -24,7 +29,7 @@ export class AuthService {
   // отбирает данные пользователя для клиента ===================
   private selectDataUsers(user: UserDto) {
     return {
-      _id: user._id,
+      userId: user.userId,
       phoneNumber: user.phoneNumber,
       birthday: user.birthday,
       name: user.name,
@@ -40,11 +45,13 @@ export class AuthService {
     req: Request,
     res: Response,
   ): Promise<void> {
-    const user: UserDto = await this.userModal.findById(id);
+    const user: UserDto = await this.userRepository.findOne({
+      where: { userId: id },
+    });
 
     if (user) {
       const tokens = await this.tokensService.getTokens(
-        user._id,
+        user.userId,
         user.phoneNumber,
       );
 
@@ -83,14 +90,16 @@ export class AuthService {
     let userData: AuthDto;
 
     // проверяем существующего пользователя по телефону в БД
-    let user: UserDto = await this.userModal.findOne({
-      phoneNumber: userRequest.phoneNumber,
+    let user: UserDto = await this.userRepository.findOne({
+      where: {
+        phoneNumber: userRequest.phoneNumber,
+      },
     });
 
     // Если пользователь есть, генерируем токены, обновляем в БД токен
     if (user) {
       const tokens = await this.tokensService.getTokens(
-        user._id,
+        user.userId,
         user.phoneNumber,
       );
       await this.tokensService.updateRefreshToken(user, tokens.refreshToken);
@@ -134,13 +143,13 @@ export class AuthService {
       theme: 'app_light_theme',
     };
     // Добавляем в БД доп. инфо
-    user._id = uuidv4();
+    user.userId = uuidv4();
     user.createDate = new Date();
     user.userSettings = userSettings;
 
     // генерирую токены
     const tokens = await this.tokensService.getTokens(
-      user._id,
+      user.userId,
       user.phoneNumber,
     );
 
@@ -153,9 +162,9 @@ export class AuthService {
       createToken: new Date(),
     };
 
-    const newUser: UserDocument = new this.userModal(user);
+    const newUser = this.userRepository.create(user);
 
-    const userDto: UserDto = await newUser.save();
+    const userDto: UserDto = await this.userRepository.save(newUser);
 
     return { user: userDto, tokens };
   }

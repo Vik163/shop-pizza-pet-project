@@ -13,7 +13,7 @@ export interface Birthday {
 }
 
 export interface UserData {
-   _id: string;
+   userId: string;
    name?: string;
    phoneNumber: number;
    email?: string;

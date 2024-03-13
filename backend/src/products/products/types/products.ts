@@ -1,14 +1,14 @@
-import { Model } from 'mongoose';
-import { PizzasDocument } from '../schemas/pizzas.schema';
-import { CombosDocument } from '../schemas/combos.schema';
-import { SnacksDocument } from '../schemas/snacks.schema';
-import { SaucesDocument } from '../schemas/sauces.schema';
-import { DrinksDocument } from '../schemas/drinks.schema';
+import { Repository } from 'typeorm';
+import { Pizzas } from '../entities/pizzas.entity';
+import { Snacks } from '../entities/snacks.entity';
+import { Sauces } from '../entities/sauces.entity';
+import { Combos } from '../entities/combos.entity';
+import { Drinks } from '../entities/drinks.entity';
 
-export interface ProductsModels {
-  pizzas: Model<PizzasDocument>;
-  combos: Model<CombosDocument>;
-  snacks: Model<SnacksDocument>;
-  sauces: Model<SaucesDocument>;
-  drinks: Model<DrinksDocument>;
+export interface ProductsEntities {
+  pizzas: Repository<Pizzas>;
+  combos: Repository<Snacks>;
+  snacks: Repository<Sauces>;
+  sauces: Repository<Combos>;
+  drinks: Repository<Drinks>;
 }

@@ -24,6 +24,7 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.2.1",
     "@nestjs/serve-static": "^4.0.0",
+    "@nestjs/typeorm": "^10.0.2",
     "argon2": "^0.31.2",
     "axios": "^1.6.3",
     "bcrypt": "^5.1.1",
@@ -40,12 +41,14 @@
     "latest": "^0.2.0",
     "mongoose": "^7.4.4",
     "nestjs-cls": "^3.6.0",
+    "nestjs-paginate": "^8.6.2",
     "node-fetch": "^2.7.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "typeorm": "^0.3.20",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

@@ -1,21 +1,14 @@
-import {
-  Controller,
-  Get,
-  HttpStatus,
-  Logger,
-  Body,
-  Post,
-  HttpCode,
-  Delete,
-  Param,
-  Put,
-  Req,
-} from '@nestjs/common';
-import { CreateCardDto } from '../dto/create-card.dto';
-import { UpdateCardDto } from '../dto/update-card.dto';
-import { CardItem } from '../interfaces/card.interface';
+import { Controller, Get, Logger, Req } from '@nestjs/common';
+// import { CreateCardDto } from '../dto/create-card.dto';
+// import { UpdateCardDto } from '../dto/update-card.dto';
 import { ProductsService } from './products.service';
 import { Request } from 'express';
+import {
+  Pagination,
+  PaginationParams,
+} from 'src/common/decorators/paginationParams.decorator';
+import { PaginatedResource } from '../dto/paginate.dto';
+import { Product } from './entities/product.entity';
 // import { Auth } from 'src/decorators/auth.decorator';
 // import { Auth } from 'src/decorators/auth.decorator';
 
@@ -27,14 +20,16 @@ export class ProductsController {
   }
 
   @Get()
-  // @Auth('ADMIN')
-  getProducts(@Req() req: Request): Promise<CardItem[]> {
-    return this.productsService.getProducts(req);
+  async getProductsByParams(
+    @Req() req: Request,
+
+    @PaginationParams() paginationParams: Pagination,
+  ): Promise<PaginatedResource<Partial<Product[]>>> {
+    return this.productsService.getProductsByParams(req, paginationParams);
   }
 
   @Get('popular')
-  // @Auth('ADMIN')
-  getPopularProducts(): Promise<CardItem[]> {
+  getPopularProducts(): Promise<Product[]> {
     return this.productsService.getPopularProducts();
   }
 

@@ -18,10 +18,9 @@ export const userSlice = createSlice({
    initialState,
    reducers: {
       setAuthData: (state, { payload }: PayloadAction<UserData>) => {
-         console.log('setAuthData:', payload);
          state.authData = payload;
          state._inited = true;
-         localStorage.setItem(LOCALSTORAGE_USER_KEY, payload._id);
+         localStorage.setItem(LOCALSTORAGE_USER_KEY, payload.userId);
       },
       logout: (state) => {
          state._inited = false;

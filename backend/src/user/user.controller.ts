@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
 // import { Auth } from 'src/decorators/auth.decorator';
 import { UserDto } from './dto/user.dto';
@@ -16,22 +16,14 @@ export class UserController {
   }
 
   @Patch(':id')
-  updateUserData(
-    @Req() req: Request,
-    @Param('id') id: string,
-    @Body() updateUserDto: UserDto,
-  ) {
+  updateUserData(@Param('id') id: string, @Body() updateUserDto: UserDto) {
     return this.userService.updateUserData(id, updateUserDto);
   }
-  // @Get(':id')
-  // // @Auth('ADMIN')
-  // getUserById(
-  //   @Param('id') id: string,
-  //   @Req() req: Request,
-  //   @Res() res: Response,
-  // ) {
-  //   return this.userService.getUserById(id, req, res);
-  // }
+  @Get(':id')
+  // @Auth('ADMIN')
+  getUserById(@Param('id') id: string) {
+    return this.userService.findById(id);
+  }
 
   // @Post()
   // signup(@Body() userRequest: UserDto) {

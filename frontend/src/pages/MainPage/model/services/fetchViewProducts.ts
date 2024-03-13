@@ -4,9 +4,9 @@ import {} from // getMainPageLimit,
 // getMainPageNum,
 // getMainPageSearch,
 '../selectors/mainPageSelectors';
-import { Product } from '@/entities/Product';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 import { getViewProducts } from '../selectors/productsSelector';
+import { PaginateSchema } from '../types/mainPageSchema';
 
 // 8_5 3min пагинация
 interface FetchViewProductsProps {
@@ -16,7 +16,7 @@ interface FetchViewProductsProps {
 
 // 8_4
 export const fetchViewProducts = createAsyncThunk<
-   Product[],
+   PaginateSchema,
    FetchViewProductsProps,
    ThunkConfig<string>
 >('articlesPage/fetchFetchViewProducts', async (props, thunkApi) => {
@@ -33,13 +33,13 @@ export const fetchViewProducts = createAsyncThunk<
       //    // search,
       //    view,
       // });
-      const response = await extra.api.get<Product[]>('/products', {
+      const response = await extra.api.get<PaginateSchema>('/products', {
          params: {
             _expand: userId || 'user',
             view,
             // 8_5 4,58min
-            // _limit: limit,
-            // _page: page,
+            _limit: 4,
+            _page: 1,
             // q: search, // 9_3 24min
          },
       });
@@ -48,7 +48,7 @@ export const fetchViewProducts = createAsyncThunk<
          throw new Error();
       }
 
-      // console.log('response.data:', response.data);
+      console.log('response.data:', response.data);
       return response.data;
    } catch (e) {
       return rejectWithValue('error');

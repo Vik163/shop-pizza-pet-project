@@ -1,56 +1,82 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectRepository } from '@nestjs/typeorm';
 
-import { CardItem } from '../interfaces/card.interface';
-import { CreateCardDto } from '../dto/create-card.dto';
-import { UpdateCardDto } from '../dto/update-card.dto';
-import { Pizzas, PizzasDocument } from './schemas/pizzas.schema';
-import { Combos, CombosDocument } from './schemas/combos.schema';
+// import { CreateCardDto } from '../dto/create-card.dto';
+// import { UpdateCardDto } from '../dto/update-card.dto';
+import { Pizzas } from './entities/pizzas.entity';
 import { Request } from 'express';
 import { ReqParamDto } from '../dto/req-param.dto';
 import { DataBasesProducts } from 'src/consts/nameDataBase';
-import { ProductsModels } from './types/products';
-import { Drinks, DrinksDocument } from './schemas/drinks.schema';
-import { Sauces, SaucesDocument } from './schemas/sauces.schema';
-import { Snacks, SnacksDocument } from './schemas/snacks.schema';
-import { Populars, PopularsDocument } from './schemas/populars.schema';
+import { ProductsEntities } from './types/products';
+import { Pagination } from 'src/common/decorators/paginationParams.decorator';
+// import { Sorting } from 'src/common/decorators/sortingParams.decorator';
+// import { Filtering } from 'src/common/decorators/filteringParams.decorator';
+import { PaginatedResource } from '../dto/paginate.dto';
+import { Repository } from 'typeorm';
+import { Drinks } from './entities/drinks.entity';
+import { Combos } from './entities/combos.entity';
+import { Sauces } from './entities/sauces.entity';
+import { Snacks } from './entities/snacks.entity';
+import { Product } from './entities/product.entity';
+import { Populars } from './entities/populars.entity';
 
 @Injectable()
 export class ProductsService {
-  private _productsModels: ProductsModels;
+  private _productsEntities: ProductsEntities;
   constructor(
-    @InjectModel(Pizzas.name)
-    private readonly pizzasModel: Model<PizzasDocument>,
-    @InjectModel(Combos.name)
-    private readonly combosModel: Model<CombosDocument>,
-    @InjectModel(Drinks.name)
-    private readonly drinksModel: Model<DrinksDocument>,
-    @InjectModel(Sauces.name)
-    private readonly saucesModel: Model<SaucesDocument>,
-    @InjectModel(Snacks.name)
-    private readonly snacksModel: Model<SnacksDocument>,
-    @InjectModel(Populars.name)
-    private readonly popularsModel: Model<PopularsDocument>,
+    @InjectRepository(Pizzas)
+    private readonly pizzasRepository: Repository<Pizzas>,
+    @InjectRepository(Drinks)
+    private readonly drinksRepository: Repository<Drinks>,
+    @InjectRepository(Combos)
+    private readonly combosRepository: Repository<Combos>,
+    @InjectRepository(Sauces)
+    private readonly saucesRepository: Repository<Sauces>,
+    @InjectRepository(Snacks)
+    private readonly snacksRepository: Repository<Snacks>,
+    @InjectRepository(Populars)
+    private readonly popularsRepository: Repository<Populars>,
   ) {
-    this._productsModels = {
-      pizzas: this.pizzasModel,
-      combos: this.combosModel,
-      drinks: this.drinksModel,
-      sauces: this.saucesModel,
-      snacks: this.snacksModel,
+    this._productsEntities = {
+      pizzas: this.pizzasRepository,
+      combos: this.combosRepository,
+      drinks: this.drinksRepository,
+      sauces: this.saucesRepository,
+      snacks: this.snacksRepository,
     };
   }
 
-  async getProducts(req: Request): Promise<CardItem[]> {
+  async getProducts(req: Request): Promise<Product[]> {
     const params: ReqParamDto = req.query;
     const viewProduct = params.view || DataBasesProducts.PIZZAS;
 
-    return await this._productsModels[viewProduct].find().exec();
+    return await this._productsEntities[viewProduct].find();
   }
 
-  async getPopularProducts(): Promise<CardItem[]> {
-    return await this.popularsModel.find().exec();
+  async getPopularProducts(): Promise<Product[]> {
+    return await this.popularsRepository.find();
+  }
+
+  public async getProductsByParams(
+    req: Request,
+    { page, limit }: Pagination,
+    // sort?: Sorting,
+    // filter?: Filtering,
+  ): Promise<PaginatedResource<Partial<Product[]>>> {
+    const params: ReqParamDto = req.query;
+    const viewProduct = params.view || DataBasesProducts.PIZZAS;
+    const [data, totalItems] = await this._productsEntities[
+      viewProduct
+    ].findAndCount({
+      take: limit,
+      // skip: offset,
+    });
+
+    return {
+      totalItems: totalItems,
+      items: data,
+      page,
+    };
   }
 
   // async addPizza(createPizzaDTO: CreateCardDto): Promise<CardItem> {

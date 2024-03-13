@@ -6,15 +6,24 @@ import {
 } from '@/entities/Product';
 import { ScrollingCards } from '@/features/HorizontalScrolling';
 
+export interface PaginateSchema {
+   items: Product[];
+   page?: number;
+   limit?: number;
+   hasMore?: boolean;
+   totalItems?: number;
+}
+
 export interface MainPageSchema {
    isLoading?: boolean;
    isLoadingProducts?: boolean;
    isLoadingPopularProducts?: boolean;
    error?: string;
-   cards: Product[];
+   items: Product[];
    popularProducts?: Product[];
-   actionCards?: ScrollingCards[];
+   actionItems?: ScrollingCards[];
    blockTopScroll?: string;
+   totalItems?: number;
 
    // pagination
    page?: number;

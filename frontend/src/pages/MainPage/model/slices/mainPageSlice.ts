@@ -14,14 +14,14 @@ const initialState: MainPageSchema = {
    isLoadingPopularProducts: false,
    error: undefined,
    view: ProductView.PIZZAS,
-   //    page: 1,
+   page: 1,
    //    hasMore: true,
    //    _inited: false,
-   cards: [],
+   items: [],
    popularProducts: [],
-   actionCards: [],
+   actionItems: [],
    blockTopScroll: '',
-   //    limit: 9,
+   limit: 4,
    //    sort: ArticleSortField.CREATED,
    //    search: '',
    //    type: ArticleType.ALL,
@@ -70,10 +70,13 @@ const mainPageSlice = createSlice({
             fetchViewProducts.fulfilled,
             (
                state,
-               action, // 9_3 27min
+               { payload }, // 9_3 27min
             ) => {
                state.isLoadingProducts = false;
-               state.cards = action.payload;
+               state.items = payload.items;
+               state.page = payload.page;
+               state.limit = payload.limit;
+               state.totalItems = payload.totalItems;
                // 8_5 21:12min
                //    state.hasMore = action.payload.length >= state.limit;
             },
@@ -100,7 +103,7 @@ const mainPageSlice = createSlice({
          })
          .addCase(fetchActions.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.actionCards = action.payload;
+            state.actionItems = action.payload;
          })
          .addCase(fetchActions.rejected, (state, action) => {
             state.isLoading = false;

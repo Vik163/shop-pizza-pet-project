@@ -51,7 +51,7 @@ export class TokensService {
     // верификация
     const refreshTokenMatches = await argon2.verify(token, refreshToken);
     if (!refreshTokenMatches) throw new ForbiddenException('Доступ отклонён');
-    const tokens = await this.getTokens(user._id, user.phoneNumber);
+    const tokens = await this.getTokens(user.userId, user.phoneNumber);
 
     const timeToken = this.handleTimeToken(user.refreshTokenData.createToken);
     console.log('timeToken:', timeToken);
@@ -72,7 +72,7 @@ export class TokensService {
       createToken: new Date(),
     };
 
-    await this.userService.updateUserData(user._id, user);
+    await this.userService.updateUserData(user.userId, user);
   }
 
   async getTokens(userId: string, phoneNumber: string): Promise<TokensDto> {

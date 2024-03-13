@@ -43,7 +43,7 @@ export class SessionsService {
               const data = await this.setSecondVisit(user);
               if (data) user = data;
             }
-            session.userId = user._id;
+            session.userId = user.userId;
             session.sessId = sessId;
             session.visits = session.visits ? session.visits + 1 : 1;
             session.provider = 'yandex';
@@ -83,11 +83,12 @@ export class SessionsService {
       const data = await this.setSecondVisit(user);
       if (data) user = data;
     }
-    sess.userId = user._id;
+    sess.userId = user.userId;
     sess.sessId = sess.id;
     sess.visits = sess.visits ? sess.visits + 1 : 1;
 
     sess.provider = yaProvider ? 'yandex' : 'firebase';
+    console.log('sess.provider:', sess.provider);
     sess.save();
 
     yaProvider &&
@@ -95,7 +96,7 @@ export class SessionsService {
   }
 
   setSecondVisit(user: UserDto) {
-    const newData = this.userService.updateUserData(user._id, user);
+    const newData = this.userService.updateUserData(user.userId, user);
 
     if (newData) return newData;
 

@@ -39,7 +39,7 @@ export const Navbar = memo((props: NavbarProps) => {
    const [titlePopup, setTitlePopup] = useState('');
    const inited = useSelector(getInited);
    const user = useSelector(getUserData) as UserData;
-   const pathProfile = user?._id && getRouteProfile(user?._id);
+   const pathProfile = user?.userId && getRouteProfile(user?.userId);
 
    const getUser = async () => {
       try {

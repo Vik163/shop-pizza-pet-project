@@ -7,6 +7,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import session from 'express-session';
+import { ObjectId } from 'mongoose';
 import { RefreshTokenDto } from 'src/auth/dto/tokens.dto';
 
 export enum Roles {
@@ -36,7 +37,9 @@ export interface UserSettings {
 }
 
 export class UserDto {
-  _id?: string;
+  _id?: ObjectId;
+  // Не обновлялся пользователь по личному id (конфликт дубликат ключа) пришлось добавить ObjectId
+  userId?: string;
 
   @IsNotEmpty()
   @IsOptional()
@@ -51,7 +54,7 @@ export class UserDto {
   @IsOptional()
   phoneNumber?: string;
   birthday?: Birthday;
-  userSettings: UserSettings;
+  userSettings?: UserSettings;
 
   // @IsNotEmpty()
   // @MinLength(8)

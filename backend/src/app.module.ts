@@ -1,8 +1,8 @@
-import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 // import { APP_GUARD } from '@nestjs/core';
 
 import { UserModule } from './user/user.module';
@@ -17,7 +17,17 @@ import { ActionsModule } from './actions/actions.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot(process.env.MONGO_DB),
+    TypeOrmModule.forRoot({
+      type: process.env.DB_TYPE,
+      host: '127.0.0.1',
+      port: process.env.DB_PORT,
+      database: process.env.DB_BASE,
+      synchronize: true,
+      autoLoadEntities: true,
+      entities: [__dirname + './**/*.entity.ts'],
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    }),
 
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../public/images'),
