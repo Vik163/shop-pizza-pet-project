@@ -38,7 +38,7 @@ import {
 
 import { fetchLogoutUser } from '../model/services/fetchLogout';
 import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
-import { $api } from '@/shared/api/api';
+import { $apiTokens } from '@/shared/api/api';
 import { Switch } from '@/shared/ui/Switch';
 import { HStack } from '@/shared/ui/Stack';
 import { useTheme } from '@/shared/lib/hooks/useTheme';
@@ -72,7 +72,7 @@ const ProfilePage = memo((props: ProfilePageProps) => {
             // имя токена задаю сам
 
             if (csrf) {
-               await $api
+               await $apiTokens
                   .patch(
                      `/users/${userId}`,
                      {
@@ -87,7 +87,6 @@ const ProfilePage = memo((props: ProfilePageProps) => {
                      const userData: UserData = data.data;
                      if (userData) {
                         dispatch(userAction.setAuthData(userData));
-                        console.log('userData:', userData);
                         setIsEdit('');
                      }
                   });

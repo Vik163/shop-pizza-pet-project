@@ -72,18 +72,11 @@ export class AuthProvidersService {
             },
             // role: Roles.CLIENT,
           };
+
           const yaProvider = true;
 
           if (userYaData) {
-            const { tokens } = await this.authService.handleUser(
-              userYaData,
-              req,
-              res,
-              yaProvider,
-            );
-
-            // Отправка данных клиенту в сессиях (переадресация)
-            this.tokensService.sendTokens(res, tokens);
+            await this.authService.handleUser(userYaData, req, res, yaProvider);
           }
         }
       }

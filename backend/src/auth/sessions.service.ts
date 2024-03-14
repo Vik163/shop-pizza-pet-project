@@ -10,13 +10,17 @@ type TSess = session.Session & Partial<session.SessionData>;
 interface ISession extends TSess {
   userId?: string;
   visits?: number;
-  provider?: string;
   sessId?: string;
-  csrf?: string;
 }
 
 @Injectable()
 export class SessionsService {
+  private _user: UserDto;
+  private _req: Request;
+  private _res: Response;
+  private _sess: ISession;
+  private _yaProvider?: boolean;
+
   constructor(
     @Inject(CACHE_MANAGER)
     private cacheManager: Cache,
@@ -29,74 +33,101 @@ export class SessionsService {
     user: UserDto,
     yaProvider?: boolean,
   ) {
-    const sess: ISession = req.session;
-    if (yaProvider) {
-      const sessId = (await this.cacheManager.get('sessionId')) as string;
-      if (sessId) {
-        req.sessionStore.get(sessId, async (err, session: ISession) => {
-          // console.log('errget', err);
+    this._user = user;
+    this._req = req;
+    this._res = res;
+    this._sess = this._req.session;
+    this._yaProvider = yaProvider;
+
+    const authYaSessId = (await this.cacheManager.get('sessionId')) as string;
+    if (authYaSessId) {
+      this._req.sessionStore.get(
+        authYaSessId,
+        async (err, session: ISession) => {
           if (session) {
-            // второй визит
-            if (session.visits === 1) {
-              user.userSettings.isFirstVisit = false;
+            this._setDataSession(session, authYaSessId);
 
-              const data = await this.setSecondVisit(user);
-              if (data) user = data;
-            }
-            session.userId = user.userId;
-            session.sessId = sessId;
-            session.visits = session.visits ? session.visits + 1 : 1;
-            session.provider = 'yandex';
-
-            req.sessionStore.set(sessId, session, () => {
-              // console.log('errset', err);
-            });
-            req.sessionStore.destroy(req.session.id, async () => {
-              // console.log('errdestroy', err);
+            this._req.sessionStore.destroy(this._req.session.id, async () => {
               await this.cacheManager.del('sessionId');
 
-              res.redirect(
+              this._res.redirect(
                 `https://pizzashop163.ru?user=${JSON.stringify(user)}`,
               );
             });
           } else {
-            this._updateSession(res, sess, user, yaProvider);
+            this._createSession();
           }
-        });
-      } else {
-        this._updateSession(res, sess, user, yaProvider);
-      }
+        },
+      );
     } else {
-      this._updateSession(res, sess, user);
+      if (this._sess.userId) {
+        this._updateSession();
+      } else {
+        this._createSession();
+      }
     }
   }
 
-  async _updateSession(
-    res: Response,
-    sess: ISession,
-    user: UserDto,
-    yaProvider?: boolean,
-  ) {
+  async _updateSession() {
+    if (this._sess.userId === this._user.userId) {
+      this._req.sessionStore.get(
+        this._sess.id,
+        async (err, session: ISession) => {
+          if (session) {
+            this._setDataSession(session, this._sess.id);
+          }
+        },
+      );
+    } else {
+      console.log('all sessions');
+
+      this._req.sessionStore.all((err, obg: ISession[]) => {
+        const session = obg.find(
+          (item: ISession) => item.userId === this._user.userId,
+        );
+        if (session) {
+          this._setDataSession(session, session.id);
+
+          session.save();
+        } else {
+          this._createSession();
+        }
+      });
+    }
+  }
+
+  async _setDataSession(session: ISession, sessId: string) {
     // второй визит
-    if (sess.visits === 1) {
-      user.userSettings.isFirstVisit = false;
-      const data = await this.setSecondVisit(user);
-      if (data) user = data;
+    if (session.visits === 1) {
+      this._user.userSettings.isFirstVisit = false;
+
+      const data = await this.setSecondVisit();
+      if (data) this._user = data;
     }
-    sess.userId = user.userId;
-    sess.sessId = sess.id;
-    sess.visits = sess.visits ? sess.visits + 1 : 1;
+    session.userId = this._user.userId;
+    session.sessId = sessId;
+    session.visits = session.visits ? session.visits + 1 : 1;
 
-    sess.provider = yaProvider ? 'yandex' : 'firebase';
-    console.log('sess.provider:', sess.provider);
-    sess.save();
-
-    yaProvider &&
-      res.redirect(`https://pizzashop163.ru?user=${JSON.stringify(user)}`);
+    this._req.sessionStore.set(sessId, session, () => {});
   }
 
-  setSecondVisit(user: UserDto) {
-    const newData = this.userService.updateUserData(user.userId, user);
+  async _createSession() {
+    this._sess.userId = this._user.userId;
+    this._sess.sessId = this._sess.id;
+    this._sess.visits = 1;
+    this._sess.save();
+
+    this._yaProvider &&
+      this._res.redirect(
+        `https://pizzashop163.ru?user=${JSON.stringify(this._user)}`,
+      );
+  }
+
+  setSecondVisit() {
+    const newData = this.userService.updateUserData(
+      this._user.userId,
+      this._user,
+    );
 
     if (newData) return newData;
 

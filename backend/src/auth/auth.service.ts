@@ -1,12 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
-// import { User, UserDocument } from '../user/schemas/user.schema';
-// import { InjectModel } from '@nestjs/mongoose';
-// import { Model } from 'mongoose';
 import { UserDto } from 'src/user/dto/user.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
+// import { CACHE_MANAGER } from '@nestjs/cache-manager';
+// import { Cache } from 'cache-manager';
 import { SessionsService } from './sessions.service';
 import { TokensService } from './tokens.service';
 import { AuthDto } from './dto/auth.dto';
@@ -19,11 +16,9 @@ export class AuthService {
   constructor(
     @InjectRepository(UsersEntity)
     private readonly userRepository: Repository<UsersEntity>,
-    // @InjectModel(User.name)
-    // private readonly userModal: Model<UserDocument>,
     private readonly sesionsService: SessionsService,
     private readonly tokensService: TokensService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    // @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   // отбирает данные пользователя для клиента ===================
@@ -108,6 +103,7 @@ export class AuthService {
       const selectedUserData: UserDto = this.selectDataUsers(user);
       user = selectedUserData;
       userData = { user, tokens };
+
       this.sesionsService.handleSession(req, res, selectedUserData, yaProvider);
 
       // Если пользователя нет создаем все
@@ -174,6 +170,7 @@ export class AuthService {
     res.clearCookie('__Host-psifi.x-csrf-token');
     res.clearCookie('refreshToken');
     res.clearCookie('accessToken');
+    // res.clearCookie('sessPizza');
     res.send({ status: 'success' });
   }
 }

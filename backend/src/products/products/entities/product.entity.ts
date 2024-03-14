@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongoose';
-import { IngredientsView } from 'src/products/ingredients/schemas/ingredients-view.schema';
-import { Ingredients } from 'src/products/ingredients/schemas/ingredients.schema';
+import {
+  IngredientsDto,
+  IngredientsViewDto,
+} from 'src/products/ingredients/dto/ingredients-view.dto';
 import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
 @Entity()
@@ -43,5 +45,7 @@ export class Product {
 
   @Column()
   popular: boolean;
-  ingredients?: Ingredients | IngredientsView;
+
+  @Column()
+  ingredients?: IngredientsDto | IngredientsViewDto;
 }

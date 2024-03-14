@@ -6,3 +6,9 @@ export class IngredientsViewDto {
   readonly weight: number;
   readonly dia?: number;
 }
+
+export class IngredientsDto {
+  small: IngredientsViewDto;
+  average: IngredientsViewDto;
+  big: IngredientsViewDto;
+}

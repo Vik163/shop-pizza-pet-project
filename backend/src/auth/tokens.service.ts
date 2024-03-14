@@ -44,6 +44,7 @@ export class TokensService {
     res: Response,
   ): Promise<void> {
     const refreshToken: string = req.cookies.refreshToken;
+
     const user: UserDto = await this.userService.findById(userId);
     // хешированный из БД
     const token = user.refreshTokenData.refreshToken;

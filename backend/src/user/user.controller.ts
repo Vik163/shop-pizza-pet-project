@@ -15,10 +15,13 @@ export class UserController {
     return this.userService.getUsers();
   }
 
+  @AccessToken()
   @Patch(':id')
   updateUserData(@Param('id') id: string, @Body() updateUserDto: UserDto) {
     return this.userService.updateUserData(id, updateUserDto);
   }
+
+  @AccessToken()
   @Get(':id')
   // @Auth('ADMIN')
   getUserById(@Param('id') id: string) {

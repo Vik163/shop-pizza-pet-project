@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
@@ -8,17 +8,11 @@ import { AppRouter } from './providers/router';
 import { Footer } from '@/widgets/Footer';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 
-import {
-   csrfTokenActions,
-   fetchCsrfToken,
-   getInited,
-   initAuthData,
-   userAction,
-} from '@/entities/User';
+import { getInited, initAuthData, userAction } from '@/entities/User';
 import { withTheme } from './providers/ThemeProvider/ui/withTheme';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 
-const App = () => {
+const App = memo(() => {
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
    const inited = useSelector(getInited);
@@ -26,30 +20,33 @@ const App = () => {
    // Yandex query ответ
    const initYaData = searchParams.get('user');
    const userYaData = initYaData && JSON.parse(initYaData);
+   try {
+      useEffect(() => {
+         const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+         // Авторизация Яндекс
+         if (initYaData && !inited) {
+            // Запрос для получения токенов (из-за переадресации не получилось отправить с бека)
+            dispatch(initAuthData(userYaData.userId))
+               .then((data) => {
+                  if (data.payload)
+                     dispatch(userAction.setAuthData(userYaData));
+                  navigate('/');
+               })
+               .catch((err) => {
+                  console.log(err);
+               });
+         }
 
-   useEffect(() => {
-      const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
-      // Авторизация Яндекс
-      if (initYaData) {
-         fetchCsrfToken()
-            .then((csrfToken) => {
-               if (csrfToken) dispatch(csrfTokenActions.setToken(csrfToken));
-               dispatch(userAction.setAuthData(userYaData));
-               // убираю query ответ
-               navigate('/');
-            })
-            .catch((err) => {
+         // Обновление сессии по пользователю
+         if (userId && !inited) {
+            dispatch(initAuthData(userId)).catch((err) => {
                console.log(err);
             });
-      }
-
-      // Обновление сессии по пользователю
-      if (userId && !inited) {
-         dispatch(initAuthData(userId)).catch((err) => {
-            console.log(err);
-         });
-      }
-   }, [dispatch, initYaData, inited, navigate, userYaData]);
+         }
+      }, [dispatch, initYaData, inited, navigate, userYaData]);
+   } catch (err) {
+      console.log('err', err);
+   }
 
    return (
       <div className={classNames('app', {}, [])}>
@@ -58,6 +55,6 @@ const App = () => {
          <Footer />
       </div>
    );
-};
+});
 
 export default withTheme(App);

@@ -20,7 +20,12 @@ export const $api = axios.create({
    withCredentials: true,
 });
 
-$api.interceptors.request.use(async (config: IRequest) => {
+export const $apiTokens = axios.create({
+   baseURL: __API__, // правильнее
+   withCredentials: true,
+});
+
+$apiTokens.interceptors.request.use(async (config: IRequest) => {
    const token = getCookie('accessToken');
    // обходим правило eslint (no-param-reassign)
    const newConfig = { ...config };
@@ -32,10 +37,9 @@ $api.interceptors.request.use(async (config: IRequest) => {
    // два пакета чтобы определить годность токена
    const user = token && jwtDecode(token);
    const isExpired = user && user.exp && dayjs.unix(user.exp).diff(dayjs()) < 1;
+   if (!isExpired) return config;
 
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
-
-   if (!isExpired) return config;
 
    const response = await axios.get(
       `https://pizzashop163.ru/api/refresh/${userId}`,
@@ -43,7 +47,9 @@ $api.interceptors.request.use(async (config: IRequest) => {
 
    if (!(response.status === 200))
       throw Error('Не обновлены токены безопасности');
+
    newConfig.headers.authorization = `Bearer ${getCookie('accessToken')}`;
+
    return config;
 });
 
