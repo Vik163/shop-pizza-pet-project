@@ -8,6 +8,7 @@ export interface IngredientsView {
 }
 
 export interface Product {
+   _id: string;
    image: string;
    imageAverage: string;
    imageSmall: string;

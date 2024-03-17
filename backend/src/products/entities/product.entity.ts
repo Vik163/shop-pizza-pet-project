@@ -2,7 +2,7 @@ import { ObjectId } from 'mongoose';
 import {
   IngredientsDto,
   IngredientsViewDto,
-} from 'src/products/ingredients/dto/ingredients-view.dto';
+} from 'src/products/dto/ingredients-view.dto';
 import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
 @Entity()

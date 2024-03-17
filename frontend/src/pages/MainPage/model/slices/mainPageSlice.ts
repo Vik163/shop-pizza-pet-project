@@ -1,21 +1,28 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+   createEntityAdapter,
+   createSlice,
+   PayloadAction,
+} from '@reduxjs/toolkit';
 import { LOCALSTORAGE_PRODUCTS_VIEW_KEY } from '@/shared/const/localstorage';
 import { fetchViewProducts } from '../../model/services/fetchViewProducts';
 import { MainPageSchema } from '../types/mainPageSchema';
-import { ProductView } from '@/entities/Product';
+import { Product, ProductView } from '@/entities/Product';
 import { fetchPopularProducts } from '../services/fetchPopularProducts';
 import { fetchActions } from '../services/fetchActions';
+import { StateSchema } from '@/app/providers/StoreProvider';
 
 // 8_4
-const initialState: MainPageSchema = {
+const initialStateMainPage: MainPageSchema = {
    isLoading: false,
    isLoadingProducts: false,
    isLoadingPopularProducts: false,
    error: undefined,
    view: ProductView.PIZZAS,
    page: 1,
-   //    hasMore: true,
+   ids: [],
+   entities: {},
+   hasMore: true,
    //    _inited: false,
    items: [],
    popularProducts: [],
@@ -27,9 +34,18 @@ const initialState: MainPageSchema = {
    //    type: ArticleType.ALL,
 };
 
+export const productsAdapter = createEntityAdapter<Product>({
+   selectId: (product) => product._id,
+});
+
+// Селекторы
+export const getEntityProducts = productsAdapter.getSelectors<StateSchema>(
+   (state) => state.mainPage || productsAdapter.getInitialState(),
+);
+
 const mainPageSlice = createSlice({
    name: 'mainPageSlice',
-   initialState,
+   initialState: productsAdapter.getInitialState(initialStateMainPage),
    reducers: {
       setView: (state, action: PayloadAction<ProductView>) => {
          state.view = action.payload;
@@ -38,9 +54,9 @@ const mainPageSlice = createSlice({
       setBlockTopScroll: (state, action: PayloadAction<string>) => {
          state.blockTopScroll = action.payload;
       },
-      //   setPage: (state, action: PayloadAction<number>) => {
-      //      state.page = action.payload;
-      //   },
+      setPage: (state, action: PayloadAction<number>) => {
+         state.page = action.payload;
+      },
       //   setSort: (state, action: PayloadAction<ArticleSortField>) => {
       //      state.sort = action.payload;
       //   },
@@ -66,21 +82,16 @@ const mainPageSlice = createSlice({
             state.error = undefined;
             state.isLoadingProducts = true;
          })
-         .addCase(
-            fetchViewProducts.fulfilled,
-            (
-               state,
-               { payload }, // 9_3 27min
-            ) => {
-               state.isLoadingProducts = false;
-               state.items = payload.items;
-               state.page = payload.page;
-               state.limit = payload.limit;
-               state.totalItems = payload.totalItems;
-               // 8_5 21:12min
-               //    state.hasMore = action.payload.length >= state.limit;
-            },
-         )
+         .addCase(fetchViewProducts.fulfilled, (state, { payload }) => {
+            state.isLoadingProducts = false;
+            state.page = payload.page;
+            state.limit = payload.limit;
+            state.totalItems = payload.totalItems;
+            state.hasMore = payload.hasMore;
+
+            // addMany добавляет в конец, setAll перезатирает
+            productsAdapter.addMany(state, payload.items);
+         })
          .addCase(fetchViewProducts.rejected, (state, action) => {
             state.isLoadingProducts = false;
             state.error = action.payload;

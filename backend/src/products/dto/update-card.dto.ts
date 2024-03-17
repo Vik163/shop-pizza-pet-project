@@ -1,4 +1,4 @@
-import { IngredientsViewDto } from '../ingredients/dto/ingredients-view.dto';
+import { IngredientsViewDto } from './ingredients-view.dto';
 
 export class UpdateCardDto {
   readonly image: string;

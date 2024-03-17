@@ -13,7 +13,6 @@ import {
    FontWeight,
 } from '@/shared/ui/Text';
 import { FlexWrap } from '@/shared/ui/Stack/Flex';
-import { getMainPageIsLoading } from '../../../model/selectors/mainPageSelectors';
 import { useProductsFilters } from '../../../lib/hooks/useProductsFilter';
 import { fetchViewProducts } from '../../../model/services/fetchViewProducts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
@@ -21,8 +20,9 @@ import { Card } from '@/shared/ui/Card';
 import { ProductsSkeleton } from './ProductsSkeleton/ProductsSkeleton';
 import {
    getBlockTopScroll,
-   getProducts,
+   getIsLoadingProducts,
 } from '../../../model/selectors/productsSelector';
+import { getEntityProducts } from '../../../model/slices/mainPageSlice';
 
 interface MainPageProductsProps {
    className?: string;
@@ -31,16 +31,15 @@ interface MainPageProductsProps {
 export const MainPageProducts = memo((props: MainPageProductsProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
-   const products: Product[] = useSelector(getProducts);
-   // console.log('products:', products);
-   const isLoading = useSelector(getMainPageIsLoading);
+   const products: Product[] = useSelector(getEntityProducts.selectAll);
+   const isLoading = useSelector(getIsLoadingProducts);
    const blockTopScroll = useSelector(getBlockTopScroll) as ProductView;
    const refProducts = useRef<HTMLDivElement>(null);
    const { onChangeViewProducts } = useProductsFilters();
 
    useEffect(() => {
       onChangeViewProducts(blockTopScroll);
-      dispatch(fetchViewProducts({})).then((data) => {
+      dispatch(fetchViewProducts({ page: 1 })).then((data) => {
          if (data.payload && blockTopScroll) {
             window.scrollTo({
                top: 600,
@@ -50,7 +49,7 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
       });
    }, [blockTopScroll, dispatch, onChangeViewProducts]);
 
-   const editCards = products.map((card) => {
+   const editPriceCards = products.map((card) => {
       return { ...card, price: card.price[0] };
    });
 
@@ -70,10 +69,8 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
             {products[0] && products[0].type}
          </Text>
          <HStack wrap={FlexWrap.WPAP} className={cls.container}>
-            {isLoading ? (
-               <ProductsSkeleton className={cls.card} elements={4} />
-            ) : (
-               editCards.map((card) => (
+            {editPriceCards &&
+               editPriceCards.map((card) => (
                   <Card
                      key={card.title}
                      className={cls.card}
@@ -84,7 +81,9 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
                      image={card.imageAverage}
                      addInfo={card.addInfo}
                   />
-               ))
+               ))}
+            {isLoading && (
+               <ProductsSkeleton className={cls.card} elements={4} />
             )}
          </HStack>
       </div>

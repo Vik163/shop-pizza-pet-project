@@ -1,3 +1,4 @@
+import { EntityState } from '@reduxjs/toolkit';
 import {
    type ProductView,
    type ProductSortField,
@@ -14,7 +15,7 @@ export interface PaginateSchema {
    totalItems?: number;
 }
 
-export interface MainPageSchema {
+export interface MainPageSchema extends EntityState<Product> {
    isLoading?: boolean;
    isLoadingProducts?: boolean;
    isLoadingPopularProducts?: boolean;

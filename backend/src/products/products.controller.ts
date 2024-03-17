@@ -7,7 +7,7 @@ import {
   Pagination,
   PaginationParams,
 } from 'src/common/decorators/paginationParams.decorator';
-import { PaginatedResource } from '../dto/paginate.dto';
+import { PaginatedResource } from './dto/paginate.dto';
 import { Product } from './entities/product.entity';
 // import { Auth } from 'src/decorators/auth.decorator';
 // import { Auth } from 'src/decorators/auth.decorator';

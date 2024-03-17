@@ -17,8 +17,6 @@ const httpsOptions = {
 };
 const option = ['https://pizzashop163.ru, https://127.0.0.1:3000'];
 
-const expiresIn = 60 * 60 * 24 * 1000 * 30;
-
 async function bootstrap() {
   // c https
   const app = await NestFactory.create(AppModule, {
@@ -40,7 +38,7 @@ async function bootstrap() {
         // 30 дней
         ttl: 30 * 24 * 60 * 60,
       }),
-      name: 'sessPizza',
+      name: process.env.SESSION_NAME,
       secret: process.env.SESSION_SECRET_KEY || 'this is a secret msg',
       // указывает, нужно ли пересохранять сессию в хранилище, если она не изменилась (по умолчанию false);
       resave: false,
@@ -51,7 +49,7 @@ async function bootstrap() {
         signed: true,
         sameSite: 'strict',
         // 30 дней
-        maxAge: expiresIn,
+        maxAge: 60 * 60 * 24 * 1000 * 30,
       },
     }),
   );

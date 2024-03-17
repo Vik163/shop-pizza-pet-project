@@ -8,7 +8,7 @@ import { Request } from 'express';
 export interface Pagination {
   page: number;
   limit: number;
-  //   offset: number;
+  offset: number;
 }
 
 export const PaginationParams = createParamDecorator(
@@ -29,8 +29,8 @@ export const PaginationParams = createParamDecorator(
     }
 
     // calculate pagination parameters
-    // const offset = page * limit;
+    const offset = (page - 1) * limit;
 
-    return { page, limit };
+    return { page, limit, offset };
   },
 );

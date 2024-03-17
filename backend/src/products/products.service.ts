@@ -5,13 +5,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 // import { UpdateCardDto } from '../dto/update-card.dto';
 import { Pizzas } from './entities/pizzas.entity';
 import { Request } from 'express';
-import { ReqParamDto } from '../dto/req-param.dto';
+import { ReqParamDto } from './dto/req-param.dto';
 import { DataBasesProducts } from 'src/consts/nameDataBase';
-import { ProductsEntities } from './types/products';
 import { Pagination } from 'src/common/decorators/paginationParams.decorator';
 // import { Sorting } from 'src/common/decorators/sortingParams.decorator';
 // import { Filtering } from 'src/common/decorators/filteringParams.decorator';
-import { PaginatedResource } from '../dto/paginate.dto';
+import { PaginatedResource } from './dto/paginate.dto';
 import { Repository } from 'typeorm';
 import { Drinks } from './entities/drinks.entity';
 import { Combos } from './entities/combos.entity';
@@ -19,6 +18,14 @@ import { Sauces } from './entities/sauces.entity';
 import { Snacks } from './entities/snacks.entity';
 import { Product } from './entities/product.entity';
 import { Populars } from './entities/populars.entity';
+
+interface ProductsEntities {
+  pizzas: Repository<Pizzas>;
+  combos: Repository<Snacks>;
+  snacks: Repository<Sauces>;
+  sauces: Repository<Combos>;
+  drinks: Repository<Drinks>;
+}
 
 @Injectable()
 export class ProductsService {
@@ -59,23 +66,33 @@ export class ProductsService {
 
   public async getProductsByParams(
     req: Request,
-    { page, limit }: Pagination,
+    { page, limit, offset }: Pagination,
     // sort?: Sorting,
     // filter?: Filtering,
   ): Promise<PaginatedResource<Partial<Product[]>>> {
+    let hasMore = true;
+
     const params: ReqParamDto = req.query;
     const viewProduct = params.view || DataBasesProducts.PIZZAS;
     const [data, totalItems] = await this._productsEntities[
       viewProduct
     ].findAndCount({
       take: limit,
-      // skip: offset,
+      // пропускает ненужные элементы
+      skip: offset,
     });
+
+    // настроен, чтобы не было лишнего запроса
+    if (offset > totalItems - limit) {
+      // останавливает запросы
+      hasMore = false;
+    }
 
     return {
       totalItems: totalItems,
       items: data,
       page,
+      hasMore,
     };
   }
 
