@@ -39,7 +39,14 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
 
    useEffect(() => {
       onChangeViewProducts(blockTopScroll);
-      dispatch(fetchViewProducts({ page: 1 })).then((data) => {
+      console.log('blockTopScroll:', blockTopScroll);
+
+      dispatch(
+         fetchViewProducts({
+            page: 1,
+            replace: blockTopScroll || '',
+         }),
+      ).then((data) => {
          if (data.payload && blockTopScroll) {
             window.scrollTo({
                top: 600,

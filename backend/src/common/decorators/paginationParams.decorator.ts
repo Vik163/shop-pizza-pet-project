@@ -9,6 +9,7 @@ export interface Pagination {
   page: number;
   limit: number;
   offset: number;
+  replace: string;
 }
 
 export const PaginationParams = createParamDecorator(
@@ -16,6 +17,8 @@ export const PaginationParams = createParamDecorator(
     const req: Request = ctx.switchToHttp().getRequest();
     const page = parseInt(req.query._page as string);
     const limit = parseInt(req.query._limit as string);
+    // флаг (полностью меняет вид продукта а не подгружает дополнительно)
+    const replace = req.query._replace as string;
 
     // check if page and size are valid
     if (isNaN(page) || page < 0 || isNaN(limit) || limit < 0) {
@@ -31,6 +34,6 @@ export const PaginationParams = createParamDecorator(
     // calculate pagination parameters
     const offset = (page - 1) * limit;
 
-    return { page, limit, offset };
+    return { page, limit, offset, replace };
   },
 );

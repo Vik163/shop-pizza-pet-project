@@ -66,7 +66,7 @@ export class ProductsService {
 
   public async getProductsByParams(
     req: Request,
-    { page, limit, offset }: Pagination,
+    { page, limit, offset, replace }: Pagination,
     // sort?: Sorting,
     // filter?: Filtering,
   ): Promise<PaginatedResource<Partial<Product[]>>> {
@@ -93,6 +93,7 @@ export class ProductsService {
       items: data,
       page,
       hasMore,
+      replace,
     };
   }
 

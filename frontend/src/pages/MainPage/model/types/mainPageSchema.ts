@@ -13,6 +13,7 @@ export interface PaginateSchema {
    limit?: number;
    hasMore?: boolean;
    totalItems?: number;
+   replace?: string;
 }
 
 export interface MainPageSchema extends EntityState<Product> {

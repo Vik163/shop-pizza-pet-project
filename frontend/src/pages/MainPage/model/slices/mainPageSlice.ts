@@ -90,7 +90,11 @@ const mainPageSlice = createSlice({
             state.hasMore = payload.hasMore;
 
             // addMany добавляет в конец, setAll перезатирает
-            productsAdapter.addMany(state, payload.items);
+            if (payload.replace) {
+               productsAdapter.setAll(state, payload.items);
+            } else {
+               productsAdapter.addMany(state, payload.items);
+            }
          })
          .addCase(fetchViewProducts.rejected, (state, action) => {
             state.isLoadingProducts = false;

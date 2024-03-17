@@ -9,7 +9,7 @@ import { PaginateSchema } from '../types/mainPageSchema';
 
 interface FetchViewProductsProps {
    page?: number;
-   replace?: boolean;
+   replace?: string;
 }
 
 export const fetchViewProducts = createAsyncThunk<
@@ -18,7 +18,7 @@ export const fetchViewProducts = createAsyncThunk<
    ThunkConfig<string>
 >('mainPageProducts/fetchFetchViewProducts', async (props, thunkApi) => {
    const { extra, rejectWithValue, getState } = thunkApi;
-   const { page } = props;
+   const { page, replace } = props;
    const limit = getLimitProducts(getState());
    // const search = getMainPageSearch(getState());
 
@@ -32,6 +32,7 @@ export const fetchViewProducts = createAsyncThunk<
             view,
             _limit: limit,
             _page: page,
+            _replace: replace,
             // q: search, // 9_3 24min
          },
       });

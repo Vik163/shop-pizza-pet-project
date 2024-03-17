@@ -3,4 +3,5 @@ export interface PaginatedResource<T> {
   items: T;
   page: number;
   hasMore?: boolean;
+  replace?: string;
 }
