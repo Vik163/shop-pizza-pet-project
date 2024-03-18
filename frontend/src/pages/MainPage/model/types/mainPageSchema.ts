@@ -1,9 +1,9 @@
 import { EntityState } from '@reduxjs/toolkit';
 import {
-   type ProductView,
    type ProductSortField,
    type ProductType,
    Product,
+   ViewsProducts,
 } from '@/entities/Product';
 import { ScrollingCards } from '@/features/HorizontalScrolling';
 
@@ -33,7 +33,7 @@ export interface MainPageSchema extends EntityState<Product> {
    hasMore?: boolean;
 
    // фильтры 9_3
-   view: ProductView;
+   view: ViewsProducts;
    sort?: ProductSortField;
    search?: string;
    type?: ProductType;

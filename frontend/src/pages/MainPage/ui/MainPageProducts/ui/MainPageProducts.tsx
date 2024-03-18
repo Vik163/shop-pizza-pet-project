@@ -1,10 +1,10 @@
 import { memo, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './MainPageProducts.module.scss';
-import { ProductView, type Product } from '@/entities/Product';
-import { HStack } from '@/shared/ui/Stack';
+import { type Product } from '@/entities/Product';
 import {
    HeaderTagType,
    Text,
@@ -12,17 +12,16 @@ import {
    FontSize,
    FontWeight,
 } from '@/shared/ui/Text';
-import { FlexWrap } from '@/shared/ui/Stack/Flex';
 import { useProductsFilters } from '../../../lib/hooks/useProductsFilter';
 import { fetchViewProducts } from '../../../model/services/fetchViewProducts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { Card } from '@/shared/ui/Card';
-import { ProductsSkeleton } from './ProductsSkeleton/ProductsSkeleton';
 import {
    getBlockTopScroll,
    getIsLoadingProducts,
 } from '../../../model/selectors/productsSelector';
 import { getEntityProducts } from '../../../model/slices/mainPageSlice';
+import { ProductsList, ProductViews } from '@/entities/Product';
+import { paginateElements } from '@/shared/const/paginateElements';
 
 interface MainPageProductsProps {
    className?: string;
@@ -31,34 +30,35 @@ interface MainPageProductsProps {
 export const MainPageProducts = memo((props: MainPageProductsProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
+   const { pathname } = useLocation();
    const products: Product[] = useSelector(getEntityProducts.selectAll);
    const isLoading = useSelector(getIsLoadingProducts);
-   const blockTopScroll = useSelector(getBlockTopScroll) as ProductView;
+   const pathLink = useSelector(getBlockTopScroll);
    const refProducts = useRef<HTMLDivElement>(null);
    const { onChangeViewProducts } = useProductsFilters();
 
    useEffect(() => {
-      onChangeViewProducts(blockTopScroll);
-      console.log('blockTopScroll:', blockTopScroll);
+      if (pathLink || pathname) {
+         const path = pathname.slice(1) || pathLink.slice(1);
 
-      dispatch(
-         fetchViewProducts({
-            page: 1,
-            replace: blockTopScroll || '',
-         }),
-      ).then((data) => {
-         if (data.payload && blockTopScroll) {
-            window.scrollTo({
-               top: 600,
-               behavior: 'smooth',
-            });
-         }
-      });
-   }, [blockTopScroll, dispatch, onChangeViewProducts]);
+         const view = ProductViews.find((item) => item === path);
+         if (view) onChangeViewProducts(view);
 
-   const editPriceCards = products.map((card) => {
-      return { ...card, price: card.price[0] };
-   });
+         dispatch(
+            fetchViewProducts({
+               page: 1,
+               replace: view || '',
+            }),
+         ).then((data) => {
+            if (data.payload && view) {
+               window.scrollTo({
+                  top: 600,
+                  behavior: 'smooth',
+               });
+            }
+         });
+      }
+   }, [dispatch, onChangeViewProducts, pathLink, pathname]);
 
    return (
       <div
@@ -73,26 +73,13 @@ export const MainPageProducts = memo((props: MainPageProductsProps) => {
             fontColor={FontColor.TEXT_YELLOW}
             max
          >
-            {products[0] && products[0].type}
+            {products[0]?.type}
          </Text>
-         <HStack wrap={FlexWrap.WPAP} className={cls.container}>
-            {editPriceCards &&
-               editPriceCards.map((card) => (
-                  <Card
-                     key={card.title}
-                     className={cls.card}
-                     title={card.title}
-                     price={card.price}
-                     structure={card.description}
-                     buttonText='В корзину'
-                     image={card.imageAverage}
-                     addInfo={card.addInfo}
-                  />
-               ))}
-            {isLoading && (
-               <ProductsSkeleton className={cls.card} elements={4} />
-            )}
-         </HStack>
+         <ProductsList
+            products={products}
+            isLoading={isLoading}
+            skeletonElements={paginateElements}
+         />
       </div>
    );
 });

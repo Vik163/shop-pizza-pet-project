@@ -7,7 +7,7 @@ import {
 import { LOCALSTORAGE_PRODUCTS_VIEW_KEY } from '@/shared/const/localstorage';
 import { fetchViewProducts } from '../../model/services/fetchViewProducts';
 import { MainPageSchema } from '../types/mainPageSchema';
-import { Product, ProductView } from '@/entities/Product';
+import { Product, ViewsProducts } from '@/entities/Product';
 import { fetchPopularProducts } from '../services/fetchPopularProducts';
 import { fetchActions } from '../services/fetchActions';
 import { StateSchema } from '@/app/providers/StoreProvider';
@@ -18,7 +18,7 @@ const initialStateMainPage: MainPageSchema = {
    isLoadingProducts: false,
    isLoadingPopularProducts: false,
    error: undefined,
-   view: ProductView.PIZZAS,
+   view: 'pizzas',
    page: 1,
    ids: [],
    entities: {},
@@ -47,7 +47,7 @@ const mainPageSlice = createSlice({
    name: 'mainPageSlice',
    initialState: productsAdapter.getInitialState(initialStateMainPage),
    reducers: {
-      setView: (state, action: PayloadAction<ProductView>) => {
+      setView: (state, action: PayloadAction<ViewsProducts>) => {
          state.view = action.payload;
          localStorage.setItem(LOCALSTORAGE_PRODUCTS_VIEW_KEY, action.payload);
       },

@@ -10,11 +10,13 @@ import { type TokenSchema, type UserSchema } from '@/entities/User';
 import { type AuthPhoneSchema } from '@/features/AuthByPhone';
 import { type rtkApi } from '@/shared/api/rtkApi';
 import { type MainPageSchema } from '@/pages/MainPage';
+import { type ScrollSaveSchema } from '@/features/ScrollSave';
 
 export interface StateSchema {
    mainPage: MainPageSchema;
    user: UserSchema;
    csrfToken: TokenSchema;
+   scroll: ScrollSaveSchema;
 
    [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>; // 11_2 9min
 

@@ -1,3 +1,5 @@
+export type ProductView = 'pizzas' | 'combos' | 'drinks' | 'sauces' | 'snacks';
+
 export interface IngredientsView {
    caloricValue: number;
    proteins: number;
@@ -28,19 +30,24 @@ export interface Product {
       | IngredientsView;
 }
 
-type KeysProducts = 'pizzas' | 'combos' | 'snacks' | 'drinks' | 'sauces';
+export type ViewsProducts =
+   | 'pizzas'
+   | 'combos'
+   | 'snacks'
+   | 'drinks'
+   | 'sauces';
 
-export type TypeProducts = {
-   [K in KeysProducts]?: Product[];
-};
+// export type TypeProducts = {
+//    [K in KeysProducts]?: Product[];
+// };
 
-export type Products = TypeProducts[];
+// export type Products = TypeProducts[];
 
-export interface ProductShema {
-   isLoading?: boolean;
-   error?: string;
-   cards: Products;
-}
+// export interface ProductShema {
+//    isLoading?: boolean;
+//    error?: string;
+//    cards: Products;
+// }
 
 export type ProductFixPrice = Omit<Product, 'price'> & {
    price: number;

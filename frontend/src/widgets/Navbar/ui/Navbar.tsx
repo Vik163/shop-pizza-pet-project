@@ -21,7 +21,6 @@ import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
 import { $api } from '@/shared/api/api';
-import { ProductView } from '@/entities/Product';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { mainPageActions } from '@/pages/MainPage';
@@ -54,8 +53,7 @@ export const Navbar = memo((props: NavbarProps) => {
    };
 
    const clickTopScroll = (path: string) => {
-      const viewProduct = path.slice(1) as ProductView;
-      dispatch(mainPageActions.setBlockTopScroll(viewProduct));
+      dispatch(mainPageActions.setBlockTopScroll(path));
    };
 
    const onAuth = () => {

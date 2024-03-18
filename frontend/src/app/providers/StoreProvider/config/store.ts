@@ -10,6 +10,7 @@ import { $api } from '@/shared/api/api';
 import { rtkApi } from '@/shared/api/rtkApi';
 import { createReducerManager } from './reducerManager';
 import { mainPageReducer } from '@/pages/MainPage';
+import { scrollSaveReducer } from '@/features/ScrollSave';
 
 const initialState = {} as StateSchema;
 
@@ -25,6 +26,7 @@ export function createReduxStore(
       user: userReducer,
       mainPage: mainPageReducer,
       csrfToken: csrfTokenReducer,
+      scroll: scrollSaveReducer,
       [rtkApi.reducerPath]: rtkApi.reducer, // 11_2 8min
    };
 

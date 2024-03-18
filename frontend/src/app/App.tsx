@@ -16,10 +16,12 @@ const App = memo(() => {
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
    const inited = useSelector(getInited);
+
    const [searchParams] = useSearchParams();
    // Yandex query ответ
    const initYaData = searchParams.get('user');
    const userYaData = initYaData && JSON.parse(initYaData);
+
    try {
       useEffect(() => {
          const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);

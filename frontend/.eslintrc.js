@@ -76,7 +76,7 @@ module.exports = {
       'jsx-a11y/click-events-have-key-events': 'off', // , чтобы  люди с нарушениями зрения могли пользоваться
       'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
       'react-hooks/exhaustive-deps': 'error', // Checks effect dependencies,
-      'no-param-reassign': 'error', // запрещает менять значения аргументов функции
+      'no-param-reassign': 'warn', // запрещает менять значения аргументов функции
       'no-undef': 'error', // Запрещает использование необъявленных переменных, если они не указаны в /*global */ комментариях
       'react/no-array-index-key': 'error', // использование индекса массива как ключа
       'arrow-body-style': 'off', // регулирует правило использования фигурных скобок в строелочных функциях
