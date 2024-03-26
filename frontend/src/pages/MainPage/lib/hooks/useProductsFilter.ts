@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { useCallback } from 'react';
 import { getMainPageSearch } from '../../model/selectors/mainPageSelectors';
-import { ViewsProducts } from '@/entities/Product';
+import { ProductView } from '@/entities/Product';
 import { mainPageActions } from '../../model/slices/mainPageSlice';
 import { useAppDispatch } from '../../../../shared/lib/hooks/useAppDispatch/useAppDispatch';
-import { getViewProducts } from '../../model/selectors/productsSelector';
+import { getViewProducts } from '../../model/selectors/paginateSelector';
 // import { fetchMainList } from '../../model/services/fetchMainList/fetchMainList';
 // import { useDebounce } from './useDebounce/useDebounce';
 
@@ -22,7 +22,7 @@ export function useProductsFilters() {
    // const debouncedFetchData = useDebounce(fetchData, 500);
 
    const onChangeViewProducts = useCallback(
-      (view: ViewsProducts) => {
+      (view: ProductView) => {
          dispatch(mainPageActions.setView(view));
       },
       [dispatch],

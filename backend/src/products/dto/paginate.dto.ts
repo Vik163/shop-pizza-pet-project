@@ -4,4 +4,5 @@ export interface PaginatedResource<T> {
   page: number;
   hasMore?: boolean;
   replace?: string;
+  view?: string;
 }

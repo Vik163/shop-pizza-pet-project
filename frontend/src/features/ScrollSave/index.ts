@@ -4,6 +4,6 @@ export {
    scrollSaveActions,
 } from './model/slices/scrollSaveSlice';
 export {
-   getSaveScrollByPath,
+   // getSaveScrollByPath,
    getSaveScroll,
 } from './model/selectors/scrollSaveSelector';

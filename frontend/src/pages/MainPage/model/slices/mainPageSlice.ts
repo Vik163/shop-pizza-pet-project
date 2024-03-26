@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import {
    createEntityAdapter,
    createSlice,
@@ -6,8 +5,8 @@ import {
 } from '@reduxjs/toolkit';
 import { LOCALSTORAGE_PRODUCTS_VIEW_KEY } from '@/shared/const/localstorage';
 import { fetchViewProducts } from '../../model/services/fetchViewProducts';
-import { MainPageSchema } from '../types/mainPageSchema';
-import { Product, ViewsProducts } from '@/entities/Product';
+import { MainPageSchema, ViewProducts } from '../types/mainPageSchema';
+import { Product, ProductView } from '@/entities/Product';
 import { fetchPopularProducts } from '../services/fetchPopularProducts';
 import { fetchActions } from '../services/fetchActions';
 import { StateSchema } from '@/app/providers/StoreProvider';
@@ -25,10 +24,10 @@ const initialStateMainPage: MainPageSchema = {
    hasMore: true,
    //    _inited: false,
    items: [],
+   cards: {},
    popularProducts: [],
    actionItems: [],
-   blockTopScroll: '',
-   limit: 4,
+   limit: 0,
    //    sort: ArticleSortField.CREATED,
    //    search: '',
    //    type: ArticleType.ALL,
@@ -47,12 +46,13 @@ const mainPageSlice = createSlice({
    name: 'mainPageSlice',
    initialState: productsAdapter.getInitialState(initialStateMainPage),
    reducers: {
-      setView: (state, action: PayloadAction<ViewsProducts>) => {
+      setProducts: (state, action: PayloadAction<ViewProducts>) => {
+         // console.log('action.payload:', action.payload);
+         state.cards = action.payload;
+      },
+      setView: (state, action: PayloadAction<ProductView>) => {
          state.view = action.payload;
          localStorage.setItem(LOCALSTORAGE_PRODUCTS_VIEW_KEY, action.payload);
-      },
-      setBlockTopScroll: (state, action: PayloadAction<string>) => {
-         state.blockTopScroll = action.payload;
       },
       setPage: (state, action: PayloadAction<number>) => {
          state.page = action.payload;
@@ -84,6 +84,7 @@ const mainPageSlice = createSlice({
          })
          .addCase(fetchViewProducts.fulfilled, (state, { payload }) => {
             state.isLoadingProducts = false;
+            state.view = payload.view;
             state.page = payload.page;
             state.limit = payload.limit;
             state.totalItems = payload.totalItems;

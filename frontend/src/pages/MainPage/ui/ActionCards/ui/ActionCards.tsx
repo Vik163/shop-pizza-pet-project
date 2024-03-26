@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -8,6 +8,8 @@ import { getMainPageIsLoading } from '../../../model/selectors/mainPageSelectors
 import { HStack } from '@/shared/ui/Stack';
 import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
 import { getActions } from '../../../model/selectors/actionsSelector';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { fetchActions } from '../../../model/services/fetchActions';
 
 interface ActionCardsProps {
    className?: string;
@@ -15,8 +17,13 @@ interface ActionCardsProps {
 
 export const ActionCards = memo((props: ActionCardsProps) => {
    const { className } = props;
+   const dispatch = useAppDispatch();
    const actions = useSelector(getActions);
    const isLoading = useSelector(getMainPageIsLoading);
+
+   useEffect(() => {
+      dispatch(fetchActions());
+   }, [dispatch]);
 
    const actionsSkeleton = (
       <HStack gap={30} className={cls.ActionCardsSkeleton}>

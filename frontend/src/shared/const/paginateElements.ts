@@ -1,1 +1,1 @@
-export const paginateElements = 4;
+export const paginateElements = 8;

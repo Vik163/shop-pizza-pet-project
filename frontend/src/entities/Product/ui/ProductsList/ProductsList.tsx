@@ -8,7 +8,7 @@ import { Product } from '../../model/types/product';
 import { ProductItemSkeleton } from '../ProductItemSkeleton/ProductItemSkeleton';
 
 interface ProductsListProps {
-   products: Product[];
+   products?: Product[];
    isLoading?: boolean;
    skeletonElements: number;
 }
@@ -25,14 +25,15 @@ export const ProductsList = memo((props: ProductsListProps) => {
 
    return (
       <HStack wrap={FlexWrap.WPAP} className={cls.container}>
-         {products.map((card) => (
-            <ProductItem
-               key={card.title}
-               className={cls.card}
-               buttonText='В корзину'
-               card={card}
-            />
-         ))}
+         {products &&
+            products.map((card) => (
+               <ProductItem
+                  key={card.title}
+                  className={cls.card}
+                  buttonText='В корзину'
+                  card={card}
+               />
+            ))}
          {isLoading && getSkeleton()}
       </HStack>
    );

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -17,10 +17,17 @@ import {
    getPopularProducts,
 } from '../../../model/selectors/popularProductsSelector';
 import { NewProductsSkeleton } from './NewProductsSkeleton/NewProductsSkeleton';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { fetchPopularProducts } from '../../../model/services/fetchPopularProducts';
 
 export const NewProducts = memo(() => {
+   const dispatch = useAppDispatch();
    const popularProducts = useSelector(getPopularProducts);
    const isLoading = useSelector(getIsLoadingPopularProducts);
+
+   useEffect(() => {
+      dispatch(fetchPopularProducts());
+   }, [dispatch]);
 
    return (
       <div className={cls.NewProducts}>

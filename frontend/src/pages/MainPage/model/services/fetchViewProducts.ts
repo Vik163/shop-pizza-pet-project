@@ -4,7 +4,7 @@ import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 import {
    getLimitProducts,
    getViewProducts,
-} from '../selectors/productsSelector';
+} from '../selectors/paginateSelector';
 import { PaginateSchema } from '../types/mainPageSchema';
 
 interface FetchViewProductsProps {

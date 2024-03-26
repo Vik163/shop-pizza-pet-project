@@ -2,7 +2,7 @@ export type {
    Product,
    ProductFixPrice,
    IngredientsView,
-   ViewsProducts,
+   ProductView,
    // ProductShema,
    // Products,
 } from './model/types/product';
@@ -17,8 +17,4 @@ export { ProductsList } from './ui/ProductsList/ProductsList';
 // //    getProducts,
 // // } from './model/selectors/productSelector';
 // export { fetchProductsList } from './model/services/fetchInitProducts/fetchInitProducts';
-export {
-   ProductViews,
-   ProductType,
-   ProductSortField,
-} from './model/consts/productConst';
+export { ProductSortField } from '../../shared/const/productConst';

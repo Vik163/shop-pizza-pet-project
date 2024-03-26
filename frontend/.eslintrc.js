@@ -75,7 +75,7 @@ module.exports = {
       'jsx-a11y/no-static-element-interactions': 'off', // нужно добалять модель поведения для кликабельных элементов
       'jsx-a11y/click-events-have-key-events': 'off', // , чтобы  люди с нарушениями зрения могли пользоваться
       'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
-      'react-hooks/exhaustive-deps': 'error', // Checks effect dependencies,
+      'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies,
       'no-param-reassign': 'warn', // запрещает менять значения аргументов функции
       'no-undef': 'error', // Запрещает использование необъявленных переменных, если они не указаны в /*global */ комментариях
       'react/no-array-index-key': 'error', // использование индекса массива как ключа

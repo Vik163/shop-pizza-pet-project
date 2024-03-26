@@ -21,9 +21,7 @@ import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
 import { $api } from '@/shared/api/api';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
-import { mainPageActions } from '@/pages/MainPage';
 
 interface NavbarProps {
    className?: string;
@@ -31,8 +29,6 @@ interface NavbarProps {
 
 export const Navbar = memo((props: NavbarProps) => {
    const { className } = props;
-   const dispatch = useAppDispatch();
-   // const navigate = useNavigate();
    const [isOpenPopup, setIsOpenPopup] = useState(false);
 
    const [titlePopup, setTitlePopup] = useState('');
@@ -50,10 +46,6 @@ export const Navbar = memo((props: NavbarProps) => {
 
       // const users = await $api.get('/users');
       // console.log('users:', users.data);
-   };
-
-   const clickTopScroll = (path: string) => {
-      dispatch(mainPageActions.setBlockTopScroll(path));
    };
 
    const onAuth = () => {
@@ -74,7 +66,6 @@ export const Navbar = memo((props: NavbarProps) => {
                key={item.text}
                to={item.path}
                className={classNames(cls.link)}
-               onClick={() => clickTopScroll(item.path)}
             >
                {item.text}
             </AppLink>

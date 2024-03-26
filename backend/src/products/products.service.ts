@@ -94,6 +94,7 @@ export class ProductsService {
       page,
       hasMore,
       replace,
+      view: viewProduct,
     };
   }
 
