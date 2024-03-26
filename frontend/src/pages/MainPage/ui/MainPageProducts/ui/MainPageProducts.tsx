@@ -48,14 +48,12 @@ export interface RefType {
    onLoadNextPart: () => void;
 }
 
-export const MainPageProducts = forwardRef(
+const MainPageProducts = forwardRef(
    (props: MainPageProductsProps, ref: Ref<RefType>) => {
       const { className } = props;
       const dispatch = useAppDispatch();
       const { pathname } = useLocation();
       const products: Product[] = useSelector(getEntityProducts.selectAll);
-      // const [car, setCar] = useState<Product[]>();
-
       const cards = useSelector(getCards);
       const isLoading = useSelector(getIsLoadingProducts);
       const refProducts = useRef<HTMLDivElement>(null);
@@ -98,8 +96,6 @@ export const MainPageProducts = forwardRef(
                }),
             );
          }
-
-         // setCar(cards[viewProduct]);
       }, [viewProduct, cards]);
 
       const onLoadNextPart = () => {

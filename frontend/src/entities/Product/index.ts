@@ -3,8 +3,6 @@ export type {
    ProductFixPrice,
    IngredientsView,
    ProductView,
-   // ProductShema,
-   // Products,
 } from './model/types/product';
 
 export { ProductItem } from './ui/ProductItem/ProductItem';
