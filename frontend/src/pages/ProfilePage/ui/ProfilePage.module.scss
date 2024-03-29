@@ -3,8 +3,19 @@
    padding: 27px 0 87px;
 }
 
-.theme {
-   gap: 30px;
+.switch {
+   width: 350px;
+   gap: 5px;
+   margin-bottom: 40px;
+}
+
+.switchTheme {
+   width: 350px;
+   height: 27px;
+   gap: 15px;
+   border-top: 1px solid var(--color-background-button);
+   padding: 24px 19px;
+   cursor: default;
 }
 
 .title {

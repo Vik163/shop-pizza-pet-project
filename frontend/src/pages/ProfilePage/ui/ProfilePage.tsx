@@ -40,9 +40,15 @@ import { fetchLogoutUser } from '../model/services/fetchLogout';
 import { useCookie } from '@/shared/lib/hooks/useCookie/useCookie';
 import { $apiTokens } from '@/shared/api/api';
 import { Switch } from '@/shared/ui/Switch';
-import { HStack } from '@/shared/ui/Stack';
+import { VStack } from '@/shared/ui/Stack';
 import { useTheme } from '@/shared/lib/hooks/useTheme';
-import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
+import {
+   LOCALSTORAGE_USER_KEY,
+   LOCAL_STORAGE_VIEW_LOAD_KEY,
+} from '@/shared/const/localstorage';
+import { FlexAlign } from '@/shared/ui/Stack/Flex';
+import { ViewLoad } from '@/shared/const/viewLoad';
+import { useViewLoadProducts } from '@/shared/lib/hooks/useViewLoadProducts';
 
 export interface ProfilePageProps {
    className?: string;
@@ -62,8 +68,10 @@ const ProfilePage = memo((props: ProfilePageProps) => {
    const userEmail = useSelector(getUserEmail);
    const csrf = useSelector(getTokenSelector);
    const userSettings = useSelector(getUserSettings);
-   const { addAdvertisement } = userSettings;
+   const { addAdvertisement, viewLoadProducts } = userSettings;
+
    const { theme, toggleTheme } = useTheme();
+   const { viewLoad, toggleViewLoad } = useViewLoadProducts();
 
    const saveValue = useCallback(
       async (name: string, value: UpdateValue) => {
@@ -124,34 +132,84 @@ const ProfilePage = memo((props: ProfilePageProps) => {
       }
    };
 
-   const onToggleTheme = () => {
-      toggleTheme((newTheme) => {
-         dispatch(
-            saveUserSettings({
-               ...userSettings,
-               theme: newTheme,
-            }),
-         );
-      });
+   const onToggleTheme = (id: string) => {
+      if (id === 'theme')
+         toggleTheme((newTheme) => {
+            dispatch(
+               saveUserSettings({
+                  ...userSettings,
+                  theme: newTheme,
+               }),
+            );
+         });
+   };
+
+   const onToggleLoadProducts = (id: string) => {
+      if (id === 'load')
+         toggleViewLoad((load: ViewLoad) => {
+            dispatch(
+               saveUserSettings({
+                  ...userSettings,
+                  viewLoadProducts: load,
+               }),
+            ).then((data) => {
+               if (data.payload) {
+                  const settings = data.payload as UserSettings;
+                  localStorage.setItem(
+                     LOCAL_STORAGE_VIEW_LOAD_KEY,
+                     settings.viewLoadProducts,
+                  );
+                  console.log('data', settings.viewLoadProducts);
+               }
+            });
+         });
    };
 
    return (
       <Page className={classNames(cls.ProfilePage, {}, [className])}>
          <Bonuses />
          <section className={cls.Profile}>
-            <HStack className={cls.theme}>
-               <Switch
-                  width={50}
-                  onToggle={onToggleTheme}
-                  isChecked={theme !== 'app_dark_theme'}
-               />
+            <VStack className={cls.switch} align={FlexAlign.START}>
                <Text
                   fontSize={FontSize.SIZE_14}
                   fontWeight={FontWeight.TEXT_700}
                >
-                  Выбрать цветовую тему
+                  Цветовая тема
                </Text>
-            </HStack>
+               <Switch
+                  htmlFor='theme'
+                  labelLeft='тёмная'
+                  labelRight='светлая'
+                  fontSizeLabel={FontSize.SIZE_14}
+                  fontWeightLabel={FontWeight.TEXT_700}
+                  fontColorLabel={FontColor.TEXT_PRIMARY}
+                  className={cls.switchTheme}
+                  width={70}
+                  onToggle={onToggleTheme}
+                  isChecked={theme !== 'app_dark_theme'}
+               />
+            </VStack>
+            <VStack className={cls.switch} align={FlexAlign.START}>
+               <Text
+                  fontSize={FontSize.SIZE_14}
+                  fontWeight={FontWeight.TEXT_700}
+               >
+                  Метод загрузки товаров
+               </Text>
+               <Switch
+                  htmlFor='load'
+                  labelLeft='прокрутка'
+                  labelRight='страницы'
+                  fontSizeLabel={FontSize.SIZE_14}
+                  fontWeightLabel={FontWeight.TEXT_700}
+                  fontColorLabel={FontColor.TEXT_PRIMARY}
+                  className={cls.switchTheme}
+                  width={70}
+                  onToggle={onToggleLoadProducts}
+                  isChecked={viewLoadProducts !== ViewLoad.SCROLL}
+                  value={viewLoad}
+               />
+            </VStack>
 
             <Text
                title={HeaderTagType.H_2}

@@ -53,8 +53,13 @@ export class AuthService {
       const timeToken = this.tokensService.handleTimeToken(
         user.refreshTokenData.createToken,
       );
-      // время вышло => обновляем токен в БД и отправляем токены в куки
-      if (timeToken > process.env.TIME_REFRESH - 2) {
+      console.log('req.cookies:', req.cookies.refreshToken);
+
+      // время вышло или нет рефреш => обновляем токен в БД и отправляем токены в куки
+      if (
+        timeToken > process.env.TIME_REFRESH - 2 ||
+        !req.cookies.refreshToken
+      ) {
         await this.tokensService.updateRefreshToken(user, tokens.refreshToken);
         this.tokensService.sendTokens(res, tokens);
       } else {
@@ -137,6 +142,7 @@ export class AuthService {
       isFirstVisit: true,
       addAdvertisement: false,
       theme: 'app_light_theme',
+      viewLoadProducts: 'pages',
     };
     // Добавляем в БД доп. инфо
     user.userId = uuidv4();

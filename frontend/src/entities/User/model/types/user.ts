@@ -19,7 +19,7 @@ export interface UserData {
    email?: string;
    birthday?: Birthday;
    role?: RoleUser;
-   userSettings?: UserSettings;
+   userSettings: UserSettings;
 }
 
 export interface ValidationErrors {

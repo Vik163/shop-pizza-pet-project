@@ -34,6 +34,7 @@ export interface UserSettings {
   isFirstVisit: boolean;
   addAdvertisement: boolean;
   theme: string;
+  viewLoadProducts: string;
 }
 
 export class UserDto {

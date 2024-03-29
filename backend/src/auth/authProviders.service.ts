@@ -69,6 +69,7 @@ export class AuthProvidersService {
               isFirstVisit: true,
               addAdvertisement: false,
               theme: 'app_light_theme',
+              viewLoadProducts: 'pages',
             },
             // role: Roles.CLIENT,
           };
