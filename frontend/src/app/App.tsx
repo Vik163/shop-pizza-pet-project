@@ -6,7 +6,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import { Header } from '@/widgets/Header';
 import { AppRouter } from './providers/router';
 import { Footer } from '@/widgets/Footer';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
 import { getInited, initAuthData, userAction } from '@/entities/User';
 import { withTheme } from './providers/ThemeProvider/ui/withTheme';

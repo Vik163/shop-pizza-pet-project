@@ -21,7 +21,7 @@ import {
 } from '@/shared/ui/Text';
 import { useProductsFilters } from '../../../lib/hooks/useProductsFilter';
 import { fetchViewProducts } from '../../../model/services/fetchViewProducts';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
 import {
    getEntityProducts,

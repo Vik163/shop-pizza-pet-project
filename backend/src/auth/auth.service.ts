@@ -53,7 +53,6 @@ export class AuthService {
       const timeToken = this.tokensService.handleTimeToken(
         user.refreshTokenData.createToken,
       );
-      console.log('req.cookies:', req.cookies.refreshToken);
 
       // время вышло или нет рефреш => обновляем токен в БД и отправляем токены в куки
       if (

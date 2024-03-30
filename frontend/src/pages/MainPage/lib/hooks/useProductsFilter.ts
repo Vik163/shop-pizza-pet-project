@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { getMainPageSearch } from '../../model/selectors/mainPageSelectors';
 import { ProductView } from '@/entities/Product';
 import { mainPageActions } from '../../model/slices/mainPageSlice';
-import { useAppDispatch } from '../../../../shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '../../../../shared/lib/hooks/useAppDispatch';
 import { getViewProducts } from '../../model/selectors/paginateSelector';
 // import { fetchMainList } from '../../model/services/fetchMainList/fetchMainList';
 // import { useDebounce } from './useDebounce/useDebounce';

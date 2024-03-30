@@ -17,7 +17,7 @@ import { FlexAlign, FlexJustify } from '../Stack/Flex';
 import { Button } from '../Button';
 import checkmark from '@/shared/assets/icons/Checkmark.svg';
 import { Icon } from '../Icon';
-import { usePhoneValidator } from '@/shared/lib/hooks/usePhoneValidator/usePhoneValidator';
+import { usePhoneValidator } from '@/shared/lib/hooks/usePhoneValidator';
 
 type InputTypeProps = Omit<
    InputHTMLAttributes<HTMLInputElement>,

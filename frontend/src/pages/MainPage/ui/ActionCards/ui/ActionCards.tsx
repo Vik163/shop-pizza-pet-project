@@ -8,7 +8,7 @@ import { getMainPageIsLoading } from '../../../model/selectors/mainPageSelectors
 import { HStack } from '@/shared/ui/Stack';
 import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
 import { getActions } from '../../../model/selectors/actionsSelector';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { fetchActions } from '../../../model/services/fetchActions';
 
 interface ActionCardsProps {

@@ -1,10 +1,10 @@
 import { ChangeEvent, memo, useEffect, useRef } from 'react';
 
-import cls from './Switch.module.scss';
+import cls from './SwitchUI.module.scss';
 import { Text, FontSize, FontWeight, FontColor } from '../Text';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
-interface SwitchProps {
+interface SwitchUIProps {
    className?: string;
    htmlFor?: string;
    width: number;
@@ -18,7 +18,7 @@ interface SwitchProps {
    value?: string;
 }
 
-export const Switch = memo((props: SwitchProps) => {
+export const SwitchUI = memo((props: SwitchUIProps) => {
    const {
       width,
       onToggle,

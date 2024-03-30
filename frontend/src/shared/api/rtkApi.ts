@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { jwtDecode } from 'jwt-decode';
 import dayjs from 'dayjs';
 import axios from 'axios';
-import { useCookie } from '../lib/hooks/useCookie/useCookie';
+import { useCookie } from '../lib/hooks/useCookie';
 import { StateSchema } from '@/app/providers/StoreProvider';
 import { LOCALSTORAGE_USER_KEY } from '../const/localstorage';
 

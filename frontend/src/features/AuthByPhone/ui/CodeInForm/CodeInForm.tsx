@@ -14,7 +14,7 @@ import {
    getIsError,
    getIsLoading,
 } from '../../model/selectors/authPhoneSelectors';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
 import { fetchSignupUser } from '../../model/services/fetchSignupUser';
 import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';

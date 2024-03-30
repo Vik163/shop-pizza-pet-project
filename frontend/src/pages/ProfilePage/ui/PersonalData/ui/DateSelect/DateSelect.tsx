@@ -7,8 +7,8 @@ import cls from './DateSelect.module.scss';
 import { Button } from '@/shared/ui/Button';
 import { HStack } from '@/shared/ui/Stack';
 import { Select } from '@/shared/ui/Select';
-import { useSelectDays } from '../lib/hooks/useSelectDays/useSelectDays';
 import { Birthday, getUserBirthday } from '@/entities/User';
+import { useSelectDays } from '@/shared/lib/hooks/useSelectDays';
 
 interface DateSelectProps {
    className?: string;

@@ -1,7 +1,7 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import dayjs from 'dayjs';
-import { useCookie } from '../lib/hooks/useCookie/useCookie';
+import { useCookie } from '../lib/hooks/useCookie';
 import { LOCALSTORAGE_USER_KEY } from '../const/localstorage';
 
 //! useSelector - падает ошибка

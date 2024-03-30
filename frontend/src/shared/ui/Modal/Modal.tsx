@@ -7,7 +7,7 @@ import { Text, FontSize, FontWeight } from '../Text';
 import { Button } from '../Button';
 import close from '@/shared/assets/icons/close.svg';
 import { Icon } from '../Icon';
-import { useModal } from '@/shared/lib/hooks/useModal/useModal';
+import { useModal } from '@/shared/lib/hooks/useModal';
 
 interface ModalProps {
    className?: string;

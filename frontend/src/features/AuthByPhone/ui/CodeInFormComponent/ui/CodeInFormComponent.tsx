@@ -14,7 +14,7 @@ import {
    getPhoneNumber,
 } from '../../../model/selectors/authPhoneSelectors';
 import { firebaseApi } from '@/entities/User';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { authPhoneActions } from '../../../model/slice/authPhoneSlice';
 import { lengthConfirmCode } from '../../../model/constants/constants';
 

@@ -17,7 +17,7 @@ import {
    getPopularProducts,
 } from '../../../model/selectors/popularProductsSelector';
 import { NewProductsSkeleton } from './NewProductsSkeleton/NewProductsSkeleton';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { fetchPopularProducts } from '../../../model/services/fetchPopularProducts';
 
 export const NewProducts = memo(() => {

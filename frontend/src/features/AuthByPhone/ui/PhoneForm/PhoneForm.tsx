@@ -11,7 +11,7 @@ import {
    TextAlign,
 } from '@/shared/ui/Text';
 import { CodeInForm } from '../CodeInForm/CodeInForm';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import {
    authPhoneActions,
    authPhoneReducer,

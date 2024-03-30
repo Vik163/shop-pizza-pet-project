@@ -7,7 +7,7 @@ export function buildDevServer(options: BuildOptions): DevServerConfiguration {
       host: '127.0.0.1', // you can change this ip with your ip
       allowedHosts: ['pizzashop163.ru', 'www.pizzashop163.ru'], // nginx
       port: options.port,
-      open: true, // Автоматически открывает в браузере приложение
+      // open: true, // Автоматически открывает в браузере приложение
       // Запросы через index page иначе при перезагрузке не на главной странице ошибка
       historyApiFallback: true,
       // для плагина HotModuleReplacementPlugin видео 2_6

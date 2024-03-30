@@ -13,13 +13,13 @@ import { Icon } from '@/shared/ui/Icon';
 import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
 import { Text, FontColor, FontSize } from '@/shared/ui/Text';
 import yandexID from '@/shared/assets/icons/yandex.png';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { authPhoneActions } from '../../../model/slice/authPhoneSlice';
 import {
    getIsConfirmCode,
    getPhoneNumber,
 } from '../../../model/selectors/authPhoneSelectors';
-import { usePhoneValidator } from '@/shared/lib/hooks/usePhoneValidator/usePhoneValidator';
+import { usePhoneValidator } from '@/shared/lib/hooks/usePhoneValidator';
 import { firebaseApi } from '@/entities/User';
 
 export const PhoneFormComponent = memo(() => {

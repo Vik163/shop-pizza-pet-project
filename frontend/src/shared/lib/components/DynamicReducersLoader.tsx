@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect } from 'react';
 import { useStore } from 'react-redux';
 import { type Reducer } from '@reduxjs/toolkit';
-import { useAppDispatch } from '../hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '../hooks/useAppDispatch';
 import {
    type StateSchema,
    type ReduxStoreWithManager,
