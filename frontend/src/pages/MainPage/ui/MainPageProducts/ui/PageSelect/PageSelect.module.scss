@@ -1,0 +1,39 @@
+.PageSelect {
+   background: var(--color-bg-primary);
+   padding: 30px 70px 0;
+   display: flex;
+   justify-content: end;
+   gap: 7px;
+}
+
+.page {
+   width: 32px;
+   display: flex;
+   justify-content: center;
+   padding: 0px 9px;
+   border-radius: 3px;
+   background: var(--color-background-button);
+   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+   font-size: 0.875em;
+   font-weight: bold;
+   text-decoration: none;
+   color: var(--color-text-button);
+   cursor: pointer;
+
+   &:hover {
+      background: var(--color-input-outline);
+      color: var(--color-text-button);
+   }
+}
+
+.inActive {
+   opacity: 0.5;
+   cursor: default;
+   pointer-events: none;
+}
+
+.active {
+   background: var(--color-input-edit);
+   color: var(--color-background-button);
+   pointer-events: none;
+}

@@ -8,5 +8,7 @@ export const getLimitProducts = (state: StateSchema) =>
 export const getPageProductsNum = (state: StateSchema) =>
    state.mainPage?.page || 1;
 export const getPageHasMore = (state: StateSchema) => state.mainPage?.hasMore;
+export const getTotalProducts = (state: StateSchema) =>
+   state.mainPage?.totalItems;
 export const getIsLoadingProducts = (state: StateSchema) =>
    state.mainPage.isLoadingProducts;

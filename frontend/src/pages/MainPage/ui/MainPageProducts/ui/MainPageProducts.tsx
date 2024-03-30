@@ -39,6 +39,7 @@ import {
 } from '../../../model/selectors/paginateSelector';
 import { TypeProducts } from '../model/types/mainPageProducts';
 import { nameViewProducts } from '@/shared/const/productConst';
+import { PageSelect } from './PageSelect/PageSelect';
 
 interface MainPageProductsProps {
    className?: string;
@@ -138,6 +139,7 @@ const MainPageProducts = forwardRef(
                isLoading={isLoading}
                skeletonElements={paginateElements}
             />
+            <PageSelect />
          </div>
       );
    },
