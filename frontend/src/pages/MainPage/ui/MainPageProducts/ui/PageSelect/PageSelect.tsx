@@ -27,9 +27,11 @@ export const PageSelect = memo((props: PageSelectProps) => {
    const totalProducts = useSelector(getTotalProducts);
    const limitProducts = useSelector(getLimitProducts);
 
+   // определяем количество полученных страниц и количество видимых кнопок
    const pages = Math.ceil(totalProducts / limitProducts);
    const buttons = pages < countButtons ? pages : countButtons;
 
+   // массив для отрисовки кнопок (зависит от количества кнопок и выбранной страницы)
    const arrPages = () => {
       const arr: number[] = [];
 
@@ -39,11 +41,12 @@ export const PageSelect = memo((props: PageSelectProps) => {
       }
       return arr;
    };
-
+   // При обновлении страницы возвращает первоначальную нумерацию
    useEffect(() => {
       setNumPage(1);
    }, [pathname]);
 
+   // После запроса устанавливает нужную нумерацию и переводит скролл
    const clickPage = (page: number) => {
       dispatch(
          fetchViewProducts({

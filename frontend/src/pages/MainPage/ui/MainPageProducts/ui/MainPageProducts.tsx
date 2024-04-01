@@ -66,6 +66,7 @@ const MainPageProducts = forwardRef(
       const hasMoreProducts = useSelector(getPageHasMore);
       const { viewLoadProducts } = useSelector(getUserSettings);
 
+      // Преобразуем путь (убираем слеш) ====================
       const checkViewProductFromPath = () => {
          const path = pathname.slice(1) as keyof TypeProducts;
          if (nameViewProducts[path]) return path;
@@ -77,6 +78,7 @@ const MainPageProducts = forwardRef(
          if (pathProduct) onChangeViewProducts(pathProduct);
       }, [pathname]);
 
+      // Запрос при выборе вида загрузки и сброс стейта
       useEffect(() => {
          dispatch(mainPageActions.setProducts({}));
          dispatch(
@@ -88,6 +90,7 @@ const MainPageProducts = forwardRef(
          );
       }, [viewLoadProducts]);
 
+      // Сбор данных в стейт =========================
       useEffect(() => {
          if (products.length) {
             if (viewProduct === products[0].type) {
@@ -109,6 +112,7 @@ const MainPageProducts = forwardRef(
          }
       }, [products]);
 
+      // первоначальный запрос при изменении страницы если нет данных в стейте
       useEffect(() => {
          if (!cards[viewProduct]) {
             dispatch(
@@ -120,6 +124,7 @@ const MainPageProducts = forwardRef(
          }
       }, [viewProduct, cards]);
 
+      // Бесконечный скролл =======================================
       const onLoadNextPart = () => {
          if (scroll[viewProduct]) {
             if (hasMoreProducts && window.scrollY > scroll[viewProduct])
