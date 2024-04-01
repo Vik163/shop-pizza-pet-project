@@ -20,6 +20,7 @@ import { useTrottle } from '@/shared/lib/hooks/useTrottle';
 interface PageProps {
    className?: string;
    children: ReactNode;
+   saveScroll?: boolean;
    onScrollEnd?: () => void;
    scrollTriggerRef?: MutableRefObject<HTMLDivElement> | undefined;
    hasScroll?: boolean;
@@ -36,6 +37,7 @@ export const Page = memo((props: PageProps) => {
       scrollTriggerRef,
       hasScroll = false,
       animationScroll = false,
+      saveScroll = false,
    } = props;
    const triggerRef = useRef() as MutableRefObject<HTMLDivElement>;
    const pageWithScrollRef = useRef() as MutableRefObject<HTMLDivElement>;
@@ -54,6 +56,7 @@ export const Page = memo((props: PageProps) => {
       if (animationScroll) {
          // с анимацией
          const scrollWithoutPathname = pathname === '/' ? 0 : 600;
+
          window.scrollTo({
             top: scroll[pathname] ? scroll[pathname] : scrollWithoutPathname,
             behavior: 'smooth',
@@ -82,7 +85,7 @@ export const Page = memo((props: PageProps) => {
    }, 500);
 
    useEffect(() => {
-      if (!hasScroll && delayScroll) {
+      if (!hasScroll && delayScroll && saveScroll) {
          window.addEventListener('scroll', onScroll);
 
          return () => {
@@ -97,7 +100,7 @@ export const Page = memo((props: PageProps) => {
          ref={hasScroll ? pageWithScrollRef : null}
          className={classNames(cls.Page, {}, [className])}
          id={PAGE_ID}
-         onScroll={hasScroll ? onScroll : undefined}
+         onScroll={hasScroll && saveScroll ? onScroll : undefined}
       >
          {children}
          <div className={cls.trigger} ref={triggerRef} />

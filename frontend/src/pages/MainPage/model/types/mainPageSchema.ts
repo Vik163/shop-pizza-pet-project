@@ -10,10 +10,10 @@ export type ViewProducts = {
 
 export interface PaginateSchema {
    items: Product[];
-   page?: number;
-   limit?: number;
-   hasMore?: boolean;
-   totalItems?: number;
+   page: number;
+   limit: number;
+   hasMore: boolean;
+   totalItems: number;
    replace?: string;
    view: ProductView;
 }
@@ -27,12 +27,12 @@ export interface MainPageSchema extends EntityState<Product> {
    cards: ViewProducts;
    popularProducts?: Product[];
    actionItems?: ScrollingCards[];
-   totalItems?: number;
+   totalItems: number;
 
    // pagination
-   page?: number;
-   limit?: number;
-   hasMore?: boolean;
+   page: number;
+   limit: number;
+   hasMore: boolean;
 
    // фильтры 9_3
    view: ProductView;

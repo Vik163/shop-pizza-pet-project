@@ -1,6 +1,6 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './PageSelect.module.scss';
@@ -10,34 +10,63 @@ import {
    getTotalProducts,
 } from '../../../../model/selectors/paginateSelector';
 import { Button } from '@/shared/ui/Button';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { fetchViewProducts } from '../../../../model/services/fetchViewProducts';
 
 interface PageSelectProps {
    className?: string;
+   countButtons?: number;
 }
 
 export const PageSelect = memo((props: PageSelectProps) => {
-   const { className } = props;
+   const { className, countButtons = 5 } = props;
+   const { pathname } = useLocation();
+   const dispatch = useAppDispatch();
    const [numPage, setNumPage] = useState(1);
    const pageProducts = useSelector(getPageProductsNum);
    const totalProducts = useSelector(getTotalProducts);
    const limitProducts = useSelector(getLimitProducts);
 
-   if (!totalProducts) return;
    const pages = Math.ceil(totalProducts / limitProducts);
-   const arr: number[] = [];
-   const arrItems = pages < 5 ? pages : 5;
+   const buttons = pages < countButtons ? pages : countButtons;
 
-   for (let i = 0; i < arrItems; ) {
-      arr[i] = numPage + i;
-      i += 1;
-   }
+   const arrPages = () => {
+      const arr: number[] = [];
+
+      for (let i = 0; i < buttons; ) {
+         arr[i] = numPage + i;
+         i += 1;
+      }
+      return arr;
+   };
+
+   useEffect(() => {
+      setNumPage(1);
+   }, [pathname]);
 
    const clickPage = (page: number) => {
-      if (page < 3) {
-         setNumPage(1);
-      } else {
-         setNumPage(page - 2);
-      }
+      dispatch(
+         fetchViewProducts({
+            page,
+            replace: pathname,
+         }),
+      ).then((data) => {
+         if (data.payload) {
+            if (page < 3) {
+               setNumPage(1);
+            } else if (page === pages) {
+               setNumPage(page - (buttons - 1));
+            } else if (page === pages - 1) {
+               setNumPage(page - (buttons - 2));
+            } else {
+               setNumPage(page - (buttons - 3));
+            }
+         }
+         window.scrollTo({
+            top: 600,
+            behavior: 'smooth',
+         });
+      });
    };
 
    const decreasePage = () => {
@@ -45,11 +74,11 @@ export const PageSelect = memo((props: PageSelectProps) => {
    };
 
    const increasePage = () => {
-      if (numPage < pages - 4) setNumPage(numPage + 1);
+      if (numPage < pages - (buttons - 1)) setNumPage(numPage + 1);
    };
 
    const modsRightArrow: Mods = {
-      [cls.inActive]: numPage > pages - 5,
+      [cls.inActive]: numPage > pages - buttons,
    };
    const modsLeftArrow: Mods = {
       [cls.inActive]: numPage < 2,
@@ -60,7 +89,7 @@ export const PageSelect = memo((props: PageSelectProps) => {
          id='container'
          className={classNames(cls.PageSelect, {}, [className])}
       >
-         {pages > 6 && (
+         {pages > buttons && (
             <Button
                onClick={decreasePage}
                className={classNames(cls.page, modsLeftArrow, [])}
@@ -68,7 +97,7 @@ export const PageSelect = memo((props: PageSelectProps) => {
                &lt;&lt;
             </Button>
          )}
-         {arr.map((item) => (
+         {arrPages().map((item) => (
             <Button
                key={item}
                className={classNames(
@@ -81,9 +110,9 @@ export const PageSelect = memo((props: PageSelectProps) => {
                {item}
             </Button>
          ))}
-         {pages > 5 && (
+         {pages > buttons && (
             <Button
-               disabled={numPage > pages - 5}
+               disabled={numPage > pages - buttons}
                onClick={increasePage}
                className={classNames(cls.page, modsRightArrow, [])}
             >

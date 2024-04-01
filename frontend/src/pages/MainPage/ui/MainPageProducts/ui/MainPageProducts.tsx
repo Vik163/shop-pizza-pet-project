@@ -40,6 +40,7 @@ import {
 import { TypeProducts } from '../model/types/mainPageProducts';
 import { nameViewProducts } from '@/shared/const/productConst';
 import { PageSelect } from './PageSelect/PageSelect';
+import { getUserSettings } from '@/entities/User';
 
 interface MainPageProductsProps {
    className?: string;
@@ -63,6 +64,7 @@ const MainPageProducts = forwardRef(
       const viewProduct = useSelector(getViewProducts);
       const page = useSelector(getPageProductsNum);
       const hasMoreProducts = useSelector(getPageHasMore);
+      const { viewLoadProducts } = useSelector(getUserSettings);
 
       const checkViewProductFromPath = () => {
          const path = pathname.slice(1) as keyof TypeProducts;
@@ -76,14 +78,33 @@ const MainPageProducts = forwardRef(
       }, [pathname]);
 
       useEffect(() => {
+         dispatch(mainPageActions.setProducts({}));
+         dispatch(
+            fetchViewProducts({
+               page: 1,
+               // меняет, а не добавляет
+               replace: pathname,
+            }),
+         );
+      }, [viewLoadProducts]);
+
+      useEffect(() => {
          if (products.length) {
             if (viewProduct === products[0].type) {
-               dispatch(
-                  mainPageActions.setProducts({
-                     ...cards,
-                     [viewProduct as string]: products,
-                  }),
-               );
+               if (viewLoadProducts === 'scroll') {
+                  dispatch(
+                     mainPageActions.setProducts({
+                        ...cards,
+                        [viewProduct as string]: products,
+                     }),
+                  );
+               } else {
+                  dispatch(
+                     mainPageActions.setProducts({
+                        [viewProduct as string]: products,
+                     }),
+                  );
+               }
             }
          }
       }, [products]);
@@ -139,7 +160,7 @@ const MainPageProducts = forwardRef(
                isLoading={isLoading}
                skeletonElements={paginateElements}
             />
-            <PageSelect />
+            {viewLoadProducts === 'pages' && <PageSelect />}
          </div>
       );
    },

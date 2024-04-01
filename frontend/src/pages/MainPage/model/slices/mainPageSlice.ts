@@ -28,6 +28,7 @@ const initialStateMainPage: MainPageSchema = {
    popularProducts: [],
    actionItems: [],
    limit: 0,
+   totalItems: 0,
    //    sort: ArticleSortField.CREATED,
    //    search: '',
    //    type: ArticleType.ALL,
@@ -47,7 +48,6 @@ const mainPageSlice = createSlice({
    initialState: productsAdapter.getInitialState(initialStateMainPage),
    reducers: {
       setProducts: (state, action: PayloadAction<ViewProducts>) => {
-         // console.log('action.payload:', action.payload);
          state.cards = action.payload;
       },
       setView: (state, action: PayloadAction<ProductView>) => {
