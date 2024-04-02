@@ -1,6 +1,6 @@
 export type {
    Product,
-   ProductFixPrice,
+   NewProducts,
    IngredientsView,
    ProductView,
 } from './model/types/product';

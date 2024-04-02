@@ -78,7 +78,7 @@ const MainPageProducts = forwardRef(
          if (pathProduct) onChangeViewProducts(pathProduct);
       }, [pathname]);
 
-      // Запрос при выборе вида загрузки и сброс стейта
+      // Запрос при переключении вида загрузки и сброс стейта
       useEffect(() => {
          dispatch(mainPageActions.setProducts({}));
          dispatch(

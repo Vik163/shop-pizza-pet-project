@@ -4,9 +4,9 @@ import { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/typ
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './HorizontalScrollingCard.module.scss';
-import { ScrollingCards } from '../../model/types/scrollingCards';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { CardNewProduct } from '@/features/CardNewProduct';
+import { ScrollingCards } from '../../model/types/scrollingCards';
 
 interface HorizontalScrollingCardProps {
    className?: string;

@@ -1,6 +1,5 @@
 import { EntityState } from '@reduxjs/toolkit';
 import { Product, ProductView } from '@/entities/Product';
-import { ScrollingCards } from '@/features/HorizontalScrolling';
 
 // export type ViewProducts = Record<string, Product[]>;
 
@@ -26,7 +25,6 @@ export interface MainPageSchema extends EntityState<Product> {
    items: Product[];
    cards: ViewProducts;
    popularProducts?: Product[];
-   actionItems?: ScrollingCards[];
    totalItems: number;
 
    // pagination

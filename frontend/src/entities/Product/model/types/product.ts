@@ -40,6 +40,6 @@ export type TypeProducts = {
    [K in ProductView]: string;
 };
 
-export type ProductFixPrice = Omit<Product, 'price'> & {
-   price: number;
-};
+export interface NewProducts extends Product {
+   link?: string;
+}

@@ -8,7 +8,6 @@ import { fetchViewProducts } from '../../model/services/fetchViewProducts';
 import { MainPageSchema, ViewProducts } from '../types/mainPageSchema';
 import { Product, ProductView } from '@/entities/Product';
 import { fetchPopularProducts } from '../services/fetchPopularProducts';
-import { fetchActions } from '../services/fetchActions';
 import { StateSchema } from '@/app/providers/StoreProvider';
 
 // 8_4
@@ -26,7 +25,6 @@ const initialStateMainPage: MainPageSchema = {
    items: [],
    cards: {},
    popularProducts: [],
-   actionItems: [],
    limit: 0,
    totalItems: 0,
    //    sort: ArticleSortField.CREATED,
@@ -111,18 +109,6 @@ const mainPageSlice = createSlice({
          })
          .addCase(fetchPopularProducts.rejected, (state, action) => {
             state.isLoadingPopularProducts = false;
-            state.error = action.payload;
-         })
-         .addCase(fetchActions.pending, (state) => {
-            state.error = undefined;
-            state.isLoading = true;
-         })
-         .addCase(fetchActions.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.actionItems = action.payload;
-         })
-         .addCase(fetchActions.rejected, (state, action) => {
-            state.isLoading = false;
             state.error = action.payload;
          });
    },
