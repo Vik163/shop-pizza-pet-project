@@ -22,8 +22,9 @@ export const ActionsPage = memo((props: ActionsPageProps) => {
 
    return (
       <Page className={classNames(cls.ActionsPage, {}, [className])}>
-         {actions?.map((action) => (
-            <ActionItem action={action} key={action.title} />
+         {actions?.map((action, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <ActionItem action={action} key={index} />
          ))}
       </Page>
    );

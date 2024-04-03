@@ -1,46 +1,12 @@
 .Card {
-   cursor: pointer;
-   padding: 5px 10px 10px;
+   // cursor: pointer;
+   // padding: 5px 10px 10px;
 }
 
-.container {
-   gap: 14px;
-   position: relative;
+.radius_12 {
+   border-radius: 12px;
 }
 
-.addInfo {
-   position: absolute;
-   right: 10px;
-   top: 15px;
-   padding: 0 15px;
-   height: 30px;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   border-radius: 15px;
-   font-weight: 700;
-   background-color: var(--color-bg-addInfo-card);
-   color: var(--color-black);
-   z-index: 1;
-
-   &.new {
-      background-color: var(--color-red);
-      color: var(--color-white);
-   }
-}
-
-.image {
-   margin: auto;
-   align-self: start;
-   transition: 0.2s;
-
-   &:hover {
-      transform: translateY(3px);
-      transition: 0.2s;
-   }
-}
-
-.title {
-   width: 235px;
-   text-align: start;
+.radius_14 {
+   border-radius: 14px;
 }

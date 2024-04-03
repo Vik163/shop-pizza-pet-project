@@ -29,7 +29,6 @@ export const ProductsList = memo((props: ProductsListProps) => {
             products.map((card) => (
                <ProductItem
                   key={card.title}
-                  className={cls.card}
                   buttonText='В корзину'
                   card={card}
                />

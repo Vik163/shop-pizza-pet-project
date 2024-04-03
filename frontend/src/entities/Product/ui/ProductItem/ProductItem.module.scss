@@ -1,1 +1,51 @@
+.card {
+   cursor: pointer;
+   padding: 5px 10px 10px;
+   width: 255px;
+   height: 465px;
+   background-color: var(--block-bg-primary);
+   border: 1px solid var(--color-border-cards);
+   box-shadow: 0 0 8px 0 var(--color-shadow);
+}
 
+.container {
+   gap: 14px;
+   position: relative;
+}
+
+.addInfo {
+   position: absolute;
+   right: 10px;
+   top: 15px;
+   padding: 0 15px;
+   height: 30px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   border-radius: 15px;
+   font-weight: 700;
+   background-color: var(--color-bg-addInfo-card);
+   color: var(--color-black);
+   z-index: 1;
+
+   &.new {
+      background-color: var(--color-red);
+      color: var(--color-white);
+   }
+}
+
+.image {
+   margin: auto;
+   align-self: start;
+   transition: 0.2s;
+
+   &:hover {
+      transform: translateY(3px);
+      transition: 0.2s;
+   }
+}
+
+.title {
+   width: 235px;
+   text-align: start;
+}

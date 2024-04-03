@@ -1,10 +1,17 @@
-.CardNewProduct {
+.NewProduct {
    gap: 25px;
    height: 100%;
    width: 255px;
-   border-radius: 12px;
    padding: 0 17px;
    background-color: var(--block-bg-primary);
+}
+
+.image {
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center center;
+   width: 71px;
+   height: 71px;
 }
 
 .cardInfo {
@@ -20,9 +27,4 @@
    -moz-user-select: none;
    -ms-user-select: none;
    user-select: none;
-}
-
-.CardNewProduct > div:first-child {
-   width: 71px;
-   height: 71px;
 }

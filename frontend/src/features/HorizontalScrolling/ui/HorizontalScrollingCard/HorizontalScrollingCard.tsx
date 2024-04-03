@@ -5,7 +5,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './HorizontalScrollingCard.module.scss';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
-import { CardNewProduct } from '@/features/CardNewProduct';
+import { NewProduct } from '@/entities/Product';
 import { ScrollingCards } from '../../model/types/scrollingCards';
 
 interface HorizontalScrollingCardProps {
@@ -98,22 +98,14 @@ export const HorizontalScrollingCard = memo(
             {!card.price ? (
                <div
                   className={cls.Card}
-                  style={{ width: widthElement, height: heightElement }}
-               >
-                  <div
-                     style={{
-                        backgroundImage: `url(${card.image})`,
-                     }}
-                  />
-               </div>
+                  style={{
+                     backgroundImage: `url(${card.image})`,
+                     width: widthElement,
+                     height: heightElement,
+                  }}
+               />
             ) : (
-               <CardNewProduct className={cls.Card} card={card}>
-                  <div
-                     style={{
-                        backgroundImage: `url(${card.imageSmall})`,
-                     }}
-                  />
-               </CardNewProduct>
+               <NewProduct card={card} />
             )}
          </animated.div>
       );

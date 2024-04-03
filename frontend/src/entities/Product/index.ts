@@ -7,6 +7,7 @@ export type {
 
 export { ProductItem } from './ui/ProductItem/ProductItem';
 export { ProductsList } from './ui/ProductsList/ProductsList';
+export { NewProduct } from './ui/NewProduct/NewProduct';
 
 // export { productActions, productReducer } from './model/slice/productsSlice';
 // // export {
