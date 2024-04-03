@@ -1,4 +1,28 @@
+.ActionItem {
+   width: 350px;
+   height: 391px;
+   box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.15);
+   position: relative;
+}
+
 .image {
-   width: 200px;
-   height: 150px;
+   width: 350px;
+}
+
+.info {
+   position: absolute;
+   top: 138px;
+   background-color: var(--color-bg-primary);
+   height: 253px;
+   padding: 20px;
+}
+
+.description {
+   margin: 10px 0 20px;
+   line-height: 20px;
+}
+
+.button {
+   width: 159px;
+   height: 45px;
 }

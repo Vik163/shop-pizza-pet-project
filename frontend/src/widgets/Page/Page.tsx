@@ -17,9 +17,15 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { getSaveScroll, scrollSaveActions } from '@/features/ScrollSave';
 import { useTrottle } from '@/shared/lib/hooks/useTrottle';
 
+export enum PageDirection {
+   VIRTICAL = 'vertical',
+   HORIZONTAL = 'horizontal',
+}
+
 interface PageProps {
    className?: string;
    children: ReactNode;
+   direction?: PageDirection;
    saveScroll?: boolean;
    onScrollEnd?: () => void;
    scrollTriggerRef?: MutableRefObject<HTMLDivElement> | undefined;
@@ -33,6 +39,7 @@ export const Page = memo((props: PageProps) => {
    const {
       className,
       children,
+      direction = PageDirection.VIRTICAL,
       onScrollEnd,
       scrollTriggerRef,
       hasScroll = false,
@@ -98,7 +105,7 @@ export const Page = memo((props: PageProps) => {
       <section
          // ставится если нужен внутренный скролл в page
          ref={hasScroll ? pageWithScrollRef : null}
-         className={classNames(cls.Page, {}, [className])}
+         className={classNames(cls.Page, {}, [className, cls[direction]])}
          id={PAGE_ID}
          onScroll={hasScroll && saveScroll ? onScroll : undefined}
       >

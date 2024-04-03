@@ -21,8 +21,8 @@ body {
    display: flex;
    flex-direction: column;
    align-items: center;
-   max-width: 1110px;
+   max-width: var(--page-width);
    width: 100%;
-   padding-top: 120px;
+   padding-top: var(--header-height);
    margin: 0 auto;
 }
