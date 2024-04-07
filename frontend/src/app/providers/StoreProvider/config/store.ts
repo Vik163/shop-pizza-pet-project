@@ -29,6 +29,7 @@ export function createReduxStore(
       csrfToken: csrfTokenReducer,
       scroll: scrollSaveReducer,
       actions: actionsReducer,
+      // maps: mapsElementsReducer,
       [rtkApi.reducerPath]: rtkApi.reducer, // 11_2 8min
    };
 

@@ -22,10 +22,17 @@ export enum PageDirection {
    HORIZONTAL = 'horizontal',
 }
 
+export enum PageAlign {
+   START = 'align_start',
+   END = 'align_end',
+   CENTER = 'align_center',
+}
+
 interface PageProps {
    className?: string;
    children: ReactNode;
    direction?: PageDirection;
+   align?: PageAlign;
    saveScroll?: boolean;
    onScrollEnd?: () => void;
    scrollTriggerRef?: MutableRefObject<HTMLDivElement> | undefined;
@@ -42,6 +49,7 @@ export const Page = memo((props: PageProps) => {
       direction = PageDirection.VIRTICAL,
       onScrollEnd,
       scrollTriggerRef,
+      align = PageAlign.CENTER,
       hasScroll = false,
       animationScroll = false,
       saveScroll = false,
@@ -105,7 +113,11 @@ export const Page = memo((props: PageProps) => {
       <section
          // ставится если нужен внутренный скролл в page
          ref={hasScroll ? pageWithScrollRef : null}
-         className={classNames(cls.Page, {}, [className, cls[direction]])}
+         className={classNames(cls.Page, {}, [
+            className,
+            cls[direction],
+            cls[align],
+         ])}
          id={PAGE_ID}
          onScroll={hasScroll && saveScroll ? onScroll : undefined}
       >

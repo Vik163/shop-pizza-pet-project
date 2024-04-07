@@ -1,6 +1,5 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { YMaps } from '@pbe/react-yandex-maps';
 
 import App from './app/App';
 import '@/app/styles/index.scss';
@@ -22,9 +21,7 @@ root.render(
    <BrowserRouter>
       <StoreProvider>
          <ThemeProvider>
-            <YMaps>
-               <App />
-            </YMaps>
+            <App />
          </ThemeProvider>
       </StoreProvider>
    </BrowserRouter>,

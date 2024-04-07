@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
@@ -21,6 +21,25 @@ const App = memo(() => {
    // Yandex query ответ
    const initYaData = searchParams.get('user');
    const userYaData = initYaData && JSON.parse(initYaData);
+   // const Map = async () => {
+   //    const ymaps3Reactify = await ymaps3.import('@yandex/ymaps3-reactify');
+   //    const reactify = ymaps3Reactify.reactify.bindTo(React, ReactDOM);
+   //    const {
+   //       YMap,
+   //       YMapDefaultSchemeLayer,
+   //       YMapDefaultFeaturesLayer,
+   //       YMapMarker,
+   //    } = reactify.module(ymaps3);
+
+   //    return {
+   //       YMap,
+   //       YMapDefaultSchemeLayer,
+   //       YMapDefaultFeaturesLayer,
+   //       YMapMarker,
+   //    };
+   // };
+
+   // Map();
 
    try {
       useEffect(() => {

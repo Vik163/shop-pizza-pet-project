@@ -15,8 +15,15 @@
       "moduleResolution": "node",
       // Для абсолютного импорта
       "baseUrl": ".",
+      // яндекс карты
+      "typeRoots": [
+         "./types",
+         "./node_modules/@types",
+         "./node_modules/@yandex/ymaps3-types"
+      ],
       "paths": {
-         "@/*": ["./src/*"] // 12_5 2min
+         "@/*": ["./src/*"], // 12_5 2min
+         "ymaps3": ["./node_modules/@yandex/ymaps3-types"] // яндекс карты
       },
       // esModuleInterop позволяет работать с пакетами, которые используют
       // common js как с обычными пакета с помощью import (require() module.export) = common js

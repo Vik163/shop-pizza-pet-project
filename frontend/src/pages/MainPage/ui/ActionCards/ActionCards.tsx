@@ -7,12 +7,12 @@ import {
    HorizontalScrolling,
    ScrollingCards,
 } from '@/features/HorizontalScrolling';
-import { getMainPageIsLoading } from '../../../model/selectors/mainPageSelectors';
+import { getMainPageIsLoading } from '../../model/selectors/mainPageSelectors';
 import { HStack } from '@/shared/ui/Stack';
 import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
-import { getActions } from '../../../../../entities/Action/model/selectors/actionsSelector';
+import { getActions } from '../../../../entities/Action/model/selectors/actionsSelector';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { fetchActions } from '../../../../../entities/Action/model/services/fetchActions';
+import { fetchActions } from '../../../../entities/Action/model/services/fetchActions';
 
 interface ActionCardsProps {
    className?: string;

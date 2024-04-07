@@ -31,15 +31,17 @@ export const ActionItem = memo((props: ActionItemProps) => {
             >
                {action.description}
             </Text>
-            <Button
-               className={cls.button}
-               variant={ButtonVariant.FILLED}
-               bgColor={ButtonBgColor.YELLOW}
-               fontColor={FontColor.TEXT_BUTTON}
-               fontSize={FontSize.SIZE_14}
-            >
-               Посмотреть
-            </Button>
+            <a href={action.link} target='_blank' rel='noreferrer'>
+               <Button
+                  className={cls.button}
+                  variant={ButtonVariant.FILLED}
+                  bgColor={ButtonBgColor.YELLOW}
+                  fontColor={FontColor.TEXT_BUTTON}
+                  fontSize={FontSize.SIZE_14}
+               >
+                  Посмотреть
+               </Button>
+            </a>
          </VStack>
       </Card>
    );

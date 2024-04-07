@@ -96,14 +96,21 @@ export const HorizontalScrollingCard = memo(
             }}
          >
             {!card.price ? (
-               <div
-                  className={cls.Card}
-                  style={{
-                     backgroundImage: `url(${card.image})`,
-                     width: widthElement,
-                     height: heightElement,
-                  }}
-               />
+               <a
+                  href={card.link}
+                  target='_blank'
+                  rel='noreferrer'
+                  aria-label='Link'
+               >
+                  <div
+                     className={cls.Card}
+                     style={{
+                        backgroundImage: `url(${card.image})`,
+                        width: widthElement,
+                        height: heightElement,
+                     }}
+                  />
+               </a>
             ) : (
                <NewProduct card={card} />
             )}

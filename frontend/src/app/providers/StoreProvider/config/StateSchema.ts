@@ -19,6 +19,7 @@ export interface StateSchema {
    csrfToken: TokenSchema;
    scroll: ScrollSaveSchema;
    actions: ActionsSchema;
+   // maps: MapsElementsSchema;
 
    [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>; // 11_2 9min
 

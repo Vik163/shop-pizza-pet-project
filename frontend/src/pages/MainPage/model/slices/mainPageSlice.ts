@@ -55,6 +55,7 @@ const mainPageSlice = createSlice({
       setPage: (state, action: PayloadAction<number>) => {
          state.page = action.payload;
       },
+
       //   setSort: (state, action: PayloadAction<ArticleSortField>) => {
       //      state.sort = action.payload;
       //   },

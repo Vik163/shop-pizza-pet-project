@@ -15,7 +15,7 @@ import {
    RefType,
 } from '../MainPageProducts/ui/MainPageProducts';
 import { NewProducts } from '../NewProducts/ui/NewProducts';
-import { ActionCards } from '../ActionCards/ui/ActionCards';
+import { ActionCards } from '../ActionCards/ActionCards';
 import { getUserSettings } from '@/entities/User';
 
 interface MainPageProps {
