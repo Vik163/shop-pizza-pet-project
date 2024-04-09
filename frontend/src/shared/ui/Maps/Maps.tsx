@@ -4,16 +4,20 @@ import { LngLat } from '@yandex/ymaps3-types';
 import cls from './Maps.module.scss';
 import { IMaps, useLoadMaps } from '@/shared/lib/hooks/useLoadMaps';
 import { classNames } from '@/shared/lib/classNames/classNames';
+import { Icon } from '../Icon';
+import markerStore from '@/shared/assets/icons/marker_store.png';
+import markerCar from '@/shared/assets/icons/marker_car.png';
 
 interface MapsProps {
    className?: string;
    location: LngLat;
    zoom: number;
-   coordinates?: LngLat;
+   coordStore?: LngLat;
+   coordCar?: LngLat;
 }
 
 const Maps = (props: MapsProps) => {
-   const { className, location, zoom, coordinates } = props;
+   const { className, location, zoom, coordStore, coordCar } = props;
 
    const mapsElements: IMaps = useLoadMaps();
 
@@ -35,12 +39,30 @@ const Maps = (props: MapsProps) => {
          >
             <YMapDefaultSchemeLayer />
             <YMapDefaultFeaturesLayer />
-            {coordinates && (
-               <YMapMarker coordinates={coordinates} draggable>
+            {coordStore && (
+               <YMapMarker coordinates={coordStore} draggable>
                   {true && (
-                     <section>
-                        <h1>You can drag this header</h1>
+                     <section className={cls.markerContainer}>
+                        <div className={cls.mapInfo}>dfgdfgdfg</div>
+                        <Icon
+                           width={40}
+                           height={40}
+                           className={cls.markerStore}
+                           src={markerStore}
+                        />
                      </section>
+                  )}
+               </YMapMarker>
+            )}
+            {coordCar && (
+               <YMapMarker coordinates={coordCar} draggable>
+                  {true && (
+                     <Icon
+                        width={40}
+                        height={40}
+                        className={cls.markerStore}
+                        src={markerCar}
+                     />
                   )}
                </YMapMarker>
             )}

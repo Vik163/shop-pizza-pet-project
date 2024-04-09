@@ -3,7 +3,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Header.module.scss';
 import { Icon } from '@/shared/ui/Icon';
-import Logo from '@/shared/assets/icons/logo.png';
+import Logo from '@/shared/assets/icons/shop_logo.png';
 import Star from '@/shared/assets/icons/star.svg';
 import YaFood from '@/shared/assets/icons/ya_eda.png';
 import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';

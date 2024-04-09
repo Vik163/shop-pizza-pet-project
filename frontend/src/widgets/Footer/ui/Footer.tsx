@@ -3,7 +3,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Footer.module.scss';
 
-import Logo from '@/shared/assets/icons/logo.png';
+import Logo from '@/shared/assets/icons/shop_logo.png';
 import Viza from '@/shared/assets/icons/viza.png';
 import Pay from '@/shared/assets/icons/pay.png';
 import Master from '@/shared/assets/icons/master.png';

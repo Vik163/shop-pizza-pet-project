@@ -5,7 +5,7 @@ import cls from './ContactsPage.module.scss';
 import { Page, PageAlign } from '@/widgets/Page';
 import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
 import Maps from '@/shared/ui/Maps/Maps';
-import { mainCoordinates, mainZoom } from '@/shared/const/maps';
+import { coordStore, mainCoordinates, mainZoom } from '@/shared/const/maps';
 
 interface ContactsPageProps {
    className?: string;
@@ -27,7 +27,8 @@ export const ContactsPage = memo((props: ContactsPageProps) => {
          <Maps
             location={mainCoordinates}
             zoom={mainZoom}
-            coordinates={mainCoordinates}
+            coordStore={coordStore}
+            // coordCar={coordStore}
             className={cls.map}
          />
          <Text
