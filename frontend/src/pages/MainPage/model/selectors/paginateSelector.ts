@@ -1,5 +1,5 @@
 import { StateSchema } from '@/app/providers/StoreProvider';
-import { paginateElements } from '@/shared/const/paginateElements';
+import { paginateElements } from '@/shared/const/paginate_elements';
 
 export const getViewProducts = (state: StateSchema) =>
    state.mainPage.view || 'pizzas';

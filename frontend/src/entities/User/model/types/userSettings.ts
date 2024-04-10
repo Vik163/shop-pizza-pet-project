@@ -1,5 +1,5 @@
 import { Theme } from '@/shared/const/theme';
-import { ViewLoad } from '@/shared/const/viewLoad';
+import { ViewLoad } from '@/shared/const/view_load';
 
 export interface UserSettings {
    isFirstVisit: boolean;

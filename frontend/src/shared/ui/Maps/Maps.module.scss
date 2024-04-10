@@ -1,28 +1,44 @@
 .markerContainer {
    position: relative;
 
-   .mapInfo {
+   .infoContainer {
       position: absolute;
       bottom: 45px;
-      width: 200px;
-      height: fit-content;
       background-color: white;
-      border-radius: 4px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      border-radius: 8px;
       visibility: hidden;
       opacity: 0;
       transition: 0.3s;
-      padding: 4px;
+      padding: 8px;
       border: 1px solid rgb(200, 200, 200);
    }
 
+   .mapInfo {
+      width: 150px;
+      height: fit-content;
+   }
+
+   .markerStore {
+      position: absolute;
+      left: -5px;
+      bottom: -3px;
+   }
+
    &:has(.markerStore:hover) {
-      .mapInfo {
+      .infoContainer {
          visibility: visible;
          opacity: 1;
          transition: 0.3s;
       }
    }
+}
+
+.logoContainer {
+   width: 150px;
+   height: 25px;
+}
+
+.logo {
+   width: 25px;
+   height: 25px;
 }

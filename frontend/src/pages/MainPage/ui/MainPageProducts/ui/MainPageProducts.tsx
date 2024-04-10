@@ -28,7 +28,7 @@ import {
    mainPageActions,
 } from '../../../model/slices/mainPageSlice';
 import { ProductsList } from '@/entities/Product';
-import { paginateElements } from '@/shared/const/paginateElements';
+import { paginateElements } from '@/shared/const/paginate_elements';
 import { getSaveScroll } from '@/features/ScrollSave';
 import { getCards } from '../../../model/selectors/productsSelector';
 import {
@@ -38,7 +38,7 @@ import {
    getViewProducts,
 } from '../../../model/selectors/paginateSelector';
 import { TypeProducts } from '../model/types/mainPageProducts';
-import { nameViewProducts } from '@/shared/const/productConst';
+import { nameViewProducts } from '@/shared/const/product_const';
 import { PageSelect } from './PageSelect/PageSelect';
 import { getUserSettings } from '@/entities/User';
 

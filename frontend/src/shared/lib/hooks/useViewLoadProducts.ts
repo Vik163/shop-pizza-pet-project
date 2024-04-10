@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ViewLoad } from '@/shared/const/viewLoad';
+import { ViewLoad } from '@/shared/const/view_load';
 import { LOCAL_STORAGE_VIEW_LOAD_KEY } from '@/shared/const/localstorage';
 
 interface UseViewLoadResult {

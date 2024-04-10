@@ -15,3 +15,9 @@ declare global {
       YaSendSuggestToken: any;
    }
 }
+
+declare global {
+   interface Window {
+      map: any;
+   }
+}

@@ -7,7 +7,7 @@ import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { SwitchUI } from '@/shared/ui/SwitchUI';
 import { useViewLoadProducts } from '@/shared/lib/hooks/useViewLoadProducts';
-import { ViewLoad } from '@/shared/const/viewLoad';
+import { ViewLoad } from '@/shared/const/view_load';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import {
    UserSettings,

@@ -4,8 +4,14 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import cls from './ContactsPage.module.scss';
 import { Page, PageAlign } from '@/widgets/Page';
 import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
+import {
+   coordCar,
+   coordStore,
+   mainCoordinates,
+   mainZoom,
+} from '@/shared/const/maps';
 import Maps from '@/shared/ui/Maps/Maps';
-import { coordStore, mainCoordinates, mainZoom } from '@/shared/const/maps';
+import { address, phoneContacts } from '@/shared/const/main_info';
 
 interface ContactsPageProps {
    className?: string;
@@ -28,7 +34,7 @@ export const ContactsPage = memo((props: ContactsPageProps) => {
             location={mainCoordinates}
             zoom={mainZoom}
             coordStore={coordStore}
-            // coordCar={coordStore}
+            coordCar={coordCar}
             className={cls.map}
          />
          <Text
@@ -37,17 +43,17 @@ export const ContactsPage = memo((props: ContactsPageProps) => {
             fontWeight={FontWeight.TEXT_700}
             fontColor={FontColor.TEXT_YELLOW}
          >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            {phoneContacts}
          </Text>
          <Text
             className={cls.address}
             fontSize={FontSize.SIZE_26}
             fontWeight={FontWeight.TEXT_700}
          >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            {address}
          </Text>
          <Text fontSize={FontSize.SIZE_15} fontWeight={FontWeight.TEXT_500}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            Доставка и самовывоз 10:00 — 23:00
          </Text>
       </Page>
    );

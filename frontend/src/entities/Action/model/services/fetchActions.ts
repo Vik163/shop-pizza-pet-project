@@ -16,7 +16,6 @@ export const fetchActions = createAsyncThunk<
          rejectWithValue('Акции не найдены');
       }
 
-      console.log(response.data);
       return response.data;
    } catch (e) {
       return rejectWithValue('error');

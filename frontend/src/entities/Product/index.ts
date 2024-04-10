@@ -16,4 +16,4 @@ export { NewProduct } from './ui/NewProduct/NewProduct';
 // //    getProducts,
 // // } from './model/selectors/productSelector';
 // export { fetchProductsList } from './model/services/fetchInitProducts/fetchInitProducts';
-export { ProductSortField } from '../../shared/const/productConst';
+export { ProductSortField } from '../../shared/const/product_const';

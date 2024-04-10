@@ -17,6 +17,7 @@ import { HStack, VStack } from '@/shared/ui/Stack';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { Navbar } from '@/widgets/Navbar';
+import { phoneHeader } from '@/shared/const/main_info';
 
 interface HeaderProps {
    className?: string;
@@ -38,8 +39,8 @@ export const Header = memo((props: HeaderProps) => {
                   fontColor={FontColor.TEXT_PRIMARY}
                   fontSize={FontSize.SIZE_17}
                >
-                  Доставка пасты
-                  <span className={classNames(cls.text_city)}>Москва</span>
+                  Доставка пиццы
+                  <span className={classNames(cls.text_city)}>Самара</span>
                </Text>
                <HStack className={classNames(cls.delivery_info)}>
                   <Icon src={YaFood} width={18} height={18} />
@@ -88,7 +89,7 @@ export const Header = memo((props: HeaderProps) => {
                fontWeight={FontWeight.TEXT_700}
                fontSize={FontSize.SIZE_26}
             >
-               8 499 391-84-49
+               {phoneHeader}
             </Text>
          </HStack>
          <Navbar />

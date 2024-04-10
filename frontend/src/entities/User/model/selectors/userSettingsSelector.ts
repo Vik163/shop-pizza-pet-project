@@ -5,7 +5,7 @@ import {
    LOCAL_STORAGE_THEME_KEY,
    LOCAL_STORAGE_VIEW_LOAD_KEY,
 } from '@/shared/const/localstorage';
-import { ViewLoad } from '@/shared/const/viewLoad';
+import { ViewLoad } from '@/shared/const/view_load';
 
 const defaultUserSettings: UserSettings = {
    isFirstVisit: true,
