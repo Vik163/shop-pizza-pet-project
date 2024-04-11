@@ -14,13 +14,14 @@ import { FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { navbarItems } from '../model/items';
 import { AppLink } from '@/shared/ui/AppLink';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
-import { Modal } from '@/shared/ui/Modal';
 import { PhoneForm } from '@/features/AuthByPhone';
 import { getInited, getUserData, UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
 import { $api } from '@/shared/api/api';
+import { Modal, getOpenPopup, modalActions } from '@/shared/ui/Modal';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
 
 interface NavbarProps {
@@ -29,10 +30,12 @@ interface NavbarProps {
 
 export const Navbar = memo((props: NavbarProps) => {
    const { className } = props;
-   const [isOpenPopup, setIsOpenPopup] = useState(false);
+   const dispatch = useAppDispatch();
+   // const [isOpenPopup, setIsOpenPopup] = useState(false);
 
    const [titlePopup, setTitlePopup] = useState('');
    const inited = useSelector(getInited);
+   const isOpenPopup = useSelector(getOpenPopup);
    const user = useSelector(getUserData) as UserData;
    const pathProfile = user?.userId && getRouteProfile(user?.userId);
 
@@ -43,20 +46,15 @@ export const Navbar = memo((props: NavbarProps) => {
       } catch (err) {
          console.log(err);
       }
-
-      // const users = await $api.get('/users');
-      // console.log('users:', users.data);
    };
 
    const onAuth = () => {
-      // if(inited) navigate(getRouteProfile())
-      // if (inited) navigate('/profile');
-      setIsOpenPopup(true);
+      dispatch(modalActions.setIsOpenPopup(true));
       setTitlePopup('Вход на сайт');
    };
 
    const closePopup = useCallback(() => {
-      setIsOpenPopup(false);
+      dispatch(modalActions.setIsOpenPopup(false));
    }, []);
 
    const itemList = useMemo(
@@ -115,7 +113,6 @@ export const Navbar = memo((props: NavbarProps) => {
             // если нет то модалка не встраивается
             <Modal
                className={cls.phoneModal}
-               isOpen={isOpenPopup}
                onClose={closePopup}
                title={titlePopup}
                lazy
@@ -123,10 +120,6 @@ export const Navbar = memo((props: NavbarProps) => {
                <PhoneForm onClosePopup={closePopup} />
             </Modal>
          )}
-
-         {/* <Suspense fallback={'...'}>
-            <ProfilePage />
-         </Suspense> */}
       </HStack>
    );
 });

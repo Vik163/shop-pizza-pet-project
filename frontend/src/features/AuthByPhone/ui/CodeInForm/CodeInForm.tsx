@@ -19,6 +19,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { fetchSignupUser } from '../../model/services/fetchSignupUser';
 import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
 import { CodeInFormComponent } from '../CodeInFormComponent/ui/CodeInFormComponent';
+import { modalActions } from '@/shared/ui/Modal';
 
 interface CodeInFormProps {
    className?: string;
@@ -39,7 +40,7 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
       async (user: User) => {
          const signupData = await dispatch(fetchSignupUser(user));
          if (signupData.payload) {
-            onClosePopup();
+            dispatch(modalActions.setIsOpenPopup(false));
             return signupData.payload;
          }
       },
