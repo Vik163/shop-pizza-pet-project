@@ -31,7 +31,7 @@ import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
 import { PhoneFormComponent } from '../PhoneFormComponent/ui/PhoneFormComponent';
 
 export interface PhoneFormProps {
-   onClosePopup: () => void;
+   onCloseModal: () => void;
 }
 
 const initialReducers: ReducersList = {
@@ -39,7 +39,7 @@ const initialReducers: ReducersList = {
 };
 
 const PhoneForm = memo((props: PhoneFormProps) => {
-   const { onClosePopup } = props;
+   const { onCloseModal } = props;
    const dispatch = useAppDispatch();
    const captchaRef = useRef(null);
    const isLoading = useSelector(getIsLoading);
@@ -90,7 +90,7 @@ const PhoneForm = memo((props: PhoneFormProps) => {
             <CodeInForm
                forvardRef={captchaRef}
                onEditPhone={onEditPhone}
-               onClosePopup={onClosePopup}
+               onCloseModal={onCloseModal}
             />
          )}
          <div ref={captchaRef} className={cls.recaptcha}>

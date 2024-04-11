@@ -11,10 +11,11 @@ interface ProductsListProps {
    products?: Product[];
    isLoading?: boolean;
    skeletonElements: number;
+   onModal: (card: Product) => void;
 }
 
 export const ProductsList = memo((props: ProductsListProps) => {
-   const { products, isLoading, skeletonElements } = props;
+   const { products, isLoading, skeletonElements, onModal } = props;
 
    const getSkeleton = () => {
       return new Array(skeletonElements).fill(0).map((item, index) => (
@@ -31,6 +32,7 @@ export const ProductsList = memo((props: ProductsListProps) => {
                   key={card.title}
                   buttonText='В корзину'
                   card={card}
+                  onClick={() => onModal(card)}
                />
             ))}
          {isLoading && getSkeleton()}

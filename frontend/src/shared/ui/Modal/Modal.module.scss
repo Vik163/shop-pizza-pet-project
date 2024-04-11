@@ -46,14 +46,10 @@
    transition: 0.15s transform;
 }
 
-.modalTime {
-   background: var(--color-grey-blue);
-   color: var(--color-grey-blue-dark);
-}
-
-.title {
-   color: inherit;
-}
+// .modalTime {
+//    background: var(--color-grey-blue);
+//    color: var(--color-grey-blue-dark);
+// }
 
 .close {
    width: 40px;
@@ -63,4 +59,5 @@
    fill: var(--color-yellow);
    top: 32px;
    right: 40px;
+   z-index: 5;
 }

@@ -1,30 +1,23 @@
 import { type ReactNode, memo } from 'react';
-import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Modal.module.scss';
-import { Text, FontSize, FontWeight } from '../../../Text';
-import { Button } from '../../../Button/Button';
+import { Button } from '../Button/Button';
 import close from '@/shared/assets/icons/close.svg';
-import { Icon } from '../../../Icon';
-import { useModal } from '../../lib/hook/useModal';
-import { getOpenPopup } from '../../model/selectors/modalSelectors';
-import { Portal } from '../../../Portal/Portal';
+import { Icon } from '../Icon';
+import { useModal } from '../../lib/hooks/useModal';
+import { Portal } from '../Portal/Portal';
 
 interface ModalProps {
    className?: string;
    children?: ReactNode;
    onClose: () => void;
-   title: string;
-   themeGray?: boolean;
+   isOpen: boolean;
    lazy?: boolean;
 }
 
 export const Modal = memo((props: ModalProps) => {
-   const { children, className, onClose, title, themeGray, lazy } = props;
-
-   const isOpen = useSelector(getOpenPopup);
-   console.log('isOpen:', isOpen);
+   const { children, className, onClose, isOpen, lazy } = props;
 
    //* выношу логику в хук
    const { isClosing, handleClose, onContentClick, isMounted } = useModal({
@@ -32,14 +25,9 @@ export const Modal = memo((props: ModalProps) => {
       onClose,
    });
 
-   const modalTheme = !!themeGray;
-
    const mods: Record<string, boolean> = {
       [cls.opened]: isOpen,
       [cls.closing]: isClosing,
-   };
-   const modsContainer: Record<string, boolean> = {
-      [cls.modalTime]: modalTheme,
    };
 
    if (lazy && !isMounted) return;
@@ -49,19 +37,9 @@ export const Modal = memo((props: ModalProps) => {
          <div className={classNames(cls.Modal, mods, [])}>
             <div className={cls.overlay} onClick={handleClose}>
                <div
-                  className={classNames(cls.content, modsContainer, [
-                     className,
-                  ])}
+                  className={classNames(cls.content, {}, [className])}
                   onClick={onContentClick}
                >
-                  <Text
-                     className={cls.title}
-                     fontSize={FontSize.SIZE_32}
-                     fontWeight={FontWeight.TEXT_700}
-                     max
-                  >
-                     {title}
-                  </Text>
                   <Button className={cls.close} onClick={handleClose}>
                      <Icon width={40} height={40} Svg={close} />
                   </Button>

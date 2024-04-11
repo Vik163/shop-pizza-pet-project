@@ -12,7 +12,6 @@ import { type rtkApi } from '@/shared/api/rtkApi';
 import { type MainPageSchema } from '@/pages/MainPage';
 import { type ScrollSaveSchema } from '@/features/ScrollSave';
 import { ActionsSchema } from '@/entities/Action';
-import { ModalSchema } from '@/shared/ui/Modal';
 
 export interface StateSchema {
    mainPage: MainPageSchema;
@@ -20,7 +19,6 @@ export interface StateSchema {
    csrfToken: TokenSchema;
    scroll: ScrollSaveSchema;
    actions: ActionsSchema;
-   modal: ModalSchema;
 
    [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>; // 11_2 9min
 

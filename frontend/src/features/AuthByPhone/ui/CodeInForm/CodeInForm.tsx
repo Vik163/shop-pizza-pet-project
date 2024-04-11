@@ -19,17 +19,16 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { fetchSignupUser } from '../../model/services/fetchSignupUser';
 import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
 import { CodeInFormComponent } from '../CodeInFormComponent/ui/CodeInFormComponent';
-import { modalActions } from '@/shared/ui/Modal';
 
 interface CodeInFormProps {
    className?: string;
    onEditPhone: () => void;
-   onClosePopup: () => void;
+   onCloseModal: () => void;
    forvardRef: MutableRefObject<null>;
 }
 
 export const CodeInForm = memo((props: CodeInFormProps) => {
-   const { onEditPhone, onClosePopup, forvardRef } = props;
+   const { onEditPhone, onCloseModal, forvardRef } = props;
 
    const dispatch = useAppDispatch();
    const isLoading = useSelector(getIsLoading);
@@ -40,11 +39,11 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
       async (user: User) => {
          const signupData = await dispatch(fetchSignupUser(user));
          if (signupData.payload) {
-            dispatch(modalActions.setIsOpenPopup(false));
+            onCloseModal();
             return signupData.payload;
          }
       },
-      [dispatch, onClosePopup],
+      [dispatch, onCloseModal],
    );
 
    // -----------------------------------------------------------------------------

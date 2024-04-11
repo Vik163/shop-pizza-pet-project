@@ -1,14 +1,19 @@
-import { memo } from "react";
-import { classNames } from "@/shared/lib/classNames/classNames";
+import { memo } from 'react';
+import { classNames } from '@/shared/lib/classNames/classNames';
 
-import cls from "./OrderProducts.module.scss";
+import cls from './OrderProducts.module.scss';
+import { Product } from '@/entities/Product';
 
 interface OrderProductsProps {
-  className?: string;
+   className?: string;
+   modalInfo: Product;
 }
 
 export const OrderProducts = memo((props: OrderProductsProps) => {
-  const { className } = props;
+   const { className, modalInfo } = props;
+   console.log('modalInfo:', modalInfo);
 
-  return <div className={classNames(cls.OrderProducts, {}, [className])}></div>;
+   return (
+      <div className={classNames(cls.OrderProducts, {}, [className])}></div>
+   );
 });

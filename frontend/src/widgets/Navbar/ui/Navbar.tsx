@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -20,9 +20,7 @@ import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
 import { $api } from '@/shared/api/api';
-import { Modal, getOpenPopup, modalActions } from '@/shared/ui/Modal';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-// eslint-disable-next-line ulbi-tv-plugin/layer-imports
+import { Modal } from '@/shared/ui/Modal';
 
 interface NavbarProps {
    className?: string;
@@ -30,12 +28,8 @@ interface NavbarProps {
 
 export const Navbar = memo((props: NavbarProps) => {
    const { className } = props;
-   const dispatch = useAppDispatch();
-   // const [isOpenPopup, setIsOpenPopup] = useState(false);
-
-   const [titlePopup, setTitlePopup] = useState('');
+   const [isOpenModal, setIsOpenModal] = useState(false);
    const inited = useSelector(getInited);
-   const isOpenPopup = useSelector(getOpenPopup);
    const user = useSelector(getUserData) as UserData;
    const pathProfile = user?.userId && getRouteProfile(user?.userId);
 
@@ -48,15 +42,6 @@ export const Navbar = memo((props: NavbarProps) => {
       }
    };
 
-   const onAuth = () => {
-      dispatch(modalActions.setIsOpenPopup(true));
-      setTitlePopup('Вход на сайт');
-   };
-
-   const closePopup = useCallback(() => {
-      dispatch(modalActions.setIsOpenPopup(false));
-   }, []);
-
    const itemList = useMemo(
       () =>
          navbarItems.map((item) => (
@@ -68,9 +53,16 @@ export const Navbar = memo((props: NavbarProps) => {
                {item.text}
             </AppLink>
          )),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       [],
    );
+
+   const onOpenModal = () => {
+      setIsOpenModal(true);
+   };
+
+   const onCloseModal = () => {
+      setIsOpenModal(false);
+   };
 
    return (
       <HStack className={classNames(cls.Navbar, {}, [className])} max>
@@ -87,7 +79,7 @@ export const Navbar = memo((props: NavbarProps) => {
                fontColor={FontColor.TEXT_PRIMARY}
                fontWeight={FontWeight.TEXT_700}
                fontSize={FontSize.SIZE_16}
-               onClick={onAuth}
+               onClick={onOpenModal}
             >
                Войти
             </Button>
@@ -109,15 +101,15 @@ export const Navbar = memo((props: NavbarProps) => {
          >
             Корзина<span className={classNames(cls.basket_quantity)}>1</span>
          </Button>
-         {isOpenPopup && (
+         {isOpenModal && (
             // если нет то модалка не встраивается
             <Modal
+               onClose={onCloseModal}
+               isOpen={isOpenModal}
                className={cls.phoneModal}
-               onClose={closePopup}
-               title={titlePopup}
                lazy
             >
-               <PhoneForm onClosePopup={closePopup} />
+               <PhoneForm onCloseModal={onCloseModal} />
             </Modal>
          )}
       </HStack>

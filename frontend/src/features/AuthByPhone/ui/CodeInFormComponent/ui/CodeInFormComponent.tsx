@@ -5,9 +5,9 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './CodeInFormComponent.module.scss';
 import { Button } from '@/shared/ui/Button';
-import { HStack } from '@/shared/ui/Stack';
+import { HStack, VStack } from '@/shared/ui/Stack';
 import { Text, FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
-import { FlexJustify } from '@/shared/ui/Stack/Flex';
+import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
 import { Input } from '@/shared/ui/Input';
 import {
    getIsError,
@@ -85,56 +85,69 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
    };
 
    return (
-      <form className={classNames(cls.formByPhone, {}, [])}>
-         <HStack className={cls.phoneContainer} justify={FlexJustify.BETWEEN}>
-            <Text>Номер телефона</Text>
-            <Text
-               className={cls.phone}
-               fontSize={FontSize.SIZE_15}
-               fontColor={FontColor.TEXT_PRIMARY}
-               fontWeight={FontWeight.TEXT_700}
-            >
-               {authPhoneNumber}
-            </Text>
-            <Button
-               fontColor={FontColor.TEXT_YELLOW}
-               fontWeight={FontWeight.TEXT_500}
-               fontSize={FontSize.SIZE_14}
-               onClick={onEditPhone}
-            >
-               Изменить
-            </Button>
-         </HStack>
-         <HStack
-            className={cls.confirmCodeContainer}
-            justify={FlexJustify.BETWEEN}
+      <VStack align={FlexAlign.START} className={cls.container}>
+         <Text
+            className={cls.title}
+            fontSize={FontSize.SIZE_32}
+            fontWeight={FontWeight.TEXT_700}
+            max
          >
-            <Input
-               className={classNames(cls.confirmCodeInput, {}, [])}
-               widthInput={114}
-               heightInput={48}
-               widthInputAndEditButtonRight={88}
-               name='confirmCode'
-               labelLeft='Код из СМС'
-               type='number'
-               error={error}
-               focusInput
-               onChange={onChangeNumberCode}
-               value=''
-               fixedChangeValue={lengthConfirmCode}
-            />
-            <Button
-               fontColor={FontColor.TEXT_YELLOW}
-               fontWeight={FontWeight.TEXT_500}
-               fontSize={FontSize.SIZE_14}
-               onClick={onRequestCode}
+            Вход на сайт
+         </Text>
+         <form className={classNames(cls.formByPhone, {}, [])}>
+            <HStack
+               className={cls.phoneContainer}
+               justify={FlexJustify.BETWEEN}
             >
-               Получить новый код
-            </Button>
-            {error === 'Неверный код' && (
-               <div className={cls.errorWarning}>Неверный код</div>
-            )}
-         </HStack>
-      </form>
+               <Text>Номер телефона</Text>
+               <Text
+                  className={cls.phone}
+                  fontSize={FontSize.SIZE_15}
+                  fontColor={FontColor.TEXT_PRIMARY}
+                  fontWeight={FontWeight.TEXT_700}
+               >
+                  {authPhoneNumber}
+               </Text>
+               <Button
+                  fontColor={FontColor.TEXT_YELLOW}
+                  fontWeight={FontWeight.TEXT_500}
+                  fontSize={FontSize.SIZE_14}
+                  onClick={onEditPhone}
+               >
+                  Изменить
+               </Button>
+            </HStack>
+            <HStack
+               className={cls.confirmCodeContainer}
+               justify={FlexJustify.BETWEEN}
+            >
+               <Input
+                  className={classNames(cls.confirmCodeInput, {}, [])}
+                  widthInput={114}
+                  heightInput={48}
+                  widthInputAndEditButtonRight={88}
+                  name='confirmCode'
+                  labelLeft='Код из СМС'
+                  type='number'
+                  error={error}
+                  focusInput
+                  onChange={onChangeNumberCode}
+                  value=''
+                  fixedChangeValue={lengthConfirmCode}
+               />
+               <Button
+                  fontColor={FontColor.TEXT_YELLOW}
+                  fontWeight={FontWeight.TEXT_500}
+                  fontSize={FontSize.SIZE_14}
+                  onClick={onRequestCode}
+               >
+                  Получить новый код
+               </Button>
+               {error === 'Неверный код' && (
+                  <div className={cls.errorWarning}>Неверный код</div>
+               )}
+            </HStack>
+         </form>
+      </VStack>
    );
 });

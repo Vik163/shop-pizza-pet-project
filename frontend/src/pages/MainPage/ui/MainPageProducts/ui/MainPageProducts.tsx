@@ -5,6 +5,7 @@ import {
    useEffect,
    useImperativeHandle,
    useRef,
+   useState,
 } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -41,6 +42,8 @@ import { TypeProducts } from '../model/types/mainPageProducts';
 import { nameViewProducts } from '@/shared/const/product_const';
 import { PageSelect } from './PageSelect/PageSelect';
 import { getUserSettings } from '@/entities/User';
+import { Modal } from '@/shared/ui/Modal';
+import { OrderProducts } from '@/features/OrderProducts';
 
 interface MainPageProductsProps {
    className?: string;
@@ -55,6 +58,8 @@ const MainPageProducts = forwardRef(
       const { className } = props;
       const dispatch = useAppDispatch();
       const { pathname } = useLocation();
+      const [modalInfo, setModalInfo] = useState<Product>();
+      const [isOpenModal, setIsOpenModal] = useState(false);
       const products: Product[] = useSelector(getEntityProducts.selectAll);
       const cards = useSelector(getCards);
       const isLoading = useSelector(getIsLoadingProducts);
@@ -145,6 +150,16 @@ const MainPageProducts = forwardRef(
          onLoadNextPart,
       }));
 
+      const onOpenModal = (card: Product) => {
+         setModalInfo(card);
+         setIsOpenModal(true);
+      };
+
+      const onCloseModal = () => {
+         setModalInfo(undefined);
+         setIsOpenModal(false);
+      };
+
       return (
          <div
             ref={refProducts}
@@ -164,8 +179,20 @@ const MainPageProducts = forwardRef(
                products={cards[viewProduct]}
                isLoading={isLoading}
                skeletonElements={paginateElements}
+               onModal={onOpenModal}
             />
             {viewLoadProducts === 'pages' && <PageSelect />}
+            {isOpenModal && modalInfo && (
+               // если нет то модалка не встраивается
+               <Modal
+                  isOpen={isOpenModal}
+                  onClose={onCloseModal}
+                  className={cls.phoneModal}
+                  lazy
+               >
+                  <OrderProducts modalInfo={modalInfo} />
+               </Modal>
+            )}
          </div>
       );
    },
