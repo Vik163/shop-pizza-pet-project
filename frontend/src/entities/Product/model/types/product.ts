@@ -6,13 +6,19 @@ export type ProductView =
    | 'snacks'
    | '';
 
-export interface IngredientsView {
+export interface Ingredients {
    caloricValue: number;
    proteins: number;
    fats: number;
    carbohydrates: number;
    weight: number;
    dia?: number;
+}
+
+export interface IngredientsViews {
+   small: Ingredients;
+   average: Ingredients;
+   big: Ingredients;
 }
 
 export interface Product {
@@ -27,13 +33,7 @@ export interface Product {
    popular: boolean;
    price: number[];
    discount: number;
-   ingredients?:
-      | {
-           small: IngredientsView;
-           average: IngredientsView;
-           big: IngredientsView;
-        }
-      | IngredientsView;
+   ingredients: IngredientsViews | Ingredients;
 }
 
 export type TypeProducts = {

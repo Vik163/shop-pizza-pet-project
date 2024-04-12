@@ -1,7 +1,8 @@
 export type {
    Product,
    NewProducts,
-   IngredientsView,
+   IngredientsViews,
+   Ingredients,
    ProductView,
 } from './model/types/product';
 

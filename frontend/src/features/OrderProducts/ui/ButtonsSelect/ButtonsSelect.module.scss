@@ -1,0 +1,23 @@
+.buttonsContainer {
+   width: 330px;
+}
+
+.buttonSmall {
+   width: 103px;
+   height: 34px;
+   border-radius: 8px;
+   background-color: var(--color-background-button);
+   color: var(--color-text-button);
+}
+
+.buttonBig {
+   width: 160px;
+   height: 34px;
+   border-radius: 8px;
+   background-color: var(--color-background-button);
+   color: var(--color-text-button);
+}
+
+.buttonActive {
+   background-color: var(--color-yellow);
+}

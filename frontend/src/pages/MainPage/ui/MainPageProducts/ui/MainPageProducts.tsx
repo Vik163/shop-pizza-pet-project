@@ -43,7 +43,7 @@ import { nameViewProducts } from '@/shared/const/product_const';
 import { PageSelect } from './PageSelect/PageSelect';
 import { getUserSettings } from '@/entities/User';
 import { Modal } from '@/shared/ui/Modal';
-import { OrderProducts } from '@/features/OrderProducts';
+import { OrderProductsModal } from '@/features/OrderProducts';
 
 interface MainPageProductsProps {
    className?: string;
@@ -187,10 +187,10 @@ const MainPageProducts = forwardRef(
                <Modal
                   isOpen={isOpenModal}
                   onClose={onCloseModal}
-                  className={cls.phoneModal}
+                  className={cls.modal}
                   lazy
                >
-                  <OrderProducts modalInfo={modalInfo} />
+                  <OrderProductsModal modalInfo={modalInfo} />
                </Modal>
             )}
          </div>

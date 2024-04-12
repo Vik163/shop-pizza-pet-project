@@ -1,0 +1,45 @@
+.imageContainer {
+   width: 504px;
+   height: 504px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: relative;
+
+   svg {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      height: 100%;
+      width: 100%;
+   }
+
+   .bigBorder {
+      fill: none;
+      stroke: var(--color-card-text);
+      stroke-width: 1;
+      stroke-dasharray: 5, 22;
+   }
+
+   .averageBorder {
+      fill: none;
+      stroke: var(--color-card-text);
+      stroke-width: 1;
+      stroke-dasharray: 5, 23;
+   }
+}
+
+.imageBig {
+   width: 500px;
+   height: 500px;
+}
+
+.imageAverage {
+   width: 420px;
+   height: 420px;
+}
+
+.imageSmall {
+   width: 340px;
+   height: 340px;
+}
