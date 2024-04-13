@@ -9,6 +9,7 @@ import {
 } from 'src/common/decorators/paginationParams.decorator';
 import { PaginatedResource } from './dto/paginate.dto';
 import { Product } from './entities/product.entity';
+import { Additives } from './entities/additives.entity';
 // import { Auth } from 'src/decorators/auth.decorator';
 // import { Auth } from 'src/decorators/auth.decorator';
 
@@ -31,6 +32,13 @@ export class ProductsController {
   @Get('popular')
   getPopularProducts(): Promise<Product[]> {
     return this.productsService.getPopularProducts();
+  }
+
+  @Get('additives')
+  getAdditives(): Promise<Additives[]> {
+    console.log('i');
+
+    return this.productsService.getAdditives();
   }
 
   // @Post()

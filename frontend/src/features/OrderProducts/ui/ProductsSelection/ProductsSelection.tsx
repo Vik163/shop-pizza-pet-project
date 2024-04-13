@@ -12,6 +12,7 @@ import {
    ButtonRadius,
    ButtonVariant,
 } from '@/shared/ui/Button';
+import { AdditivesAsync as Additives } from '../Additives/Additives.async';
 
 interface ProductsSelectionProps {
    modalInfo: Product;
@@ -85,12 +86,15 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
                {modalInfo.description}
             </Text>
             {modalInfo.type === 'pizzas' && (
-               <ButtonsSelect
-                  setSizePizza={setSizePizza}
-                  setViewDough={setViewDough}
-                  sizePizza={sizePizza}
-                  viewDough={viewDough}
-               />
+               <div>
+                  <ButtonsSelect
+                     setSizePizza={setSizePizza}
+                     setViewDough={setViewDough}
+                     sizePizza={sizePizza}
+                     viewDough={viewDough}
+                  />
+                  <Additives />
+               </div>
             )}
          </VStack>
          <Button
