@@ -1,9 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-// eslint-disable-next-line ulbi-tv-plugin/layer-imports
-import { type ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
 import { Product } from '@/entities/Product';
-
-// interface FetchProductsListProps {}
+import { type ThunkConfig } from '@/app/providers/StoreProvider';
 
 export const fetchPopularProducts = createAsyncThunk<
    Product[],

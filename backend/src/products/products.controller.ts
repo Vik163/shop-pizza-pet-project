@@ -36,8 +36,6 @@ export class ProductsController {
 
   @Get('additives')
   getAdditives(): Promise<Additives[]> {
-    console.log('i');
-
     return this.productsService.getAdditives();
   }
 

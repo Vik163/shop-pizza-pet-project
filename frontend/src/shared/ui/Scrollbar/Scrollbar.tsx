@@ -9,20 +9,11 @@ import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Scrollbar.module.scss';
 
-export enum ScrollbarVariant {
-   SELECT = 'selectScroll',
-}
-
-const scrollbarVariant: Record<ScrollbarVariant, string> = {
-   selectScroll: cls.selectScroll,
-};
-
 interface ScrollbarProps {
    className?: string;
-   variant?: ScrollbarVariant;
    scrollArrows?: boolean;
    children: ReactNode;
-   heightOptionContainer: string | number;
+   heightContainer: string | number;
    scrollThumbColor?: string;
    scrollThumbBorder?: string;
    scrollWidth?: string | number;
@@ -30,12 +21,12 @@ interface ScrollbarProps {
    scrollRadius?: string | number;
    scrollHover?: boolean;
    name: string;
+   selectVariant?: boolean;
 }
 
 export const Scrollbar = (props: ScrollbarProps) => {
    const {
       children,
-      variant = ScrollbarVariant.SELECT,
       className,
       scrollArrows,
       scrollThumbColor,
@@ -43,9 +34,10 @@ export const Scrollbar = (props: ScrollbarProps) => {
       scrollWidth,
       scrollTrackColor,
       scrollHover,
-      heightOptionContainer,
+      heightContainer,
       scrollRadius,
       name,
+      selectVariant = false,
       ...otherProps
    } = props;
    const containerRef = useRef<HTMLDivElement>(null);
@@ -236,34 +228,52 @@ export const Scrollbar = (props: ScrollbarProps) => {
    const mods: Mods = {
       [cls.stateCursor]: isDragging,
       [cls.hover]: scrollHover && !isDragging,
+      [cls.selectScroll]: selectVariant,
    };
 
    const modsButtons: Mods = {
       [cls.hover]: scrollHover,
+      [cls.selectScroll]: selectVariant,
    };
 
-   const classes = [scrollbarVariant[variant]];
+   // const classes = [scrollbarVariant[variant]];
 
    return (
       <div
-         style={{ height: `${heightOptionContainer}px` }}
-         className={classNames(cls.container, {}, [className])}
+         style={{ height: `${heightContainer}px` }}
+         className={classNames(
+            cls.container,
+            { [cls.selectScroll]: selectVariant },
+            [className],
+         )}
          ref={containerRef}
       >
-         {/* eslint-disable-next-line react/jsx-max-props-per-line */}
-         <ul className={cls.content} ref={contentRef} {...otherProps} id={name}>
-            {children}
-         </ul>
+         {!selectVariant ? (
+            <div className={cls.content}>{children}</div>
+         ) : (
+            <ul
+               className={cls.content}
+               ref={contentRef}
+               {...otherProps}
+               id={name}
+            >
+               {children}
+            </ul>
+         )}
          {isScrollbar && (
             <div
-               className={classNames(cls.scrollbar, {}, classes)}
+               className={classNames(
+                  cls.scrollbar,
+                  { [cls.selectScroll]: selectVariant },
+                  [],
+               )}
                style={{ width: scrollWidth }}
             >
                {scrollArrows && (
                   <button
                      type='button'
                      style={{ color: scrollThumbColor }}
-                     className={classNames(cls.button, modsButtons, classes)}
+                     className={classNames(cls.button, modsButtons, [])}
                      onClick={(e) => {
                         handleScrollButton(e, 'up');
                      }}
@@ -277,12 +287,12 @@ export const Scrollbar = (props: ScrollbarProps) => {
                         backgroundColor: scrollTrackColor,
                         borderRadius: `${scrollRadius}px`,
                      }}
-                     className={classNames(cls.track, mods, classes)}
+                     className={classNames(cls.track, mods, [])}
                      ref={scrollTrackRef}
                      onClick={handleTrackClick}
                   ></div>
                   <div
-                     className={classNames(cls.thumb, mods, classes)}
+                     className={classNames(cls.thumb, mods, [])}
                      ref={scrollThumbRef}
                      onMouseDown={handleThumbMousedown}
                      style={{
@@ -297,7 +307,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
                   <button
                      type='button'
                      style={{ color: scrollThumbColor }}
-                     className={classNames(cls.button, modsButtons, classes)}
+                     className={classNames(cls.button, modsButtons, [])}
                      onClick={(e) => {
                         handleScrollButton(e, 'down');
                      }}

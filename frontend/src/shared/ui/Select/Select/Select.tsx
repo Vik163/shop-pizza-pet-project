@@ -12,7 +12,7 @@ import cls from './Select.module.scss';
 
 import { Option } from '../Option/Option';
 import ArrowDown from '@/shared/assets/icons/arrowDown.svg';
-import { Scrollbar, ScrollbarVariant } from '../../Scrollbar/Scrollbar';
+import { Scrollbar } from '../../Scrollbar/Scrollbar';
 
 interface SelectProps {
    className?: string;
@@ -31,7 +31,6 @@ interface SelectProps {
    scrollRadius?: string | number;
    scrollHover?: boolean;
    name: string;
-   scrollVariant?: ScrollbarVariant;
 }
 
 export const Select = memo((props: SelectProps) => {
@@ -52,7 +51,6 @@ export const Select = memo((props: SelectProps) => {
       scrollTrackColor,
       scrollHover,
       scrollRadius,
-      scrollVariant,
       name,
    } = props;
    const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -146,7 +144,7 @@ export const Select = memo((props: SelectProps) => {
          {isOpen && (
             <Scrollbar
                className={classNames(cls.select, mods, [])}
-               heightOptionContainer={heightOptionContainer}
+               heightContainer={heightOptionContainer}
                scrollArrows={scrollArrows}
                scrollTrackColor={scrollTrackColor}
                scrollThumbColor={scrollThumbColor}
@@ -155,7 +153,7 @@ export const Select = memo((props: SelectProps) => {
                scrollRadius={scrollRadius}
                scrollHover={scrollHover}
                name={name}
-               variant={scrollVariant}
+               selectVariant
             >
                {options.map((option) => (
                   <Option
