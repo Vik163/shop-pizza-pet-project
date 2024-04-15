@@ -11,10 +11,8 @@ import {
    ReducersList,
 } from '@/shared/lib/components/DynamicReducersLoader';
 import { additivesReducer } from '../../model/slices/additivesSlice';
-import { HStack } from '@/shared/ui/Stack';
-import { AdditivesCard } from '../AdditivesCard/AdditivesCard';
-import { FlexWrap } from '@/shared/ui/Stack/Flex';
 import { Scrollbar } from '@/shared/ui/Scrollbar';
+import { AdditivesList } from '../AdditivesList/AdditivesList';
 
 export interface AdditivesProps {
    className?: string;
@@ -36,17 +34,16 @@ const Additives = memo((props: AdditivesProps) => {
 
    return (
       <DynamicReducersLoader removeAfterUnmount reducers={initialReducer}>
-         <Scrollbar heightContainer={280} name='additives'>
-            <HStack
-               wrap={FlexWrap.WPAP}
-               gap={12}
-               className={classNames(cls.Additives, {}, [className])}
+         {cards && (
+            <Scrollbar
+               heightContainer={280}
+               name='additives'
+               scrollWidth={5}
+               className={classNames(cls.Additives, {}, [])}
             >
-               {cards?.map((card) => (
-                  <AdditivesCard key={card._id} card={card} />
-               ))}
-            </HStack>
-         </Scrollbar>
+               <AdditivesList className={cls.container} cards={cards} />
+            </Scrollbar>
+         )}
       </DynamicReducersLoader>
    );
 });

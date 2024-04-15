@@ -41,7 +41,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
       ...otherProps
    } = props;
    const containerRef = useRef<HTMLDivElement>(null);
-   const contentRef = useRef<HTMLUListElement>(null);
+   const contentRef = useRef<HTMLDivElement>(null);
    const scrollTrackRef = useRef<HTMLDivElement>(null);
    const scrollThumbRef = useRef<HTMLDivElement>(null);
    const observer = useRef<ResizeObserver | null>(null);
@@ -56,7 +56,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
    const [isDragging, setIsDragging] = useState(false);
 
    // размер кнопки ----------------------------------------------
-   function handleResize(ref: HTMLUListElement, trackSize: number) {
+   function handleResize(ref: HTMLDivElement, trackSize: number) {
       const { clientHeight, scrollHeight } = ref;
 
       setThumbHeight(Math.max((clientHeight / scrollHeight) * trackSize, 20));
@@ -182,7 +182,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
    // видимость скрола
    // проверка высоты контента по вложенным элементам и высоты контейнера
    useEffect(() => {
-      const child = contentRef.current?.firstChild as HTMLLIElement;
+      const child = contentRef.current?.firstChild as HTMLElement;
       if (!child) return;
       const heightChild = child.offsetHeight;
       const countChildren = contentRef.current?.childElementCount;
@@ -190,7 +190,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
       if (!countChildren || !heightContainerContent) return;
       const heightContent = heightChild * countChildren;
       setIsScrollbar(heightContent > heightContainerContent);
-   }, []);
+   }, [contentRef.current]);
 
    // Если содержимое и дорожка полосы прокрутки существуют, используем наблюдатель за изменением
    // размера, чтобы отрегулировать высоту бегунка, и слушать событие прокрутки
@@ -248,18 +248,14 @@ export const Scrollbar = (props: ScrollbarProps) => {
          )}
          ref={containerRef}
       >
-         {!selectVariant ? (
-            <div className={cls.content}>{children}</div>
-         ) : (
-            <ul
-               className={cls.content}
-               ref={contentRef}
-               {...otherProps}
-               id={name}
-            >
-               {children}
-            </ul>
-         )}
+         <div
+            className={cls.content}
+            ref={contentRef}
+            {...otherProps}
+            id={name}
+         >
+            {children}
+         </div>
          {isScrollbar && (
             <div
                className={classNames(

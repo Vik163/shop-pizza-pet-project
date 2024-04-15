@@ -7,7 +7,7 @@ interface OptionProps {
 }
 export const Option = (props: OptionProps) => {
    const { value, onClick } = props;
-   const optionRef = useRef<HTMLOptionElement>(null);
+   const optionRef = useRef<HTMLDivElement>(null);
 
    useEffect(() => {
       const option = optionRef.current;
@@ -27,20 +27,20 @@ export const Option = (props: OptionProps) => {
    }, [value, onClick]);
 
    const handleClick =
-      (clickedValue: string): MouseEventHandler<HTMLOptionElement> =>
+      (clickedValue: string): MouseEventHandler<HTMLDivElement> =>
       () => {
          onClick(clickedValue);
       };
 
    return (
-      <option
+      <div
          className={cls.option}
-         value={value}
+         // value={value}
          onClick={handleClick(value)}
-         tabIndex={0}
+         // tabIndex={0}
          ref={optionRef}
       >
          {value}
-      </option>
+      </div>
    );
 };
