@@ -1,27 +1,40 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './AdditivesCard.module.scss';
-import { Additives } from '../../model/types/additives';
+import { IAdditives } from '../../model/types/additives';
 import { FontSize, FontWeight, Text, TextAlign } from '@/shared/ui/Text';
 import { Card, CardRadius } from '@/shared/ui/Card';
 import { VStack } from '@/shared/ui/Stack';
+import { Icon } from '@/shared/ui/Icon';
+import checkmark from '@/shared/assets/icons/checkmark_outline.svg';
 
 interface AdditivesCardProps {
    className?: string;
-   card: Additives;
+   card: IAdditives;
+   onCard: (card: IAdditives) => void;
 }
 
 export const AdditivesCard = memo((props: AdditivesCardProps) => {
-   const { className, card } = props;
+   const { className, card, onCard } = props;
+   const [isActive, setIsActive] = useState(false);
    const price = card.price[0];
+
+   const clickCard = () => {
+      onCard(card);
+      setIsActive(!isActive);
+   };
 
    return (
       <Card
          radius={CardRadius.RADIUS_12}
-         className={classNames(cls.AdditivesCard, {}, [className])}
+         className={classNames(cls.AdditivesCard, { [cls.active]: isActive }, [
+            className,
+         ])}
+         onClick={clickCard}
       >
          <VStack>
+            {isActive && <Icon className={cls.icon} Svg={checkmark} />}
             <img src={card.image} alt={card.title} />
             <Text
                className={cls.title}

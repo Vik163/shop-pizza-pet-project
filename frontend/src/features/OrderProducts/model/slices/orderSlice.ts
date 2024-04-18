@@ -1,25 +1,28 @@
 /* eslint-disable no-param-reassign */
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import {
-   IAdditives,
-   AdditivesSchema,
-   AdditivesSelect,
-} from '../types/additives';
+import { IAdditives } from '../types/additives';
 import { fetchAdditives } from '../services/fetchAddivites';
+import { OrderSchema } from '../types/order';
 
-const initialState: AdditivesSchema = {
-   additives: [],
+const initialState: OrderSchema = {
    isLoading: false,
    error: '',
-   additivesSelect: undefined,
+   addProductInBasket: undefined,
+   order: [],
+   price: 0,
 };
 
-const additivesSlice = createSlice({
-   name: 'additives',
+const orderSlice = createSlice({
+   name: 'order',
    initialState,
    reducers: {
-      additivesSelect: (state, { payload }: PayloadAction<AdditivesSelect>) => {
-         state.additivesSelect = payload;
+      setOrderPrice: (state, { payload }: PayloadAction<number>) => {
+         state.price = payload;
+      },
+      setPriceOneProduct: (state, { payload }: PayloadAction<number>) => {
+         if (state.addProductInBasket) {
+            state.addProductInBasket.price = payload;
+         }
       },
    },
    extraReducers: (builder) => {
@@ -31,7 +34,7 @@ const additivesSlice = createSlice({
             fetchAdditives.fulfilled,
             (state, { payload }: PayloadAction<IAdditives[]>) => {
                state.isLoading = false;
-               state.additives = payload;
+               // state.additives = payload;
             },
          )
          .addCase(fetchAdditives.rejected, (state, action) => {
@@ -41,5 +44,5 @@ const additivesSlice = createSlice({
    },
 });
 
-export const { actions: additivesActions } = additivesSlice;
-export const { reducer: additivesReducer } = additivesSlice;
+export const { actions: orderActions } = orderSlice;
+export const { reducer: orderReducer } = orderSlice;

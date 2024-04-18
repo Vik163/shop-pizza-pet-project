@@ -1,9 +1,10 @@
 import React, { Dispatch, memo } from 'react';
 
+import { useSelector } from 'react-redux';
 import cls from './ProductsSelection.module.scss';
 import { VStack } from '@/shared/ui/Stack';
 import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
-import { Product, Ingredients, IngredientsViews } from '@/entities/Product';
+import { Product } from '@/entities/Product';
 import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
 import { ButtonsSelect } from '../ButtonsSelect/ButtonsSelect';
 import {
@@ -13,9 +14,12 @@ import {
    ButtonVariant,
 } from '@/shared/ui/Button';
 import { AdditivesAsync as Additives } from '../Additives/Additives.async';
+import { useIngredients } from '../../lib/hooks/useIngredients';
+import { getOrderAdditives } from '../../model/selectors/additivesSelector';
+import { useCountPrice } from '../../lib/hooks/useCountPrice';
 
 interface ProductsSelectionProps {
-   modalInfo: Product;
+   productInfo: Product;
    setSizePizza: Dispatch<React.SetStateAction<string>>;
    setViewDough: Dispatch<React.SetStateAction<string>>;
    viewDough: string;
@@ -23,45 +27,20 @@ interface ProductsSelectionProps {
 }
 
 export const ProductsSelection = memo((props: ProductsSelectionProps) => {
-   const { modalInfo, setSizePizza, setViewDough, viewDough, sizePizza } =
+   const { productInfo, setSizePizza, setViewDough, viewDough, sizePizza } =
       props;
-
-   const bigPrice = modalInfo.price[2];
-   const averagePrice = modalInfo.price[1];
-   const smallPrice = modalInfo.price[0];
-   const allIngredients = modalInfo.ingredients as IngredientsViews;
-
-   let ingredients: Ingredients;
-   let price: number;
-   if (modalInfo.type === 'pizzas') {
-      switch (sizePizza) {
-         case 'big':
-            ingredients = allIngredients.big;
-            price = bigPrice;
-            break;
-         case 'average':
-            ingredients = allIngredients.average;
-            price = averagePrice;
-            break;
-         case 'small':
-            ingredients = allIngredients.small;
-            price = smallPrice;
-            break;
-         default:
-            ingredients = allIngredients.small;
-            price = smallPrice;
-      }
-   } else {
-      ingredients = modalInfo.ingredients as Ingredients;
-      price = smallPrice;
-   }
+   const ingredients = useIngredients({ productInfo, sizePizza });
+   const orderAdditives = useSelector(getOrderAdditives);
+   const orderAdditivesTitle = orderAdditives?.orderAdditivesTitle;
+   const additivesPrice = orderAdditives?.price;
+   const price = useCountPrice({ productInfo, sizePizza, additivesPrice });
 
    const dataPizza =
-      modalInfo.type === 'pizzas'
+      productInfo.type === 'pizzas'
          ? `${ingredients.dia} см, ${viewDough} тесто,`
          : '';
 
-   const dataProduct = modalInfo.ingredients
+   const dataProduct = productInfo.ingredients
       ? `${dataPizza} ${ingredients.weight} г`
       : '';
 
@@ -73,7 +52,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
                fontSize={FontSize.SIZE_20}
                fontWeight={FontWeight.TEXT_900}
             >
-               {modalInfo.title}
+               {productInfo.title}
             </Text>
             <Text fontSize={FontSize.SIZE_14} fontWeight={FontWeight.TEXT_500}>
                {dataProduct}
@@ -83,9 +62,9 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
                fontSize={FontSize.SIZE_11}
                fontWeight={FontWeight.TEXT_500}
             >
-               {modalInfo.description}
+               {productInfo.description}
             </Text>
-            {modalInfo.type === 'pizzas' && (
+            {productInfo.type === 'pizzas' && (
                <div>
                   <ButtonsSelect
                      setSizePizza={setSizePizza}

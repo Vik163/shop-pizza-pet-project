@@ -1,16 +1,16 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Additives } from '../types/additives';
+import { IAdditives } from '../types/additives';
 import { type ThunkConfig } from '@/app/providers/StoreProvider';
 
 export const fetchAdditives = createAsyncThunk<
-   Additives[],
+   IAdditives[],
    void,
    ThunkConfig<string>
 >('orderProducts/fetchAdditives', async (_, thunkApi) => {
    const { extra, rejectWithValue } = thunkApi;
 
    try {
-      const additivesData = await extra.api.get<Additives[]>(
+      const additivesData = await extra.api.get<IAdditives[]>(
          '/products/additives',
       );
 

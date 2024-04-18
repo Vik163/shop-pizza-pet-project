@@ -58,7 +58,7 @@ const MainPageProducts = forwardRef(
       const { className } = props;
       const dispatch = useAppDispatch();
       const { pathname } = useLocation();
-      const [modalInfo, setModalInfo] = useState<Product>();
+      const [productInfo, setProductInfo] = useState<Product>();
       const [isOpenModal, setIsOpenModal] = useState(false);
       const products: Product[] = useSelector(getEntityProducts.selectAll);
       const cards = useSelector(getCards);
@@ -151,12 +151,12 @@ const MainPageProducts = forwardRef(
       }));
 
       const onOpenModal = (card: Product) => {
-         setModalInfo(card);
+         setProductInfo(card);
          setIsOpenModal(true);
       };
 
       const onCloseModal = () => {
-         setModalInfo(undefined);
+         setProductInfo(undefined);
          setIsOpenModal(false);
       };
 
@@ -182,7 +182,7 @@ const MainPageProducts = forwardRef(
                onModal={onOpenModal}
             />
             {viewLoadProducts === 'pages' && <PageSelect />}
-            {isOpenModal && modalInfo && (
+            {isOpenModal && productInfo && (
                // если нет то модалка не встраивается
                <Modal
                   isOpen={isOpenModal}
@@ -190,7 +190,7 @@ const MainPageProducts = forwardRef(
                   className={cls.modal}
                   lazy
                >
-                  <OrderProductsModal modalInfo={modalInfo} />
+                  <OrderProductsModal productInfo={productInfo} />
                </Modal>
             )}
          </div>

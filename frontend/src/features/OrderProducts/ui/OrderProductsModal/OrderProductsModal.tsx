@@ -9,15 +9,13 @@ import { ProductsSelection } from '../ProductsSelection/ProductsSelection';
 
 interface OrderProductsModalProps {
    className?: string;
-   modalInfo: Product;
+   productInfo: Product;
 }
 
 export const OrderProductsModal = memo((props: OrderProductsModalProps) => {
-   const { className, modalInfo } = props;
+   const { className, productInfo } = props;
    const [sizePizza, setSizePizza] = useState('small');
    const [viewDough, setViewDough] = useState('традиционное');
-
-   console.log('modalInfo:', modalInfo);
 
    const imageMods: Mods = {
       [cls.imageBig]: sizePizza === 'big',
@@ -31,7 +29,7 @@ export const OrderProductsModal = memo((props: OrderProductsModalProps) => {
          className={classNames(cls.OrderProducts, {}, [className])}
       >
          <div className={cls.imageContainer}>
-            {modalInfo.type === 'pizzas' && (
+            {productInfo.type === 'pizzas' && (
                <svg viewBox='0 0 500 500'>
                   <circle cx='250' cy='250' r='245' className={cls.bigBorder} />
                   <circle
@@ -44,13 +42,13 @@ export const OrderProductsModal = memo((props: OrderProductsModalProps) => {
             )}
             <img
                className={classNames('', imageMods, [])}
-               src={modalInfo.image}
-               alt={modalInfo.title}
+               src={productInfo.image}
+               alt={productInfo.title}
             />
          </div>
          <ProductsSelection
             setSizePizza={setSizePizza}
-            modalInfo={modalInfo}
+            productInfo={productInfo}
             setViewDough={setViewDough}
             viewDough={viewDough}
             sizePizza={sizePizza}

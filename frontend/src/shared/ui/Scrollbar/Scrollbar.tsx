@@ -236,8 +236,6 @@ export const Scrollbar = (props: ScrollbarProps) => {
       [cls.selectScroll]: selectVariant,
    };
 
-   // const classes = [scrollbarVariant[variant]];
-
    return (
       <div
          style={{ height: `${heightContainer}px` }}
