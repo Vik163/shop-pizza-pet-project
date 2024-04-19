@@ -1,3 +1,3 @@
 export { OrderProductsModal } from './ui/OrderProductsModal/OrderProductsModal';
-export type { IAdditives, AdditivesSchema } from './model/types/additives';
-export type { OrderSchema, OrderOneProduct } from './model/types/order';
+export type { OrderSchema } from './model/types/order';
+export { orderActions, orderReducer } from './model/slices/orderSlice';

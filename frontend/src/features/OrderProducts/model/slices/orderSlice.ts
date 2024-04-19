@@ -1,15 +1,14 @@
 /* eslint-disable no-param-reassign */
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IAdditives } from '../types/additives';
-import { fetchAdditives } from '../services/fetchAddivites';
 import { OrderSchema } from '../types/order';
+import { DoughPizza, SizePizza } from '@/entities/Basket';
 
 const initialState: OrderSchema = {
-   isLoading: false,
    error: '',
-   addProductInBasket: undefined,
-   order: [],
+   basket: [],
    price: 0,
+   sizePizza: 'small',
+   dough: 'традиционное',
 };
 
 const orderSlice = createSlice({
@@ -19,28 +18,33 @@ const orderSlice = createSlice({
       setOrderPrice: (state, { payload }: PayloadAction<number>) => {
          state.price = payload;
       },
-      setPriceOneProduct: (state, { payload }: PayloadAction<number>) => {
-         if (state.addProductInBasket) {
-            state.addProductInBasket.price = payload;
-         }
+      setSizePizza: (state, { payload }: PayloadAction<SizePizza>) => {
+         state.sizePizza = payload;
+      },
+      setViewDough: (state, { payload }: PayloadAction<DoughPizza>) => {
+         state.dough = payload;
       },
    },
    extraReducers: (builder) => {
-      builder
-         .addCase(fetchAdditives.pending, (state) => {
-            state.isLoading = true;
-         })
-         .addCase(
-            fetchAdditives.fulfilled,
-            (state, { payload }: PayloadAction<IAdditives[]>) => {
-               state.isLoading = false;
-               // state.additives = payload;
-            },
-         )
-         .addCase(fetchAdditives.rejected, (state, action) => {
-            state.isLoading = false;
-            state.error = action.error.message;
-         });
+      // builder
+      //    .addCase(
+      //       fetchAddBasket.fulfilled,
+      //       (state, { payload }: PayloadAction<BasketOneProduct[]>) => {
+      //          state.basket = payload;
+      //       },
+      //    )
+      //    .addCase(fetchAddBasket.rejected, (state, action) => {
+      //       state.error = action.error.message;
+      //    })
+      //    .addCase(
+      //       fetchBasket.fulfilled,
+      //       (state, action: PayloadAction<BasketOneProduct[]>) => {
+      //          state.basket = action.payload;
+      //       },
+      //    )
+      //    .addCase(fetchBasket.rejected, (state, action) => {
+      //       state.error = action.error.message;
+      //    });
    },
 });
 

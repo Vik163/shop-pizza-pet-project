@@ -190,7 +190,10 @@ const MainPageProducts = forwardRef(
                   className={cls.modal}
                   lazy
                >
-                  <OrderProductsModal productInfo={productInfo} />
+                  <OrderProductsModal
+                     onCloseModal={onCloseModal}
+                     productInfo={productInfo}
+                  />
                </Modal>
             )}
          </div>

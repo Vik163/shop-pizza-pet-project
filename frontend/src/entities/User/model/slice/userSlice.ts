@@ -47,8 +47,6 @@ export const userSlice = createSlice({
          },
       );
       builder.addCase(initAuthData.rejected, (state, action) => {
-         console.log('error:', action.error);
-         console.log('payload:', action.payload);
          state._inited = false;
          if (action.payload) {
             // Being that we passed in ValidationErrors to rejectType in `createAsyncThunk`, the payload will be available here.

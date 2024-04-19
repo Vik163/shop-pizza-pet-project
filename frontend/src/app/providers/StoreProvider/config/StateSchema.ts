@@ -12,7 +12,9 @@ import { type rtkApi } from '@/shared/api/rtkApi';
 import { type MainPageSchema } from '@/pages/MainPage';
 import { type ScrollSaveSchema } from '@/features/ScrollSave';
 import { ActionsSchema } from '@/entities/Action';
-import { AdditivesSchema, OrderSchema } from '@/features/OrderProducts';
+import { OrderSchema } from '@/features/OrderProducts';
+import { BasketSchema } from '@/entities/Basket';
+import { AdditivesSchema } from '@/entities/Additives';
 
 export interface StateSchema {
    mainPage: MainPageSchema;
@@ -20,6 +22,7 @@ export interface StateSchema {
    csrfToken: TokenSchema;
    scroll: ScrollSaveSchema;
    actions: ActionsSchema;
+   basket: BasketSchema;
 
    [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>; // 11_2 9min
 

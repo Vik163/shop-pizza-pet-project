@@ -1,4 +1,4 @@
-import React, { Dispatch, memo } from 'react';
+import React, { memo } from 'react';
 
 import { useSelector } from 'react-redux';
 import cls from './ProductsSelection.module.scss';
@@ -13,22 +13,28 @@ import {
    ButtonRadius,
    ButtonVariant,
 } from '@/shared/ui/Button';
-import { AdditivesAsync as Additives } from '../Additives/Additives.async';
+import { AdditivesAsync as Additives } from '../../../../entities/Additives/ui/Additives/Additives.async';
 import { useIngredients } from '../../lib/hooks/useIngredients';
-import { getOrderAdditives } from '../../model/selectors/additivesSelector';
+import { getOrderAdditives } from '../../../../entities/Additives/model/selectors/additivesSelector';
 import { useCountPrice } from '../../lib/hooks/useCountPrice';
+import {
+   getDoughView,
+   getSizePizza,
+} from '../../../../entities/Basket/model/selectors/basketSelector';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { fetchAddBasket } from '../../../../entities/Basket/model/services/fetchAddBasket';
+import { BasketOneProduct } from '@/entities/Basket';
 
 interface ProductsSelectionProps {
    productInfo: Product;
-   setSizePizza: Dispatch<React.SetStateAction<string>>;
-   setViewDough: Dispatch<React.SetStateAction<string>>;
-   viewDough: string;
-   sizePizza: string;
+   onCloseModal: () => void;
 }
 
 export const ProductsSelection = memo((props: ProductsSelectionProps) => {
-   const { productInfo, setSizePizza, setViewDough, viewDough, sizePizza } =
-      props;
+   const { productInfo, onCloseModal } = props;
+   const dispatch = useAppDispatch();
+   const viewDough = useSelector(getDoughView);
+   const sizePizza = useSelector(getSizePizza);
    const ingredients = useIngredients({ productInfo, sizePizza });
    const orderAdditives = useSelector(getOrderAdditives);
    const orderAdditivesTitle = orderAdditives?.orderAdditivesTitle;
@@ -43,6 +49,20 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
    const dataProduct = productInfo.ingredients
       ? `${dataPizza} ${ingredients.weight} г`
       : '';
+
+   const onSubmit = () => {
+      const order: BasketOneProduct = {
+         product: productInfo.title,
+         sizePizza,
+         dough: viewDough,
+         additives: orderAdditivesTitle,
+         price,
+      };
+
+      dispatch(fetchAddBasket(order)).then((data) => {
+         if (data.payload) onCloseModal();
+      });
+   };
 
    return (
       <VStack justify={FlexJustify.BETWEEN} className={cls.infoContainer}>
@@ -66,12 +86,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
             </Text>
             {productInfo.type === 'pizzas' && (
                <div>
-                  <ButtonsSelect
-                     setSizePizza={setSizePizza}
-                     setViewDough={setViewDough}
-                     sizePizza={sizePizza}
-                     viewDough={viewDough}
-                  />
+                  <ButtonsSelect />
                   <Additives />
                </div>
             )}
@@ -85,6 +100,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
             fontSize={FontSize.SIZE_15}
             fontWeight={FontWeight.TEXT_900}
             fontColor={FontColor.TEXT_BUTTON}
+            onClick={onSubmit}
          >
             Добавить в корзину за {price}
          </Button>

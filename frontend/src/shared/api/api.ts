@@ -29,6 +29,16 @@ $apiTokens.interceptors.request.use(async (config: IRequest) => {
    const token = getCookie('accessToken');
    // обходим правило eslint (no-param-reassign)
    const newConfig = { ...config };
+   if (
+      config.method === 'post' ||
+      config.method === 'put' ||
+      config.method === 'patch'
+   ) {
+      const csrf = await axios.get('https://pizzashop163.ru/api/csrf');
+
+      const csrfToken: string = csrf.data;
+      newConfig.headers['x-csrf-token'] = csrfToken;
+   }
 
    if (config.headers && token) {
       newConfig.headers.authorization = `Bearer ${token}`;

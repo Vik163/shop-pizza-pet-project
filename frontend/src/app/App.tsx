@@ -11,6 +11,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { getInited, initAuthData, userAction } from '@/entities/User';
 import { withTheme } from './providers/ThemeProvider/ui/withTheme';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
+import { fetchBasket } from '@/entities/Basket';
 
 const App = memo(() => {
    const dispatch = useAppDispatch();
@@ -21,53 +22,33 @@ const App = memo(() => {
    // Yandex query ответ
    const initYaData = searchParams.get('user');
    const userYaData = initYaData && JSON.parse(initYaData);
-   // const Map = async () => {
-   //    const ymaps3Reactify = await ymaps3.import('@yandex/ymaps3-reactify');
-   //    const reactify = ymaps3Reactify.reactify.bindTo(React, ReactDOM);
-   //    const {
-   //       YMap,
-   //       YMapDefaultSchemeLayer,
-   //       YMapDefaultFeaturesLayer,
-   //       YMapMarker,
-   //    } = reactify.module(ymaps3);
 
-   //    return {
-   //       YMap,
-   //       YMapDefaultSchemeLayer,
-   //       YMapDefaultFeaturesLayer,
-   //       YMapMarker,
-   //    };
-   // };
+   useEffect(() => {
+      dispatch(fetchBasket());
+   }, []);
 
-   // Map();
-
-   try {
-      useEffect(() => {
-         const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
-         // Авторизация Яндекс
-         if (initYaData && !inited) {
-            // Запрос для получения токенов (из-за переадресации не получилось отправить с бека)
-            dispatch(initAuthData(userYaData.userId))
-               .then((data) => {
-                  if (data.payload)
-                     dispatch(userAction.setAuthData(userYaData));
-                  navigate('/');
-               })
-               .catch((err) => {
-                  console.log(err);
-               });
-         }
-
-         // Обновление сессии по пользователю
-         if (userId && !inited) {
-            dispatch(initAuthData(userId)).catch((err) => {
+   useEffect(() => {
+      const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+      // Авторизация Яндекс
+      if (initYaData && !inited) {
+         // Запрос для получения токенов (из-за переадресации не получилось отправить с бека)
+         dispatch(initAuthData(userYaData.userId))
+            .then((data) => {
+               if (data.payload) dispatch(userAction.setAuthData(userYaData));
+               navigate('/');
+            })
+            .catch((err) => {
                console.log(err);
             });
-         }
-      }, [dispatch, initYaData, inited, navigate, userYaData]);
-   } catch (err) {
-      console.log('err', err);
-   }
+      }
+
+      // Обновление сессии по пользователю
+      if (userId && !inited) {
+         dispatch(initAuthData(userId)).catch((err) => {
+            console.log(err);
+         });
+      }
+   }, [dispatch, initYaData, inited, navigate, userYaData]);
 
    return (
       <div className={classNames('app', {}, [])}>

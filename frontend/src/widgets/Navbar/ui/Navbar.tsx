@@ -19,8 +19,9 @@ import { getInited, getUserData, UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
-import { $api } from '@/shared/api/api';
 import { Modal } from '@/shared/ui/Modal';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { getBasket, Basket } from '@/entities/Basket';
 
 interface NavbarProps {
    className?: string;
@@ -28,19 +29,15 @@ interface NavbarProps {
 
 export const Navbar = memo((props: NavbarProps) => {
    const { className } = props;
-   const [isOpenModal, setIsOpenModal] = useState(false);
+   const dispatch = useAppDispatch();
+   const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
+   const [isOpenModalBasket, setIsOpenModalBasket] = useState(false);
+   console.log('isOpenModalBasket:', isOpenModalBasket);
    const inited = useSelector(getInited);
    const user = useSelector(getUserData) as UserData;
+   const basket = useSelector(getBasket);
+   console.log('basket:', basket);
    const pathProfile = user?.userId && getRouteProfile(user?.userId);
-
-   const getUser = async () => {
-      try {
-         const data = await $api.get(`/users`);
-         console.log('data:', data);
-      } catch (err) {
-         console.log(err);
-      }
-   };
 
    const itemList = useMemo(
       () =>
@@ -57,11 +54,11 @@ export const Navbar = memo((props: NavbarProps) => {
    );
 
    const onOpenModal = () => {
-      setIsOpenModal(true);
+      setIsOpenModalAuth(true);
    };
 
    const onCloseModal = () => {
-      setIsOpenModal(false);
+      setIsOpenModalAuth(false);
    };
 
    return (
@@ -97,20 +94,30 @@ export const Navbar = memo((props: NavbarProps) => {
             fontColor={FontColor.TEXT_BUTTON}
             fontWeight={FontWeight.TEXT_700}
             fontSize={FontSize.SIZE_16}
-            onClick={getUser}
+            onMouseEnter={() => setIsOpenModalBasket(true)}
+            onMouseLeave={() => setIsOpenModalBasket(false)}
+            className={cls.basket}
          >
-            Корзина<span className={classNames(cls.basket_quantity)}>1</span>
+            Корзина
+            <span className={classNames(cls.basket_quantity)}>
+               {basket?.length || 0}
+            </span>
          </Button>
-         {isOpenModal && (
+         {isOpenModalAuth && (
             // если нет то модалка не встраивается
             <Modal
                onClose={onCloseModal}
-               isOpen={isOpenModal}
+               isOpen={isOpenModalAuth}
                className={cls.phoneModal}
                lazy
             >
                <PhoneForm onCloseModal={onCloseModal} />
             </Modal>
+         )}
+         {isOpenModalBasket && (
+            // если нет то модалка не встраивается
+
+            <Basket className={cls.basketModal} />
          )}
       </HStack>
    );

@@ -1,26 +1,14 @@
-import { Product } from '@/entities/Product';
-
-export type SizePizza = 'small' | 'average' | 'big' | '';
-
-export type DoughPizza = 'традиционное' | 'тонкое' | '';
+import { BasketOneProduct, DoughPizza, SizePizza } from '@/entities/Basket';
 
 export interface OrderAdditives {
    orderAdditivesTitle: string[];
    price: number;
 }
 
-export interface OrderOneProduct {
-   product: Product;
+export interface OrderSchema {
+   error?: string;
    sizePizza?: SizePizza;
    dough?: DoughPizza;
-   price: number;
-   additivesName?: string[];
-}
-
-export interface OrderSchema {
-   isLoading?: boolean;
-   error?: string;
-   addProductInBasket: OrderOneProduct | undefined;
-   order: OrderOneProduct[];
+   basket: BasketOneProduct[];
    price: number;
 }
