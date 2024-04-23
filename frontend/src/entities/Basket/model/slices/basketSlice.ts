@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { fetchAddBasket } from '../services/fetchAddBasket';
 import { fetchBasket } from '../services/fetchBasket';
 import {
-   BasketOneProduct,
+   BasketData,
    BasketSchema,
    DoughPizza,
    SizePizza,
@@ -11,7 +11,10 @@ import {
 
 const initialState: BasketSchema = {
    error: '',
-   basket: [],
+   basketData: {
+      basketProducts: [],
+      totalPrice: 0,
+   },
    price: 0,
    sizePizza: 'small',
    dough: 'традиционное',
@@ -35,8 +38,8 @@ const basketSlice = createSlice({
       builder
          .addCase(
             fetchAddBasket.fulfilled,
-            (state, { payload }: PayloadAction<BasketOneProduct[]>) => {
-               state.basket = payload;
+            (state, { payload }: PayloadAction<BasketData>) => {
+               state.basketData = payload;
             },
          )
          .addCase(fetchAddBasket.rejected, (state, action) => {
@@ -44,8 +47,8 @@ const basketSlice = createSlice({
          })
          .addCase(
             fetchBasket.fulfilled,
-            (state, action: PayloadAction<BasketOneProduct[]>) => {
-               state.basket = action.payload;
+            (state, action: PayloadAction<BasketData>) => {
+               state.basketData = action.payload;
             },
          )
          .addCase(fetchBasket.rejected, (state, action) => {

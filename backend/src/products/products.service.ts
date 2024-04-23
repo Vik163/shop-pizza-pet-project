@@ -90,7 +90,6 @@ export class ProductsService {
     });
 
     // настроен, чтобы не было лишнего запроса
-    console.log('limit:', limit);
     if (offset > totalItems - limit) {
       // останавливает запросы
       hasMore = false;

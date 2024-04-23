@@ -46,14 +46,11 @@ export class TokensService {
     const refreshToken: string = req.cookies.refreshToken;
 
     const user: UserDto = await this.userService.findById(userId);
-    console.log('user:', user);
     // хешированный из БД
     const token = user.refreshTokenData.refreshToken;
-    console.log('token:', token);
     if (!user || !token) throw new ForbiddenException('Доступ отклонён');
     // верификация
     const refreshTokenMatches = await argon2.verify(token, refreshToken);
-    console.log('refreshTokenMatches:', refreshTokenMatches);
     if (!refreshTokenMatches) throw new ForbiddenException('Доступ отклонён');
     const tokens = await this.getTokens(user.userId, user.phoneNumber);
 
@@ -109,7 +106,6 @@ export class TokensService {
   // Отправка токенов ========================================================
   async sendTokens(res: Response, tokens: TokensDto): Promise<void> {
     res.cookie('accessToken', tokens.accessToken, { secure: true });
-    console.log('tokens.refreshToken:', tokens.refreshToken);
     tokens.refreshToken &&
       res.cookie('refreshToken', tokens.refreshToken, {
         secure: true,

@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -19,9 +19,8 @@ import { getInited, getUserData, UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
-import { Modal } from '@/shared/ui/Modal';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { getBasket, Basket } from '@/entities/Basket';
+import { Basket, getBasketProducts } from '@/entities/Basket';
+import { Modal } from '@/shared/ui/Modal/Modal';
 
 interface NavbarProps {
    className?: string;
@@ -29,14 +28,13 @@ interface NavbarProps {
 
 export const Navbar = memo((props: NavbarProps) => {
    const { className } = props;
-   const dispatch = useAppDispatch();
    const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
    const [isOpenModalBasket, setIsOpenModalBasket] = useState(false);
-   console.log('isOpenModalBasket:', isOpenModalBasket);
+   const [isClosing, setIsClosing] = useState(false);
    const inited = useSelector(getInited);
    const user = useSelector(getUserData) as UserData;
-   const basket = useSelector(getBasket);
-   console.log('basket:', basket);
+   const basketProducts = useSelector(getBasketProducts);
+   console.log('basket:', basketProducts);
    const pathProfile = user?.userId && getRouteProfile(user?.userId);
 
    const itemList = useMemo(
@@ -53,13 +51,25 @@ export const Navbar = memo((props: NavbarProps) => {
       [],
    );
 
-   const onOpenModal = () => {
+   const onOpenAuthModal = () => {
       setIsOpenModalAuth(true);
    };
 
-   const onCloseModal = () => {
+   const onCloseAuthModal = () => {
       setIsOpenModalAuth(false);
    };
+
+   const onOpenBasketModal = () => {
+      setIsOpenModalBasket(true);
+   };
+
+   const onCloseBasketModal = useCallback(() => {
+      setIsOpenModalBasket(false);
+   }, []);
+
+   const handleAnimate = useCallback((bool: boolean) => {
+      setIsClosing(bool);
+   }, []);
 
    return (
       <HStack className={classNames(cls.Navbar, {}, [className])} max>
@@ -76,7 +86,7 @@ export const Navbar = memo((props: NavbarProps) => {
                fontColor={FontColor.TEXT_PRIMARY}
                fontWeight={FontWeight.TEXT_700}
                fontSize={FontSize.SIZE_16}
-               onClick={onOpenModal}
+               onClick={onOpenAuthModal}
             >
                Войти
             </Button>
@@ -94,30 +104,55 @@ export const Navbar = memo((props: NavbarProps) => {
             fontColor={FontColor.TEXT_BUTTON}
             fontWeight={FontWeight.TEXT_700}
             fontSize={FontSize.SIZE_16}
-            onMouseEnter={() => setIsOpenModalBasket(true)}
-            onMouseLeave={() => setIsOpenModalBasket(false)}
+            onClick={onOpenBasketModal}
             className={cls.basket}
          >
             Корзина
             <span className={classNames(cls.basket_quantity)}>
-               {basket?.length || 0}
+               {basketProducts?.length || 0}
             </span>
          </Button>
          {isOpenModalAuth && (
             // если нет то модалка не встраивается
             <Modal
-               onClose={onCloseModal}
+               onAnimate={handleAnimate}
+               onClose={onCloseAuthModal}
                isOpen={isOpenModalAuth}
-               className={cls.phoneModal}
+               className={classNames(
+                  cls.phoneModal,
+                  { [cls.authModalActive]: isClosing },
+                  [],
+               )}
                lazy
+               isCenter
+               delayClose={300}
+               buttonCloseHeight={40}
+               buttonCloseRight={30}
+               buttonCloseTop={30}
+               buttonCloseWidth={40}
             >
-               <PhoneForm onCloseModal={onCloseModal} />
+               <PhoneForm onCloseModal={onCloseAuthModal} />
             </Modal>
          )}
          {isOpenModalBasket && (
-            // если нет то модалка не встраивается
-
-            <Basket className={cls.basketModal} />
+            <Modal
+               isCenter={false}
+               onAnimate={handleAnimate}
+               isOpen={isOpenModalBasket}
+               onClose={onCloseBasketModal}
+               className={classNames(
+                  cls.basketPopup,
+                  { [cls.basketPopupActive]: isClosing },
+                  [],
+               )}
+               delayClose={300}
+               buttonCloseHeight={30}
+               buttonCloseRight={20}
+               buttonCloseTop={20}
+               buttonCloseWidth={30}
+            >
+               <Basket />
+            </Modal>
          )}
       </HStack>
    );

@@ -2,16 +2,18 @@ export type {
    SizePizza,
    DoughPizza,
    BasketOneProduct,
+   BasketData,
    BasketSchema,
 } from './model/types/basket';
 
 export { basketActions, basketReducer } from './model/slices/basketSlice';
 export {
    getDoughView,
-   getBasket,
    getSizePizza,
+   getBasketProducts,
+   getBasketTotalPrice,
 } from './model/selectors/basketSelector';
 
 export { fetchAddBasket } from './model/services/fetchAddBasket';
 export { fetchBasket } from './model/services/fetchBasket';
-export { BasketAsync as Basket } from './ui/Basket.async';
+export { Basket } from './ui/Basket';

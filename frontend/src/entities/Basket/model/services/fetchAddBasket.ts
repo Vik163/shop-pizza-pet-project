@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/StoreProvider';
 import { $apiTokens } from '@/shared/api/api';
-import { BasketOneProduct } from '../types/basket';
+import { BasketData, BasketOneProduct } from '../types/basket';
 
 export const fetchAddBasket = createAsyncThunk<
-   BasketOneProduct[],
+   BasketData,
    BasketOneProduct,
    ThunkConfig<string>
 >('orderProducts/fetchAddBasket', async (order, thunkApi) => {

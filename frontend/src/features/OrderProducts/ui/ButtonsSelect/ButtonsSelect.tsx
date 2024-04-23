@@ -7,12 +7,11 @@ import { HStack } from '@/shared/ui/Stack';
 import { FlexWrap } from '@/shared/ui/Stack/Flex';
 import { classNames } from '@/shared/lib/classNames/classNames';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { orderActions } from '../../model/slices/orderSlice';
 import {
    getDoughView,
    getSizePizza,
 } from '../../../../entities/Basket/model/selectors/basketSelector';
-import { DoughPizza, SizePizza } from '@/entities/Basket';
+import { DoughPizza, SizePizza, basketActions } from '@/entities/Basket';
 
 export const ButtonsSelect = memo(() => {
    const dispatch = useAppDispatch();
@@ -20,11 +19,11 @@ export const ButtonsSelect = memo(() => {
    const viewDough = useSelector(getDoughView);
 
    const clickSizePizza = (size: SizePizza) => {
-      dispatch(orderActions.setSizePizza(size));
+      dispatch(basketActions.setSizePizza(size));
    };
 
    const clickViewDough = (dough: DoughPizza) => {
-      dispatch(orderActions.setViewDough(dough));
+      dispatch(basketActions.setViewDough(dough));
    };
 
    return (

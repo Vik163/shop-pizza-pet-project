@@ -10,7 +10,7 @@ const additivesSelect = (state: StateSchema) =>
 
 let price = 0;
 export const getOrderAdditives = createSelector([additivesSelect], (obj) => {
-   if (obj) {
+   if (obj?.card && obj.orderAdditives) {
       const { orderAdditives, card } = obj;
 
       if (card) {
@@ -30,5 +30,7 @@ export const getOrderAdditives = createSelector([additivesSelect], (obj) => {
 
          return { orderAdditivesTitle, price };
       }
+   } else {
+      price = 0;
    }
 });

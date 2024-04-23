@@ -2,6 +2,7 @@ import {
    Ref,
    forwardRef,
    memo,
+   useCallback,
    useEffect,
    useImperativeHandle,
    useRef,
@@ -44,6 +45,7 @@ import { PageSelect } from './PageSelect/PageSelect';
 import { getUserSettings } from '@/entities/User';
 import { Modal } from '@/shared/ui/Modal';
 import { OrderProductsModal } from '@/features/OrderProducts';
+import { additivesActions } from '@/entities/Additives';
 
 interface MainPageProductsProps {
    className?: string;
@@ -60,6 +62,7 @@ const MainPageProducts = forwardRef(
       const { pathname } = useLocation();
       const [productInfo, setProductInfo] = useState<Product>();
       const [isOpenModal, setIsOpenModal] = useState(false);
+      const [isClosing, setIsClosing] = useState(false);
       const products: Product[] = useSelector(getEntityProducts.selectAll);
       const cards = useSelector(getCards);
       const isLoading = useSelector(getIsLoadingProducts);
@@ -158,7 +161,17 @@ const MainPageProducts = forwardRef(
       const onCloseModal = () => {
          setProductInfo(undefined);
          setIsOpenModal(false);
+         // сброс цены в селекторе
+         dispatch(
+            additivesActions.additivesSelect({
+               orderAdditives: [],
+            }),
+         );
       };
+
+      const handleAnimate = useCallback((bool: boolean) => {
+         setIsClosing(bool);
+      }, []);
 
       return (
          <div
@@ -185,10 +198,20 @@ const MainPageProducts = forwardRef(
             {isOpenModal && productInfo && (
                // если нет то модалка не встраивается
                <Modal
+                  onAnimate={handleAnimate}
                   isOpen={isOpenModal}
                   onClose={onCloseModal}
-                  className={cls.modal}
+                  className={classNames(
+                     cls.modal,
+                     { [cls.modalActive]: isClosing },
+                     [],
+                  )}
+                  delayClose={300}
                   lazy
+                  buttonCloseHeight={40}
+                  buttonCloseRight={30}
+                  buttonCloseTop={30}
+                  buttonCloseWidth={40}
                >
                   <OrderProductsModal
                      onCloseModal={onCloseModal}

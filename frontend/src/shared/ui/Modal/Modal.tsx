@@ -5,29 +5,51 @@ import cls from './Modal.module.scss';
 import { Button } from '../Button/Button';
 import close from '@/shared/assets/icons/close.svg';
 import { Icon } from '../Icon';
-import { useModal } from '../../lib/hooks/useModal';
 import { Portal } from '../Portal/Portal';
+import { useModal } from '@/shared/lib/hooks/useModal';
 
 interface ModalProps {
    className?: string;
    children?: ReactNode;
    onClose: () => void;
+   onAnimate?: (bool: boolean) => void;
    isOpen: boolean;
    lazy?: boolean;
+   isCenter?: boolean;
+   delayClose?: number;
+   buttonCloseWidth: number;
+   buttonCloseHeight: number;
+   buttonCloseTop: number;
+   buttonCloseRight: number;
 }
 
 export const Modal = memo((props: ModalProps) => {
-   const { children, className, onClose, isOpen, lazy } = props;
+   const {
+      children,
+      className,
+      onClose,
+      isOpen,
+      lazy,
+      onAnimate,
+      buttonCloseHeight,
+      buttonCloseRight,
+      buttonCloseTop,
+      buttonCloseWidth,
+      isCenter = true,
+      delayClose = 300,
+   } = props;
 
    //* выношу логику в хук
-   const { isClosing, handleClose, onContentClick, isMounted } = useModal({
+   const { handleClose, onContentClick, isMounted } = useModal({
       isOpen,
       onClose,
+      onAnimate,
+      delayClose,
    });
 
    const mods: Record<string, boolean> = {
       [cls.opened]: isOpen,
-      [cls.closing]: isClosing,
+      [cls.center]: isCenter,
    };
 
    if (lazy && !isMounted) return;
@@ -35,13 +57,31 @@ export const Modal = memo((props: ModalProps) => {
    return (
       <Portal>
          <div className={classNames(cls.Modal, mods, [])}>
-            <div className={cls.overlay} onClick={handleClose}>
+            <div
+               className={classNames(
+                  cls.overlay,
+                  { [cls.centerOverlay]: isCenter },
+                  [],
+               )}
+               onClick={handleClose}
+            >
                <div
                   className={classNames(cls.content, {}, [className])}
                   onClick={onContentClick}
                >
-                  <Button className={cls.close} onClick={handleClose}>
-                     <Icon width={40} height={40} Svg={close} />
+                  <Button
+                     style={{
+                        top: `${buttonCloseTop}px`,
+                        right: `${buttonCloseRight}px`,
+                     }}
+                     className={cls.close}
+                     onClick={handleClose}
+                  >
+                     <Icon
+                        width={buttonCloseWidth}
+                        height={buttonCloseHeight}
+                        Svg={close}
+                     />
                   </Button>
                   {children}
                </div>

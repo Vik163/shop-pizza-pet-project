@@ -9,20 +9,26 @@ import {
 @Entity()
 export class Basket {
   @ObjectIdColumn()
-  _id: ObjectId;
+  _id?: ObjectId;
 
   @PrimaryColumn()
+  id: string;
+
+  @Column()
   product: string;
 
   @Column()
-  sizePizza: string;
+  sizePizza?: string;
 
   @Column()
-  dough: number[];
+  dough?: string;
 
   @Column()
-  additives: string[];
+  additives?: string[];
 
   @Column()
   price: number;
+
+  @Column()
+  quantity?: number;
 }

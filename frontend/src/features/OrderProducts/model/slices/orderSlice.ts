@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { OrderSchema } from '../types/order';
-import { DoughPizza, SizePizza } from '@/entities/Basket';
 
 const initialState: OrderSchema = {
    error: '',
@@ -15,15 +14,9 @@ const orderSlice = createSlice({
    name: 'order',
    initialState,
    reducers: {
-      setOrderPrice: (state, { payload }: PayloadAction<number>) => {
-         state.price = payload;
-      },
-      setSizePizza: (state, { payload }: PayloadAction<SizePizza>) => {
-         state.sizePizza = payload;
-      },
-      setViewDough: (state, { payload }: PayloadAction<DoughPizza>) => {
-         state.dough = payload;
-      },
+      // setOrderPrice: (state, { payload }: PayloadAction<number>) => {
+      //    state.price = payload;
+      // },
    },
    extraReducers: (builder) => {
       // builder

@@ -1,16 +1,35 @@
+/* eslint-disable prefer-destructuring */
 import { memo } from 'react';
+import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Basket.module.scss';
+import { VStack } from '@/shared/ui/Stack';
+import {
+   getBasketProducts,
+   getBasketTotalPrice,
+} from '../model/selectors/basketSelector';
+import { BasketItem } from './BasketItem/BasketItem';
+import { Text } from '@/shared/ui/Text';
+import { useChangeWord } from '@/shared/lib/hooks/useChangeWord';
 
-export interface BasketProps {
+interface BasketProps {
    className?: string;
 }
 
-const Basket = memo((props: BasketProps) => {
+export const Basket = memo((props: BasketProps) => {
    const { className } = props;
+   const basketProducts = useSelector(getBasketProducts);
+   const totalPrice = useSelector(getBasketTotalPrice);
+   const { word } = useChangeWord(basketProducts.length);
 
-   return <div className={classNames(cls.Basket, {}, [className])}></div>;
+   return (
+      <VStack className={classNames(cls.Basket, {}, [className])}>
+         <Text>
+            {basketProducts.length} {word} на {totalPrice} &#8381;
+         </Text>
+         {basketProducts &&
+            basketProducts.map((item) => <BasketItem key={item.product} />)}
+      </VStack>
+   );
 });
-
-export default Basket;

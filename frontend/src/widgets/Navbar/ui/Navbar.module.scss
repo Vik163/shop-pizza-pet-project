@@ -3,6 +3,8 @@
 .Navbar {
    width: 1110px;
    gap: 60px;
+   position: relative;
+   z-index: 6;
 }
 
 .loginContainer {
@@ -13,10 +15,6 @@
 .loginButton {
    width: 90px;
    height: 36px;
-}
-
-.basket {
-   position: relative;
 }
 
 .basket_quantity {
@@ -39,10 +37,38 @@
 .phoneModal {
    width: 668px;
    height: 320px;
+   border-radius: 12px;
+   background: var(--color-modal);
+   color: var(--color-yellow);
+   padding: 30px 40px;
+   position: relative;
+   transform: scale(0.9);
+   transition: 0.3s transform;
+   position: relative;
+
+   &.authModalActive {
+      transform: scale(1);
+      transition: 0.3s transform;
+   }
 }
 
-.basketModal {
+.basketPopup {
    position: absolute;
+   display: flex;
+   right: calc((100vw - 1110px) / 2);
+   top: calc(-100vh + var(--header-height) * 2);
+   width: 350px;
+   height: calc(100vh - var(--header-height));
+   background-color: var(--block-bg-primary);
+   border: 2px solid var(--color-yellow);
+   border-radius: 14px;
+   transition: 0.3s;
+   z-index: 1;
+
+   &.basketPopupActive {
+      transition: 0.3s;
+      transform: translateY(calc(100vh - var(--header-height)));
+   }
 }
 
 .account {

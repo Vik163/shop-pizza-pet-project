@@ -13,17 +13,17 @@ import {
    ButtonRadius,
    ButtonVariant,
 } from '@/shared/ui/Button';
-import { AdditivesAsync as Additives } from '../../../../entities/Additives/ui/Additives/Additives.async';
+import { Additives, getOrderAdditives } from '@/entities/Additives';
 import { useIngredients } from '../../lib/hooks/useIngredients';
-import { getOrderAdditives } from '../../../../entities/Additives/model/selectors/additivesSelector';
 import { useCountPrice } from '../../lib/hooks/useCountPrice';
 import {
+   getBasketProducts,
    getDoughView,
    getSizePizza,
-} from '../../../../entities/Basket/model/selectors/basketSelector';
+   fetchAddBasket,
+   BasketOneProduct,
+} from '@/entities/Basket';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { fetchAddBasket } from '../../../../entities/Basket/model/services/fetchAddBasket';
-import { BasketOneProduct } from '@/entities/Basket';
 
 interface ProductsSelectionProps {
    productInfo: Product;
@@ -37,9 +37,10 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
    const sizePizza = useSelector(getSizePizza);
    const ingredients = useIngredients({ productInfo, sizePizza });
    const orderAdditives = useSelector(getOrderAdditives);
+   const selectedProducts = useSelector(getBasketProducts);
    const orderAdditivesTitle = orderAdditives?.orderAdditivesTitle;
    const additivesPrice = orderAdditives?.price;
-   const price = useCountPrice({ productInfo, sizePizza, additivesPrice });
+   const totalPrice = useCountPrice({ productInfo, sizePizza, additivesPrice });
 
    const dataPizza =
       productInfo.type === 'pizzas'
@@ -51,13 +52,22 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
       : '';
 
    const onSubmit = () => {
-      const order: BasketOneProduct = {
-         product: productInfo.title,
-         sizePizza,
-         dough: viewDough,
-         additives: orderAdditivesTitle,
-         price,
-      };
+      let order: BasketOneProduct;
+
+      if (productInfo.type === 'pizzas') {
+         order = {
+            product: productInfo.title,
+            sizePizza,
+            dough: viewDough,
+            additives: orderAdditivesTitle,
+            price: totalPrice,
+         };
+      } else {
+         order = {
+            product: productInfo.title,
+            price: totalPrice,
+         };
+      }
 
       dispatch(fetchAddBasket(order)).then((data) => {
          if (data.payload) onCloseModal();
@@ -102,7 +112,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
             fontColor={FontColor.TEXT_BUTTON}
             onClick={onSubmit}
          >
-            Добавить в корзину за {price}
+            Добавить в корзину за {totalPrice} &#8381;
          </Button>
       </VStack>
    );
