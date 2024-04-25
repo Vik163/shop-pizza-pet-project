@@ -18,8 +18,13 @@ export class Basket {
   product: string;
 
   @Column()
+  image: string;
+
+  @Column()
   sizePizza?: string;
 
+  @Column()
+  dia?: number;
   @Column()
   dough?: string;
 

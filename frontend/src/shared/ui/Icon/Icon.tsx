@@ -22,15 +22,8 @@ interface ClicableBaseProps extends IconBaseProps {
 type IconProps = NoneClicableIconProps | ClicableBaseProps;
 
 export const Icon = memo((props: IconProps) => {
-   const {
-      className,
-      Svg,
-      width = 32,
-      height = 32,
-      clickable,
-      src,
-      ...otherProps
-   } = props;
+   const { className, Svg, width, height, clickable, src, ...otherProps } =
+      props;
 
    const icon = Svg ? (
       <Svg
@@ -55,7 +48,7 @@ export const Icon = memo((props: IconProps) => {
       return (
          <button
             type='button'
-            className={cls.button}
+            className={classNames(cls.button, {}, [className])}
             style={{ height, width }}
             onClick={props.onClick}
          >

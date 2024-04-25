@@ -28,9 +28,9 @@ export const OrderProductsModal = memo((props: OrderProductsModalProps) => {
    const sizePizza = useSelector(getSizePizza);
 
    const imageMods: Mods = {
-      [cls.imageBig]: sizePizza === 'big',
-      [cls.imageAverage]: sizePizza === 'average',
-      [cls.imageSmall]: sizePizza === 'small',
+      [cls.imageBig]: sizePizza === 'большая',
+      [cls.imageAverage]: sizePizza === 'средняя',
+      [cls.imageSmall]: sizePizza === 'маленькая',
    };
 
    return (

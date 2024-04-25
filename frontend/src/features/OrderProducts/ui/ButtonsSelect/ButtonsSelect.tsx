@@ -29,30 +29,30 @@ export const ButtonsSelect = memo(() => {
    return (
       <HStack gap={10} wrap={FlexWrap.WPAP} className={cls.buttonsContainer}>
          <Button
-            onClick={() => clickSizePizza('small')}
+            onClick={() => clickSizePizza('маленькая')}
             className={classNames(
                cls.buttonSmall,
-               { [cls.buttonActive]: sizePizza === 'small' },
+               { [cls.buttonActive]: sizePizza === 'маленькая' },
                [],
             )}
          >
             Маленькая
          </Button>
          <Button
-            onClick={() => clickSizePizza('average')}
+            onClick={() => clickSizePizza('средняя')}
             className={classNames(
                cls.buttonSmall,
-               { [cls.buttonActive]: sizePizza === 'average' },
+               { [cls.buttonActive]: sizePizza === 'средняя' },
                [],
             )}
          >
             Средняя
          </Button>
          <Button
-            onClick={() => clickSizePizza('big')}
+            onClick={() => clickSizePizza('большая')}
             className={classNames(
                cls.buttonSmall,
-               { [cls.buttonActive]: sizePizza === 'big' },
+               { [cls.buttonActive]: sizePizza === 'большая' },
                [],
             )}
          >

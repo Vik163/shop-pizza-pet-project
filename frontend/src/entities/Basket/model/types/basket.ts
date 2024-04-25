@@ -1,11 +1,13 @@
-export type SizePizza = 'small' | 'average' | 'big' | '';
+export type SizePizza = 'маленькая' | 'средняя' | 'большая' | '';
 
 export type DoughPizza = 'традиционное' | 'тонкое' | '';
 
 export interface BasketOneProduct {
    id?: string;
    product: string;
+   image: string;
    sizePizza?: SizePizza;
+   dia?: number;
    dough?: DoughPizza;
    price: number;
    additives?: string[];
@@ -21,6 +23,7 @@ export interface BasketSchema {
    error?: string;
    sizePizza?: SizePizza;
    dough?: DoughPizza;
-   basketData: BasketData;
+   basketProducts: BasketOneProduct[];
+   totalPrice: number;
    price: number;
 }

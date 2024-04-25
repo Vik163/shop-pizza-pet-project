@@ -11,12 +11,10 @@ export const fetchAddBasket = createAsyncThunk<
    const { rejectWithValue } = thunkApi;
 
    try {
-      const data = await $apiTokens.post('/order/basket', order);
-      const basket = data.data;
+      const basketData = await $apiTokens.post('/order/basket', order);
+      const basket = basketData.data;
 
-      if (!basket) {
-         rejectWithValue('Товары в корзине не обновились');
-      }
+      if (!basket) rejectWithValue('Товары в корзине не обновились');
 
       return basket;
    } catch (err) {

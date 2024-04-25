@@ -10,8 +10,9 @@ import {
    getBasketTotalPrice,
 } from '../model/selectors/basketSelector';
 import { BasketItem } from './BasketItem/BasketItem';
-import { Text } from '@/shared/ui/Text';
+import { FontSize, Text } from '@/shared/ui/Text';
 import { useChangeWord } from '@/shared/lib/hooks/useChangeWord';
+import { FlexAlign } from '@/shared/ui/Stack/Flex';
 
 interface BasketProps {
    className?: string;
@@ -24,12 +25,17 @@ export const Basket = memo((props: BasketProps) => {
    const { word } = useChangeWord(basketProducts.length);
 
    return (
-      <VStack className={classNames(cls.Basket, {}, [className])}>
-         <Text>
+      <VStack
+         align={FlexAlign.START}
+         className={classNames(cls.Basket, {}, [className])}
+      >
+         <Text fontSize={FontSize.SIZE_24} className={cls.title}>
             {basketProducts.length} {word} на {totalPrice} &#8381;
          </Text>
          {basketProducts &&
-            basketProducts.map((item) => <BasketItem key={item.product} />)}
+            basketProducts.map((item) => (
+               <BasketItem key={item.id} card={item} />
+            ))}
       </VStack>
    );
 });

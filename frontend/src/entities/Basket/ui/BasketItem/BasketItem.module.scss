@@ -1,5 +1,43 @@
 .BasketItem {
-   height: 117px;
-   width: 350px;
-   border: 1px solid red;
+   width: 328px;
+   border-bottom: 1px solid var(--color-line);
+   border-top: 1px solid var(--color-line);
+   padding-top: 20px;
+   margin-bottom: 3px;
+}
+
+.image {
+   width: 60px;
+   height: 60px;
+}
+
+.textContainer {
+   width: 223px;
+   padding-top: 3px;
+}
+
+.close {
+   fill: var(--color-primary);
+   width: 15px;
+   height: 15px;
+}
+
+.priceContainer {
+   padding: 0 20px;
+   width: 328px;
+   height: 54px;
+}
+
+.select {
+   width: 90px;
+   height: 26px;
+   background-color: var(--color-background-button);
+   border-radius: 8px;
+   border: 1px solid var(--color-yellow);
+}
+
+.buttonsSelect {
+   width: 22px;
+   height: 22px;
+   fill: var(--color-text-button);
 }

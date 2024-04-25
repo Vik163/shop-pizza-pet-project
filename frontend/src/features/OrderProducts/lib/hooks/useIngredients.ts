@@ -7,18 +7,19 @@ interface UseIngredientsProps {
 
 export const useIngredients = (props: UseIngredientsProps) => {
    const { productInfo, sizePizza } = props;
-   const allIngredients = productInfo.ingredients as IngredientsViews;
 
-   let ingredients: Ingredients;
+   let ingredients = {} as Ingredients;
    if (productInfo.type === 'pizzas') {
+      const allIngredients = productInfo.ingredients as IngredientsViews;
+
       switch (sizePizza) {
-         case 'big':
+         case 'большая':
             ingredients = allIngredients.big;
             break;
-         case 'average':
+         case 'средняя':
             ingredients = allIngredients.average;
             break;
-         case 'small':
+         case 'маленькая':
             ingredients = allIngredients.small;
             break;
          default:

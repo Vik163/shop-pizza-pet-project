@@ -8,7 +8,7 @@ export class OrderController {
 
   @Post('basket')
   async addBasket(@Body() body: BasketDto) {
-    return this.orderService.addBasket(body);
+    return await this.orderService.addBasket(body);
   }
 
   @Get('basket')

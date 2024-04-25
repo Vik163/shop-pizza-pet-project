@@ -57,7 +57,9 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
       if (productInfo.type === 'pizzas') {
          order = {
             product: productInfo.title,
+            image: productInfo.imageSmall,
             sizePizza,
+            dia: ingredients.dia,
             dough: viewDough,
             additives: orderAdditivesTitle,
             price: totalPrice,
@@ -65,6 +67,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
       } else {
          order = {
             product: productInfo.title,
+            image: productInfo.imageSmall,
             price: totalPrice,
          };
       }

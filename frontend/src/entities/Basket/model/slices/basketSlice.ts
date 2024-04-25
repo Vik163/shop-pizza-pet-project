@@ -11,12 +11,10 @@ import {
 
 const initialState: BasketSchema = {
    error: '',
-   basketData: {
-      basketProducts: [],
-      totalPrice: 0,
-   },
+   basketProducts: [],
+   totalPrice: 0,
    price: 0,
-   sizePizza: 'small',
+   sizePizza: 'маленькая',
    dough: 'традиционное',
 };
 
@@ -39,7 +37,8 @@ const basketSlice = createSlice({
          .addCase(
             fetchAddBasket.fulfilled,
             (state, { payload }: PayloadAction<BasketData>) => {
-               state.basketData = payload;
+               state.basketProducts = payload.basketProducts;
+               state.totalPrice = payload.totalPrice;
             },
          )
          .addCase(fetchAddBasket.rejected, (state, action) => {
@@ -47,8 +46,9 @@ const basketSlice = createSlice({
          })
          .addCase(
             fetchBasket.fulfilled,
-            (state, action: PayloadAction<BasketData>) => {
-               state.basketData = action.payload;
+            (state, { payload }: PayloadAction<BasketData>) => {
+               state.basketProducts = payload.basketProducts;
+               state.totalPrice = payload.totalPrice;
             },
          )
          .addCase(fetchBasket.rejected, (state, action) => {

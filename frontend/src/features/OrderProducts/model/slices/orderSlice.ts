@@ -6,7 +6,7 @@ const initialState: OrderSchema = {
    error: '',
    basket: [],
    price: 0,
-   sizePizza: 'small',
+   sizePizza: 'маленькая',
    dough: 'традиционное',
 };
 

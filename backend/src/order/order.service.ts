@@ -30,31 +30,28 @@ export class OrderService {
         : sameProducts[0];
 
     if (sameProduct) {
+      console.log('sameProduct:', sameProduct);
       sameProduct.quantity = sameProduct.quantity
         ? sameProduct.quantity + 1
         : 1;
       sameProduct.price = sameProduct.price + body.price;
 
-      console.log('sameProduct:', sameProduct);
-
       const data = await this.basketRepository.save(sameProduct);
 
       if (data) {
-        const basket: BasketDto[] = await this.basketRepository.find();
-
-        return basket;
+        return this.getBasket();
       }
     } else {
       body.id = uuidv4();
       body.quantity = 1;
+      console.log('body:', body);
       const newProduct = this.basketRepository.create(body);
+      console.log('newProduct:', newProduct);
 
       const basketDto: BasketDto = await this.basketRepository.save(newProduct);
 
       if (basketDto) {
-        const basket: BasketDto[] = await this.basketRepository.find();
-
-        return basket;
+        return this.getBasket();
       }
     }
   }
@@ -69,8 +66,6 @@ export class OrderService {
         totalPrice,
       );
     }
-
-    console.log(totalPrice);
 
     return { basketProducts, totalPrice };
   }

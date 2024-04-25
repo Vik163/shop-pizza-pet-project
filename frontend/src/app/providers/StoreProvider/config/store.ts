@@ -26,11 +26,11 @@ export function createReduxStore(
    const rootReducers: ReducersMapObject<StateSchema> = {
       ...asyncReducers, // необязательные редьюсеры
       user: userReducer,
+      basket: basketReducer,
       mainPage: mainPageReducer,
       csrfToken: csrfTokenReducer,
       scroll: scrollSaveReducer,
       actions: actionsReducer,
-      basket: basketReducer,
       [rtkApi.reducerPath]: rtkApi.reducer, // 11_2 8min
    };
 
