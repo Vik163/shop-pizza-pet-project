@@ -32,6 +32,7 @@ $apiTokens.interceptors.request.use(async (config: IRequest) => {
    if (
       config.method === 'post' ||
       config.method === 'put' ||
+      config.method === 'delete' ||
       config.method === 'patch'
    ) {
       const csrf = await axios.get('https://pizzashop163.ru/api/csrf');

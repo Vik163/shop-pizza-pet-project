@@ -8,7 +8,8 @@ export class BasketDto {
   readonly dia?: number;
   readonly dough?: string;
   readonly additives?: string[];
-  readonly price: number;
+  totalPrice: number;
+  price: number;
   quantity?: number;
   id: string;
 }

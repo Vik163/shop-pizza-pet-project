@@ -30,11 +30,10 @@ export class OrderService {
         : sameProducts[0];
 
     if (sameProduct) {
-      console.log('sameProduct:', sameProduct);
       sameProduct.quantity = sameProduct.quantity
         ? sameProduct.quantity + 1
         : 1;
-      sameProduct.price = sameProduct.price + body.price;
+      sameProduct.totalPrice = body.price * sameProduct.quantity;
 
       const data = await this.basketRepository.save(sameProduct);
 
@@ -44,9 +43,8 @@ export class OrderService {
     } else {
       body.id = uuidv4();
       body.quantity = 1;
-      console.log('body:', body);
+      body.totalPrice = body.price;
       const newProduct = this.basketRepository.create(body);
-      console.log('newProduct:', newProduct);
 
       const basketDto: BasketDto = await this.basketRepository.save(newProduct);
 
@@ -62,11 +60,42 @@ export class OrderService {
 
     if (basketProducts.length > 0) {
       totalPrice = basketProducts.reduce(
-        (sum, item) => sum + item.price,
+        (sum, item) => sum + item.totalPrice,
         totalPrice,
       );
     }
 
     return { basketProducts, totalPrice };
+  }
+
+  async decreaseBasket(id: string) {
+    const product: BasketDto = await this.basketRepository.findOne({
+      where: { id: id },
+    });
+
+    if (product) {
+      product.quantity = product.quantity - 1;
+      product.totalPrice = product.price * product.quantity;
+    }
+
+    console.log('product:', product);
+    const basketDto: BasketDto = await this.basketRepository.save(product);
+
+    if (basketDto) {
+      return this.getBasket();
+    }
+  }
+
+  async deleteBasket(id: string) {
+    const product: BasketDto = await this.basketRepository.findOne({
+      where: { id: id },
+    });
+    if (product) {
+      const deleteProduct = await this.basketRepository.remove(product);
+
+      if (deleteProduct) {
+        return this.getBasket();
+      }
+    }
   }
 }

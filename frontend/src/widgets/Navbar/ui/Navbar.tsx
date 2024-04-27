@@ -19,8 +19,9 @@ import { getInited, getUserData, UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
-import { Basket, getBasketProducts } from '@/entities/Basket';
+import { getBasketProducts } from '@/entities/Basket';
 import { Modal } from '@/shared/ui/Modal/Modal';
+import { BasketNavbar } from '@/features/BasketNavbar';
 
 interface NavbarProps {
    className?: string;
@@ -30,6 +31,8 @@ export const Navbar = memo((props: NavbarProps) => {
    const { className } = props;
    const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
    const [isOpenModalBasket, setIsOpenModalBasket] = useState(false);
+   // const [productInfo, setProductInfo] = useState<Product>();
+   // const [isOpenModalProduct, setIsOpenModalProduct] = useState(false);
    const [isClosing, setIsClosing] = useState(false);
    const inited = useSelector(getInited);
    const user = useSelector(getUserData) as UserData;
@@ -66,6 +69,17 @@ export const Navbar = memo((props: NavbarProps) => {
    const onCloseBasketModal = useCallback(() => {
       setIsOpenModalBasket(false);
    }, []);
+
+   // const onModalProduct = (card: BasketOneProduct) => {
+   //    setIsOpenModalBasket(false);
+   //    setIsOpenModalProduct(true);
+
+   //    console.log('card:', card);
+   // };
+
+   // const onCloseModalProduct = () => {
+   //    setIsOpenModalProduct(false);
+   // };
 
    const handleAnimate = useCallback((bool: boolean) => {
       setIsClosing(bool);
@@ -134,7 +148,11 @@ export const Navbar = memo((props: NavbarProps) => {
                <PhoneForm onCloseModal={onCloseAuthModal} />
             </Modal>
          )}
-         {isOpenModalBasket && (
+         <BasketNavbar
+            isOpenModalBasket={isOpenModalBasket}
+            onCloseBasketModal={onCloseBasketModal}
+         />
+         {/* {isOpenModalBasket && (
             <Modal
                isCenter={false}
                onAnimate={handleAnimate}
@@ -151,9 +169,33 @@ export const Navbar = memo((props: NavbarProps) => {
                buttonCloseTop={20}
                buttonCloseWidth={30}
             >
-               <Basket />
+               <Basket onModalProduct={onModalProduct} />
             </Modal>
          )}
+         {isOpenModalProduct && productInfo && (
+            // если нет то модалка не встраивается
+            <Modal
+               onAnimate={handleAnimate}
+               isOpen={isOpenModalProduct}
+               onClose={onCloseModalProduct}
+               className={classNames(
+                  cls.modal,
+                  { [cls.modalActive]: isClosing },
+                  [],
+               )}
+               delayClose={300}
+               lazy
+               buttonCloseHeight={40}
+               buttonCloseRight={30}
+               buttonCloseTop={30}
+               buttonCloseWidth={40}
+            >
+               <OrderProductsModal
+                  onCloseModal={onCloseModalProduct}
+                  productInfo={productInfo}
+               />
+            </Modal>
+         )} */}
       </HStack>
    );
 });

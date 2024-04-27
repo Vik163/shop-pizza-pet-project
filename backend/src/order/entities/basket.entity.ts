@@ -25,11 +25,15 @@ export class Basket {
 
   @Column()
   dia?: number;
+
   @Column()
   dough?: string;
 
   @Column()
   additives?: string[];
+
+  @Column()
+  totalPrice: number;
 
   @Column()
   price: number;

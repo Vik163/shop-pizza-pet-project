@@ -1,11 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/StoreProvider';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
+
 import {
    getLimitProducts,
    getViewProducts,
-} from '../selectors/paginateSelector';
-import { PaginateSchema } from '../types/mainPageSchema';
+} from '../selectors/productSelector';
+import { PaginateSchema } from '../types/productSchema';
 
 interface FetchViewProductsProps {
    page?: number;

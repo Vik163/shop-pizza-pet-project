@@ -4,14 +4,14 @@ import { useLocation } from 'react-router-dom';
 import { Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './PageSelect.module.scss';
+import { Button } from '@/shared/ui/Button';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { fetchViewProducts } from '../../../../../../entities/Product/model/services/fetchViewProducts';
 import {
    getLimitProducts,
    getPageProductsNum,
    getTotalProducts,
-} from '../../../../model/selectors/paginateSelector';
-import { Button } from '@/shared/ui/Button';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { fetchViewProducts } from '../../../../model/services/fetchViewProducts';
+} from '@/entities/Product';
 
 interface PageSelectProps {
    className?: string;
@@ -32,7 +32,7 @@ export const PageSelect = memo((props: PageSelectProps) => {
    const buttons = pages < countButtons ? pages : countButtons;
 
    // массив для отрисовки кнопок (зависит от количества кнопок и выбранной страницы)
-   const arrPages = () => {
+   const initialArr = () => {
       const arr: number[] = [];
 
       for (let i = 0; i < buttons; ) {
@@ -41,6 +41,11 @@ export const PageSelect = memo((props: PageSelectProps) => {
       }
       return arr;
    };
+
+   const arrPages = initialArr();
+
+   console.log(arrPages);
+
    // При обновлении страницы возвращает первоначальную нумерацию
    useEffect(() => {
       setNumPage(1);
@@ -100,19 +105,20 @@ export const PageSelect = memo((props: PageSelectProps) => {
                &lt;&lt;
             </Button>
          )}
-         {arrPages().map((item) => (
-            <Button
-               key={item}
-               className={classNames(
-                  cls.page,
-                  { [cls.active]: item === pageProducts },
-                  [],
-               )}
-               onClick={() => clickPage(item)}
-            >
-               {item}
-            </Button>
-         ))}
+         {arrPages.length > 1 &&
+            arrPages.map((item) => (
+               <Button
+                  key={item}
+                  className={classNames(
+                     cls.page,
+                     { [cls.active]: item === pageProducts },
+                     [],
+                  )}
+                  onClick={() => clickPage(item)}
+               >
+                  {item}
+               </Button>
+            ))}
          {pages > buttons && (
             <Button
                disabled={numPage > pages - buttons}

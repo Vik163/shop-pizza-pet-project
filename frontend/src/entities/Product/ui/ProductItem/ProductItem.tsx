@@ -1,5 +1,6 @@
 import { memo } from 'react';
 
+import { useSelector } from 'react-redux';
 import cls from './ProductItem.module.scss';
 
 import { Card, CardRadius } from '@/shared/ui/Card';
@@ -14,15 +15,20 @@ import {
    ButtonRadius,
    ButtonVariant,
 } from '@/shared/ui/Button';
+import { getBasketProducts } from '@/entities/Basket';
 
 interface ProductItemProps {
    card: Product;
-   buttonText: string;
    onClick: () => void;
 }
 
 export const ProductItem = memo((props: ProductItemProps) => {
-   const { card, buttonText, onClick } = props;
+   const { card, onClick } = props;
+   const basketProducts = useSelector(getBasketProducts);
+
+   const isInBasket = basketProducts.some((i) => i.product === card.title);
+
+   const buttonText = isInBasket ? 'В корзине' : 'В корзину';
 
    const mods: Mods = {
       [cls.new]: card.addInfo === 'Новинка',
@@ -79,7 +85,7 @@ export const ProductItem = memo((props: ProductItemProps) => {
             </Text>
             <Button
                variant={ButtonVariant.FILLED}
-               bgColor={ButtonBgColor.YELLOW}
+               bgColor={isInBasket ? ButtonBgColor.GREY : ButtonBgColor.YELLOW}
                radius={ButtonRadius.RADIUS_8}
                fontColor={FontColor.TEXT_BUTTON}
                width={126}

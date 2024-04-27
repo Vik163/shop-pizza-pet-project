@@ -13,13 +13,16 @@ import { BasketItem } from './BasketItem/BasketItem';
 import { FontSize, Text } from '@/shared/ui/Text';
 import { useChangeWord } from '@/shared/lib/hooks/useChangeWord';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
+import { BasketOneProduct } from '../model/types/basket';
 
 interface BasketProps {
    className?: string;
+   onModalProduct: (card: BasketOneProduct) => void;
 }
 
 export const Basket = memo((props: BasketProps) => {
-   const { className } = props;
+   const { className, onModalProduct } = props;
+
    const basketProducts = useSelector(getBasketProducts);
    const totalPrice = useSelector(getBasketTotalPrice);
    const { word } = useChangeWord(basketProducts.length);
@@ -34,7 +37,11 @@ export const Basket = memo((props: BasketProps) => {
          </Text>
          {basketProducts &&
             basketProducts.map((item) => (
-               <BasketItem key={item.id} card={item} />
+               <BasketItem
+                  key={item.id}
+                  card={item}
+                  onModalProduct={onModalProduct}
+               />
             ))}
       </VStack>
    );

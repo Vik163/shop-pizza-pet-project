@@ -30,7 +30,6 @@ export const ProductsList = memo((props: ProductsListProps) => {
             products.map((card) => (
                <ProductItem
                   key={card.title}
-                  buttonText='В корзину'
                   card={card}
                   onClick={() => onModal(card)}
                />

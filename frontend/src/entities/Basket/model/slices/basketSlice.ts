@@ -8,6 +8,8 @@ import {
    DoughPizza,
    SizePizza,
 } from '../types/basket';
+import { fetchDecreaseBasket } from '../services/fetchDecreaseBasket';
+import { fetchDelete } from '../services/fetchDelete';
 
 const initialState: BasketSchema = {
    error: '',
@@ -52,6 +54,26 @@ const basketSlice = createSlice({
             },
          )
          .addCase(fetchBasket.rejected, (state, action) => {
+            state.error = action.error.message;
+         })
+         .addCase(
+            fetchDecreaseBasket.fulfilled,
+            (state, { payload }: PayloadAction<BasketData>) => {
+               state.basketProducts = payload.basketProducts;
+               state.totalPrice = payload.totalPrice;
+            },
+         )
+         .addCase(fetchDecreaseBasket.rejected, (state, action) => {
+            state.error = action.error.message;
+         })
+         .addCase(
+            fetchDelete.fulfilled,
+            (state, { payload }: PayloadAction<BasketData>) => {
+               state.basketProducts = payload.basketProducts;
+               state.totalPrice = payload.totalPrice;
+            },
+         )
+         .addCase(fetchDelete.rejected, (state, action) => {
             state.error = action.error.message;
          });
    },

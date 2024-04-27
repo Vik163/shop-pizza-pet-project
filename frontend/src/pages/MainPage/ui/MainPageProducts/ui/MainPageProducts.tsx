@@ -13,7 +13,15 @@ import { useLocation } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './MainPageProducts.module.scss';
-import { type Product } from '@/entities/Product';
+import {
+   ViewProducts,
+   getEntityProducts,
+   getIsLoadingProducts,
+   getPageHasMore,
+   getPageProductsNum,
+   getViewProducts,
+   type Product,
+} from '@/entities/Product';
 import {
    HeaderTagType,
    Text,
@@ -22,24 +30,15 @@ import {
    FontWeight,
 } from '@/shared/ui/Text';
 import { useProductsFilters } from '../../../lib/hooks/useProductsFilter';
-import { fetchViewProducts } from '../../../model/services/fetchViewProducts';
+import { fetchViewProducts } from '../../../../../entities/Product/model/services/fetchViewProducts';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
-import {
-   getEntityProducts,
-   mainPageActions,
-} from '../../../model/slices/mainPageSlice';
+import { mainPageActions } from '../../../model/slices/mainPageSlice';
 import { ProductsList } from '@/entities/Product';
 import { paginateElements } from '@/shared/const/paginate_elements';
 import { getSaveScroll } from '@/features/ScrollSave';
 import { getCards } from '../../../model/selectors/productsSelector';
-import {
-   getIsLoadingProducts,
-   getPageHasMore,
-   getPageProductsNum,
-   getViewProducts,
-} from '../../../model/selectors/paginateSelector';
-import { TypeProducts } from '../model/types/mainPageProducts';
+
 import { nameViewProducts } from '@/shared/const/product_const';
 import { PageSelect } from './PageSelect/PageSelect';
 import { getUserSettings } from '@/entities/User';
@@ -76,8 +75,8 @@ const MainPageProducts = forwardRef(
 
       // Преобразуем путь (убираем слеш) ====================
       const checkViewProductFromPath = () => {
-         const path = pathname.slice(1) as keyof TypeProducts;
-         if (nameViewProducts[path]) return path;
+         const path = pathname.slice(1) as keyof ViewProducts;
+         if (path && nameViewProducts[path]) return path;
       };
 
       useEffect(() => {

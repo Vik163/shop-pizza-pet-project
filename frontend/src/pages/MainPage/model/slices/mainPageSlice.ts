@@ -1,59 +1,36 @@
-import {
-   createEntityAdapter,
-   createSlice,
-   PayloadAction,
-} from '@reduxjs/toolkit';
-import { LOCALSTORAGE_PRODUCTS_VIEW_KEY } from '@/shared/const/localstorage';
-import { fetchViewProducts } from '../../model/services/fetchViewProducts';
-import { MainPageSchema, ViewProducts } from '../types/mainPageSchema';
-import { Product, ProductView } from '@/entities/Product';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { MainPageSchema } from '../types/mainPageSchema';
 import { fetchPopularProducts } from '../services/fetchPopularProducts';
-import { StateSchema } from '@/app/providers/StoreProvider';
+import { ViewProducts } from '@/entities/Product';
 
 // 8_4
 const initialStateMainPage: MainPageSchema = {
    isLoading: false,
-   isLoadingProducts: false,
    isLoadingPopularProducts: false,
    error: undefined,
-   view: 'pizzas',
-   page: 1,
-   ids: [],
-   entities: {},
-   hasMore: true,
    //    _inited: false,
-   items: [],
    cards: {},
    popularProducts: [],
-   limit: 0,
-   totalItems: 0,
    //    sort: ArticleSortField.CREATED,
    //    search: '',
    //    type: ArticleType.ALL,
 };
 
-export const productsAdapter = createEntityAdapter<Product>({
-   selectId: (product) => product._id,
-});
+// export const productsAdapter = createEntityAdapter<Product>({
+//    selectId: (product) => product._id,
+// });
 
-// Селекторы
-export const getEntityProducts = productsAdapter.getSelectors<StateSchema>(
-   (state) => state.mainPage || productsAdapter.getInitialState(),
-);
+// // Селекторы
+// export const getEntityProducts = productsAdapter.getSelectors<StateSchema>(
+//    (state) => state.mainPage || productsAdapter.getInitialState(),
+// );
 
 const mainPageSlice = createSlice({
    name: 'mainPageSlice',
-   initialState: productsAdapter.getInitialState(initialStateMainPage),
+   initialState: initialStateMainPage,
    reducers: {
       setProducts: (state, action: PayloadAction<ViewProducts>) => {
          state.cards = action.payload;
-      },
-      setView: (state, action: PayloadAction<ProductView>) => {
-         state.view = action.payload;
-         localStorage.setItem(LOCALSTORAGE_PRODUCTS_VIEW_KEY, action.payload);
-      },
-      setPage: (state, action: PayloadAction<number>) => {
-         state.page = action.payload;
       },
 
       //   setSort: (state, action: PayloadAction<ArticleSortField>) => {
@@ -77,29 +54,6 @@ const mainPageSlice = createSlice({
    },
    extraReducers: (builder) => {
       builder
-         .addCase(fetchViewProducts.pending, (state) => {
-            state.error = undefined;
-            state.isLoadingProducts = true;
-         })
-         .addCase(fetchViewProducts.fulfilled, (state, { payload }) => {
-            state.isLoadingProducts = false;
-            state.view = payload.view;
-            state.page = payload.page;
-            state.limit = payload.limit;
-            state.totalItems = payload.totalItems;
-            state.hasMore = payload.hasMore;
-
-            // addMany добавляет в конец, setAll перезатирает
-            if (payload.replace) {
-               productsAdapter.setAll(state, payload.items);
-            } else {
-               productsAdapter.addMany(state, payload.items);
-            }
-         })
-         .addCase(fetchViewProducts.rejected, (state, action) => {
-            state.isLoadingProducts = false;
-            state.error = action.payload;
-         })
          .addCase(fetchPopularProducts.pending, (state) => {
             state.error = undefined;
             state.isLoadingPopularProducts = true;

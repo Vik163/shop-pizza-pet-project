@@ -52,25 +52,6 @@
    }
 }
 
-.basketPopup {
-   position: absolute;
-   display: flex;
-   right: calc((100vw - 1110px) / 2);
-   top: calc(-100vh + var(--header-height) * 2);
-   width: 370px;
-   height: calc(100vh - var(--header-height));
-   background-color: var(--block-bg-primary);
-   border: 1px solid var(--color-yellow);
-   border-radius: 14px;
-   transition: 0.3s;
-   z-index: 1;
-
-   &.basketPopupActive {
-      transition: 0.3s;
-      transform: translateY(calc(100vh - var(--header-height)));
-   }
-}
-
 .account {
    fill: var(--color-primary);
    width: 32px;

@@ -15,6 +15,7 @@ import { ActionsSchema } from '@/entities/Action';
 import { OrderSchema } from '@/features/OrderProducts';
 import { BasketSchema } from '@/entities/Basket';
 import { AdditivesSchema } from '@/entities/Additives';
+import { ProductSchema } from '@/entities/Product';
 
 export interface StateSchema {
    mainPage: MainPageSchema;
@@ -23,6 +24,7 @@ export interface StateSchema {
    scroll: ScrollSaveSchema;
    actions: ActionsSchema;
    basket: BasketSchema;
+   product: ProductSchema;
 
    [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>; // 11_2 9min
 

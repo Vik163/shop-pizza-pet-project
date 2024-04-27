@@ -36,10 +36,6 @@ export interface Product {
    ingredients: IngredientsViews | Ingredients;
 }
 
-export type TypeProducts = {
-   [K in ProductView]: string;
-};
-
 export interface NewProducts extends Product {
    link?: string;
 }

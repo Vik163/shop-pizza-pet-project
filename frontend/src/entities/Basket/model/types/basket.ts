@@ -10,6 +10,7 @@ export interface BasketOneProduct {
    dia?: number;
    dough?: DoughPizza;
    price: number;
+   totalPrice?: number;
    additives?: string[];
    quantity?: number;
 }

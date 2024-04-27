@@ -3,34 +3,22 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Icon.module.scss';
 
-type SvgProps = Omit<React.SVGProps<SVGSVGElement>, 'onClick'>;
+type SvgProps = React.SVGProps<SVGSVGElement>;
 
-interface IconBaseProps extends SvgProps {
+interface IconProps extends SvgProps {
    className?: string;
    Svg?: React.VFC<React.SVGProps<SVGSVGElement>>;
    src?: string;
 }
 
-interface NoneClicableIconProps extends IconBaseProps {
-   clickable?: false;
-}
-
-interface ClicableBaseProps extends IconBaseProps {
-   clickable?: true;
-   onClick: () => void;
-}
-type IconProps = NoneClicableIconProps | ClicableBaseProps;
-
 export const Icon = memo((props: IconProps) => {
-   const { className, Svg, width, height, clickable, src, ...otherProps } =
-      props;
+   const { className, Svg, width, height, src, ...otherProps } = props;
 
    const icon = Svg ? (
       <Svg
          className={classNames(cls.Icon, {}, [className])}
          width={width}
          height={height}
-         onClick={undefined}
          {...otherProps}
       />
    ) : (
@@ -39,22 +27,9 @@ export const Icon = memo((props: IconProps) => {
          className={classNames(cls.Icon, {}, [className])}
          width={width}
          height={height}
-         onClick={undefined}
          alt='иконка'
       />
    );
 
-   if (clickable) {
-      return (
-         <button
-            type='button'
-            className={classNames(cls.button, {}, [className])}
-            style={{ height, width }}
-            onClick={props.onClick}
-         >
-            {icon}
-         </button>
-      );
-   }
    return icon;
 });
