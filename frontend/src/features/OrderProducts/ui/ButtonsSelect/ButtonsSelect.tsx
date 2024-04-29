@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 import cls from './ButtonsSelect.module.scss';
@@ -11,12 +11,29 @@ import {
    getDoughView,
    getSizePizza,
 } from '../../../../entities/Basket/model/selectors/basketSelector';
-import { DoughPizza, SizePizza, basketActions } from '@/entities/Basket';
+import {
+   BasketOneProduct,
+   DoughPizza,
+   SizePizza,
+   basketActions,
+} from '@/entities/Basket';
 
-export const ButtonsSelect = memo(() => {
+interface ButtonsSelectProps {
+   existingOrder?: BasketOneProduct;
+}
+
+export const ButtonsSelect = memo((props: ButtonsSelectProps) => {
+   const { existingOrder } = props;
    const dispatch = useAppDispatch();
    const sizePizza = useSelector(getSizePizza);
    const viewDough = useSelector(getDoughView);
+
+   useEffect(() => {
+      if (existingOrder?.sizePizza)
+         dispatch(basketActions.setSizePizza(existingOrder.sizePizza));
+      if (existingOrder?.dough)
+         dispatch(basketActions.setViewDough(existingOrder.dough));
+   }, []);
 
    const clickSizePizza = (size: SizePizza) => {
       dispatch(basketActions.setSizePizza(size));
@@ -32,7 +49,9 @@ export const ButtonsSelect = memo(() => {
             onClick={() => clickSizePizza('маленькая')}
             className={classNames(
                cls.buttonSmall,
-               { [cls.buttonActive]: sizePizza === 'маленькая' },
+               {
+                  [cls.buttonActive]: sizePizza === 'маленькая',
+               },
                [],
             )}
          >
@@ -42,7 +61,9 @@ export const ButtonsSelect = memo(() => {
             onClick={() => clickSizePizza('средняя')}
             className={classNames(
                cls.buttonSmall,
-               { [cls.buttonActive]: sizePizza === 'средняя' },
+               {
+                  [cls.buttonActive]: sizePizza === 'средняя',
+               },
                [],
             )}
          >
@@ -52,7 +73,9 @@ export const ButtonsSelect = memo(() => {
             onClick={() => clickSizePizza('большая')}
             className={classNames(
                cls.buttonSmall,
-               { [cls.buttonActive]: sizePizza === 'большая' },
+               {
+                  [cls.buttonActive]: sizePizza === 'большая',
+               },
                [],
             )}
          >

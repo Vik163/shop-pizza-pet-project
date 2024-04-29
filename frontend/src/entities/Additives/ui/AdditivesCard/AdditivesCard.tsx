@@ -13,11 +13,16 @@ interface AdditivesCardProps {
    className?: string;
    card: IAdditives;
    onCard: (card: IAdditives) => void;
+   existingOrderAdditives?: string[];
 }
 
 export const AdditivesCard = memo((props: AdditivesCardProps) => {
-   const { className, card, onCard } = props;
-   const [isActive, setIsActive] = useState(false);
+   const { className, card, onCard, existingOrderAdditives } = props;
+   const isOrder =
+      existingOrderAdditives &&
+      existingOrderAdditives.some((i) => i === card.title);
+
+   const [isActive, setIsActive] = useState(isOrder || false);
    const price = card.price[0];
 
    const clickCard = () => {

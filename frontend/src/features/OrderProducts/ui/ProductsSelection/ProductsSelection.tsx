@@ -28,10 +28,11 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 interface ProductsSelectionProps {
    productInfo: Product;
    onCloseModal: () => void;
+   existingOrder?: BasketOneProduct;
 }
 
 export const ProductsSelection = memo((props: ProductsSelectionProps) => {
-   const { productInfo, onCloseModal } = props;
+   const { productInfo, onCloseModal, existingOrder } = props;
    const dispatch = useAppDispatch();
    const viewDough = useSelector(getDoughView);
    const sizePizza = useSelector(getSizePizza);
@@ -78,7 +79,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
    };
 
    return (
-      <VStack justify={FlexJustify.BETWEEN} className={cls.infoContainer}>
+      <VStack gap={20} justify={FlexJustify.BETWEEN} className={cls.container}>
          <VStack align={FlexAlign.START} className={cls.infoContainer}>
             <Text
                className={cls.title}
@@ -99,8 +100,10 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
             </Text>
             {productInfo.type === 'pizzas' && (
                <div>
-                  <ButtonsSelect />
-                  <Additives />
+                  <ButtonsSelect existingOrder={existingOrder} />
+                  <Additives
+                     existingOrderAdditives={existingOrder?.additives}
+                  />
                </div>
             )}
          </VStack>

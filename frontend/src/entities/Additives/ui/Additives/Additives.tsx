@@ -22,15 +22,17 @@ import { fetchAdditives } from '../../model/services/fetchAddivites';
 import { AdditivesCard } from '../AdditivesCard/AdditivesCard';
 
 export interface AdditivesProps {
-   // orderAdditives: string[];
+   existingOrderAdditives?: string[];
 }
 
 const initialReducer: ReducersList = {
    additives: additivesReducer,
 };
 
-const Additives = memo(() => {
+const Additives = memo((props: AdditivesProps) => {
+   const { existingOrderAdditives } = props;
    const dispatch = useAppDispatch();
+
    const cards = useSelector(getAdditives);
    const orderAdditives = useSelector(getOrderAdditives);
    const orderAdditivesTitle = orderAdditives?.orderAdditivesTitle;
@@ -45,7 +47,9 @@ const Additives = memo(() => {
          dispatch(
             additivesActions.additivesSelect({
                card,
-               orderAdditives: orderAdditivesTitle || [],
+               orderAdditives:
+                  // корзина или выбор
+                  orderAdditivesTitle || existingOrderAdditives || [],
             }),
          );
       },
@@ -56,7 +60,7 @@ const Additives = memo(() => {
       <DynamicReducersLoader removeAfterUnmount reducers={initialReducer}>
          {cards && (
             <Scrollbar
-               heightContainer={280}
+               heightContainer={302}
                name='additives'
                scrollWidth={5}
                className={classNames(cls.Additives, {}, [])}
@@ -67,6 +71,7 @@ const Additives = memo(() => {
                         key={card._id}
                         card={card}
                         onCard={onCard}
+                        existingOrderAdditives={existingOrderAdditives}
                      />
                   ))}
                </div>

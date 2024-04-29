@@ -2,11 +2,9 @@ import {
    Ref,
    forwardRef,
    memo,
-   useCallback,
    useEffect,
    useImperativeHandle,
    useRef,
-   useState,
 } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -42,9 +40,8 @@ import { getCards } from '../../../model/selectors/productsSelector';
 import { nameViewProducts } from '@/shared/const/product_const';
 import { PageSelect } from './PageSelect/PageSelect';
 import { getUserSettings } from '@/entities/User';
-import { Modal } from '@/shared/ui/Modal';
-import { OrderProductsModal } from '@/features/OrderProducts';
 import { additivesActions } from '@/entities/Additives';
+import { ModalOrderProduct, RefTypeModal } from '@/features/ModalOrderProduct';
 
 interface MainPageProductsProps {
    className?: string;
@@ -57,11 +54,12 @@ export interface RefType {
 const MainPageProducts = forwardRef(
    (props: MainPageProductsProps, ref: Ref<RefType>) => {
       const { className } = props;
+      const childRef = useRef<RefTypeModal>(null);
+
       const dispatch = useAppDispatch();
       const { pathname } = useLocation();
-      const [productInfo, setProductInfo] = useState<Product>();
-      const [isOpenModal, setIsOpenModal] = useState(false);
-      const [isClosing, setIsClosing] = useState(false);
+      // const [productInfo, setProductInfo] = useState<Product>();
+      // const [isOpenModal, setIsOpenModal] = useState(false);
       const products: Product[] = useSelector(getEntityProducts.selectAll);
       const cards = useSelector(getCards);
       const isLoading = useSelector(getIsLoadingProducts);
@@ -152,14 +150,12 @@ const MainPageProducts = forwardRef(
          onLoadNextPart,
       }));
 
-      const onOpenModal = (card: Product) => {
-         setProductInfo(card);
-         setIsOpenModal(true);
+      // пробрасываю функцию в модалку через реф
+      const openModal = (card: Product) => {
+         childRef.current?.openModal(card);
       };
 
       const onCloseModal = () => {
-         setProductInfo(undefined);
-         setIsOpenModal(false);
          // сброс цены в селекторе
          dispatch(
             additivesActions.additivesSelect({
@@ -167,10 +163,6 @@ const MainPageProducts = forwardRef(
             }),
          );
       };
-
-      const handleAnimate = useCallback((bool: boolean) => {
-         setIsClosing(bool);
-      }, []);
 
       return (
          <div
@@ -191,33 +183,10 @@ const MainPageProducts = forwardRef(
                products={cards[viewProduct]}
                isLoading={isLoading}
                skeletonElements={paginateElements}
-               onModal={onOpenModal}
+               onModal={openModal}
             />
             {viewLoadProducts === 'pages' && <PageSelect />}
-            {isOpenModal && productInfo && (
-               // если нет то модалка не встраивается
-               <Modal
-                  onAnimate={handleAnimate}
-                  isOpen={isOpenModal}
-                  onClose={onCloseModal}
-                  className={classNames(
-                     cls.modal,
-                     { [cls.modalActive]: isClosing },
-                     [],
-                  )}
-                  delayClose={300}
-                  lazy
-                  buttonCloseHeight={40}
-                  buttonCloseRight={30}
-                  buttonCloseTop={30}
-                  buttonCloseWidth={40}
-               >
-                  <OrderProductsModal
-                     onCloseModal={onCloseModal}
-                     productInfo={productInfo}
-                  />
-               </Modal>
-            )}
+            <ModalOrderProduct ref={childRef} onCloseModal={onCloseModal} />
          </div>
       );
    },

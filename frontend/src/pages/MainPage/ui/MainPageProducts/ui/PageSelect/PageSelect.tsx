@@ -44,8 +44,6 @@ export const PageSelect = memo((props: PageSelectProps) => {
 
    const arrPages = initialArr();
 
-   console.log(arrPages);
-
    // При обновлении страницы возвращает первоначальную нумерацию
    useEffect(() => {
       setNumPage(1);

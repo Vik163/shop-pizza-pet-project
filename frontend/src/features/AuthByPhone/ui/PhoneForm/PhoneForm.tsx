@@ -48,6 +48,8 @@ const PhoneForm = memo((props: PhoneFormProps) => {
 
    // кнопка 'изменить' ===================================================
    const onEditPhone = useCallback(() => {
+      console.log('i');
+
       // сброс каптчи
       firebaseApi.resetRecaptcha(captchaRef);
       dispatch(authPhoneActions.setIsConfirmCode({ isConfirmCode: false }));

@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -14,14 +14,14 @@ import { FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { navbarItems } from '../model/items';
 import { AppLink } from '@/shared/ui/AppLink';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
-import { PhoneForm } from '@/features/AuthByPhone';
+import { AuthByPhone } from '@/features/AuthByPhone';
 import { getInited, getUserData, UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
-import { getBasketProducts } from '@/entities/Basket';
-import { Modal } from '@/shared/ui/Modal/Modal';
-import { BasketNavbar } from '@/features/BasketNavbar';
+import { BasketOneProduct, getBasketProducts } from '@/entities/Basket';
+import { ModalOrderProduct, RefTypeModal } from '@/features/ModalOrderProduct';
+import { ModalBasket } from '@/features/ModalBasket';
 
 interface NavbarProps {
    className?: string;
@@ -29,15 +29,14 @@ interface NavbarProps {
 
 export const Navbar = memo((props: NavbarProps) => {
    const { className } = props;
+   const childRef = useRef<RefTypeModal>(null);
    const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
    const [isOpenModalBasket, setIsOpenModalBasket] = useState(false);
-   // const [productInfo, setProductInfo] = useState<Product>();
-   // const [isOpenModalProduct, setIsOpenModalProduct] = useState(false);
-   const [isClosing, setIsClosing] = useState(false);
+
    const inited = useSelector(getInited);
    const user = useSelector(getUserData) as UserData;
    const basketProducts = useSelector(getBasketProducts);
-   console.log('basket:', basketProducts);
+
    const pathProfile = user?.userId && getRouteProfile(user?.userId);
 
    const itemList = useMemo(
@@ -54,36 +53,9 @@ export const Navbar = memo((props: NavbarProps) => {
       [],
    );
 
-   const onOpenAuthModal = () => {
-      setIsOpenModalAuth(true);
+   const onModalProduct = (basket: BasketOneProduct) => {
+      childRef.current?.openModal(undefined, basket);
    };
-
-   const onCloseAuthModal = () => {
-      setIsOpenModalAuth(false);
-   };
-
-   const onOpenBasketModal = () => {
-      setIsOpenModalBasket(true);
-   };
-
-   const onCloseBasketModal = useCallback(() => {
-      setIsOpenModalBasket(false);
-   }, []);
-
-   // const onModalProduct = (card: BasketOneProduct) => {
-   //    setIsOpenModalBasket(false);
-   //    setIsOpenModalProduct(true);
-
-   //    console.log('card:', card);
-   // };
-
-   // const onCloseModalProduct = () => {
-   //    setIsOpenModalProduct(false);
-   // };
-
-   const handleAnimate = useCallback((bool: boolean) => {
-      setIsClosing(bool);
-   }, []);
 
    return (
       <HStack className={classNames(cls.Navbar, {}, [className])} max>
@@ -100,7 +72,7 @@ export const Navbar = memo((props: NavbarProps) => {
                fontColor={FontColor.TEXT_PRIMARY}
                fontWeight={FontWeight.TEXT_700}
                fontSize={FontSize.SIZE_16}
-               onClick={onOpenAuthModal}
+               onClick={() => setIsOpenModalAuth(true)}
             >
                Войти
             </Button>
@@ -118,7 +90,7 @@ export const Navbar = memo((props: NavbarProps) => {
             fontColor={FontColor.TEXT_BUTTON}
             fontWeight={FontWeight.TEXT_700}
             fontSize={FontSize.SIZE_16}
-            onClick={onOpenBasketModal}
+            onClick={() => setIsOpenModalBasket(true)}
             className={cls.basket}
          >
             Корзина
@@ -127,75 +99,19 @@ export const Navbar = memo((props: NavbarProps) => {
             </span>
          </Button>
          {isOpenModalAuth && (
-            // если нет то модалка не встраивается
-            <Modal
-               onAnimate={handleAnimate}
-               onClose={onCloseAuthModal}
-               isOpen={isOpenModalAuth}
-               className={classNames(
-                  cls.phoneModal,
-                  { [cls.authModalActive]: isClosing },
-                  [],
-               )}
-               lazy
-               isCenter
-               delayClose={300}
-               buttonCloseHeight={40}
-               buttonCloseRight={30}
-               buttonCloseTop={30}
-               buttonCloseWidth={40}
-            >
-               <PhoneForm onCloseModal={onCloseAuthModal} />
-            </Modal>
+            <AuthByPhone
+               setIsOpenModal={setIsOpenModalAuth}
+               isOpenModal={isOpenModalAuth}
+            />
          )}
-         <BasketNavbar
-            isOpenModalBasket={isOpenModalBasket}
-            onCloseBasketModal={onCloseBasketModal}
-         />
-         {/* {isOpenModalBasket && (
-            <Modal
-               isCenter={false}
-               onAnimate={handleAnimate}
-               isOpen={isOpenModalBasket}
-               onClose={onCloseBasketModal}
-               className={classNames(
-                  cls.basketPopup,
-                  { [cls.basketPopupActive]: isClosing },
-                  [],
-               )}
-               delayClose={300}
-               buttonCloseHeight={30}
-               buttonCloseRight={20}
-               buttonCloseTop={20}
-               buttonCloseWidth={30}
-            >
-               <Basket onModalProduct={onModalProduct} />
-            </Modal>
+         {isOpenModalBasket && (
+            <ModalBasket
+               setIsOpenModalBasket={setIsOpenModalBasket}
+               isOpenModalBasket={isOpenModalBasket}
+               onModalProduct={onModalProduct}
+            />
          )}
-         {isOpenModalProduct && productInfo && (
-            // если нет то модалка не встраивается
-            <Modal
-               onAnimate={handleAnimate}
-               isOpen={isOpenModalProduct}
-               onClose={onCloseModalProduct}
-               className={classNames(
-                  cls.modal,
-                  { [cls.modalActive]: isClosing },
-                  [],
-               )}
-               delayClose={300}
-               lazy
-               buttonCloseHeight={40}
-               buttonCloseRight={30}
-               buttonCloseTop={30}
-               buttonCloseWidth={40}
-            >
-               <OrderProductsModal
-                  onCloseModal={onCloseModalProduct}
-                  productInfo={productInfo}
-               />
-            </Modal>
-         )} */}
+         <ModalOrderProduct ref={childRef} />
       </HStack>
    );
 });

@@ -1,4 +1,4 @@
-export { PhoneFormAsync as PhoneForm } from './ui/PhoneForm/PhoneForm.async';
+export { AuthByPhone } from './ui/AuthByPhone/AuthByPhone';
 
 export type { AuthPhoneSchema } from './model/types/authPhone';
 

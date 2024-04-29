@@ -34,24 +34,6 @@
    @include font(var(--size-15), var(--weight-700), var(--color-primary));
 }
 
-.phoneModal {
-   width: 668px;
-   height: 320px;
-   border-radius: 12px;
-   background: var(--color-modal);
-   color: var(--color-yellow);
-   padding: 30px 40px;
-   position: relative;
-   transform: scale(0.9);
-   transition: 0.3s transform;
-   position: relative;
-
-   &.authModalActive {
-      transform: scale(1);
-      transition: 0.3s transform;
-   }
-}
-
 .account {
    fill: var(--color-primary);
    width: 32px;

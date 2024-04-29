@@ -3,22 +3,6 @@
    width: 1110px;
 }
 
-.modal {
-   width: 960px;
-   height: 610px;
-   border-radius: 12px;
-   background-color: var(--block-bg-primary);
-   padding: 30px;
-   position: relative;
-   transform: scale(0.9);
-   transition: 0.3s transform;
-
-   &.modalActive {
-      transform: scale(1);
-      transition: 0.3s transform;
-   }
-}
-
 .title {
    width: 100%;
    margin: 46px 0 26px;
