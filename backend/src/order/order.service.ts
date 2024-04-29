@@ -14,6 +14,28 @@ export class OrderService {
   ) {}
 
   async addBasket(body: BasketDto) {
+    if (body.id) {
+      const updateProduct = await this.basketRepository.findOne({
+        where: {
+          id: body.id,
+        },
+      });
+      body.totalPrice = body.price;
+
+      if (
+        String(body.additives) === String(updateProduct.additives) &&
+        body.dough === updateProduct.dough &&
+        body.price === updateProduct.price
+      ) {
+        body.quantity = updateProduct.quantity + 1;
+      }
+
+      this.basketRepository.merge(updateProduct, body);
+      const data = await this.basketRepository.save(updateProduct);
+
+      if (data) return this.getBasket();
+    }
+
     const sameProducts = await this.basketRepository.find({
       where: {
         product: body.product,
@@ -78,7 +100,6 @@ export class OrderService {
       product.totalPrice = product.price * product.quantity;
     }
 
-    console.log('product:', product);
     const basketDto: BasketDto = await this.basketRepository.save(product);
 
     if (basketDto) {

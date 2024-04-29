@@ -1,4 +1,11 @@
-import { Ref, forwardRef, memo, useImperativeHandle, useState } from 'react';
+import {
+   Ref,
+   forwardRef,
+   memo,
+   useCallback,
+   useImperativeHandle,
+   useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -30,28 +37,31 @@ export const ModalOrderProduct = forwardRef(
          setIsClosing(bool);
       };
 
-      const openModal = (cardProduct?: Product, basket?: BasketOneProduct) => {
-         if (basket && basket.product) {
-            const product = products.find(
-               (item) => item.title === basket.product,
-            );
-            if (product) {
-               setExistingOrder(basket);
-               setProductInfo(product);
+      const openModal = useCallback(
+         (cardProduct?: Product, basket?: BasketOneProduct) => {
+            if (basket && basket.product) {
+               const product = products.find(
+                  (item) => item.title === basket.product,
+               );
+               if (product) {
+                  setExistingOrder(basket);
+                  setProductInfo(product);
+                  setIsOpenModal(true);
+               }
+            } else {
+               setProductInfo(cardProduct);
                setIsOpenModal(true);
             }
-         } else {
-            setProductInfo(cardProduct);
-            setIsOpenModal(true);
-         }
-      };
+         },
+         [],
+      );
 
-      const onClose = () => {
+      const onClose = useCallback(() => {
          setProductInfo(undefined);
          setIsOpenModal(false);
          // сброс цены в селекторе
          if (onCloseModal) onCloseModal();
-      };
+      }, []);
 
       useImperativeHandle(ref, () => ({
          openModal,

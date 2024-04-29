@@ -106,16 +106,10 @@ export const Text = memo((props: TextProps) => {
    ];
 
    return (
-      <div>
-         <HeaderTag
-            className={classNames(
-               cls.text,
-               { [cls.max]: max },
-               additionalClasses,
-            )}
-         >
-            {children}
-         </HeaderTag>
-      </div>
+      <HeaderTag
+         className={classNames(cls.text, { [cls.max]: max }, additionalClasses)}
+      >
+         {children}
+      </HeaderTag>
    );
 });

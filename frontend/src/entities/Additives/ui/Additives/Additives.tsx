@@ -41,9 +41,22 @@ const Additives = memo((props: AdditivesProps) => {
       if (!cards) dispatch(fetchAdditives());
    }, [cards, dispatch]);
 
+   useEffect(() => {
+      if (existingOrderAdditives) {
+         dispatch(
+            additivesActions.additivesSelect({
+               orderAdditives:
+                  // корзина или выбор
+                  existingOrderAdditives,
+            }),
+         );
+      }
+   }, []);
+
    const onCard = useCallback(
       (card: IAdditives) => {
          // создал reselect для мемоизации (после dispatch нужных данных расчет в селекторе)
+
          dispatch(
             additivesActions.additivesSelect({
                card,

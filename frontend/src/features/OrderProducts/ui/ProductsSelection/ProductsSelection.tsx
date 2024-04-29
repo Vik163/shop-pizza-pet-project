@@ -62,8 +62,9 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
             sizePizza,
             dia: ingredients.dia,
             dough: viewDough,
-            additives: orderAdditivesTitle,
+            additives: orderAdditivesTitle || existingOrder?.additives,
             price: totalPrice,
+            id: existingOrder?.id,
          };
       } else {
          order = {

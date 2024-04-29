@@ -19,14 +19,14 @@ export const useCountPrice = (props: UseCountPriceProps) => {
 
    const pizzaPrice = () => {
       switch (sizePizza) {
-         case 'big':
+         case 'большая':
             pricePizza = bigPrice;
             return pricePizza;
-         case 'average':
+         case 'средняя':
             pricePizza = averagePrice;
             return pricePizza;
 
-         case 'small':
+         case 'маленькая':
             pricePizza = smallPrice;
             return pricePizza;
 
