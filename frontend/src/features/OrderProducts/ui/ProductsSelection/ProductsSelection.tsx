@@ -64,7 +64,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
             dough: viewDough,
             additives: orderAdditivesTitle || existingOrder?.additives,
             price: totalPrice,
-            id: existingOrder?.id,
+            existingOrderId: existingOrder?.id,
          };
       } else {
          order = {

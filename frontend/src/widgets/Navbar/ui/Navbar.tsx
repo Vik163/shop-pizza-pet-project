@@ -105,15 +105,13 @@ export const Navbar = memo((props: NavbarProps) => {
             />
          )}
          {isOpenModalBasket && (
-            <div>
-               <ModalBasket
-                  setIsOpenModalBasket={setIsOpenModalBasket}
-                  isOpenModalBasket={isOpenModalBasket}
-                  onModalProduct={onModalProduct}
-               />
-               <ModalOrderProduct ref={childRef} />
-            </div>
+            <ModalBasket
+               setIsOpenModalBasket={setIsOpenModalBasket}
+               isOpenModalBasket={isOpenModalBasket}
+               onModalProduct={onModalProduct}
+            />
          )}
+         {isOpenModalBasket && <ModalOrderProduct ref={childRef} />}
       </HStack>
    );
 });

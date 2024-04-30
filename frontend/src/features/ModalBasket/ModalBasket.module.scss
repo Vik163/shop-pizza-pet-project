@@ -1,3 +1,11 @@
+.Basket {
+   padding: 20px;
+}
+
+.title {
+   margin-bottom: 20px;
+}
+
 .basketPopup {
    position: absolute;
    display: flex;
@@ -15,4 +23,22 @@
       transition: 0.3s;
       transform: translateY(calc(100vh - var(--header-height)));
    }
+}
+
+.button {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-top: auto;
+   width: 330px;
+   height: 40px;
+   background-color: var(--color-yellow);
+   border-radius: 8px;
+   color: var(--color-text-button);
+   font-size: var(--size-14);
+   font-weight: var(--weight-700);
+}
+
+.scrollbar {
+   width: 340px;
 }

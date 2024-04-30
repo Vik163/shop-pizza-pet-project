@@ -16,4 +16,4 @@ export {
 
 export { fetchAddBasket } from './model/services/fetchAddBasket';
 export { fetchBasket } from './model/services/fetchBasket';
-export { Basket } from './ui/Basket';
+export { BasketItem } from './ui/BasketItem/BasketItem';

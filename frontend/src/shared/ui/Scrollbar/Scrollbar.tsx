@@ -48,12 +48,17 @@ export const Scrollbar = (props: ScrollbarProps) => {
    // размер бегунка
    const [thumbHeight, setThumbHeight] = useState(20);
    const [isScrollbar, setIsScrollbar] = useState(false);
+   console.log('isScrollbar:', isScrollbar);
    // начальное положение скрола
    const [scrollStartPosition, setScrollStartPosition] = useState<
       number | null
    >(null);
    const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
    const [isDragging, setIsDragging] = useState(false);
+   const [hei, setHei] = useState(0);
+   const child = contentRef.current?.firstChild as HTMLElement;
+   const countChildren = contentRef.current?.childElementCount;
+   const heightContainerContent = containerRef.current?.clientHeight;
 
    // размер кнопки ----------------------------------------------
    function handleResize(ref: HTMLDivElement, trackSize: number) {
@@ -179,18 +184,17 @@ export const Scrollbar = (props: ScrollbarProps) => {
       [initialScrollTop, isDragging, scrollStartPosition, thumbHeight],
    );
 
+   console.log('countChildren:', countChildren);
    // видимость скрола
    // проверка высоты контента по вложенным элементам и высоты контейнера
    useEffect(() => {
-      const child = contentRef.current?.firstChild as HTMLElement;
       if (!child) return;
       const heightChild = child.offsetHeight;
-      const countChildren = contentRef.current?.childElementCount;
-      const heightContainerContent = containerRef.current?.clientHeight;
       if (!countChildren || !heightContainerContent) return;
       const heightContent = heightChild * countChildren;
+
       setIsScrollbar(heightContent > heightContainerContent);
-   }, [contentRef.current]);
+   }, [child, countChildren, heightContainerContent]);
 
    // Если содержимое и дорожка полосы прокрутки существуют, используем наблюдатель за изменением
    // размера, чтобы отрегулировать высоту бегунка, и слушать событие прокрутки

@@ -15,6 +15,9 @@ export class Basket {
   id: string;
 
   @Column()
+  existingOrderId?: string;
+
+  @Column()
   product: string;
 
   @Column()

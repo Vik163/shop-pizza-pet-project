@@ -4,6 +4,7 @@
    grid-template-columns: 1fr auto;
    overflow: hidden;
    color: var(--color-primary);
+   position: relative;
 
    &.selectScroll {
       background-color: var(--color-bg-primary);

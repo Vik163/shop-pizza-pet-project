@@ -7,6 +7,7 @@ export enum AppRoutes {
    ACTIONS = 'actions',
    PROFILE = 'profile',
    CONTACTS = 'contacts',
+   BASKET = 'basket',
    //    FORBIDDEN = 'forbidden',
    MAIN = 'main',
 
@@ -24,6 +25,7 @@ export const RoutePath = {
    [AppRoutes.PIZZAS]: '/pizzas',
    [AppRoutes.SAUCES]: '/sauces',
    [AppRoutes.SNACKS]: '/snacks',
+   [AppRoutes.BASKET]: '/basket',
 
    // последний
    [AppRoutes.NOT_FOUND]: '*',
@@ -40,6 +42,7 @@ export const getRouteSauces = () => '/sauces';
 export const getRouteSnacks = () => '/snacks';
 export const getRouteCombos = () => '/combos';
 export const getRouteDrinks = () => '/drinks';
+export const getRouteBasket = () => '/basket';
 // export const getRouteAdmin = () => '/admin';
 // export const getRouteForbidden = () => '/forbidden';
 export const getRouteNotFound = () => '*';
@@ -55,6 +58,7 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
    [getRouteSnacks()]: AppRoutes.SNACKS,
    [getRouteCombos()]: AppRoutes.COMBOS,
    [getRouteDrinks()]: AppRoutes.DRINKS,
+   [getRouteBasket()]: AppRoutes.BASKET,
    //    [getRouteAdmin()]: AppRoutes.ADMIN_PANEL,
    //    [getRouteForbidden()]: AppRoutes.FORBIDDEN,
    [getRouteNotFound()]: AppRoutes.NOT_FOUND,

@@ -13,7 +13,7 @@ export interface BasketOneProduct {
    totalPrice?: number;
    additives?: string[];
    quantity?: number;
-   order?: string;
+   existingOrderId?: string;
 }
 
 export interface BasketData {

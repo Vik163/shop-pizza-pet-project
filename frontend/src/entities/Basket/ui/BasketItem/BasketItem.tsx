@@ -37,7 +37,9 @@ export const BasketItem = memo((props: BasketItemProps) => {
    };
 
    const decreaseProducts = () => {
-      if (card.id) dispatch(fetchDecreaseBasket(card.id));
+      if (card.id && card.quantity === 1) {
+         dispatch(fetchDelete(card.id));
+      } else if (card.id) dispatch(fetchDecreaseBasket(card.id));
    };
 
    const addProduct = useCallback(() => {

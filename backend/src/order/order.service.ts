@@ -14,10 +14,11 @@ export class OrderService {
   ) {}
 
   async addBasket(body: BasketDto) {
-    if (body.id) {
+    console.log('body:', body);
+    if (body.existingOrderId) {
       const updateProduct = await this.basketRepository.findOne({
         where: {
-          id: body.id,
+          id: body.existingOrderId,
         },
       });
       body.totalPrice = body.price;
