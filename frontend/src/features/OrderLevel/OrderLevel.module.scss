@@ -1,0 +1,48 @@
+.OrderLevel {
+   width: 435px;
+   height: 66px;
+}
+
+.levelContainer {
+   &:first-child {
+      width: 100px;
+   }
+
+   &:last-child {
+      width: 100px;
+   }
+}
+
+.level {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 36px;
+   height: 36px;
+   color: var(--color-yellow);
+   border: 2px solid var(--color-yellow);
+   opacity: 0.6;
+   border-radius: 50%;
+   font-weight: var(--weight-700);
+   position: relative;
+
+   &.levelActive {
+      background-color: var(--color-yellow);
+      color: var(--color-text-button);
+      opacity: 1;
+   }
+}
+
+.text {
+   opacity: 0.6;
+
+   &.textActive {
+      opacity: 1;
+   }
+}
+.dotted {
+   position: absolute;
+   letter-spacing: 2px;
+   width: 100px;
+   right: 48px;
+}

@@ -31,8 +31,6 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
    const totalPrice = useSelector(getBasketTotalPrice);
    const { word } = useChangeWord(basketProducts.length);
 
-   console.log('i');
-
    const onCloseBasketModal = useCallback(() => {
       setIsOpenModalBasket(false);
    }, []);
@@ -71,6 +69,7 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
                   name='basket'
                   scrollWidth={3}
                   className={cls.scrollbar}
+                  countChildren={basketProducts.length}
                >
                   {basketProducts.map((item) => (
                      <BasketItem

@@ -77,6 +77,7 @@ const Additives = memo((props: AdditivesProps) => {
                name='additives'
                scrollWidth={5}
                className={classNames(cls.Additives, {}, [])}
+               countChildren={cards.length}
             >
                <div className={cls.container}>
                   {cards.map((card) => (

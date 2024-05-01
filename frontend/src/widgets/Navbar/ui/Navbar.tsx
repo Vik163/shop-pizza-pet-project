@@ -57,6 +57,10 @@ export const Navbar = memo((props: NavbarProps) => {
       childRef.current?.openModal(undefined, basket);
    };
 
+   const openBasket = () => {
+      if (basketProducts?.length > 0) setIsOpenModalBasket(true);
+   };
+
    return (
       <HStack className={classNames(cls.Navbar, {}, [className])} max>
          <HStack
@@ -90,7 +94,7 @@ export const Navbar = memo((props: NavbarProps) => {
             fontColor={FontColor.TEXT_BUTTON}
             fontWeight={FontWeight.TEXT_700}
             fontSize={FontSize.SIZE_16}
-            onClick={() => setIsOpenModalBasket(true)}
+            onClick={openBasket}
             className={cls.basket}
          >
             Корзина

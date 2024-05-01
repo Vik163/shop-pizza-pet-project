@@ -1,6 +1,9 @@
 import React, { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+
+import cls from './App.module.scss';
+
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import { Header } from '@/widgets/Header';
@@ -17,6 +20,8 @@ const App = memo(() => {
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
    const inited = useSelector(getInited);
+   const { pathname } = useLocation();
+   const basketPage = pathname === '/basket';
 
    const [searchParams] = useSearchParams();
    // Yandex query ответ
@@ -51,8 +56,8 @@ const App = memo(() => {
    }, [dispatch, initYaData, inited, navigate, userYaData]);
 
    return (
-      <div className={classNames('app', {}, [])}>
-         <Header />
+      <div className={classNames(cls.app, { [cls.appBasket]: basketPage }, [])}>
+         {!basketPage && <Header />}
          <AppRouter />
          <Footer />
       </div>

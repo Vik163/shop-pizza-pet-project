@@ -22,6 +22,7 @@ interface ScrollbarProps {
    scrollHover?: boolean;
    name: string;
    selectVariant?: boolean;
+   countChildren: number;
 }
 
 export const Scrollbar = (props: ScrollbarProps) => {
@@ -35,6 +36,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
       scrollTrackColor,
       scrollHover,
       heightContainer,
+      countChildren,
       scrollRadius,
       name,
       selectVariant = false,
@@ -48,17 +50,17 @@ export const Scrollbar = (props: ScrollbarProps) => {
    // размер бегунка
    const [thumbHeight, setThumbHeight] = useState(20);
    const [isScrollbar, setIsScrollbar] = useState(false);
-   console.log('isScrollbar:', isScrollbar);
    // начальное положение скрола
    const [scrollStartPosition, setScrollStartPosition] = useState<
       number | null
    >(null);
    const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
    const [isDragging, setIsDragging] = useState(false);
-   const [hei, setHei] = useState(0);
    const child = contentRef.current?.firstChild as HTMLElement;
-   const countChildren = contentRef.current?.childElementCount;
    const heightContainerContent = containerRef.current?.clientHeight;
+   // при изменении сразу не перерисовывает (при уменьшении сролл не убирался)
+   // количество передаю пропсом
+   //* const countChildren = contentRef.current?.childElementCount;
 
    // размер кнопки ----------------------------------------------
    function handleResize(ref: HTMLDivElement, trackSize: number) {
@@ -184,7 +186,6 @@ export const Scrollbar = (props: ScrollbarProps) => {
       [initialScrollTop, isDragging, scrollStartPosition, thumbHeight],
    );
 
-   console.log('countChildren:', countChildren);
    // видимость скрола
    // проверка высоты контента по вложенным элементам и высоты контейнера
    useEffect(() => {

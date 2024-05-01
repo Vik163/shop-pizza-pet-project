@@ -154,6 +154,7 @@ export const Select = memo((props: SelectProps) => {
                scrollHover={scrollHover}
                name={name}
                selectVariant
+               countChildren={options.length}
             >
                {options.map((option) => (
                   <Option
