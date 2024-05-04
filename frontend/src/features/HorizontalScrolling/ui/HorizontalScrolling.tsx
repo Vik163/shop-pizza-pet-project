@@ -42,14 +42,15 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
    const index = useRef(0);
    // width + gap
    const width = widthElement + gap;
-   // коэффициент ширины смещения элемента для стрелок
-   const indexWidthElements = Math.floor(widthBlock / (widthElement * 2));
-   const widthForArrow = width * indexWidthElements;
+   // половина ширины экрана для определения нужной стрелки
+   const widthForArrow = window.innerWidth / 2;
+
    const [indexActiveCard, setIndexActiveCard] = useState(0);
    const sizeBlock = {
       width: widthBlock + gap,
       height: heightBlock,
    };
+   const shiftShadow = shadowsOpacity ? gap / 2 : 0;
 
    if (curtains && elements.length <= visibleElements) curtains = false;
 
@@ -57,7 +58,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
    const [obj, api] = useSprings(elements.length + 1, (i) => {
       return {
          // Смещаем на один элемент влево
-         x: (i - 1) * width + gap / 2,
+         x: (i - 1) * width + shiftShadow,
          display: 'block',
          scaleElements: 1,
       };
@@ -78,7 +79,6 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
 
          // стрелки. Хардкод mx
          // положение стрелки (х) и нажатие (active)
-
          if (currentTarget === target) {
             if (curtains) {
                if (xy[0] > widthForArrow && active) {
@@ -172,7 +172,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                // Смещаем на один элемент влево
                const x =
                   ((i - indexActiveCard - 1) * width +
-                     gap / 2 +
+                     shiftShadow +
                      (active ? mx : 0)) *
                   //  растояние между элементами  (уменьшаем scaleElements < 0, увеличиваем > 0)
                   scaleElements;
@@ -186,37 +186,45 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
    const cardsVisible = obj.filter((item, i) => {
       return i <= indexActiveCard + visibleElements + 1 && i >= indexActiveCard;
    });
-   const leftArrowCurtainsActive = indexActiveCard !== -1;
+   const leftArrowCurtainsActive = curtains && indexActiveCard !== -1;
    const rightArrowCurtainsActive =
+      curtains &&
       indexActiveCard !== elements.length - visibleElements - 1 &&
       elements.length >= cardsVisible.length; // если нет боковых
    const rightArrowActive =
-      cardsVisible.length > visibleElements + 1 && indexActiveCard !== -1; //* вместо >  было !==
+      !curtains &&
+      cardsVisible.length > visibleElements + 1 &&
+      indexActiveCard !== -1; //* вместо >  было !==
 
-   const leftArrowActive = indexActiveCard !== 0;
+   const leftArrowActive = !curtains && indexActiveCard !== 0;
 
    return (
       <div
-         className={classNames(cls.HorizontalScrolling, {
-            [cls.hidden]: !curtains,
-         })}
+         className={classNames(cls.HorizontalScrolling, {})}
          style={sizeBlock}
       >
          <div
             className={classNames(
                cls.curtains,
-               { [cls.leftHidden]: !curtains },
-               [cls.leftCurtain],
+               { [cls.leftHidden]: !curtains, [cls.leftCurtain]: curtains },
+               [],
             )}
             style={{
                width: `calc((100vw - ${widthBlock}px) / 2)`,
-               right: widthBlock + gap / 2,
+               right: widthBlock + (shadowsOpacity ? gap / 2 : gap),
             }}
          >
-            {curtains && leftArrowCurtainsActive && (
+            {(leftArrowCurtainsActive || leftArrowActive) && (
                <animated.button
                   style={{ backgroundImage: `url(${arrow})` }}
-                  className={classNames(cls.icon, {}, [cls.iconLeftCurtain])}
+                  className={classNames(
+                     cls.icon,
+                     {
+                        [cls.iconLeft]: !curtains,
+                        [cls.iconLeftCurtains]: curtains,
+                     },
+                     [],
+                  )}
                   {...bind()}
                ></animated.button>
             )}
@@ -224,52 +232,30 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
          <div
             className={classNames(
                cls.curtains,
-               { [cls.rightHidden]: !curtains },
-               [className, cls.rightCurtain],
+               { [cls.rightHidden]: !curtains, [cls.rightCurtain]: curtains },
+               [className],
             )}
             style={{
                width: `calc((100vw - ${widthBlock - 20}px) / 2)`,
-               left: widthBlock + gap / 2,
+               left: widthBlock + (shadowsOpacity ? gap / 2 : gap),
             }}
          >
-            {curtains && rightArrowCurtainsActive && (
+            {(rightArrowCurtainsActive || rightArrowActive) && (
                <animated.button
                   style={{ backgroundImage: `url(${arrow})` }}
-                  className={classNames(cls.icon, {}, [cls.iconRightCurtain])}
+                  className={classNames(
+                     cls.icon,
+                     {
+                        [cls.iconRight]: !curtains,
+                        [cls.iconRightCurtains]: curtains,
+                     },
+                     [],
+                  )}
                   {...bind()}
                ></animated.button>
             )}
          </div>
-         <div>
-            {!curtains && leftArrowActive && (
-               <div
-                  className={classNames(cls.iconBlock, {}, [cls.iconLeft])}
-                  style={{
-                     height: heightBlock,
-                  }}
-               >
-                  <animated.button
-                     style={{ backgroundImage: `url(${arrow})` }}
-                     className={classNames(cls.icon, {}, [cls.iconInverse])}
-                     {...bind()}
-                  ></animated.button>
-               </div>
-            )}
-            {!curtains && rightArrowActive && (
-               <div
-                  className={classNames(cls.iconBlock, {}, [cls.iconRight])}
-                  style={{
-                     height: heightBlock,
-                  }}
-               >
-                  <animated.button
-                     style={{ backgroundImage: `url(${arrow})` }}
-                     className={classNames(cls.icon, {}, [cls.iconInverse])}
-                     {...bind()}
-                  ></animated.button>
-               </div>
-            )}
-         </div>
+
          {cardsVisible.map(({ x, display, scaleElements }, i) => (
             <HorizontalScrollingCard
                // eslint-disable-next-line react/no-array-index-key

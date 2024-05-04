@@ -15,7 +15,6 @@ import {
 } from '@/shared/ui/Button';
 import { Additives, getOrderAdditives } from '@/entities/Additives';
 import { useIngredients } from '../../lib/hooks/useIngredients';
-import { useCountPrice } from '../../lib/hooks/useCountPrice';
 import {
    getBasketProducts,
    getDoughView,
@@ -24,6 +23,7 @@ import {
    BasketOneProduct,
 } from '@/entities/Basket';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { useCountPrice } from '../../lib/hooks/useCountPrice';
 
 interface ProductsSelectionProps {
    productInfo: Product;

@@ -1,4 +1,4 @@
 export {
    ModalOrderProduct,
    type RefTypeModal,
-} from './ModalOrderProduct/ModalOrderProduct';
+} from './ui/ModalOrderProduct/ModalOrderProduct';

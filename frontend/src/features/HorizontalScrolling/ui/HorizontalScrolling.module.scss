@@ -2,18 +2,6 @@
    display: flex;
    align-items: center;
    position: relative;
-
-   &:hover .iconBlock {
-      opacity: 1;
-      transition: 0.3s;
-      cursor: pointer;
-   }
-
-   // &:hover .icon {
-   //    opacity: 1;
-   //    transition: 0.3s;
-   //    cursor: pointer;
-   // }
 }
 
 .curtains {
@@ -22,26 +10,26 @@
    top: 0;
    bottom: 0;
    z-index: 1;
-}
 
-.leftCurtain {
-   background: linear-gradient(
-      to right,
-      var(--color-bg-primary-scrolling) 93%,
-      var(--color-bg-primary-scrolling-light) 98%,
-      transparent
-   );
-   backdrop-filter: blur(4px);
-}
+   &.leftCurtain {
+      background: linear-gradient(
+         to right,
+         var(--color-bg-primary-scrolling) 93%,
+         var(--color-bg-primary-scrolling-light) 98%,
+         transparent
+      );
+      backdrop-filter: blur(4px);
+   }
 
-.rightCurtain {
-   background: linear-gradient(
-      to left,
-      var(--color-bg-primary-scrolling) 93%,
-      var(--color-bg-primary-scrolling-light) 98%,
-      transparent
-   );
-   backdrop-filter: blur(4px);
+   &.rightCurtain {
+      background: linear-gradient(
+         to left,
+         var(--color-bg-primary-scrolling) 93%,
+         var(--color-bg-primary-scrolling-light) 98%,
+         transparent
+      );
+      backdrop-filter: blur(4px);
+   }
 }
 
 .icon {
@@ -53,40 +41,24 @@
    border: none;
    z-index: 15;
    cursor: pointer;
-   // opacity: 0;
-   // transition: 0.3s;
-}
 
-.iconRightCurtain {
-   left: 60px;
-}
+   &.iconRightCurtains {
+      left: 60px;
+   }
 
-.iconLeftCurtain {
-   right: 60px;
-   transform: rotate(180deg);
-}
+   &.iconRight {
+      left: 30px;
+   }
 
-.iconBlock {
-   display: flex;
-   justify-content: center;
-   position: absolute;
-   width: 120px;
-   top: 0;
-   z-index: 3;
-   opacity: 0;
-   transition: 0.3s;
-}
+   &.iconLeftCurtains {
+      right: 60px;
+      transform: rotate(180deg);
+   }
 
-.iconRight {
-   right: 0;
-}
-
-.iconLeft {
-   left: 0;
-   transform: rotate(180deg);
-}
-.iconInverse {
-   background: #574f51;
+   &.iconLeft {
+      right: 30px;
+      transform: rotate(180deg);
+   }
 }
 
 .leftHidden {
@@ -103,8 +75,4 @@
       var(--color-bg-primary) 96%,
       transparent
    );
-}
-
-.hidden {
-   overflow: hidden;
 }

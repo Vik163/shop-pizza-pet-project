@@ -5,10 +5,9 @@ import { Mods, classNames } from '@/shared/lib/classNames/classNames';
 import cls from './OrderProduct.module.scss';
 import { Product } from '@/entities/Product';
 import { HStack } from '@/shared/ui/Stack';
-import { ProductsSelection } from '../../OrderProducts/ui/ProductsSelection/ProductsSelection';
-import { getSizePizza } from '../../../entities/Basket/model/selectors/basketSelector';
+import { ProductsSelection } from '../ProductsSelection/ProductsSelection';
+import { getSizePizza } from '../../../../entities/Basket/model/selectors/basketSelector';
 import { DynamicReducersLoader } from '@/shared/lib/components/DynamicReducersLoader';
-import { orderReducer } from '../../OrderProducts/model/slices/orderSlice';
 import { additivesReducer } from '@/entities/Additives';
 import { BasketOneProduct } from '@/entities/Basket';
 
@@ -20,7 +19,6 @@ interface OrderProductProps {
 }
 
 const initialReducer = {
-   order: orderReducer,
    additives: additivesReducer,
 };
 

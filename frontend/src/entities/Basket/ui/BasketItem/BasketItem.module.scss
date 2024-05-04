@@ -1,9 +1,22 @@
 .BasketItem {
-   width: 328px;
-   border-bottom: 1px solid var(--color-line);
+   position: relative;
    border-top: 1px solid var(--color-line);
-   padding-top: 20px;
    margin-bottom: 3px;
+
+   &:last-child {
+      border-bottom: 1px solid var(--color-line);
+   }
+
+   &.basket_modal {
+      width: 328px;
+      padding-top: 20px;
+   }
+
+   &.basket_page {
+      width: 795px;
+      padding: 30px 50px 30px 0;
+      justify-content: space-between;
+   }
 }
 
 .linkCard {
@@ -16,32 +29,54 @@
 }
 
 .textContainer {
-   width: 223px;
-   padding-top: 3px;
+   &.basket_modal {
+      width: 223px;
+      padding-top: 3px;
+   }
+
+   &.basket_page {
+      width: 400px;
+   }
+}
+
+.title {
+   &.basket_page {
+      font-size: var(--size-18);
+   }
 }
 
 .close {
    fill: var(--color-primary);
-   width: 15px;
-   height: 15px;
+
+   &.basket_modal {
+      width: 15px;
+      height: 15px;
+   }
+
+   &.basket_page {
+      position: absolute;
+      right: 0;
+      width: 20px;
+      height: 20px;
+   }
 }
 
 .priceContainer {
-   padding: 0 20px;
-   width: 328px;
-   height: 54px;
+   &.basket_modal {
+      padding: 0 20px;
+      width: 328px;
+      height: 54px;
+   }
+
+   &.basket_page {
+      padding: 0 20px;
+      width: 250px;
+      height: 54px;
+   }
 }
 
-.select {
-   width: 90px;
-   height: 26px;
-   background-color: var(--color-background-button);
-   border-radius: 8px;
-   border: 1px solid var(--color-yellow);
-}
-
-.buttonsSelect {
-   width: 22px;
-   height: 22px;
-   fill: var(--color-text-button);
+.totalPrice {
+   &.basket_page {
+      font-size: 24px;
+   }
 }

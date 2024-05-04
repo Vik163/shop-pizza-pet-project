@@ -39,6 +39,11 @@ export class ProductsController {
     return this.productsService.getAdditives();
   }
 
+  @Get('addition_order')
+  getAddition(): Promise<Product[]> {
+    return this.productsService.getAdditions();
+  }
+
   // @Post()
   // @HttpCode(HttpStatus.CREATED)
   // addPizza(@Body() createPizzaDto: CreateCardDto): Promise<CardItem> {

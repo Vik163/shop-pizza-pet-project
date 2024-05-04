@@ -12,10 +12,10 @@ import { type rtkApi } from '@/shared/api/rtkApi';
 import { type MainPageSchema } from '@/pages/MainPage';
 import { type ScrollSaveSchema } from '@/features/ScrollSave';
 import { ActionsSchema } from '@/entities/Action';
-import { OrderSchema } from '@/features/OrderProducts';
 import { BasketSchema } from '@/entities/Basket';
 import { AdditivesSchema } from '@/entities/Additives';
 import { ProductSchema } from '@/entities/Product';
+import { BasketPageSchema } from '@/pages/BasketPage';
 
 export interface StateSchema {
    mainPage: MainPageSchema;
@@ -31,7 +31,7 @@ export interface StateSchema {
    // Асинхронные редюсеры (необязательные)
    authPhone?: AuthPhoneSchema;
    additives?: AdditivesSchema;
-   order?: OrderSchema;
+   basketPage?: BasketPageSchema;
 }
 
 // типы для ReducerManager (5_1 15min)===================================

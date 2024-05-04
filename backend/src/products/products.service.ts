@@ -19,6 +19,7 @@ import { Snacks } from './entities/snacks.entity';
 import { Product } from './entities/product.entity';
 import { Populars } from './entities/populars.entity';
 import { Additives } from './entities/additives.entity';
+import { Additions } from './entities/additions.entity';
 
 interface ProductsEntities {
   pizzas: Repository<Pizzas>;
@@ -46,6 +47,8 @@ export class ProductsService {
     private readonly popularsRepository: Repository<Populars>,
     @InjectRepository(Additives)
     private readonly additivesRepository: Repository<Additives>,
+    @InjectRepository(Additions)
+    private readonly additionsRepository: Repository<Additions>,
   ) {
     this._productsEntities = {
       pizzas: this.pizzasRepository,
@@ -69,6 +72,10 @@ export class ProductsService {
 
   async getAdditives(): Promise<Additives[]> {
     return await this.additivesRepository.find();
+  }
+
+  async getAdditions(): Promise<Product[]> {
+    return await this.additionsRepository.find();
   }
 
   public async getProductsByParams(

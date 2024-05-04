@@ -10,6 +10,7 @@ import { Sauces } from './entities/sauces.entity';
 import { Snacks } from './entities/snacks.entity';
 import { Populars } from './entities/populars.entity';
 import { Additives } from './entities/additives.entity';
+import { Additions } from './entities/additions.entity';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { Additives } from './entities/additives.entity';
       Snacks,
       Populars,
       Additives,
+      Additions,
     ]),
   ],
   controllers: [ProductsController],
