@@ -9,6 +9,8 @@ import cls from './HorizontalScrolling.module.scss';
 import { HorizontalScrollingCard } from './HorizontalScrollingCard/HorizontalScrollingCard';
 import arrow from '@/shared/assets/icons/arrow.png';
 import { ScrollingCards } from '../model/types/scrollingCards';
+import { CardVariant } from './CardScrolling/CardScrolling';
+import { Product } from '@/entities/Product';
 
 interface HorizontalScrollingProps {
    className?: string;
@@ -23,6 +25,8 @@ interface HorizontalScrollingProps {
    gap: number;
    shadowsOpacity?: number;
    visibleElements?: number;
+   cardVariant?: CardVariant;
+   clickCard?: (card: Product) => void;
 }
 
 export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
@@ -38,6 +42,8 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
       heightBlock,
       shadowsOpacity = 0,
       visibleElements = 2,
+      cardVariant,
+      clickCard,
    } = props;
    const index = useRef(0);
    // width + gap
@@ -271,6 +277,8 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                shadowsOpacity={shadowsOpacity}
                visibleElements={visibleElements}
                indexActiveCard={indexActiveCard}
+               cardVariant={cardVariant}
+               clickCard={clickCard}
                bind={bind}
             />
          ))}

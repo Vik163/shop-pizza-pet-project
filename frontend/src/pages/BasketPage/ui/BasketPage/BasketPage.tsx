@@ -8,7 +8,13 @@ import { Icon } from '@/shared/ui/Icon';
 import logo from '@/shared/assets/icons/shop_logo.png';
 import { OrderLevel } from '@/features/OrderLevel';
 import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
-import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
+import {
+   FontColor,
+   FontSize,
+   FontWeight,
+   HeaderTagType,
+   Text,
+} from '@/shared/ui/Text';
 import { BasketPageProducts } from '../BasketPageProducts/BasketPageProducts';
 import { getBasketTotalPrice } from '@/entities/Basket';
 import { AdditionToOrder } from '../AdditionToOrder/AdditionToOrder';
@@ -17,6 +23,7 @@ import { basketPageReducer } from '../../model/slices/basketPageSlice';
 import { fetchAdditionToOrder } from '../../model/services/fetchAdditionToOrder';
 import { getAdditionToOrder } from '../../model/selectors/additionToOrderSelector';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { SaucesToOrder } from '../SaucesToOrder/SaucesToOrder';
 
 interface BasketPageProps {
    className?: string;
@@ -32,7 +39,6 @@ export const BasketPage = memo((props: BasketPageProps) => {
    const totalPrice = useSelector(getBasketTotalPrice);
    // const { word } = useChangeWord(basketProducts.length);
    const additionToOrder = useSelector(getAdditionToOrder);
-   console.log('additionToOrder:', additionToOrder);
 
    useEffect(() => {
       dispatch(fetchAdditionToOrder());
@@ -51,6 +57,7 @@ export const BasketPage = memo((props: BasketPageProps) => {
                   fontColor={FontColor.TEXT_YELLOW}
                   fontWeight={FontWeight.TEXT_900}
                   className={cls.title}
+                  title={HeaderTagType.H_2}
                >
                   Корзина
                </Text>
@@ -58,6 +65,7 @@ export const BasketPage = memo((props: BasketPageProps) => {
                {additionToOrder && (
                   <AdditionToOrder additions={additionToOrder} />
                )}
+               <SaucesToOrder />
             </VStack>
          </VStack>
       </DynamicReducersLoader>

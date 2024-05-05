@@ -5,8 +5,9 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './HorizontalScrollingCard.module.scss';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
-import { NewProduct } from '@/entities/Product';
 import { ScrollingCards } from '../../model/types/scrollingCards';
+import { CardScrolling, CardVariant } from '../CardScrolling/CardScrolling';
+import { Product } from '@/entities/Product';
 
 interface HorizontalScrollingCardProps {
    className?: string;
@@ -24,6 +25,8 @@ interface HorizontalScrollingCardProps {
    children?: ReactNode;
    elements: ScrollingCards[];
    indexActiveCard: number;
+   cardVariant?: CardVariant;
+   clickCard?: (card: Product) => void;
 }
 
 export const HorizontalScrollingCard = memo(
@@ -39,6 +42,8 @@ export const HorizontalScrollingCard = memo(
          heightElement,
          shadowsOpacity = 0,
          visibleElements = 2,
+         cardVariant,
+         clickCard,
          bind,
       } = props;
       // const [mouseMoveX, setMouseMoveX] = useState(0);
@@ -97,22 +102,21 @@ export const HorizontalScrollingCard = memo(
          >
             {!card.price ? (
                <a
+                  className={cls.link}
                   href={card.link}
                   target='_blank'
                   rel='noreferrer'
                   aria-label='Link'
-               >
-                  <div
-                     className={cls.Card}
-                     style={{
-                        backgroundImage: `url(${card.image})`,
-                        width: widthElement,
-                        height: heightElement,
-                     }}
-                  />
-               </a>
+                  style={{
+                     backgroundImage: `url(${card.image})`,
+                  }}
+               />
             ) : (
-               <NewProduct card={card} />
+               <CardScrolling
+                  clickCard={clickCard}
+                  card={card}
+                  cardVariant={cardVariant}
+               />
             )}
          </animated.div>
       );

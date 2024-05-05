@@ -72,7 +72,7 @@ export const BasketItem = memo((props: BasketItemProps) => {
                   )}
                >
                   <Text
-                     title={HeaderTagType.H_3}
+                     title={HeaderTagType.H_4}
                      fontSize={FontSize.SIZE_14}
                      className={classNames(cls.title, {}, additionalClasses)}
                   >

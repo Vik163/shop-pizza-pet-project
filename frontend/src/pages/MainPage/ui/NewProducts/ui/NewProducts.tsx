@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -19,15 +19,22 @@ import {
 import { NewProductsSkeleton } from './NewProductsSkeleton/NewProductsSkeleton';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { fetchPopularProducts } from '../../../model/services/fetchPopularProducts';
+import { Product } from '@/entities/Product';
+import { ModalOrderProduct, RefTypeModal } from '@/features/ModalOrderProduct';
 
 export const NewProducts = memo(() => {
    const dispatch = useAppDispatch();
    const popularProducts = useSelector(getPopularProducts);
    const isLoading = useSelector(getIsLoadingPopularProducts);
+   const childRef = useRef<RefTypeModal>(null);
 
    useEffect(() => {
       dispatch(fetchPopularProducts());
    }, [dispatch]);
+
+   const onCard = useCallback((card: Product) => {
+      childRef.current?.openModal(card);
+   }, []);
 
    return (
       <div className={cls.NewProducts}>
@@ -55,9 +62,11 @@ export const NewProducts = memo(() => {
                   gap={30}
                   shadowsOpacity={0.06}
                   visibleElements={4}
+                  clickCard={onCard}
                />
             )
          )}
+         <ModalOrderProduct ref={childRef} />
       </div>
    );
 });

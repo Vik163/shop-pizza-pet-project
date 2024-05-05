@@ -8,7 +8,6 @@ import { Drinks } from './entities/drinks.entity';
 import { Combos } from './entities/combos.entity';
 import { Sauces } from './entities/sauces.entity';
 import { Snacks } from './entities/snacks.entity';
-import { Populars } from './entities/populars.entity';
 import { Additives } from './entities/additives.entity';
 import { Additions } from './entities/additions.entity';
 
@@ -20,7 +19,6 @@ import { Additions } from './entities/additions.entity';
       Combos,
       Sauces,
       Snacks,
-      Populars,
       Additives,
       Additions,
     ]),

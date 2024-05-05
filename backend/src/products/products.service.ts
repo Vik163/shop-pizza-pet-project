@@ -17,7 +17,6 @@ import { Combos } from './entities/combos.entity';
 import { Sauces } from './entities/sauces.entity';
 import { Snacks } from './entities/snacks.entity';
 import { Product } from './entities/product.entity';
-import { Populars } from './entities/populars.entity';
 import { Additives } from './entities/additives.entity';
 import { Additions } from './entities/additions.entity';
 
@@ -43,8 +42,6 @@ export class ProductsService {
     private readonly saucesRepository: Repository<Sauces>,
     @InjectRepository(Snacks)
     private readonly snacksRepository: Repository<Snacks>,
-    @InjectRepository(Populars)
-    private readonly popularsRepository: Repository<Populars>,
     @InjectRepository(Additives)
     private readonly additivesRepository: Repository<Additives>,
     @InjectRepository(Additions)
@@ -59,15 +56,25 @@ export class ProductsService {
     };
   }
 
-  async getProducts(req: Request): Promise<Product[]> {
-    const params: ReqParamDto = req.query;
-    const viewProduct = params.view || DataBasesProducts.PIZZAS;
+  // async getProducts(req: Request): Promise<Product[]> {
+  //   const params: ReqParamDto = req.query;
+  //   const viewProduct = params.view || DataBasesProducts.PIZZAS;
+  //   console.log('viewProduct:', viewProduct);
 
-    return await this._productsEntities[viewProduct].find();
-  }
+  //   return await this._productsEntities[viewProduct].find();
+  // }
 
   async getPopularProducts(): Promise<Product[]> {
-    return await this.popularsRepository.find();
+    const arr = [];
+    for (const key in this._productsEntities) {
+      const data = await this._productsEntities[key].find({
+        where: { popular: true },
+      });
+      data.forEach((i: Product) => {
+        arr.push(i);
+      });
+    }
+    return arr;
   }
 
   async getAdditives(): Promise<Additives[]> {

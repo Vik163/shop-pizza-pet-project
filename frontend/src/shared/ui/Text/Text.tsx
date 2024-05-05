@@ -49,6 +49,7 @@ export enum FontSize {
 export enum HeaderTagType {
    H_2 = 'h2',
    H_3 = 'h3',
+   H_4 = 'h4',
 }
 
 interface TextProps {
