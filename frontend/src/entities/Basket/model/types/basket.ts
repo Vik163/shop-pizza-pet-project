@@ -1,14 +1,16 @@
-export type SizePizza = 'маленькая' | 'средняя' | 'большая' | '';
+import { Product } from '@/entities/Product';
 
-export type DoughPizza = 'традиционное' | 'тонкое' | '';
+export type TSizePizza = 'маленькая' | 'средняя' | 'большая' | '';
+
+export type TDoughPizza = 'традиционное' | 'тонкое' | '';
 
 export interface BasketOneProduct {
    id?: string;
-   product: string;
+   product: Product;
    image: string;
-   sizePizza?: SizePizza;
+   sizePizza?: TSizePizza;
    dia?: number;
-   dough?: DoughPizza;
+   dough?: TDoughPizza;
    price: number;
    totalPrice?: number;
    additives?: string[];
@@ -23,8 +25,8 @@ export interface BasketData {
 
 export interface BasketSchema {
    error?: string;
-   sizePizza?: SizePizza;
-   dough?: DoughPizza;
+   sizePizza?: TSizePizza;
+   dough?: TDoughPizza;
    basketProducts: BasketOneProduct[];
    totalPrice: number;
    price: number;

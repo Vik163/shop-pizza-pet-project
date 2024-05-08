@@ -13,10 +13,11 @@ import {
 } from '../../../../entities/Basket/model/selectors/basketSelector';
 import {
    BasketOneProduct,
-   DoughPizza,
-   SizePizza,
+   TDoughPizza,
+   TSizePizza,
    basketActions,
 } from '@/entities/Basket';
+import { SizePizza, ViewDough } from '@/shared/const/product_const';
 
 interface ButtonsSelectProps {
    existingOrder?: BasketOneProduct;
@@ -35,22 +36,22 @@ export const ButtonsSelect = memo((props: ButtonsSelectProps) => {
          dispatch(basketActions.setViewDough(existingOrder.dough));
    }, []);
 
-   const clickSizePizza = (size: SizePizza) => {
+   const clickSizePizza = (size: TSizePizza) => {
       dispatch(basketActions.setSizePizza(size));
    };
 
-   const clickViewDough = (dough: DoughPizza) => {
+   const clickViewDough = (dough: TDoughPizza) => {
       dispatch(basketActions.setViewDough(dough));
    };
 
    return (
       <HStack gap={10} wrap={FlexWrap.WPAP} className={cls.buttonsContainer}>
          <Button
-            onClick={() => clickSizePizza('маленькая')}
+            onClick={() => clickSizePizza(SizePizza.SMALL)}
             className={classNames(
                cls.buttonSmall,
                {
-                  [cls.buttonActive]: sizePizza === 'маленькая',
+                  [cls.buttonActive]: sizePizza === SizePizza.SMALL,
                },
                [],
             )}
@@ -58,11 +59,11 @@ export const ButtonsSelect = memo((props: ButtonsSelectProps) => {
             Маленькая
          </Button>
          <Button
-            onClick={() => clickSizePizza('средняя')}
+            onClick={() => clickSizePizza(SizePizza.AVERAGE)}
             className={classNames(
                cls.buttonSmall,
                {
-                  [cls.buttonActive]: sizePizza === 'средняя',
+                  [cls.buttonActive]: sizePizza === SizePizza.AVERAGE,
                },
                [],
             )}
@@ -70,11 +71,11 @@ export const ButtonsSelect = memo((props: ButtonsSelectProps) => {
             Средняя
          </Button>
          <Button
-            onClick={() => clickSizePizza('большая')}
+            onClick={() => clickSizePizza(SizePizza.BIG)}
             className={classNames(
                cls.buttonSmall,
                {
-                  [cls.buttonActive]: sizePizza === 'большая',
+                  [cls.buttonActive]: sizePizza === SizePizza.BIG,
                },
                [],
             )}
@@ -82,20 +83,20 @@ export const ButtonsSelect = memo((props: ButtonsSelectProps) => {
             Большая
          </Button>
          <Button
-            onClick={() => clickViewDough('традиционное')}
+            onClick={() => clickViewDough(ViewDough.TRADITIONAL)}
             className={classNames(
                cls.buttonBig,
-               { [cls.buttonActive]: viewDough === 'традиционное' },
+               { [cls.buttonActive]: viewDough === ViewDough.TRADITIONAL },
                [],
             )}
          >
             Традиционное
          </Button>
          <Button
-            onClick={() => clickViewDough('тонкое')}
+            onClick={() => clickViewDough(ViewDough.THIN)}
             className={classNames(
                cls.buttonBig,
-               { [cls.buttonActive]: viewDough === 'тонкое' },
+               { [cls.buttonActive]: viewDough === ViewDough.THIN },
                [],
             )}
          >

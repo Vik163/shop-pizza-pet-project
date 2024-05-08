@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -32,8 +32,8 @@ interface SaucesToOrderProps {
 export const SaucesToOrder = memo((props: SaucesToOrderProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
-   const sauces: Product[] = useSelector(getEntityProducts.selectAll);
-   console.log('products:', sauces);
+   const [sauces, setSauces] = useState<Product[]>();
+   const products: Product[] = useSelector(getEntityProducts.selectAll);
 
    useEffect(() => {
       dispatch(productActions.setView('sauces'));
@@ -41,14 +41,19 @@ export const SaucesToOrder = memo((props: SaucesToOrderProps) => {
          fetchViewProducts({
             page: 1,
             // меняет, а не добавляет
-            replace: 'sauces',
+            // replace: 'sauces',
          }),
       );
    }, []);
 
+   useEffect(() => {
+      const saucesSelected = products.filter((i) => i.type === 'sauces');
+      setSauces(saucesSelected);
+   }, [products]);
+
    const onCard = (card: Product) => {
       const order: BasketOneProduct = {
-         product: card.title,
+         product: card,
          image: card.imageSmall,
          price: card.price[0],
       };
@@ -69,7 +74,7 @@ export const SaucesToOrder = memo((props: SaucesToOrderProps) => {
          >
             Соусы к бортикам и закускам
          </Text>
-         {sauces.length > 0 && sauces[0].type === 'sauces' && (
+         {sauces && sauces.length > 0 && (
             <HorizontalScrolling
                elements={sauces}
                widthBlock={780}

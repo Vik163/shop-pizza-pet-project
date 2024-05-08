@@ -1,6 +1,6 @@
 import { IngredientsViewDto } from './ingredients-view.dto';
 
-export class CreateCardDto {
+export class ProductDto {
   readonly image: string;
   readonly imageAverage: string;
   readonly imageSmall: string;

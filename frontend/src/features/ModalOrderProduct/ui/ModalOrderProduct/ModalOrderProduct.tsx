@@ -6,14 +6,15 @@ import {
    useImperativeHandle,
    useState,
 } from 'react';
-import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './ModalOrderProduct.module.scss';
-import { Product, getEntityProducts } from '@/entities/Product';
-import { BasketOneProduct } from '@/entities/Basket';
+import { Product } from '@/entities/Product';
+import { BasketOneProduct, basketActions } from '@/entities/Basket';
 import { Modal } from '@/shared/ui/Modal';
 import { OrderProduct } from '../OrderProductsModal/OrderProduct';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { SizePizza, ViewDough } from '@/shared/const/product_const';
 
 interface ModalOrderProductProps {
    onCloseModal?: () => void;
@@ -26,12 +27,11 @@ export interface RefTypeModal {
 export const ModalOrderProduct = forwardRef(
    (props: ModalOrderProductProps, ref: Ref<RefTypeModal>) => {
       const { onCloseModal } = props;
+      const dispatch = useAppDispatch();
       const [isClosing, setIsClosing] = useState(false);
       const [productInfo, setProductInfo] = useState<Product>();
       const [isOpenModal, setIsOpenModal] = useState(false);
       const [existingOrder, setExistingOrder] = useState<BasketOneProduct>();
-
-      const products: Product[] = useSelector(getEntityProducts.selectAll);
 
       const handleAnimate = (bool: boolean) => {
          setIsClosing(bool);
@@ -40,14 +40,9 @@ export const ModalOrderProduct = forwardRef(
       const openModal = useCallback(
          (cardProduct?: Product, basket?: BasketOneProduct) => {
             if (basket && basket.product) {
-               const product = products.find(
-                  (item) => item.title === basket.product,
-               );
-               if (product) {
-                  setExistingOrder(basket);
-                  setProductInfo(product);
-                  setIsOpenModal(true);
-               }
+               setExistingOrder(basket);
+               setProductInfo(basket.product);
+               setIsOpenModal(true);
             } else {
                setProductInfo(cardProduct);
                setIsOpenModal(true);
@@ -59,6 +54,9 @@ export const ModalOrderProduct = forwardRef(
       const onClose = useCallback(() => {
          setProductInfo(undefined);
          setIsOpenModal(false);
+         // сброс кнопок выбора
+         dispatch(basketActions.setSizePizza(SizePizza.SMALL));
+         dispatch(basketActions.setViewDough(ViewDough.TRADITIONAL));
          // сброс цены в селекторе
          if (onCloseModal) onCloseModal();
       }, []);

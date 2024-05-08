@@ -1,4 +1,5 @@
 import { Product } from '@/entities/Product';
+import { SizePizza } from '@/shared/const/product_const';
 
 interface UseCountPriceProps {
    productInfo: Product;
@@ -19,14 +20,14 @@ export const useCountPrice = (props: UseCountPriceProps) => {
 
    const pizzaPrice = () => {
       switch (sizePizza) {
-         case 'большая':
+         case SizePizza.BIG:
             pricePizza = bigPrice;
             return pricePizza;
-         case 'средняя':
+         case SizePizza.AVERAGE:
             pricePizza = averagePrice;
             return pricePizza;
 
-         case 'маленькая':
+         case SizePizza.SMALL:
             pricePizza = smallPrice;
             return pricePizza;
 

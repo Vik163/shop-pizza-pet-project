@@ -5,8 +5,8 @@ import { fetchBasket } from '../services/fetchBasket';
 import {
    BasketData,
    BasketSchema,
-   DoughPizza,
-   SizePizza,
+   TDoughPizza,
+   TSizePizza,
 } from '../types/basket';
 import { fetchDecreaseBasket } from '../services/fetchDecreaseBasket';
 import { fetchDelete } from '../services/fetchDelete';
@@ -27,10 +27,10 @@ const basketSlice = createSlice({
       setOrderPrice: (state, { payload }: PayloadAction<number>) => {
          state.price = payload;
       },
-      setSizePizza: (state, { payload }: PayloadAction<SizePizza>) => {
+      setSizePizza: (state, { payload }: PayloadAction<TSizePizza>) => {
          state.sizePizza = payload;
       },
-      setViewDough: (state, { payload }: PayloadAction<DoughPizza>) => {
+      setViewDough: (state, { payload }: PayloadAction<TDoughPizza>) => {
          state.dough = payload;
       },
    },

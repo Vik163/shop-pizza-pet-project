@@ -1,3 +1,4 @@
+import { Product } from 'src/products/entities/product.entity';
 import {
   Column,
   Entity,
@@ -18,7 +19,7 @@ export class Basket {
   existingOrderId?: string;
 
   @Column()
-  product: string;
+  product: Product;
 
   @Column()
   image: string;

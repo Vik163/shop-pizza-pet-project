@@ -4,12 +4,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Navbar.module.scss';
 import { HStack } from '@/shared/ui/Stack/HStack/HStack';
-import {
-   Button,
-   ButtonBgColor,
-   ButtonRadius,
-   ButtonVariant,
-} from '@/shared/ui/Button';
+import { Button, ButtonVariant } from '@/shared/ui/Button';
 import { FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { navbarItems } from '../model/items';
 import { AppLink } from '@/shared/ui/AppLink';
@@ -85,23 +80,14 @@ export const Navbar = memo((props: NavbarProps) => {
                <Icon className={cls.account} Svg={man} />
             </AppLink>
          )}
-         <Button
-            variant={ButtonVariant.FILLED}
-            bgColor={ButtonBgColor.YELLOW}
-            radius={ButtonRadius.RADIUS_8}
-            width={160}
-            height={36}
-            fontColor={FontColor.TEXT_BUTTON}
-            fontWeight={FontWeight.TEXT_700}
-            fontSize={FontSize.SIZE_16}
-            onClick={openBasket}
-            className={cls.basket}
-         >
+
+         <AppLink to='/basket' onMouseEnter={openBasket} className={cls.basket}>
             Корзина
             <span className={classNames(cls.basket_quantity)}>
                {basketProducts?.length || 0}
             </span>
-         </Button>
+         </AppLink>
+
          {isOpenModalAuth && (
             <AuthByPhone
                setIsOpenModal={setIsOpenModalAuth}

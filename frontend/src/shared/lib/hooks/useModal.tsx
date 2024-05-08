@@ -57,6 +57,8 @@ export function useModal(props: UseModalProps) {
    useEffect(() => {
       if (isOpen) {
          document.addEventListener('keydown', onKeyDown);
+         // не прокручивается страница
+         document.body.style.overflow = 'hidden';
       }
       // скролл добавляю при размонтировании
       return () => {
@@ -64,6 +66,7 @@ export function useModal(props: UseModalProps) {
             clearTimeout(timerRef.current);
             document.removeEventListener('keydown', onKeyDown);
          }
+         document.body.style.overflow = 'unset';
       };
    }, [isOpen, onKeyDown]);
 

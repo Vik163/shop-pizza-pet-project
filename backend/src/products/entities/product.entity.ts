@@ -1,9 +1,7 @@
 import { ObjectId } from 'mongoose';
-import {
-  IngredientsDto,
-  IngredientsViewDto,
-} from 'src/products/dto/ingredients-view.dto';
+import { IngredientsViewDto } from 'src/products/dto/ingredients-view.dto';
 import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { IngredientsDto } from '../dto/ingredients.dto';
 
 @Entity()
 export class Product {

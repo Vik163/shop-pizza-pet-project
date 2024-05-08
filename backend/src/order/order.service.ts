@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
 import { BasketDto } from './dto/basket.dto';
+import { BasketTotalDto } from './dto/basket-total.dto';
 
 @Injectable()
 export class OrderService {
@@ -13,7 +14,7 @@ export class OrderService {
     private readonly basketRepository: Repository<Basket>,
   ) {}
 
-  async addBasket(body: BasketDto) {
+  async addBasket(body: BasketDto): Promise<BasketTotalDto> {
     console.log('body:', body);
     if (body.existingOrderId) {
       const updateProduct = await this.basketRepository.findOne({
@@ -22,7 +23,6 @@ export class OrderService {
         },
       });
       body.totalPrice = body.price;
-
       if (
         String(body.additives) === String(updateProduct.additives) &&
         body.dough === updateProduct.dough &&
@@ -32,14 +32,14 @@ export class OrderService {
       }
 
       this.basketRepository.merge(updateProduct, body);
-      const data = await this.basketRepository.save(updateProduct);
 
+      const data = await this.basketRepository.save(updateProduct);
       if (data) return this.getBasket();
     }
 
     const sameProducts = await this.basketRepository.find({
       where: {
-        product: body.product,
+        image: body.image,
         sizePizza: body.sizePizza || undefined,
         dough: body.dough || undefined,
       },
@@ -77,7 +77,7 @@ export class OrderService {
     }
   }
 
-  async getBasket() {
+  async getBasket(): Promise<BasketTotalDto> {
     const basketProducts: BasketDto[] = await this.basketRepository.find();
     let totalPrice = 0;
 
@@ -91,7 +91,7 @@ export class OrderService {
     return { basketProducts, totalPrice };
   }
 
-  async decreaseBasket(id: string) {
+  async decreaseBasket(id: string): Promise<BasketTotalDto> {
     const product: BasketDto = await this.basketRepository.findOne({
       where: { id: id },
     });
@@ -108,7 +108,7 @@ export class OrderService {
     }
   }
 
-  async deleteBasket(id: string) {
+  async deleteBasket(id: string): Promise<BasketTotalDto> {
     const product: BasketDto = await this.basketRepository.findOne({
       where: { id: id },
     });

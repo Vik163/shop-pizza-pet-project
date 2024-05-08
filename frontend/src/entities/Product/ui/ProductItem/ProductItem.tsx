@@ -26,7 +26,9 @@ export const ProductItem = memo((props: ProductItemProps) => {
    const { card, onClick } = props;
    const basketProducts = useSelector(getBasketProducts);
 
-   const isInBasket = basketProducts.some((i) => i.product === card.title);
+   const isInBasket = basketProducts.some(
+      (i) => i.product.title === card.title,
+   );
 
    const buttonText = isInBasket ? 'В корзине' : 'В корзину';
 

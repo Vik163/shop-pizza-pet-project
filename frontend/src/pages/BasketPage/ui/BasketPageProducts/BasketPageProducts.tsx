@@ -8,14 +8,16 @@ import {
    BasketItem,
    getBasketProducts,
    BasketVariant,
+   BasketOneProduct,
 } from '@/entities/Basket';
 
 interface BasketPageProductsProps {
    className?: string;
+   onModalProduct: (product: BasketOneProduct) => void;
 }
 
 export const BasketPageProducts = memo((props: BasketPageProductsProps) => {
-   const { className } = props;
+   const { className, onModalProduct } = props;
    const basketProducts = useSelector(getBasketProducts);
 
    return (
@@ -26,6 +28,7 @@ export const BasketPageProducts = memo((props: BasketPageProductsProps) => {
                   key={item.id}
                   card={item}
                   variant={BasketVariant.BASKET_PAGE}
+                  onModalProduct={onModalProduct}
                />
             ))}
       </VStack>

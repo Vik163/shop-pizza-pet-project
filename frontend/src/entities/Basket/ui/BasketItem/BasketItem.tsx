@@ -61,7 +61,11 @@ export const BasketItem = memo((props: BasketItemProps) => {
       >
          <HStack gap={15} align={FlexAlign.START} justify={FlexJustify.BETWEEN}>
             <HStack gap={15} onClick={onModal} className={cls.linkCard}>
-               <img src={card.image} alt={card.product} className={cls.image} />
+               <img
+                  src={card.image}
+                  alt={card.product.title}
+                  className={cls.image}
+               />
                <VStack
                   align={FlexAlign.START}
                   gap={7}
@@ -76,7 +80,7 @@ export const BasketItem = memo((props: BasketItemProps) => {
                      fontSize={FontSize.SIZE_14}
                      className={classNames(cls.title, {}, additionalClasses)}
                   >
-                     {card.product}
+                     {card.product.title}
                   </Text>
                   {card.sizePizza && (
                      <Text

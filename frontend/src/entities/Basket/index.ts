@@ -1,6 +1,6 @@
 export type {
-   SizePizza,
-   DoughPizza,
+   TSizePizza,
+   TDoughPizza,
    BasketOneProduct,
    BasketData,
    BasketSchema,

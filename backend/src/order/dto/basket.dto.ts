@@ -1,8 +1,8 @@
-import { ObjectId } from 'typeorm';
+import { Product } from 'src/products/entities/product.entity';
 
 export class BasketDto {
-  readonly _id?: ObjectId;
-  readonly product: string;
+  id: string;
+  readonly product: Product;
   readonly image: string;
   readonly sizePizza?: string;
   readonly dia?: number;
@@ -12,5 +12,4 @@ export class BasketDto {
   totalPrice: number;
   price: number;
   quantity?: number;
-  id: string;
 }

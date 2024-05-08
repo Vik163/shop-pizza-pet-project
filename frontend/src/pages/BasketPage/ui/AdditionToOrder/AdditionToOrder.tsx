@@ -30,7 +30,7 @@ export const AdditionToOrder = memo((props: AdditionToOrderProps) => {
 
    const onCard = (card: Product) => {
       const order: BasketOneProduct = {
-         product: card.title,
+         product: card,
          image: card.imageSmall,
          price: card.price[0],
       };

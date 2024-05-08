@@ -21,6 +21,7 @@ interface ModalProps {
    buttonCloseHeight: number;
    buttonCloseTop: number;
    buttonCloseRight: number;
+   hover?: boolean;
 }
 
 export const Modal = memo((props: ModalProps) => {
@@ -37,6 +38,7 @@ export const Modal = memo((props: ModalProps) => {
       buttonCloseWidth,
       isCenter = true,
       delayClose = 300,
+      hover = false,
    } = props;
 
    //* выношу логику в хук
@@ -50,6 +52,10 @@ export const Modal = memo((props: ModalProps) => {
    const mods: Record<string, boolean> = {
       [cls.opened]: isOpen,
       [cls.center]: isCenter,
+   };
+
+   const closeHoverModal = () => {
+      if (hover) handleClose();
    };
 
    if (lazy && !isMounted) return;
@@ -68,6 +74,7 @@ export const Modal = memo((props: ModalProps) => {
                <div
                   className={classNames(cls.content, {}, [className])}
                   onClick={onContentClick}
+                  onMouseLeave={closeHoverModal}
                >
                   <Button
                      style={{

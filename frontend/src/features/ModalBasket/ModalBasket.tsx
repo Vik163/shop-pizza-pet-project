@@ -14,8 +14,8 @@ import { VStack } from '@/shared/ui/Stack';
 import { FontSize, Text } from '@/shared/ui/Text';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { useChangeWord } from '@/shared/lib/hooks/useChangeWord';
-import { AppLink } from '@/shared/ui/AppLink';
 import { Scrollbar } from '@/shared/ui/Scrollbar';
+import { AppLink } from '@/shared/ui/AppLink';
 
 interface ModalBasketProps {
    setIsOpenModalBasket: Dispatch<SetStateAction<boolean>>;
@@ -27,7 +27,7 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
    const { setIsOpenModalBasket, isOpenModalBasket, onModalProduct } = props;
 
    const [isClosingBasket, setIsClosingBasket] = useState(false);
-   const basketProducts = useSelector(getBasketProducts);
+   const basketProducts: BasketOneProduct[] = useSelector(getBasketProducts);
    const totalPrice = useSelector(getBasketTotalPrice);
    const { word } = useChangeWord(basketProducts.length);
 
@@ -38,6 +38,32 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
    const handleAnimateBasket = (bool: boolean) => {
       setIsClosingBasket(bool);
    };
+   const content =
+      basketProducts.length > 4 ? (
+         <Scrollbar
+            heightContainer={552}
+            name='basket'
+            scrollWidth={3}
+            className={cls.scrollbar}
+            countChildren={basketProducts.length}
+         >
+            {basketProducts.map((item) => (
+               <BasketItem
+                  key={item.id}
+                  card={item}
+                  onModalProduct={onModalProduct}
+               />
+            ))}
+         </Scrollbar>
+      ) : (
+         basketProducts.map((item) => (
+            <BasketItem
+               key={item.id}
+               card={item}
+               onModalProduct={onModalProduct}
+            />
+         ))
+      );
 
    return (
       <Modal
@@ -61,32 +87,19 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
             className={classNames(cls.Basket, {}, [])}
          >
             <Text fontSize={FontSize.SIZE_24} className={cls.title}>
-               {basketProducts.length} {word} на {totalPrice} &#8381;
+               Состав заказа
             </Text>
-            {basketProducts && (
-               <Scrollbar
-                  heightContainer={560}
-                  name='basket'
-                  scrollWidth={3}
-                  className={cls.scrollbar}
-                  countChildren={basketProducts.length}
-               >
-                  {basketProducts.map((item) => (
-                     <BasketItem
-                        key={item.id}
-                        card={item}
-                        onModalProduct={onModalProduct}
-                     />
-                  ))}
-               </Scrollbar>
-            )}
-
+            {basketProducts && content}
+            <Text fontSize={FontSize.SIZE_22} className={cls.price}>
+               {basketProducts.length} {word} на &nbsp;
+               <span className={cls.sum}>{totalPrice} &#8381;</span>
+            </Text>
             <AppLink
                to='/basket'
                className={cls.button}
                onClick={onCloseBasketModal}
             >
-               К оформлению заказа
+               Перейти в корзину
             </AppLink>
          </VStack>
       </Modal>

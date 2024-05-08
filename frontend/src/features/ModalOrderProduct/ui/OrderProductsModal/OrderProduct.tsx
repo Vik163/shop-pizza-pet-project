@@ -10,6 +10,7 @@ import { getSizePizza } from '../../../../entities/Basket/model/selectors/basket
 import { DynamicReducersLoader } from '@/shared/lib/components/DynamicReducersLoader';
 import { additivesReducer } from '@/entities/Additives';
 import { BasketOneProduct } from '@/entities/Basket';
+import { SizePizza } from '@/shared/const/product_const';
 
 interface OrderProductProps {
    className?: string;
@@ -27,9 +28,9 @@ export const OrderProduct = memo((props: OrderProductProps) => {
    const sizePizza = useSelector(getSizePizza);
 
    const imageMods: Mods = {
-      [cls.imageBig]: sizePizza === 'большая',
-      [cls.imageAverage]: sizePizza === 'средняя',
-      [cls.imageSmall]: sizePizza === 'маленькая',
+      [cls.imageBig]: sizePizza === SizePizza.BIG,
+      [cls.imageAverage]: sizePizza === SizePizza.AVERAGE,
+      [cls.imageSmall]: sizePizza === SizePizza.SMALL,
    };
 
    return (

@@ -21,9 +21,11 @@ import {
    getSizePizza,
    fetchAddBasket,
    BasketOneProduct,
+   basketActions,
 } from '@/entities/Basket';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { useCountPrice } from '../../lib/hooks/useCountPrice';
+import { SizePizza, ViewDough } from '@/shared/const/product_const';
 
 interface ProductsSelectionProps {
    productInfo: Product;
@@ -57,7 +59,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
 
       if (productInfo.type === 'pizzas') {
          order = {
-            product: productInfo.title,
+            product: productInfo,
             image: productInfo.imageSmall,
             sizePizza,
             dia: ingredients.dia,
@@ -68,14 +70,19 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
          };
       } else {
          order = {
-            product: productInfo.title,
+            product: productInfo,
             image: productInfo.imageSmall,
             price: totalPrice,
          };
       }
 
       dispatch(fetchAddBasket(order)).then((data) => {
-         if (data.payload) onCloseModal();
+         if (data.payload) {
+            onCloseModal();
+            // сброс кнопок выбора
+            dispatch(basketActions.setSizePizza(SizePizza.SMALL));
+            dispatch(basketActions.setViewDough(ViewDough.TRADITIONAL));
+         }
       });
    };
 

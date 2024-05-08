@@ -39,3 +39,16 @@
    width: 32px;
    height: 32px;
 }
+
+.basket {
+   width: 160px;
+   height: 36px;
+   background-color: var(--color-yellow);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   border-radius: 8px;
+   color: var(--color-text-button);
+   font-size: var(--size-16);
+   font-weight: var(--weight-700);
+}
