@@ -16,7 +16,6 @@ import {
 import { Additives, getOrderAdditives } from '@/entities/Additives';
 import { useIngredients } from '../../lib/hooks/useIngredients';
 import {
-   getBasketProducts,
    getDoughView,
    getSizePizza,
    fetchAddBasket,
@@ -40,7 +39,6 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
    const sizePizza = useSelector(getSizePizza);
    const ingredients = useIngredients({ productInfo, sizePizza });
    const orderAdditives = useSelector(getOrderAdditives);
-   const selectedProducts = useSelector(getBasketProducts);
    const orderAdditivesTitle = orderAdditives?.orderAdditivesTitle;
    const additivesPrice = orderAdditives?.price;
    const totalPrice = useCountPrice({ productInfo, sizePizza, additivesPrice });

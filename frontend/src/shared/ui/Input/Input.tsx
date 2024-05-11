@@ -39,7 +39,8 @@ const inputVariantClasses: Record<InputVariant, string> = {
 };
 
 interface InputProps extends InputTypeProps {
-   className?: string;
+   classNameForLabel?: string;
+   // className?: string;
    // размеры -----------------------
    widthInput: number;
    heightInput: number;
@@ -62,6 +63,7 @@ interface InputProps extends InputTypeProps {
    disabled?: boolean;
    fixedChangeValue?: number; // ограничивает количество вводимых символов
    value?: string;
+   placeholderAsValue?: boolean; // при фокусе placeholder становится value
    onChange?: (value: string) => void;
    // чекбокс -------------------
    checked?: boolean;
@@ -70,7 +72,8 @@ interface InputProps extends InputTypeProps {
 
 export const Input = memo((props: InputProps) => {
    const {
-      className,
+      // className,
+      classNameForLabel,
       labelLeft,
       labelTop,
       labelRight,
@@ -85,6 +88,7 @@ export const Input = memo((props: InputProps) => {
       disabled,
       focusInput,
       onClickCheckbox,
+      placeholderAsValue = false,
       pattern,
       type = 'text',
       placeholder,
@@ -148,7 +152,7 @@ export const Input = memo((props: InputProps) => {
    const onFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
 
-      if (placeholder) {
+      if (placeholderAsValue && placeholder) {
          setIsValue(String(value) || placeholder);
       } else {
          setIsValue(String(value));
@@ -281,7 +285,7 @@ export const Input = memo((props: InputProps) => {
    if (labelLeft) {
       return (
          <HStack
-            className={classNames('', {}, [className])}
+            className={classNames('', {}, [classNameForLabel])}
             justify={FlexJustify.BETWEEN}
          >
             <Text className={cls.text}>{labelLeft}</Text>
@@ -296,7 +300,7 @@ export const Input = memo((props: InputProps) => {
             className={classNames(
                '',
                { [cls.switchCursor]: checkboxButtonsType },
-               [className],
+               [classNameForLabel],
             )}
             justify={FlexJustify.START}
             onClick={onClickCheckbox}
@@ -310,7 +314,7 @@ export const Input = memo((props: InputProps) => {
    if (labelTop) {
       return (
          <VStack
-            className={classNames('', {}, [className])}
+            className={classNames('', {}, [classNameForLabel])}
             align={FlexAlign.START}
             justify={FlexJustify.BETWEEN}
          >

@@ -1,0 +1,17 @@
+.buttonsContainer {
+   margin-bottom: 20px;
+}
+
+.button {
+   width: 166px;
+   height: 48px;
+   border-radius: 8px;
+   background-color: var(--color-background-button);
+   color: var(--color-input-edit);
+   font-size: var(--size-18);
+}
+
+.buttonActive {
+   background-color: var(--color-yellow);
+   color: var(--color-text-button);
+}

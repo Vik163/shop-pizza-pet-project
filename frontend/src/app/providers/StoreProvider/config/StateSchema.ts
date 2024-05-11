@@ -16,6 +16,7 @@ import { BasketSchema } from '@/entities/Basket';
 import { AdditivesSchema } from '@/entities/Additives';
 import { ProductSchema } from '@/entities/Product';
 import { BasketPageSchema } from '@/pages/BasketPage';
+import { OrderSchema } from '@/entities/Order';
 
 export interface StateSchema {
    mainPage: MainPageSchema;
@@ -32,6 +33,7 @@ export interface StateSchema {
    authPhone?: AuthPhoneSchema;
    additives?: AdditivesSchema;
    basketPage?: BasketPageSchema;
+   order?: OrderSchema;
 }
 
 // типы для ReducerManager (5_1 15min)===================================

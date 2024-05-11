@@ -28,8 +28,9 @@ import { SaucesToOrder } from '../SaucesToOrder/SaucesToOrder';
 import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
 import arrow from '@/shared/assets/icons/arrow-yellow.svg';
 import { Modal } from '@/shared/ui/Modal';
-import { SelectAddressModal } from '../selectAddressModal/selectAddressModal';
 import { RefTypeModal } from '@/features/ModalOrderProduct';
+import { SelectAddressModal } from '@/features/SelectAddressModal';
+import { orderActions, orderReducer } from '@/entities/Order';
 
 interface BasketPageProps {
    className?: string;
@@ -37,6 +38,7 @@ interface BasketPageProps {
 
 const initialReducers = {
    basketPage: basketPageReducer,
+   order: orderReducer,
 };
 
 export const BasketPage = memo((props: BasketPageProps) => {
@@ -46,7 +48,6 @@ export const BasketPage = memo((props: BasketPageProps) => {
 
    const [openModal, setOpenModal] = useState(false);
    const totalPrice = useSelector(getBasketTotalPrice);
-   // const { word } = useChangeWord(basketProducts.length);
    const additionToOrder = useSelector(getAdditionToOrder);
 
    useEffect(() => {
@@ -67,11 +68,21 @@ export const BasketPage = memo((props: BasketPageProps) => {
    };
 
    const closeModal = () => {
+      const addressEmpty = {
+         city: '',
+         street: '',
+         house: '',
+         apartment: '',
+         entrance: '',
+         floor: '',
+         comment: '',
+      };
+      dispatch(orderActions.setAddress(addressEmpty));
       setOpenModal(false);
    };
 
    return (
-      <DynamicReducersLoader removeAfterUnmount reducers={initialReducers}>
+      <DynamicReducersLoader reducers={initialReducers}>
          <VStack className={classNames(cls.BasketPage, {}, [className])}>
             <HStack max justify={FlexJustify.BETWEEN} className={cls.header}>
                <Icon src={logo} />
@@ -121,8 +132,8 @@ export const BasketPage = memo((props: BasketPageProps) => {
             {openModal && (
                <Modal
                   buttonCloseHeight={40}
-                  buttonCloseRight={30}
-                  buttonCloseTop={30}
+                  buttonCloseRight={35}
+                  buttonCloseTop={35}
                   buttonCloseWidth={40}
                   isOpen={openModal}
                   onClose={closeModal}

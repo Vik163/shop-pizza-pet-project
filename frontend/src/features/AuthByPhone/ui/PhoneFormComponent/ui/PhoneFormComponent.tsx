@@ -104,7 +104,7 @@ export const PhoneFormComponent = memo(() => {
             <HStack max justify={FlexJustify.BETWEEN}>
                <Input
                   id='phone'
-                  className={cls.loginInput}
+                  classNameForLabel={cls.loginInput}
                   name='phone'
                   placeholder='+7 (999) 999-99-99'
                   labelLeft='Номер телефона'

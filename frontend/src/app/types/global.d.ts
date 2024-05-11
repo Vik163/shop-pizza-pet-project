@@ -33,3 +33,23 @@ type DeepPartial<T> = T extends object
 type OptionalRecord<K extends keyof any, T> = {
    [P in K]?: T;
 };
+
+declare namespace NodeJS {
+   interface ProcessEnv {
+      REACT_APP_FIREBASE_API_KEY: string;
+      REACT_APP_FIREBASE_AUTH_DOMAIN: string;
+      REACT_APP_FIREBASE_PROJECT_ID: string;
+      REACT_APP_FIREBASE_STORAGE_BUCKET: string;
+      REACT_APP_FIREBASE_MESSAGING_SENDER_ID: string;
+      REACT_APP_FIREBASE_APP_ID: string;
+
+      REACT_APP_YA_MAP_KEY: string;
+      REACT_APP_YA_CLIENT_ID: string;
+      REACT_APP_YA_CLIENT_SECRET: string;
+
+      REACT_APP_DADATA_API_KEY: string;
+      REACT_APP_DADATA_CLIENT_SECRE: string;
+
+      WDS_SOCKET_PORT: string;
+   }
+}
