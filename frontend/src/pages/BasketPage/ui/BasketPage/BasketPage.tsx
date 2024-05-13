@@ -31,6 +31,7 @@ import { Modal } from '@/shared/ui/Modal';
 import { RefTypeModal } from '@/features/ModalOrderProduct';
 import { SelectAddressModal } from '@/features/SelectAddressModal';
 import { orderActions, orderReducer } from '@/entities/Order';
+import { Page } from '@/widgets/Page';
 
 interface BasketPageProps {
    className?: string;
@@ -83,7 +84,7 @@ export const BasketPage = memo((props: BasketPageProps) => {
 
    return (
       <DynamicReducersLoader reducers={initialReducers}>
-         <VStack className={classNames(cls.BasketPage, {}, [className])}>
+         <Page className={classNames(cls.BasketPage, {}, [className])}>
             <HStack max justify={FlexJustify.BETWEEN} className={cls.header}>
                <Icon src={logo} />
                <OrderLevel />
@@ -141,7 +142,7 @@ export const BasketPage = memo((props: BasketPageProps) => {
                   <SelectAddressModal />
                </Modal>
             )}
-         </VStack>
+         </Page>
       </DynamicReducersLoader>
    );
 });

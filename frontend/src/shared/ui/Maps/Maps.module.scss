@@ -3,25 +3,30 @@
 
    .infoContainer {
       position: absolute;
-      bottom: 45px;
+      right: 10px;
+      bottom: -30px;
+      width: 150px;
       background-color: white;
       border-radius: 8px;
       visibility: hidden;
       opacity: 0;
       transition: 0.3s;
-      padding: 8px;
+      padding: 6px;
       border: 1px solid rgb(200, 200, 200);
+      z-index: 100;
    }
 
    .mapInfo {
-      width: 150px;
+      width: fit-content;
       height: fit-content;
+      line-height: 18px;
    }
 
    .markerStore {
       position: absolute;
       left: -5px;
       bottom: -3px;
+      cursor: pointer;
    }
 
    &:has(.markerStore:hover) {
@@ -34,8 +39,9 @@
 }
 
 .logoContainer {
-   width: 150px;
+   width: 130px;
    height: 25px;
+   margin-bottom: 5px;
 }
 
 .logo {

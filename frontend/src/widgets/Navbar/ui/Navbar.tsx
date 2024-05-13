@@ -81,12 +81,12 @@ export const Navbar = memo((props: NavbarProps) => {
             </AppLink>
          )}
 
-         <AppLink to='/basket' onMouseEnter={openBasket} className={cls.basket}>
+         <Button onClick={openBasket} className={cls.basket}>
             Корзина
             <span className={classNames(cls.basket_quantity)}>
                {basketProducts?.length || 0}
             </span>
-         </AppLink>
+         </Button>
 
          {isOpenModalAuth && (
             <AuthByPhone

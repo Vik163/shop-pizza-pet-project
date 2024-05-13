@@ -24,7 +24,7 @@ import {
    ButtonVariant,
 } from '@/shared/ui/Button';
 import Maps from '@/shared/ui/Maps/Maps';
-import { coordStore, mainCoordinates, mainZoom } from '@/shared/const/maps';
+import { coordsStores, mainCoordinates, mainZoom } from '@/shared/const/maps';
 
 interface DeliveryPayProps {
    className?: string;
@@ -73,7 +73,7 @@ export const DeliveryPay = memo((props: DeliveryPayProps) => {
             className={cls.map}
             location={mainCoordinates}
             zoom={mainZoom}
-            coordStore={coordStore}
+            coordsStores={coordsStores}
          />
       </VStack>
    );

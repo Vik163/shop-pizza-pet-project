@@ -26,4 +26,11 @@
    color: var(--color-input-edit);
    font-weight: var(--weight-700);
    font-size: var(--size-15);
+
+   &.inputsRequired {
+      &::placeholder {
+         color: var(--color-pink);
+         opacity: 0.8;
+      }
+   }
 }

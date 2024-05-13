@@ -14,6 +14,7 @@ interface ScrollbarProps {
    scrollArrows?: boolean;
    children: ReactNode;
    heightContainer: string | number;
+   widthContainer?: string | number;
    scrollThumbColor?: string;
    scrollThumbBorder?: string;
    scrollWidth?: string | number;
@@ -36,6 +37,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
       scrollTrackColor,
       scrollHover,
       heightContainer,
+      widthContainer,
       countChildren,
       scrollRadius,
       name,
@@ -49,6 +51,7 @@ export const Scrollbar = (props: ScrollbarProps) => {
    const observer = useRef<ResizeObserver | null>(null);
    // размер бегунка
    const [thumbHeight, setThumbHeight] = useState(20);
+   const [child, setChild] = useState<HTMLElement>();
    const [isScrollbar, setIsScrollbar] = useState(false);
    // начальное положение скрола
    const [scrollStartPosition, setScrollStartPosition] = useState<
@@ -56,7 +59,6 @@ export const Scrollbar = (props: ScrollbarProps) => {
    >(null);
    const [initialScrollTop, setInitialScrollTop] = useState<number>(0);
    const [isDragging, setIsDragging] = useState(false);
-   const child = contentRef.current?.firstChild as HTMLElement;
    const heightContainerContent = containerRef.current?.clientHeight;
    // при изменении сразу не перерисовывает (при уменьшении сролл не убирался)
    // количество передаю пропсом
@@ -189,13 +191,14 @@ export const Scrollbar = (props: ScrollbarProps) => {
    // видимость скрола
    // проверка высоты контента по вложенным элементам и высоты контейнера
    useEffect(() => {
+      setChild(contentRef.current?.firstChild as HTMLElement);
       if (!child) return;
       const heightChild = child.offsetHeight;
       if (!countChildren || !heightContainerContent) return;
       const heightContent = heightChild * countChildren;
 
       setIsScrollbar(heightContent > heightContainerContent);
-   }, [child, countChildren, heightContainerContent]);
+   }, [countChildren, contentRef, heightContainerContent, child]);
 
    // Если содержимое и дорожка полосы прокрутки существуют, используем наблюдатель за изменением
    // размера, чтобы отрегулировать высоту бегунка, и слушать событие прокрутки
@@ -243,7 +246,10 @@ export const Scrollbar = (props: ScrollbarProps) => {
 
    return (
       <div
-         style={{ height: `${heightContainer}px` }}
+         style={{
+            height: `${heightContainer}px`,
+            width: `${widthContainer}px`,
+         }}
          className={classNames(
             cls.container,
             { [cls.selectScroll]: selectVariant },

@@ -13,6 +13,7 @@ import { Input } from '@/shared/ui/Input';
 import { FlexWrap } from '@/shared/ui/Stack/Flex';
 import { Address, getAddress, orderActions } from '@/entities/Order';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { classNames } from '@/shared/lib/classNames/classNames';
 
 export const SelectAddress = memo(() => {
    const dispatch = useAppDispatch();
@@ -74,12 +75,12 @@ export const SelectAddress = memo(() => {
    if (street) street.value = street.data.street_with_type as string;
 
    const propsInputCity = {
-      className: cls.inputs,
+      className: classNames(cls.inputs, {}, [cls.inputsRequired]),
       placeholder: 'Город',
    };
 
    const propsInputStreet = {
-      className: cls.inputs,
+      className: classNames(cls.inputs, {}, [cls.inputsRequired]),
       placeholder: 'Улица',
    };
 
@@ -95,9 +96,6 @@ export const SelectAddress = memo(() => {
             onChange={setCity}
             containerClassName={cls.address}
             suggestionClassName={cls.hint}
-            currentSuggestionClassName={cls.addressIn1}
-            hintClassName={cls.addressIn2}
-            highlightClassName={cls.addressIn3}
             filterFromBound='city' // Сужает поиск до списка городов
             filterToBound='city'
             count={1} // одна подсказка
@@ -116,7 +114,7 @@ export const SelectAddress = memo(() => {
             filterToBound='street'
          />
          <Input
-            className={cls.inputs}
+            className={classNames(cls.inputs, {}, [cls.inputsRequired])}
             withoutButtons
             widthInput={135}
             heightInput={48}

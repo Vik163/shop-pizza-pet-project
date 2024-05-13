@@ -16,6 +16,7 @@ import {
    ButtonVariant,
 } from '@/shared/ui/Button';
 import { getBasketProducts } from '@/entities/Basket';
+import { AppLink } from '@/shared/ui/AppLink';
 
 interface ProductItemProps {
    card: Product;
@@ -85,16 +86,35 @@ export const ProductItem = memo((props: ProductItemProps) => {
             >
                от {card.price[0]} &#8381;
             </Text>
-            <Button
-               variant={ButtonVariant.FILLED}
-               bgColor={isInBasket ? ButtonBgColor.GREY : ButtonBgColor.YELLOW}
-               radius={ButtonRadius.RADIUS_8}
-               fontColor={FontColor.TEXT_BUTTON}
-               width={126}
-               height={36}
-            >
-               {buttonText}
-            </Button>
+            {buttonText === 'В корзину' ? (
+               <Button
+                  variant={ButtonVariant.FILLED}
+                  bgColor={
+                     isInBasket ? ButtonBgColor.GREY : ButtonBgColor.YELLOW
+                  }
+                  radius={ButtonRadius.RADIUS_8}
+                  fontColor={FontColor.TEXT_BUTTON}
+                  width={126}
+                  height={36}
+               >
+                  {buttonText}
+               </Button>
+            ) : (
+               <AppLink to='/basket'>
+                  <Button
+                     variant={ButtonVariant.FILLED}
+                     bgColor={
+                        isInBasket ? ButtonBgColor.GREY : ButtonBgColor.YELLOW
+                     }
+                     radius={ButtonRadius.RADIUS_8}
+                     fontColor={FontColor.TEXT_BUTTON}
+                     width={126}
+                     height={36}
+                  >
+                     {buttonText}
+                  </Button>
+               </AppLink>
+            )}
          </HStack>
       </Card>
    );

@@ -79,3 +79,16 @@
       YMapMarker,
    } = mapsElements;
    ```
+
+#### [Location](https://yandex.ru/dev/jsapi30/doc/ru/ref/#YMapLocationRequest)
+
+```javascript
+YMapLocationRequest: YMapBoundsLocation | YMapCenterLocation | YMapZoomLocation | YMapCenterZoomLocation & {
+ duration?: number;
+ easing?: EasingFunctionDescription
+}
+
+EasingFunctionDescription: EasingPresetName | EasingBezierPreset | EasingFunction
+
+EasingPresetName: "linear" | "ease" | "ease-in" | "ease-out" | "ease-in-out"
+```

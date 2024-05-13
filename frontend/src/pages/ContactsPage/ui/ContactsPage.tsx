@@ -6,7 +6,7 @@ import { Page, PageAlign } from '@/widgets/Page';
 import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
 import {
    coordCar,
-   coordStore,
+   coordsStores,
    mainCoordinates,
    mainZoom,
 } from '@/shared/const/maps';
@@ -33,7 +33,7 @@ export const ContactsPage = memo((props: ContactsPageProps) => {
          <Maps
             location={mainCoordinates}
             zoom={mainZoom}
-            coordStore={coordStore}
+            coordsStores={coordsStores}
             coordCar={coordCar}
             className={cls.map}
          />

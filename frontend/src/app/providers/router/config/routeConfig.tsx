@@ -3,6 +3,7 @@ import { BasketPage } from '@/pages/BasketPage';
 import { ContactsPage } from '@/pages/ContactsPage';
 import { MainPage } from '@/pages/MainPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
+import { OrderPage } from '@/pages/OrderPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 import {
    AppRoutes,
@@ -17,6 +18,7 @@ import {
    getRouteSauces,
    getRouteSnacks,
    getRouteBasket,
+   getRouteOrder,
 } from '@/shared/const/router';
 import { type AppRoutesProps } from '@/shared/types/router';
 
@@ -60,6 +62,10 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
    [AppRoutes.BASKET]: {
       path: getRouteBasket(),
       element: <BasketPage />,
+   },
+   [AppRoutes.ORDER]: {
+      path: getRouteOrder(),
+      element: <OrderPage />,
    },
    [AppRoutes.NOT_FOUND]: {
       path: getRouteNotFound(),

@@ -1,39 +1,62 @@
-import { ChangeEvent, FormEvent, memo } from 'react';
+import { ChangeEvent, memo, useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import cls from './SelectAddressModal.module.scss';
-import { VStack } from '@/shared/ui/Stack';
+import { HStack, VStack } from '@/shared/ui/Stack';
 import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
-import { FlexAlign } from '@/shared/ui/Stack/Flex';
-import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
+import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
 import { ButtonsSelectDelivery } from '../ButtonsSelectDelivery/ButtonsSelectDelivery';
 import { SelectAddress } from '../SelectAddress/SelectAddress';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { Address, getAddress, orderActions } from '@/entities/Order';
-import { classNames } from '@/shared/lib/classNames/classNames';
+import {
+   Address,
+   getAddress,
+   getTypeDelivery,
+   orderActions,
+} from '@/entities/Order';
+import { Mods, classNames } from '@/shared/lib/classNames/classNames';
+import { AppLink } from '@/shared/ui/AppLink';
+import { getRouteOrder } from '@/shared/const/router';
+import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
+import { MapOrListAddresses } from '../MapOrListAddresses/MapOrListAddresses';
 
 export const SelectAddressModal = memo(() => {
    const dispatch = useAppDispatch();
+   const [textAddress, setTextAddress] = useState('');
    const addressClient = useSelector(getAddress) as Address;
-   console.log('addressClient:', addressClient);
+   const typeDelivery = useSelector(getTypeDelivery);
+   const buttonActive =
+      (addressClient.city && addressClient.street && addressClient.house) ||
+      (textAddress !== 'Название адреса' && typeDelivery !== 'Доставка');
 
-   const city = addressClient?.city ? `${addressClient?.city}, ` : '';
-   const street = addressClient?.street ? `${addressClient?.street}, ` : '';
-   const house = addressClient?.house ? `д ${addressClient?.house}, ` : '';
-   const apartment = addressClient?.apartment
-      ? `кв ${addressClient?.apartment}, `
-      : '';
-   const entrance = addressClient?.entrance
-      ? `под ${addressClient?.entrance}, `
-      : '';
-   const floor = addressClient?.floor ? `эт ${addressClient?.floor}, ` : '';
+   useEffect(() => {
+      if (addressClient) {
+         const city = addressClient?.city ? `${addressClient?.city}, ` : '';
+         const street = addressClient?.street
+            ? `${addressClient?.street}, `
+            : '';
+         const house = addressClient?.house
+            ? `д ${addressClient?.house}, `
+            : '';
+         const apartment = addressClient?.apartment
+            ? `кв ${addressClient?.apartment}, `
+            : '';
+         const entrance = addressClient?.entrance
+            ? `под ${addressClient?.entrance}, `
+            : '';
+         const floor = addressClient?.floor
+            ? `эт ${addressClient?.floor}, `
+            : '';
 
-   const addressText = `${city}${street}${house}${apartment}${entrance}${floor}`;
-   const text = addressText.endsWith(', ')
-      ? addressText.slice(0, -2)
-      : addressText || 'Название адреса';
+         const addressText = `${city}${street}${house}${apartment}${entrance}${floor}`;
 
-   console.log(text);
+         const text = addressText.endsWith(', ')
+            ? addressText.slice(0, -2)
+            : addressText || 'Название адреса';
+
+         setTextAddress(text);
+      }
+   }, [addressClient]);
 
    const changeComment = (event: ChangeEvent<HTMLTextAreaElement>) => {
       const { value } = event.target;
@@ -46,9 +69,7 @@ export const SelectAddressModal = memo(() => {
       );
    };
 
-   const confirmAddress = (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-
+   const resetAddress = () => {
       const addressEmpty = {
          city: '',
          street: '',
@@ -61,6 +82,46 @@ export const SelectAddressModal = memo(() => {
       dispatch(orderActions.setAddress(addressEmpty));
    };
 
+   const clickDelivery = () => {
+      resetAddress();
+   };
+
+   const handleAddress = (key: string) => {
+      setTextAddress(key);
+   };
+
+   const confirmAddress = () => {
+      resetAddress();
+   };
+
+   const titleAddressMods: Mods = {
+      [cls.addressPlaceholder]: textAddress === 'Название адреса',
+   };
+
+   const delivery = (
+      <div>
+         <SelectAddress />
+         <Text className={classNames(cls.address, titleAddressMods, [])}>
+            {textAddress}
+         </Text>
+         <textarea
+            autoComplete='off'
+            className={cls.comment}
+            placeholder='Комментарий к адресу'
+            onChange={changeComment}
+         ></textarea>
+      </div>
+   );
+
+   const pickup = (
+      <VStack className={cls.mapContainer}>
+         <MapOrListAddresses handleAddress={handleAddress} />
+         <Text className={classNames(cls.address, titleAddressMods, [])}>
+            {textAddress}
+         </Text>
+      </VStack>
+   );
+
    return (
       <VStack className={cls.SelectAddressModal} align={FlexAlign.START}>
          <Text
@@ -71,36 +132,46 @@ export const SelectAddressModal = memo(() => {
          >
             Куда доставить?
          </Text>
-         <form onSubmit={confirmAddress}>
-            <ButtonsSelectDelivery />
-            <SelectAddress />
-            <Text
+         <ButtonsSelectDelivery clickDelivery={clickDelivery} />
+         {typeDelivery === 'Доставка' ? delivery : pickup}
+
+         <HStack justify={FlexJustify.BETWEEN}>
+            <AppLink
+               to={buttonActive ? getRouteOrder() : ''}
+               onClick={confirmAddress}
                className={classNames(
-                  cls.address,
-                  { [cls.addressPlaceholder]: text === 'Название адреса' },
+                  cls.link,
+                  {
+                     [cls.linkActive]: buttonActive,
+                  },
                   [],
                )}
             >
-               {text}
-            </Text>
-            <textarea
-               className={cls.comment}
-               placeholder='Комментарий к адресу'
-               onChange={changeComment}
-            ></textarea>
-            <Button
-               width={224}
-               height={55}
-               variant={ButtonVariant.FILLED}
-               bgColor={ButtonBgColor.YELLOW}
-               className={cls.button}
-               fontSize={FontSize.SIZE_15}
-               fontColor={FontColor.TEXT_BUTTON}
-               fontWeight={FontWeight.TEXT_900}
-            >
-               Подтвердить адрес
-            </Button>
-         </form>
+               <Button
+                  width={224}
+                  height={55}
+                  className={classNames(
+                     '',
+                     {
+                        [cls.buttonActive]: buttonActive,
+                     },
+                     [],
+                  )}
+                  variant={ButtonVariant.FILLED}
+                  bgColor={ButtonBgColor.GREY}
+                  fontSize={FontSize.SIZE_15}
+                  fontColor={FontColor.TEXT_INPUT_EDIT}
+                  fontWeight={FontWeight.TEXT_700}
+               >
+                  Подтвердить адрес
+               </Button>
+            </AppLink>
+            {!buttonActive && typeDelivery === 'Доставка' && (
+               <Text className={cls.warning}>
+                  Необходимо заполнить поля: Город,&nbsp; Улица,&nbsp; Дом
+               </Text>
+            )}
+         </HStack>
       </VStack>
    );
 });

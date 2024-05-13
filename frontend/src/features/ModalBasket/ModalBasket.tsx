@@ -11,11 +11,13 @@ import {
    BasketItem,
 } from '@/entities/Basket';
 import { VStack } from '@/shared/ui/Stack';
-import { FontSize, Text } from '@/shared/ui/Text';
+import { FontColor, FontSize, Text } from '@/shared/ui/Text';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { useChangeWord } from '@/shared/lib/hooks/useChangeWord';
 import { Scrollbar } from '@/shared/ui/Scrollbar';
 import { AppLink } from '@/shared/ui/AppLink';
+import { getRouteBasket } from '@/shared/const/router';
+import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
 
 interface ModalBasketProps {
    setIsOpenModalBasket: Dispatch<SetStateAction<boolean>>;
@@ -94,12 +96,17 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
                {basketProducts.length} {word} на &nbsp;
                <span className={cls.sum}>{totalPrice} &#8381;</span>
             </Text>
-            <AppLink
-               to='/basket'
-               className={cls.button}
-               onClick={onCloseBasketModal}
-            >
-               Перейти в корзину
+            <AppLink to={getRouteBasket()} onClick={onCloseBasketModal}>
+               <Button
+                  width={330}
+                  height={40}
+                  variant={ButtonVariant.FILLED}
+                  bgColor={ButtonBgColor.YELLOW}
+                  fontColor={FontColor.TEXT_BUTTON}
+                  fontSize={FontSize.SIZE_14}
+               >
+                  Перейти в корзину
+               </Button>
             </AppLink>
          </VStack>
       </Modal>

@@ -11,21 +11,25 @@ import logo from '@/shared/assets/icons/shop_logo.png';
 import { FontColor, FontSize, Text, TextAlign } from '../Text';
 import { HStack, VStack } from '../Stack';
 import { FlexAlign, FlexJustify } from '../Stack/Flex';
-import { address } from '@/shared/const/main_info';
+import { Coords } from '@/shared/types/maps';
+import { Button } from '../Button';
 
 interface MapsProps {
    className?: string;
    location: LngLat;
    zoom: number;
-   coordStore?: LngLat;
+   coordsStores?: Coords;
    coordCar?: LngLat;
+   clickMarker?: (key: string) => void;
 }
 
 const Maps = (props: MapsProps) => {
-   const { className, location, zoom, coordStore, coordCar } = props;
+   const { className, location, zoom, coordsStores, coordCar, clickMarker } =
+      props;
    const [isLoading, setIsLoading] = useState(false);
 
    const mapsElements: IMaps = useLoadMaps();
+   const keysCoords = coordsStores && Object.keys(coordsStores);
 
    useEffect(() => {
       setIsLoading(true);
@@ -47,62 +51,67 @@ const Maps = (props: MapsProps) => {
    return (
       <div className={classNames(cls.Maps, {}, [className])}>
          <YMap
-            className={cls.mapYa}
-            location={{ center: location, zoom }}
+            location={{ center: location, zoom, duration: 800 }}
             mode='vector'
+            className={classNames(cls.mapYa, {}, [className])}
          >
             <YMapDefaultSchemeLayer />
             <YMapDefaultFeaturesLayer />
-            {coordStore && (
-               <YMapMarker coordinates={coordStore} draggable>
-                  {!isLoading && (
-                     <VStack
-                        align={FlexAlign.CENTER}
-                        className={cls.markerContainer}
-                     >
-                        <VStack className={cls.infoContainer}>
-                           <HStack
-                              justify={FlexJustify.CENTER}
-                              gap={10}
-                              className={cls.logoContainer}
-                           >
-                              <Icon className={cls.logo} src={logo} />
+            {keysCoords &&
+               keysCoords.map((key) => (
+                  <YMapMarker key={key} coordinates={coordsStores[key]}>
+                     {!isLoading && (
+                        <VStack
+                           align={FlexAlign.CENTER}
+                           className={cls.markerContainer}
+                        >
+                           <VStack className={cls.infoContainer}>
+                              <HStack
+                                 justify={FlexJustify.CENTER}
+                                 gap={10}
+                                 className={cls.logoContainer}
+                              >
+                                 <Icon className={cls.logo} src={logo} />
+                                 <Text
+                                    fontColor={FontColor.TEXT_BUTTON}
+                                    fontSize={FontSize.SIZE_13}
+                                    align={TextAlign.TEXT_CENTER}
+                                    className={cls.name}
+                                 >
+                                    Shop Pizza
+                                 </Text>
+                              </HStack>
                               <Text
                                  fontColor={FontColor.TEXT_BUTTON}
                                  fontSize={FontSize.SIZE_13}
                                  align={TextAlign.TEXT_CENTER}
-                                 className={cls.name}
+                                 className={cls.mapInfo}
                               >
-                                 Shop Pizza
+                                 {key}
                               </Text>
-                           </HStack>
-                           <Text
-                              fontColor={FontColor.TEXT_BUTTON}
-                              fontSize={FontSize.SIZE_13}
-                              align={TextAlign.TEXT_CENTER}
-                              className={cls.mapInfo}
+                              <Text
+                                 fontColor={FontColor.TEXT_BUTTON}
+                                 fontSize={FontSize.SIZE_13}
+                                 align={TextAlign.TEXT_CENTER}
+                                 className={cls.mapInfo}
+                              >
+                                 открыто: до 23:00
+                              </Text>
+                           </VStack>
+                           <Button
+                              onClick={() => clickMarker && clickMarker(key)}
                            >
-                              {address}
-                           </Text>
-                           <Text
-                              fontColor={FontColor.TEXT_BUTTON}
-                              fontSize={FontSize.SIZE_13}
-                              align={TextAlign.TEXT_CENTER}
-                              className={cls.mapInfo}
-                           >
-                              открыто: до 23:00
-                           </Text>
+                              <Icon
+                                 width={40}
+                                 height={40}
+                                 className={cls.markerStore}
+                                 src={markerStore}
+                              />
+                           </Button>
                         </VStack>
-                        <Icon
-                           width={40}
-                           height={40}
-                           className={cls.markerStore}
-                           src={markerStore}
-                        />
-                     </VStack>
-                  )}
-               </YMapMarker>
-            )}
+                     )}
+                  </YMapMarker>
+               ))}
             {coordCar && (
                <YMapMarker coordinates={coordCar} draggable>
                   {!isLoading && (

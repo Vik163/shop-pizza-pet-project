@@ -18,6 +18,7 @@ import {
    Text,
 } from '@/shared/ui/Text';
 import { orderReducer } from '@/entities/Order';
+import { Page } from '@/widgets/Page';
 
 interface OrderPageProps {
    className?: string;
@@ -33,7 +34,7 @@ export const OrderPage = memo((props: OrderPageProps) => {
 
    return (
       <DynamicReducersLoader removeAfterUnmount reducers={initialReducers}>
-         <VStack className={classNames(cls.BasketPage, {}, [className])}>
+         <Page className={classNames(cls.BasketPage, {}, [className])}>
             <HStack max justify={FlexJustify.BETWEEN} className={cls.header}>
                <Icon src={logo} />
                <OrderLevel />
@@ -80,7 +81,7 @@ export const OrderPage = memo((props: OrderPageProps) => {
                   <SelectAddressModal />
                </Modal>
             )} */}
-         </VStack>
+         </Page>
       </DynamicReducersLoader>
    );
 });
