@@ -9,9 +9,9 @@ import {
    coordsStores,
    mainCoordinates,
    mainZoom,
-} from '@/shared/const/maps';
+   phoneContacts,
+} from '@/shared/const/main_info';
 import Maps from '@/shared/ui/Maps/Maps';
-import { address, phoneContacts } from '@/shared/const/main_info';
 
 interface ContactsPageProps {
    className?: string;
@@ -19,6 +19,7 @@ interface ContactsPageProps {
 
 export const ContactsPage = memo((props: ContactsPageProps) => {
    const { className } = props;
+   const addresses = Object.keys(coordsStores);
 
    window.scrollTo({
       top: 0,
@@ -45,16 +46,20 @@ export const ContactsPage = memo((props: ContactsPageProps) => {
          >
             {phoneContacts}
          </Text>
-         <Text
-            className={cls.address}
-            fontSize={FontSize.SIZE_26}
-            fontWeight={FontWeight.TEXT_700}
-         >
-            {address}
-         </Text>
-         <Text fontSize={FontSize.SIZE_15} fontWeight={FontWeight.TEXT_500}>
-            Доставка и самовывоз 10:00 — 23:00
-         </Text>
+         {addresses &&
+            addresses.map((item) => (
+               <Text
+                  key={item}
+                  className={cls.address}
+                  fontSize={FontSize.SIZE_26}
+                  fontWeight={FontWeight.TEXT_700}
+               >
+                  {item} <br />
+                  <span className={cls.time}>
+                     Доставка и самовывоз 10:00 — 23:00
+                  </span>
+               </Text>
+            ))}
       </Page>
    );
 });

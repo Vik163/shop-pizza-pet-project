@@ -24,7 +24,11 @@ import {
    ButtonVariant,
 } from '@/shared/ui/Button';
 import Maps from '@/shared/ui/Maps/Maps';
-import { coordsStores, mainCoordinates, mainZoom } from '@/shared/const/maps';
+import {
+   coordsStores,
+   mainCoordinates,
+   mainZoom,
+} from '@/shared/const/main_info';
 
 interface DeliveryPayProps {
    className?: string;

@@ -1,2 +1,1 @@
-export { OrderPage } from './ui/OrderPage/OrderPage';
-export type { OrderPageSchema } from './model/types/order';
+export { OrderPageAsync as OrderPage } from './ui/OrderPage/OrderPage.async';

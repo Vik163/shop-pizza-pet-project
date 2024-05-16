@@ -68,6 +68,12 @@ export const Page = memo((props: PageProps) => {
    });
 
    useEffect(() => {
+      if (!saveScroll)
+         window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+         });
+
       if (animationScroll) {
          // с анимацией
          const scrollWithoutPathname = pathname === '/' ? 0 : 600;

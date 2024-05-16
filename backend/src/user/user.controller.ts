@@ -18,8 +18,6 @@ export class UserController {
   @AccessToken()
   @Patch(':id')
   updateUserData(@Param('id') id: string, @Body() updateUserDto: UserDto) {
-    console.log('i');
-
     return this.userService.updateUserData(id, updateUserDto);
   }
 

@@ -1,0 +1,47 @@
+.main {
+   width: 730px;
+}
+
+.title {
+   margin-bottom: 30px;
+}
+
+.form {
+   width: 100%;
+}
+
+.checkbox {
+   height: 28px;
+   width: 439px;
+   gap: 16px;
+   font-size: var(--size-14);
+   font-weight: var(--weight-700);
+}
+
+.link {
+   text-decoration: none;
+   display: flex;
+   gap: 15px;
+   align-items: center;
+   font-size: 15px;
+   color: var(--color-primary);
+}
+
+.arrowBack {
+   height: 13px;
+   fill: var(--color-primary);
+   transform: rotate(180deg);
+}
+
+.button {
+   position: relative;
+   gap: 15px;
+}
+
+.arrow {
+   position: absolute;
+   right: 20px;
+   height: 10px;
+   fill: var(--color-primary);
+   stroke: var(--color-text-button);
+}

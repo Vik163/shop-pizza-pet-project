@@ -5,8 +5,6 @@ import React, {
    useEffect,
    useRef,
    useState,
-   Dispatch,
-   SetStateAction,
 } from 'react';
 import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
@@ -26,6 +24,7 @@ type InputTypeProps = Omit<
 
 export enum InputVariant {
    INPUT_OUTLINE = 'outline',
+   INPUT_FILLED = 'filled',
    INPUT_CLEAR = 'clear',
    INPUT_CHECKBOX = 'checkbox',
    INPUT_RADIO = 'radio',
@@ -33,6 +32,7 @@ export enum InputVariant {
 
 const inputVariantClasses: Record<InputVariant, string> = {
    outline: cls.inputOutline,
+   filled: cls.inputFilled,
    clear: cls.inputClear,
    checkbox: cls.checkbox,
    radio: cls.radio,
@@ -40,21 +40,20 @@ const inputVariantClasses: Record<InputVariant, string> = {
 
 interface InputProps extends InputTypeProps {
    classNameForLabel?: string;
-   // className?: string;
+   className?: string;
    // размеры -----------------------
    widthInput: number;
    heightInput: number;
    widthInputAndEditButtonRight?: number;
    // вариант исполнения -------------
    withoutButtons?: boolean;
+   withoutButtonRight?: boolean;
    labelLeft?: string;
    labelTop?: string;
    labelRight?: string;
    variant?: InputVariant; // стиль инпута
-   // редактирование значения инпута ---------
-   isEdit?: string;
-   setIsEdit?: Dispatch<SetStateAction<string>>;
-   saveValue?: (name: string, value: string) => void;
+
+   saveValue?: (name: string, value: string) => Promise<boolean>;
    // ------------------------------------------
    readonly?: boolean;
    error?: string;
@@ -72,7 +71,7 @@ interface InputProps extends InputTypeProps {
 
 export const Input = memo((props: InputProps) => {
    const {
-      // className,
+      className,
       classNameForLabel,
       labelLeft,
       labelTop,
@@ -82,8 +81,6 @@ export const Input = memo((props: InputProps) => {
       value,
       name,
       error,
-      isEdit,
-      setIsEdit,
       fixedChangeValue,
       disabled,
       focusInput,
@@ -96,6 +93,7 @@ export const Input = memo((props: InputProps) => {
       saveValue,
       checked,
       widthInput,
+      withoutButtonRight = false,
       withoutButtons,
       widthInputAndEditButtonRight,
       heightInput,
@@ -103,6 +101,7 @@ export const Input = memo((props: InputProps) => {
    } = props;
 
    // название кнопок редактирования
+   const [isEdit, setIsEdit] = useState('');
    const [editButtonInput, setEditButtonInput] = useState('');
    const [editButtonRight, setEditButtonRight] = useState(
       widthInputAndEditButtonRight && '',
@@ -143,10 +142,25 @@ export const Input = memo((props: InputProps) => {
       }
    }, [isFocused]);
 
-   // ===========================================================
-   const onBlur = () => {
-      setIsFocused(false);
+   // слушатель на документе из-за кнопке редактирования в инпуте ============
+   const onBlur = (e: Event) => {
+      if (e.target !== ref.current) {
+         setIsEdit('');
+         setIsFocused(false);
+         document.removeEventListener('click', onBlur);
+      }
    };
+   console.log('o');
+
+   useEffect(() => {
+      if (isFocused) {
+         document.addEventListener('click', onBlur);
+      }
+
+      return () => {
+         document.addEventListener('click', onBlur);
+      };
+   }, [isFocused]);
 
    // Установка value при фокусе ==================================
    const onFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -181,23 +195,33 @@ export const Input = memo((props: InputProps) => {
    };
 
    // Кнопка редактирования в инпуте ============================================
-   const clickEditButtonInput = (e: SyntheticEvent<HTMLButtonElement>) => {
+   const clickEditButtonInput = async (
+      e: SyntheticEvent<HTMLButtonElement>,
+   ) => {
       e.preventDefault();
 
-      if (setIsEdit) setIsEdit(name);
-      if (editButtonInput === 'Сохранить') saveValue?.(name, isValue);
+      setIsEdit(name);
+      if (editButtonInput === 'Сохранить') {
+         await saveValue?.(name, isValue).then((data) => {
+            if (!data) setIsEdit(name);
+         });
+      }
    };
 
    // Кнопка редактирования справа инпута =======================================
-   const clickButtonRight = (e: SyntheticEvent<HTMLButtonElement>) => {
+   const clickButtonRight = async (e: SyntheticEvent<HTMLButtonElement>) => {
       e.preventDefault();
-      if (setIsEdit) setIsEdit('');
+
+      setIsEdit('');
       setIsValue('');
-      if (editButtonRight === 'Сохранить') saveValue?.(name, isValue);
+      if (editButtonRight === 'Сохранить')
+         await saveValue?.(name, isValue).then((data) => {
+            if (!data) setIsEdit(name);
+         });
    };
 
    // -----------------------------------------------------------------
-   const classes = [inputVariantClasses[variant]];
+   const classes = [inputVariantClasses[variant], className];
 
    const editButtonRightColor =
       editButtonRight === 'Отменить' || editButtonRight === 'Получить новый код'
@@ -255,7 +279,6 @@ export const Input = memo((props: InputProps) => {
                // checked={checked} падает ошибка неконтролируемый инпут (checked реализую по-другому)
                placeholder={placeholder}
                onChange={onChangeHandler}
-               onBlur={onBlur}
                onFocus={onFocus}
                disabled={isDisable}
                {...otherProps}
@@ -270,15 +293,18 @@ export const Input = memo((props: InputProps) => {
                </Button>
             )}
          </div>
-         {!withoutButtons && editButtonRight && !checkboxButtonsType && (
-            <Button
-               fontColor={editButtonRightColor}
-               className={classNames(cls.buttonRight, {}, [])}
-               onClick={clickButtonRight}
-            >
-               {editButtonRight}
-            </Button>
-         )}
+         {!withoutButtons &&
+            !withoutButtonRight &&
+            editButtonRight &&
+            !checkboxButtonsType && (
+               <Button
+                  fontColor={editButtonRightColor}
+                  className={classNames(cls.buttonRight, {}, [])}
+                  onClick={clickButtonRight}
+               >
+                  {editButtonRight}
+               </Button>
+            )}
       </HStack>
    );
 

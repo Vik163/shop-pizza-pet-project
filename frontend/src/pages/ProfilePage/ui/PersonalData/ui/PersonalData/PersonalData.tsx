@@ -1,4 +1,4 @@
-import { SyntheticEvent, memo, useCallback, useState } from 'react';
+import { SyntheticEvent, memo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
@@ -21,20 +21,18 @@ import {
 } from '@/shared/ui/Button';
 import {
    Birthday,
-   UserData,
-   UserSettings,
    firebaseApi,
-   getTokenSelector,
    getUserEmail,
    getUserName,
    getUserPhone,
    getUserSettings,
+   saveUserSettings,
+   updateUserData,
    userAction,
+   UpdateUserData,
 } from '@/entities/User';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { useCookie } from '@/shared/lib/hooks/useCookie';
-import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
-import { $apiTokens } from '@/shared/api/api';
 import { fetchLogoutUser } from '../../model/services/fetchLogout';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { DateSelect } from '../DateSelect/DateSelect';
@@ -43,50 +41,30 @@ interface PersonalDataProps {
    className?: string;
 }
 
-type UpdateValue = string | Birthday | UserSettings;
-
 export const PersonalData = memo((props: PersonalDataProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
    const { deleteCookie } = useCookie();
-   const [isEdit, setIsEdit] = useState('');
    const userName = useSelector(getUserName);
    const userPhone = useSelector(getUserPhone);
    const userEmail = useSelector(getUserEmail);
    const userSettings = useSelector(getUserSettings);
    const { addAdvertisement } = userSettings;
-   const csrf = useSelector(getTokenSelector);
 
    const saveValue = useCallback(
-      async (name: string, value: UpdateValue) => {
-         const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
-         if (value) {
-            // имя токена задаю сам
-
-            if (csrf) {
-               await $apiTokens
-                  .patch(
-                     `/users/${userId}`,
-                     {
-                        [name]: value,
-                     },
-                     {
-                        // x-csrf-token из библиотеки CSRF (бек)
-                        headers: { 'x-csrf-token': csrf },
-                     },
-                  )
-                  .then((data) => {
-                     const userData: UserData = data.data;
-                     if (userData) {
-                        dispatch(userAction.setAuthData(userData));
-                        setIsEdit('');
-                     }
-                  });
-            }
+      async (name: string, value: string | Birthday): Promise<boolean> => {
+         const newData: UpdateUserData = {
+            [name]: value,
+         };
+         const data = await dispatch(updateUserData(newData));
+         if (data) {
+            return true;
          }
+
+         return false;
       },
-      [csrf, dispatch],
+      [dispatch],
    );
 
    const clickCheckbox = async () => {
@@ -94,8 +72,8 @@ export const PersonalData = memo((props: PersonalDataProps) => {
          ...userSettings,
          addAdvertisement: !addAdvertisement,
       };
-
-      saveValue('userSettings', newUserParametrs);
+      dispatch(saveUserSettings(newUserParametrs));
+      // saveValue('userSettings', newUserParametrs);
    };
 
    const logout = async (e: SyntheticEvent) => {
@@ -143,8 +121,6 @@ export const PersonalData = memo((props: PersonalDataProps) => {
                placeholderAsValue
                saveValue={saveValue}
                value={userName || ''}
-               isEdit={isEdit}
-               setIsEdit={setIsEdit}
                disabled
             />
             <Input
@@ -156,8 +132,6 @@ export const PersonalData = memo((props: PersonalDataProps) => {
                placeholder={String(userPhone) || '+7 (999) 999-99-99'}
                heightInput={48}
                // value={String(userPhone) || '+7 (999) 999-99-99'}
-               isEdit={isEdit}
-               setIsEdit={setIsEdit}
                withoutButtons
                disabled
             />
@@ -181,10 +155,9 @@ export const PersonalData = memo((props: PersonalDataProps) => {
                placeholder={userEmail || 'Email'}
                placeholderAsValue
                widthInput={350}
+               widthInputAndEditButtonRight={446}
                heightInput={48}
                value={userEmail || ''}
-               isEdit={isEdit}
-               setIsEdit={setIsEdit}
                disabled
             />
             <Text

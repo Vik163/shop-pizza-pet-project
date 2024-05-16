@@ -33,7 +33,7 @@ import { SelectAddressModal } from '@/features/SelectAddressModal';
 import { orderActions, orderReducer } from '@/entities/Order';
 import { Page } from '@/widgets/Page';
 
-interface BasketPageProps {
+export interface BasketPageProps {
    className?: string;
 }
 
@@ -42,7 +42,7 @@ const initialReducers = {
    order: orderReducer,
 };
 
-export const BasketPage = memo((props: BasketPageProps) => {
+const BasketPage = memo((props: BasketPageProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
    const childRef = useRef<RefTypeModal>(null);
@@ -54,10 +54,10 @@ export const BasketPage = memo((props: BasketPageProps) => {
    useEffect(() => {
       dispatch(fetchAdditionToOrder());
 
-      window.scrollTo({
-         top: 0,
-         behavior: 'smooth',
-      });
+      // window.scrollTo({
+      //    top: 0,
+      //    behavior: 'smooth',
+      // });
    }, [dispatch]);
 
    const onModalProduct = (basket: BasketOneProduct) => {
@@ -146,3 +146,5 @@ export const BasketPage = memo((props: BasketPageProps) => {
       </DynamicReducersLoader>
    );
 });
+
+export default BasketPage;

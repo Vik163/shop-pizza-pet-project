@@ -3,7 +3,7 @@ import { LngLat } from '@yandex/ymaps3-types';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './MapOrListAddresses.module.scss';
-import { coordsStores, mainCoordinates } from '@/shared/const/maps';
+import { coordsStores, mainCoordinates } from '@/shared/const/main_info';
 import { Button } from '@/shared/ui/Button';
 import { HStack, VStack } from '@/shared/ui/Stack';
 import { FontWeight, Text } from '@/shared/ui/Text';

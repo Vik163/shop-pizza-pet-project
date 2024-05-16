@@ -14,13 +14,15 @@ export interface Birthday {
 
 export interface UserData {
    userId: string;
-   name?: string;
+   name: string;
    phoneNumber: number;
    email?: string;
    birthday?: Birthday;
    role?: RoleUser;
    userSettings: UserSettings;
 }
+
+export type UpdateUserData = { [key: string]: string | Birthday };
 
 export interface ValidationErrors {
    errorMessage: string;

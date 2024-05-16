@@ -1,15 +1,29 @@
 import { rtkApi } from '@/shared/api/rtkApi';
-import { type UserData } from '../model/types/user';
+import { UpdateUserData, type UserData } from '../model/types/user';
 import { type UserSettings } from '../model/types/userSettings';
 
 // 15_5 8min пользовательские json настройки
+
 interface SetUserSettingsArg {
    userId: string;
    userSettings: UserSettings;
 }
 
+interface SetUpdateUserDataArg {
+   userId: string;
+   updateData: UpdateUserData;
+}
+
 const userApi = rtkApi.injectEndpoints({
    endpoints: (build) => ({
+      setUpdateUserData: build.mutation<UserData, SetUpdateUserDataArg>({
+         query: ({ userId, updateData }) => ({
+            url: `/users/${userId}`,
+
+            method: 'PATCH',
+            body: updateData,
+         }),
+      }),
       setUserSettings: build.mutation<UserData, SetUserSettingsArg>({
          query: ({ userId, userSettings }) => ({
             url: `/users/${userId}`,
@@ -28,6 +42,9 @@ const userApi = rtkApi.injectEndpoints({
       }),
    }),
 });
+
+export const setUpdateUserDataMutation =
+   userApi.endpoints.setUpdateUserData.initiate;
 
 export const setUserSettingsMutation =
    userApi.endpoints.setUserSettings.initiate;

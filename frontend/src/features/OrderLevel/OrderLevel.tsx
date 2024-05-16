@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './OrderLevel.module.scss';
@@ -12,7 +13,9 @@ interface OrderLevelProps {
 
 export const OrderLevel = memo((props: OrderLevelProps) => {
    const { className } = props;
-   const active = true;
+   const { pathname } = useLocation();
+   const activeBasket = pathname === '/basket' || pathname === '/order';
+   const activeOrder = pathname === '/order';
 
    return (
       <HStack
@@ -23,7 +26,9 @@ export const OrderLevel = memo((props: OrderLevelProps) => {
             <div
                className={classNames(
                   cls.level,
-                  { [cls.levelActive]: active },
+                  {
+                     [cls.levelActive]: activeBasket,
+                  },
                   [],
                )}
             >
@@ -32,7 +37,7 @@ export const OrderLevel = memo((props: OrderLevelProps) => {
             <Text
                className={classNames(
                   cls.text,
-                  { [cls.textActive]: active },
+                  { [cls.textActive]: activeBasket },
                   [],
                )}
             >
@@ -43,14 +48,18 @@ export const OrderLevel = memo((props: OrderLevelProps) => {
             <div
                className={classNames(
                   cls.level,
-                  { [cls.levelActive]: false },
+                  { [cls.levelActive]: activeOrder },
                   [],
                )}
             >
                2<Text className={cls.dotted}>-------------</Text>
             </div>
             <Text
-               className={classNames(cls.text, { [cls.textActive]: false }, [])}
+               className={classNames(
+                  cls.text,
+                  { [cls.textActive]: activeOrder },
+                  [],
+               )}
             >
                Оформление заказа
             </Text>
