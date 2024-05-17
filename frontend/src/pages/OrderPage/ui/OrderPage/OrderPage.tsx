@@ -26,7 +26,10 @@ const OrderPage = memo((props: OrderPageProps) => {
    const { className } = props;
 
    return (
-      <DynamicReducersLoader removeAfterUnmount reducers={initialReducers}>
+      <DynamicReducersLoader
+         removeAfterUnmount={false}
+         reducers={initialReducers}
+      >
          <Page className={classNames(cls.OrderPage, {}, [className])}>
             <HStack max justify={FlexJustify.BETWEEN} className={cls.header}>
                <Icon src={logo} />

@@ -20,7 +20,12 @@ import { getRouteOrder } from '@/shared/const/router';
 import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
 import { MapOrListAddresses } from '../MapOrListAddresses/MapOrListAddresses';
 
-export const SelectAddressModal = memo(() => {
+interface SelectAddressModalProps {
+   closeModal: () => void;
+}
+
+export const SelectAddressModal = memo((props: SelectAddressModalProps) => {
+   const { closeModal } = props;
    const dispatch = useAppDispatch();
    const [textAddress, setTextAddress] = useState('');
    const addressClient = useSelector(getAddress) as Address;
@@ -91,7 +96,9 @@ export const SelectAddressModal = memo(() => {
    };
 
    const confirmAddress = () => {
+      dispatch(orderActions.setDeliveryInfo({ textAddress, typeDelivery }));
       resetAddress();
+      closeModal();
    };
 
    const titleAddressMods: Mods = {

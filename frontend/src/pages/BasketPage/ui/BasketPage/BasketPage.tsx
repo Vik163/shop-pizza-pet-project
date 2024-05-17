@@ -83,7 +83,10 @@ const BasketPage = memo((props: BasketPageProps) => {
    };
 
    return (
-      <DynamicReducersLoader reducers={initialReducers}>
+      <DynamicReducersLoader
+         removeAfterUnmount={false}
+         reducers={initialReducers}
+      >
          <Page className={classNames(cls.BasketPage, {}, [className])}>
             <HStack max justify={FlexJustify.BETWEEN} className={cls.header}>
                <Icon src={logo} />
@@ -139,7 +142,7 @@ const BasketPage = memo((props: BasketPageProps) => {
                   isOpen={openModal}
                   onClose={closeModal}
                >
-                  <SelectAddressModal />
+                  <SelectAddressModal closeModal={closeModal} />
                </Modal>
             )}
          </Page>

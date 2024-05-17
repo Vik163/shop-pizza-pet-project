@@ -10,7 +10,7 @@ import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Input.module.scss';
 import { HStack, VStack } from '../Stack';
-import { Text, FontColor } from '../Text';
+import { FontColor } from '../Text';
 import { FlexAlign, FlexJustify } from '../Stack/Flex';
 import { Button } from '../Button';
 import checkmark from '@/shared/assets/icons/Checkmark.svg';
@@ -40,6 +40,7 @@ const inputVariantClasses: Record<InputVariant, string> = {
 
 interface InputProps extends InputTypeProps {
    classNameForLabel?: string;
+   classNameButtons?: string;
    className?: string;
    // размеры -----------------------
    widthInput: number;
@@ -73,6 +74,7 @@ export const Input = memo((props: InputProps) => {
    const {
       className,
       classNameForLabel,
+      classNameButtons,
       labelLeft,
       labelTop,
       labelRight,
@@ -150,7 +152,6 @@ export const Input = memo((props: InputProps) => {
          document.removeEventListener('click', onBlur);
       }
    };
-   console.log('o');
 
    useEffect(() => {
       if (isFocused) {
@@ -269,6 +270,7 @@ export const Input = memo((props: InputProps) => {
          )}
          <div className={cls.inputWithButton}>
             <input
+               id={name}
                ref={ref}
                style={{ width: widthInput }}
                className={classNames(cls.input, modsInput, classes)}
@@ -286,7 +288,9 @@ export const Input = memo((props: InputProps) => {
             {!withoutButtons && !checkboxButtonsType && !code && (
                <Button
                   style={{ right: `${20}px` }}
-                  className={classNames(cls.inputEdit, modsInput, [])}
+                  className={classNames(cls.inputEdit, modsInput, [
+                     classNameButtons,
+                  ])}
                   onClick={clickEditButtonInput}
                >
                   {editButtonInput}
@@ -299,7 +303,9 @@ export const Input = memo((props: InputProps) => {
             !checkboxButtonsType && (
                <Button
                   fontColor={editButtonRightColor}
-                  className={classNames(cls.buttonRight, {}, [])}
+                  className={classNames(cls.buttonRight, {}, [
+                     classNameButtons,
+                  ])}
                   onClick={clickButtonRight}
                >
                   {editButtonRight}
@@ -314,7 +320,9 @@ export const Input = memo((props: InputProps) => {
             className={classNames('', {}, [classNameForLabel])}
             justify={FlexJustify.BETWEEN}
          >
-            <Text className={cls.text}>{labelLeft}</Text>
+            <label htmlFor={name} className={cls.text}>
+               {labelLeft}
+            </label>
             {input}
          </HStack>
       );
@@ -332,7 +340,9 @@ export const Input = memo((props: InputProps) => {
             onClick={onClickCheckbox}
          >
             {input}
-            <Text className={cls.text}>{labelRight}</Text>
+            <label htmlFor={name} className={cls.text}>
+               {labelRight}
+            </label>
          </HStack>
       );
    }
@@ -344,7 +354,9 @@ export const Input = memo((props: InputProps) => {
             align={FlexAlign.START}
             justify={FlexJustify.BETWEEN}
          >
-            <Text className={cls.text}>{labelTop}</Text>
+            <label htmlFor={name} className={cls.text}>
+               {labelTop}
+            </label>
             {input}
          </VStack>
       );

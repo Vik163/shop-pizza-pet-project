@@ -3,10 +3,10 @@
    height: 462px;
 }
 
-.input {
-   width: 539px;
+.inputContainer {
+   width: 100%;
 }
 
-.inputName {
-   width: 100%;
+.inputButtons {
+   font-size: var(--size-15);
 }

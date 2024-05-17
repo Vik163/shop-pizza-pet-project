@@ -8,10 +8,19 @@ export interface Address {
    comment?: string;
 }
 
+export type TypeDelivery = 'Доставка' | 'Самовывоз';
+
+export interface Delivery {
+   textAddress?: string;
+   typeDelivery: TypeDelivery;
+}
+
 export interface OrderSchema {
    isLoading?: boolean;
    error?: string;
-   delivery: string;
+   typeDelivery: TypeDelivery;
    address: Address;
+   delivery?: Delivery;
+
    //    additionToOrder: Product[];
 }

@@ -1,10 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Address, OrderSchema } from '../types/order';
+import { Address, Delivery, OrderSchema, TypeDelivery } from '../types/order';
 
 const initialState: OrderSchema = {
    isLoading: false,
    error: '',
-   delivery: '',
+   typeDelivery: 'Доставка',
+   delivery: undefined,
    address: {
       city: '',
       street: '',
@@ -19,11 +20,14 @@ const orderSlice = createSlice({
    name: 'basketPage',
    initialState,
    reducers: {
-      setTypeDelivery: (state, { payload }: PayloadAction<string>) => {
-         state.delivery = payload;
+      setTypeDelivery: (state, { payload }: PayloadAction<TypeDelivery>) => {
+         state.typeDelivery = payload;
       },
       setAddress: (state, { payload }: PayloadAction<Address>) => {
          state.address = payload;
+      },
+      setDeliveryInfo: (state, { payload }: PayloadAction<Delivery>) => {
+         state.delivery = payload;
       },
    },
    extraReducers: (builder) => {
