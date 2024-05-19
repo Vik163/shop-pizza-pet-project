@@ -9,7 +9,7 @@ import {
 import { useSelector } from 'react-redux';
 import cls from './SelectAddress.module.scss';
 import { HStack } from '@/shared/ui/Stack';
-import { Input } from '@/shared/ui/Input';
+import { Input, InputVariant } from '@/shared/ui/Input';
 import { FlexWrap } from '@/shared/ui/Stack/Flex';
 import { Address, getAddress, orderActions } from '@/entities/Order';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
@@ -123,6 +123,7 @@ export const SelectAddress = memo(() => {
             placeholder='Дом'
             onChange={changeHouse}
             type='number'
+            variant={InputVariant.INPUT_FILLED}
          />
          <Input
             className={cls.inputs}
@@ -134,6 +135,7 @@ export const SelectAddress = memo(() => {
             placeholder='Квартира'
             onChange={changeApartment}
             type='number'
+            variant={InputVariant.INPUT_FILLED}
          />
          <Input
             className={cls.inputs}
@@ -145,6 +147,7 @@ export const SelectAddress = memo(() => {
             placeholder='Подъезд'
             onChange={changeEntrance}
             type='number'
+            variant={InputVariant.INPUT_FILLED}
          />
          <Input
             className={cls.inputs}
@@ -156,6 +159,7 @@ export const SelectAddress = memo(() => {
             placeholder='Этаж'
             onChange={changeFloor}
             type='number'
+            variant={InputVariant.INPUT_FILLED}
          />
       </HStack>
    );

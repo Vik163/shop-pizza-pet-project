@@ -59,11 +59,13 @@ interface InputProps extends InputTypeProps {
    readonly?: boolean;
    error?: string;
    name: string;
+   buttonInput?: string;
    focusInput?: boolean; // управляет фокусом
    disabled?: boolean;
    fixedChangeValue?: number; // ограничивает количество вводимых символов
    value?: string;
    placeholderAsValue?: boolean; // при фокусе placeholder становится value
+   onClickInputButton?: () => void;
    onChange?: (value: string) => void;
    // чекбокс -------------------
    checked?: boolean;
@@ -85,8 +87,10 @@ export const Input = memo((props: InputProps) => {
       error,
       fixedChangeValue,
       disabled,
+      buttonInput,
       focusInput,
       onClickCheckbox,
+      onClickInputButton,
       placeholderAsValue = false,
       pattern,
       type = 'text',
@@ -122,14 +126,14 @@ export const Input = memo((props: InputProps) => {
    // ------------------------------------------
    useEffect(() => {
       if (!(isEdit === name)) {
-         setEditButtonInput('Изменить');
+         setEditButtonInput(buttonInput || 'Изменить');
          setEditButtonRight('');
          if (disabled) {
             setIsFocused(false);
             setIsDisable(true);
          }
       } else {
-         setEditButtonInput('Сохранить');
+         setEditButtonInput(buttonInput || 'Сохранить');
          setEditButtonRight('Отменить');
          setIsFocused(true);
          setIsDisable(false);
@@ -149,17 +153,17 @@ export const Input = memo((props: InputProps) => {
       if (e.target !== ref.current) {
          setIsEdit('');
          setIsFocused(false);
-         document.removeEventListener('click', onBlur);
+         document.body.removeEventListener('click', onBlur);
       }
    };
 
    useEffect(() => {
       if (isFocused) {
-         document.addEventListener('click', onBlur);
+         document.body.addEventListener('click', onBlur);
       }
 
       return () => {
-         document.addEventListener('click', onBlur);
+         document.body.addEventListener('click', onBlur);
       };
    }, [isFocused]);
 
@@ -201,7 +205,13 @@ export const Input = memo((props: InputProps) => {
    ) => {
       e.preventDefault();
 
-      setIsEdit(name);
+      if (onClickInputButton) {
+         // вызов authModal
+         onClickInputButton();
+      } else {
+         setIsEdit(name);
+      }
+
       if (editButtonInput === 'Сохранить') {
          await saveValue?.(name, isValue).then((data) => {
             if (!data) setIsEdit(name);
@@ -242,7 +252,7 @@ export const Input = memo((props: InputProps) => {
       [cls.inActive]: isDisable && !code,
       [cls.active]: error,
       [cls.focused]: isFocused,
-      [cls.editActive]: isEdit === name,
+      [cls.editActive]: isEdit === name && !buttonInput,
       [cls.switch]: checkboxButtonsType,
    };
 
@@ -287,7 +297,7 @@ export const Input = memo((props: InputProps) => {
             />
             {!withoutButtons && !checkboxButtonsType && !code && (
                <Button
-                  style={{ right: `${20}px` }}
+                  // style={{ right: `${20}px` }}
                   className={classNames(cls.inputEdit, modsInput, [
                      classNameButtons,
                   ])}

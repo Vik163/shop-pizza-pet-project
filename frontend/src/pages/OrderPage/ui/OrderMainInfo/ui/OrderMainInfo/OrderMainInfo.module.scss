@@ -10,12 +10,36 @@
    width: 100%;
 }
 
+.titlePromo {
+   margin-bottom: 27px;
+}
+
+.inputPromo {
+   font-size: var(--size-13);
+   color: var(--color-card-text);
+
+   &.inputPromoPlaceholder {
+      &::placeholder {
+         color: var(--color-card-text);
+      }
+   }
+}
+
+.promoButton {
+   background-color: var(--color-yellow);
+   color: var(--color-text-button);
+   border-radius: 0 8px 8px 0;
+   font-size: var(--size-13);
+   font-weight: var(--weight-700);
+}
+
 .checkbox {
    height: 28px;
    width: 439px;
    gap: 16px;
    font-size: var(--size-14);
    font-weight: var(--weight-700);
+   margin: 60px 0 33px;
 }
 
 .link {

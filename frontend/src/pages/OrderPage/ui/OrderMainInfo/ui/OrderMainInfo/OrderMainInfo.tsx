@@ -19,6 +19,10 @@ import { Icon } from '@/shared/ui/Icon';
 import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
 import { getRouteBasket } from '@/shared/const/router';
 import { getBasketTotalPrice } from '@/entities/Basket';
+import { Input, InputVariant } from '@/shared/ui/Input';
+import { classNames } from '@/shared/lib/classNames/classNames';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { getUserSettings, saveUserSettings } from '@/entities/User';
 
 interface OrderMainInfoProps {
    className?: string;
@@ -26,7 +30,19 @@ interface OrderMainInfoProps {
 
 export const OrderMainInfo = memo((props: OrderMainInfoProps) => {
    const { className } = props;
+   const dispatch = useAppDispatch();
+   const userSettings = useSelector(getUserSettings);
+   const { addAdvertisement } = userSettings;
    const totalPrice = useSelector(getBasketTotalPrice);
+
+   const clickCheckbox = async () => {
+      const newUserParametrs = {
+         ...userSettings,
+         addAdvertisement: !addAdvertisement,
+      };
+      dispatch(saveUserSettings(newUserParametrs));
+      // saveValue('userSettings', newUserParametrs);
+   };
 
    const submitOrder = (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -46,7 +62,40 @@ export const OrderMainInfo = memo((props: OrderMainInfoProps) => {
          </Text>
          <form onSubmit={submitOrder} className={cls.form}>
             <DeliveryInfo />
+            <Text
+               fontSize={FontSize.SIZE_22}
+               fontColor={FontColor.TEXT_YELLOW}
+               fontWeight={FontWeight.TEXT_500}
+               className={cls.titlePromo}
+               title={HeaderTagType.H_3}
+            >
+               Промокод
+            </Text>
+            <Input
+               name='promo'
+               widthInput={353}
+               classNameButtons={cls.promoButton}
+               className={classNames(cls.inputPromo, {}, [
+                  cls.inputPromoPlaceholder,
+               ])}
+               heightInput={43}
+               withoutButtonRight
+               buttonInput='Применить'
+               placeholder='Введите промокод'
+               value='Отсутствует'
+            ></Input>
             <OrderPay />
+            <Input
+               type='checkbox'
+               name='checkbox'
+               classNameForLabel={cls.checkbox}
+               labelRight='Сообщать о бонусах, акциях и новых продуктах'
+               widthInput={19}
+               heightInput={19}
+               variant={InputVariant.INPUT_CHECKBOX}
+               onClickCheckbox={clickCheckbox}
+               checked={addAdvertisement}
+            />
             <HStack max justify={FlexJustify.BETWEEN}>
                <Link to={getRouteBasket()} className={cls.link}>
                   <Icon className={cls.arrowBack} Svg={arrow} /> Назад в корзину

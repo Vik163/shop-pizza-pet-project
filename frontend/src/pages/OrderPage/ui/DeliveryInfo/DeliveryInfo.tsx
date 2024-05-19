@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -8,6 +8,7 @@ import { Input, InputVariant } from '@/shared/ui/Input';
 import { getUserName, getUserPhone, updateUserData } from '@/entities/User';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { EditAddress } from '../EditAddress/EditAddress';
+import { AuthByPhone } from '@/features/AuthByPhone';
 
 interface DeliveryInfoProps {
    className?: string;
@@ -16,6 +17,7 @@ interface DeliveryInfoProps {
 export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
+   const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
    const userName = useSelector(getUserName) as string;
    const userPhone = useSelector(getUserPhone);
 
@@ -33,6 +35,10 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
       },
       [dispatch],
    );
+
+   const onAuthModal = () => {
+      setIsOpenModalAuth(true);
+   };
 
    return (
       <VStack
@@ -65,6 +71,7 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
             placeholder={String(userPhone) || '+7 (999) 999-99-99'}
             placeholderAsValue
             withoutButtonRight
+            onClickInputButton={onAuthModal}
             variant={InputVariant.INPUT_FILLED}
             saveValue={saveValue}
             value={String(userPhone) || ''}
@@ -88,6 +95,12 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
             value={String(userPhone) || ''}
             disabled
          />
+         {isOpenModalAuth && (
+            <AuthByPhone
+               setIsOpenModal={setIsOpenModalAuth}
+               isOpenModal={isOpenModalAuth}
+            />
+         )}
       </VStack>
    );
 });

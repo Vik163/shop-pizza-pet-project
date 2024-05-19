@@ -92,10 +92,12 @@ input[type='number'] {
 
 .inputEdit {
    position: absolute;
+   width: 133px;
+   height: 100%;
    margin-top: auto;
    margin-bottom: auto;
    top: 0;
-   bottom: 0;
+   right: 0;
    color: var(--color-input-edit);
    border: none;
 
