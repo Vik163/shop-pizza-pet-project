@@ -121,15 +121,14 @@ input[type='number'] {
 }
 
 .radio {
-   background: content-box var(--color-yellow);
+   background: content-box transparent;
    border-radius: 50%;
-   border: 2px solid var(--color-yellow);
+   border: 2px solid var(--color-pink);
    padding: 4px;
 
    &.checkedRadio {
-      border: 2px solid var(--color-pink);
       background: content-box var(--color-pink);
-      fill: var(--color-pink);
+      // fill: var(--color-pink);
    }
 }
 
@@ -137,6 +136,7 @@ input[type='number'] {
    min-width: 100%;
    height: 100%;
    fill: var(--color-yellow);
+   border: 1px solid red;
 }
 
 .switchCursor {
@@ -148,8 +148,5 @@ input[type='number'] {
 }
 
 .text {
-   color: var(--color-primary);
-   font-weight: inherit;
-   font-size: inherit;
    letter-spacing: 0;
 }

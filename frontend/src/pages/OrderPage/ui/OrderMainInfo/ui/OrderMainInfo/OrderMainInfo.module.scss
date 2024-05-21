@@ -37,9 +37,13 @@
    height: 28px;
    width: 439px;
    gap: 16px;
+   margin: 60px 0 33px;
+}
+
+.label {
    font-size: var(--size-14);
    font-weight: var(--weight-700);
-   margin: 60px 0 33px;
+   color: var(--color-primary);
 }
 
 .link {

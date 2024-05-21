@@ -53,7 +53,7 @@ export const EditAddress = memo(() => {
          align={FlexAlign.START}
          justify={FlexJustify.BETWEEN}
       >
-         <Text className={cls.title} fontSize={FontSize.SIZE_17}>
+         <Text className={cls.title} fontSize={FontSize.SIZE_16}>
             Адрес доставки
          </Text>
 

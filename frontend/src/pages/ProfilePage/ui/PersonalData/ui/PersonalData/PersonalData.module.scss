@@ -22,8 +22,12 @@
    height: 28px;
    width: 439px;
    gap: 16px;
+}
+
+.label {
    font-size: var(--size-14);
    font-weight: var(--weight-700);
+   color: var(--color-primary);
 }
 
 .form {

@@ -24,12 +24,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { getUserSettings, saveUserSettings } from '@/entities/User';
 
-interface OrderMainInfoProps {
-   className?: string;
-}
-
-export const OrderMainInfo = memo((props: OrderMainInfoProps) => {
-   const { className } = props;
+export const OrderMainInfo = memo(() => {
    const dispatch = useAppDispatch();
    const userSettings = useSelector(getUserSettings);
    const { addAdvertisement } = userSettings;
@@ -83,13 +78,18 @@ export const OrderMainInfo = memo((props: OrderMainInfoProps) => {
                buttonInput='Применить'
                placeholder='Введите промокод'
                value='Отсутствует'
-            ></Input>
+            />
             <OrderPay />
             <Input
                type='checkbox'
                name='checkbox'
-               classNameForLabel={cls.checkbox}
-               labelRight='Сообщать о бонусах, акциях и новых продуктах'
+               id='bonus'
+               classNameInputWithLabel={cls.checkbox}
+               labelRight={
+                  <label htmlFor='bonus' className={cls.label}>
+                     Сообщать о бонусах, акциях и новых продуктах
+                  </label>
+               }
                widthInput={19}
                heightInput={19}
                variant={InputVariant.INPUT_CHECKBOX}

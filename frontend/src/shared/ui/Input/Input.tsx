@@ -5,12 +5,13 @@ import React, {
    useEffect,
    useRef,
    useState,
+   ReactNode,
 } from 'react';
 import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Input.module.scss';
 import { HStack, VStack } from '../Stack';
-import { FontColor } from '../Text';
+import { FontColor, FontSize, FontWeight, Text } from '../Text';
 import { FlexAlign, FlexJustify } from '../Stack/Flex';
 import { Button } from '../Button';
 import checkmark from '@/shared/assets/icons/Checkmark.svg';
@@ -39,7 +40,7 @@ const inputVariantClasses: Record<InputVariant, string> = {
 };
 
 interface InputProps extends InputTypeProps {
-   classNameForLabel?: string;
+   classNameInputWithLabel?: string;
    classNameButtons?: string;
    className?: string;
    // размеры -----------------------
@@ -49,9 +50,12 @@ interface InputProps extends InputTypeProps {
    // вариант исполнения -------------
    withoutButtons?: boolean;
    withoutButtonRight?: boolean;
-   labelLeft?: string;
+   labelLeft?: ReactNode;
    labelTop?: string;
-   labelRight?: string;
+   labelRight?: ReactNode;
+   fontLabelWeight?: FontWeight;
+   fontLabelColor?: FontColor;
+   fontLabelSize?: FontSize;
    variant?: InputVariant; // стиль инпута
 
    saveValue?: (name: string, value: string) => Promise<boolean>;
@@ -69,17 +73,20 @@ interface InputProps extends InputTypeProps {
    onChange?: (value: string) => void;
    // чекбокс -------------------
    checked?: boolean;
-   onClickCheckbox?: () => void;
+   onClickCheckbox?: (value: string) => void;
 }
 
 export const Input = memo((props: InputProps) => {
    const {
       className,
-      classNameForLabel,
+      classNameInputWithLabel,
       classNameButtons,
       labelLeft,
       labelTop,
       labelRight,
+      fontLabelWeight,
+      fontLabelColor,
+      fontLabelSize,
       readonly,
       variant = InputVariant.INPUT_OUTLINE,
       value,
@@ -288,7 +295,7 @@ export const Input = memo((props: InputProps) => {
                type={type}
                pattern={pattern}
                name={name}
-               // checked={checked} падает ошибка неконтролируемый инпут (checked реализую по-другому)
+               //  checked - реализую в компонентах из-за обёртки div
                placeholder={placeholder}
                onChange={onChangeHandler}
                onFocus={onFocus}
@@ -297,7 +304,6 @@ export const Input = memo((props: InputProps) => {
             />
             {!withoutButtons && !checkboxButtonsType && !code && (
                <Button
-                  // style={{ right: `${20}px` }}
                   className={classNames(cls.inputEdit, modsInput, [
                      classNameButtons,
                   ])}
@@ -327,12 +333,10 @@ export const Input = memo((props: InputProps) => {
    if (labelLeft) {
       return (
          <HStack
-            className={classNames('', {}, [classNameForLabel])}
+            className={classNames('', {}, [classNameInputWithLabel])}
             justify={FlexJustify.BETWEEN}
          >
-            <label htmlFor={name} className={cls.text}>
-               {labelLeft}
-            </label>
+            {labelLeft}
             {input}
          </HStack>
       );
@@ -344,15 +348,13 @@ export const Input = memo((props: InputProps) => {
             className={classNames(
                '',
                { [cls.switchCursor]: checkboxButtonsType },
-               [classNameForLabel],
+               [classNameInputWithLabel],
             )}
             justify={FlexJustify.START}
-            onClick={onClickCheckbox}
+            onClick={() => onClickCheckbox && onClickCheckbox(value || '')}
          >
             {input}
-            <label htmlFor={name} className={cls.text}>
-               {labelRight}
-            </label>
+            {labelRight}
          </HStack>
       );
    }
@@ -360,13 +362,18 @@ export const Input = memo((props: InputProps) => {
    if (labelTop) {
       return (
          <VStack
-            className={classNames('', {}, [classNameForLabel])}
+            className={classNames('', {}, [classNameInputWithLabel])}
             align={FlexAlign.START}
             justify={FlexJustify.BETWEEN}
          >
-            <label htmlFor={name} className={cls.text}>
+            <Text
+               fontColor={fontLabelColor}
+               fontSize={fontLabelSize}
+               fontWeight={fontLabelWeight}
+               className={cls.text}
+            >
                {labelTop}
-            </label>
+            </Text>
             {input}
          </VStack>
       );

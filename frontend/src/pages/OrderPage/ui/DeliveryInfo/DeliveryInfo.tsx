@@ -9,6 +9,7 @@ import { getUserName, getUserPhone, updateUserData } from '@/entities/User';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { EditAddress } from '../EditAddress/EditAddress';
 import { AuthByPhone } from '@/features/AuthByPhone';
+import { FontColor, FontSize, Text } from '@/shared/ui/Text';
 
 interface DeliveryInfoProps {
    className?: string;
@@ -49,8 +50,15 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
             widthInput={539}
             heightInput={48}
             name='name'
-            labelLeft='Имя'
-            classNameForLabel={cls.inputContainer}
+            labelLeft={
+               <Text
+                  fontSize={FontSize.SIZE_16}
+                  fontColor={FontColor.TEXT_PRIMARY}
+               >
+                  Имя
+               </Text>
+            }
+            classNameInputWithLabel={cls.inputContainer}
             classNameButtons={cls.inputButtons}
             placeholder={userName || 'Как к Вам обращаться?'}
             placeholderAsValue={Boolean(userName)}
@@ -65,8 +73,15 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
             widthInput={539}
             heightInput={48}
             name='phone'
-            labelLeft='Номер телефона'
-            classNameForLabel={cls.inputContainer}
+            labelLeft={
+               <Text
+                  fontSize={FontSize.SIZE_16}
+                  fontColor={FontColor.TEXT_PRIMARY}
+               >
+                  Номер телефона
+               </Text>
+            }
+            classNameInputWithLabel={cls.inputContainer}
             classNameButtons={cls.inputButtons}
             placeholder={String(userPhone) || '+7 (999) 999-99-99'}
             placeholderAsValue
@@ -82,10 +97,15 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
             widthInput={539}
             heightInput={48}
             name='delivery'
-            labelLeft='Время доставки'
-            classNameForLabel={classNames(cls.inputContainer, {}, [
-               cls.inputDelivery,
-            ])}
+            labelLeft={
+               <Text
+                  fontSize={FontSize.SIZE_16}
+                  fontColor={FontColor.TEXT_PRIMARY}
+               >
+                  Время доставки
+               </Text>
+            }
+            classNameInputWithLabel={cls.inputContainer}
             classNameButtons={cls.inputButtons}
             placeholder='Побыстрее'
             placeholderAsValue

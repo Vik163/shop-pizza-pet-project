@@ -122,7 +122,7 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
                justify={FlexJustify.BETWEEN}
             >
                <Input
-                  classNameForLabel={classNames(cls.confirmCodeInput, {}, [])}
+                  classNameInputWithLabel={cls.confirmCodeInput}
                   widthInput={114}
                   heightInput={48}
                   widthInputAndEditButtonRight={88}

@@ -111,7 +111,7 @@ export const PersonalData = memo((props: PersonalDataProps) => {
          </Text>
          <form className={cls.form}>
             <Input
-               classNameForLabel={cls.input}
+               classNameInputWithLabel={cls.input}
                labelTop='Имя'
                name='name'
                widthInput={350}
@@ -124,7 +124,7 @@ export const PersonalData = memo((props: PersonalDataProps) => {
                disabled
             />
             <Input
-               classNameForLabel={cls.input}
+               classNameInputWithLabel={cls.input}
                labelTop='Номер телефона'
                name='phone'
                type='number'
@@ -149,7 +149,7 @@ export const PersonalData = memo((props: PersonalDataProps) => {
                saveValue={saveValue}
             />
             <Input
-               classNameForLabel={cls.input}
+               classNameInputWithLabel={cls.input}
                name='email'
                labelTop='Электронная почта'
                placeholder={userEmail || 'Email'}
@@ -172,8 +172,13 @@ export const PersonalData = memo((props: PersonalDataProps) => {
             <Input
                type='checkbox'
                name='checkbox'
-               classNameForLabel={cls.checkbox}
-               labelRight='Сообщать о бонусах, акциях и новых продуктах'
+               id='bonus'
+               classNameInputWithLabel={cls.checkbox}
+               labelRight={
+                  <label htmlFor='bonus' className={cls.label}>
+                     Сообщать о бонусах, акциях и новых продуктах
+                  </label>
+               }
                widthInput={19}
                heightInput={19}
                variant={InputVariant.INPUT_CHECKBOX}
