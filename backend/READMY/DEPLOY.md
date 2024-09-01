@@ -6,4 +6,8 @@
    - привязать к github `clip < ~/.ssh/id_rsa.pub` - если надо.
    - добавляю на сервер `ssh-copy-id -i ~/.ssh/id_rsa.pub server_login@server_ip`
 3. Связываю сервер с github: `ssh-keygen`=>`cd .ssh/`=>`sudo nano ключ_pub`=>копирую и вставляю в github
-4. Установка на сервер (C:\Users\user\Desktop\Cправочные материалы\Деплой\14 Подготовка и деплой бэкенда.pdf): node, [mongo](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/), nginx,
+4. Создаю [нового пользователя](https://help.sweb.ru/nachal6naya-nastrojka-ubuntu-server-2204_1290.html) (шаг 2) vik:
+   - из root `adduser vik`=>password=>пропускаю доп. инфо=>`y`
+   - административные задачи от имени пользователя root через sudo `usermod -aG sudo vik`
+5. Обновление ПО: `sudo apt update`=>`sudo apt list --upgradable`=>`sudo apt upgrade`=>`sudo reboot`
+6. Установка на сервер (C:\Users\user\Desktop\Cправочные материалы\Деплой\14 Подготовка и деплой бэкенда.pdf): node, [mongo](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/), nginx,
