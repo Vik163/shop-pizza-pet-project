@@ -10,13 +10,15 @@
    - добавляю на сервер `ssh-copy-id -i ~/.ssh/id_rsa.pub server_login@server_ip`
 4. Связываю сервер с github: `ssh-keygen`=>`cd .ssh/`=>`sudo nano ключ_pub`=>копирую и вставляю в github
 5. Обновление ПО: `sudo apt update`=>`sudo apt list --upgradable`=>`sudo apt upgrade`=>`sudo reboot`
-6. Установка на сервер (C:\Users\user\Desktop\Cправочные материалы\Деплой\14 Подготовка и деплой бэкенда.pdf):
+6. Получение доменного имени (без него никак)
+7. Установка на сервер (C:\Users\user\Desktop\Cправочные материалы\Деплой\14 Подготовка и деплой бэкенда.pdf):
    - node,
    - [mongo](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/),
    - nginx,
      - конфигурация: содаем символическую ссылку между sites-available и sites-enabled (Для конфигурации по умолчанию (default) символическая ссылка уже создана)
      - переходим `cd /etc/nginx/sites-available` создаем файл конфиг `sudo touch имя_файла`
-     - переходим `cd ../sites-enabled` создаем ссылку `sudo ln -s /etc/nginx/sites-available/имя_файла имя_файла` проверяем ссылку
-     - проверяем конфигурацию `sudo nginx -t` и если успешно перезагружаем `sudo systemctl reload nginx`
+     - сразу выполняем `sudo ln -s /etc/nginx/sites-available/имя_файла /etc/nginx/sites-enabled/имя_файла` проверяем ссылку
+     - проверяем конфигурацию `sudo nginx -t` и если успешно перезагружаем `sudo systemctl restart nginx`
+     - устанавливаю SSL-сертификат (от Letsencrypt для тестов) (в nestjs свои сертификаты)
    - pm2
      - дополнительно пришлось поставить `sudo npm install -g bun` для запроса `pm2 start src/main.ts` из папки backend

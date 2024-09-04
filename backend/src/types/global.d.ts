@@ -14,6 +14,8 @@ declare global {
       REFRESH_SECRET: string;
       CSRF_SECRET: string;
       TIME_REFRESH: number;
+      SSL: string;
+      SSL_KEY_PATH: string;
     }
   }
 }
