@@ -21,4 +21,8 @@
      - проверяем конфигурацию `sudo nginx -t` и если успешно перезагружаем `sudo systemctl restart nginx`
      - устанавливаю SSL-сертификат (от Letsencrypt для тестов) (в nestjs свои сертификаты)
    - pm2
-     - дополнительно пришлось поставить `sudo npm install -g bun` для запроса `pm2 start src/main.ts` из папки backend
+     - (дополнительно пришлось поставить `sudo npm install -g bun`) - ?
+     - Захожу в папку с бекендом и собираю в production `npm run build`
+     - запускаю pm2 `pm2 start dist/src/main.js`
+8. Добавление баз данных
+   - вхожу в mongo `mongosh` с помощью [команд](https://www.forestadmin.com/blog/mongodb-cheat-sheet/) (есть шпаргалка js_guide) добавляю базы. Можно поставить compass, но он занимает много места вместе с ubuntu desktop.
