@@ -12,8 +12,8 @@ const MongoStore = require('connect-mongo');
 
 // https сертификаты --------------------------
 const httpsOptions = {
-  key: readFileSync('./security/pizzashop163.ru+4-key.pem'),
-  cert: readFileSync('./security/pizzashop163.ru+4.pem'),
+  key: readFileSync('../../nest_security/pizzashop163.ru+4-key.pem'),
+  cert: readFileSync('../../nest_security/pizzashop163.ru+4.pem'),
 };
 const option = ['https://pizzashop63.online, https://127.0.0.1:3000'];
 
