@@ -1,0 +1,5 @@
+/.fttemplates
+node_modules
+.idea
+/storybook-static
+.env
