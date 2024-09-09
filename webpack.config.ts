@@ -14,7 +14,7 @@ function getApiUrl(mode: BuildMode, apiUrl?: string) {
       return apiUrl;
    }
    if (mode === 'production') {
-      return '/api';
+      return 'https://pizzashop63.online/api';
    }
 
    return 'https://pizzashop163.ru/api';

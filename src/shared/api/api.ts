@@ -15,6 +15,10 @@ const { getCookie } = useCookie();
 // const baseURL = __IS_DEV__ ? 'http://localhost:8000' : 'адрес сервера'; - проще
 // правильнее apiUrl = env.apiUrl || 'http://localhost:8000' - webpack.config
 
+export const host = __IS_DEV__
+   ? process.env.HOST_API_DEV
+   : process.env.HOST_API_PROD;
+
 export const $api = axios.create({
    baseURL: __API__, // правильнее
    withCredentials: true,
@@ -35,7 +39,7 @@ $apiTokens.interceptors.request.use(async (config: IRequest) => {
       config.method === 'delete' ||
       config.method === 'patch'
    ) {
-      const csrf = await axios.get('https://pizzashop163.ru/api/csrf');
+      const csrf = await axios.get(`${host}/csrf`);
 
       const csrfToken: string = csrf.data;
       newConfig.headers['x-csrf-token'] = csrfToken;
@@ -52,9 +56,7 @@ $apiTokens.interceptors.request.use(async (config: IRequest) => {
 
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
 
-   const response = await axios.get(
-      `https://pizzashop163.ru/api/refresh/${userId}`,
-   );
+   const response = await axios.get(`${host}/refresh/${userId}`);
 
    if (!(response.status === 200))
       throw Error('Не обновлены токены безопасности');

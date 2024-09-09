@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useCookie } from '../lib/hooks/useCookie';
 import { StateSchema } from '@/app/providers/StoreProvider';
 import { LOCALSTORAGE_USER_KEY } from '../const/localstorage';
+import { host } from './api';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const { getCookie } = useCookie();
@@ -31,9 +32,7 @@ export const rtkApi = createApi({
 
          const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
 
-         const response = await axios.get(
-            `https://pizzashop163.ru/api/refresh/${userId}`,
-         );
+         const response = await axios.get(`${host}/refresh/${userId}`);
 
          if (!(response.status === 200))
             throw Error('Не обновлены токены безопасности');

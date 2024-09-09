@@ -51,5 +51,7 @@ declare namespace NodeJS {
       REACT_APP_DADATA_CLIENT_SECRE: string;
 
       WDS_SOCKET_PORT: string;
+      HOST_API_PROD: string;
+      HOST_API_DEV: string;
    }
 }

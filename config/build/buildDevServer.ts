@@ -5,7 +5,7 @@ export function buildDevServer(options: BuildOptions): DevServerConfiguration {
    return {
       https: true,
       host: '127.0.0.1', // you can change this ip with your ip
-      allowedHosts: ['pizzashop163.ru', 'www.pizzashop163.ru'], // nginx
+      allowedHosts: ['pizzashop63.online', 'www.pizzashop63.online', 'pizzashop163.ru', 'www.pizzashop163.ru'], // nginx
       port: options.port,
       // open: true, // Автоматически открывает в браузере приложение
       // Запросы через index page иначе при перезагрузке не на главной странице ошибка

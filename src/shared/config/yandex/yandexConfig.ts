@@ -1,5 +1,7 @@
 // import { uid } from 'uid';
 
+import { host } from '@/shared/api/api';
+
 // const state = uid(32);
 
 export const yandexIdConfig = {
@@ -8,5 +10,5 @@ export const yandexIdConfig = {
       response_type: 'token',
       // state,
    },
-   urlPage: 'https://pizzashop163.ru/',
+   urlPage: host,
 };

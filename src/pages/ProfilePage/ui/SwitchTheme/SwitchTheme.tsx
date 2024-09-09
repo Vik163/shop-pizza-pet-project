@@ -34,7 +34,7 @@ export const SwitchTheme = memo(() => {
             Цветовая тема
          </Text>
          <SwitchUI
-            htmlFor='theme'
+            variant='theme'
             labelLeft='тёмная'
             labelRight='светлая'
             fontSizeLabel={FontSize.SIZE_14}

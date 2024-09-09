@@ -1,4 +1,4 @@
-import { ChangeEvent, memo, useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 import cls from './SwitchUI.module.scss';
 import { Text, FontSize, FontWeight, FontColor } from '../Text';
@@ -6,7 +6,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 interface SwitchUIProps {
    className?: string;
-   htmlFor?: string;
+   variant: string;
    width: number;
    onToggle: (id: string) => void;
    labelLeft?: string;
@@ -23,7 +23,7 @@ export const SwitchUI = memo((props: SwitchUIProps) => {
       width,
       onToggle,
       isChecked,
-      htmlFor,
+      variant,
       className,
       fontSizeLabel,
       fontWeightLabel,
@@ -40,10 +40,6 @@ export const SwitchUI = memo((props: SwitchUIProps) => {
          switchRef.current.style.setProperty('--switch', `${width}px`);
    }, [width, switchRef]);
 
-   const onChangeModel = (e: ChangeEvent<HTMLInputElement>) => {
-      onToggle(e.target.id);
-   };
-
    return (
       <div className={classNames(cls.switchContainer, {}, [className])}>
          <Text
@@ -53,19 +49,24 @@ export const SwitchUI = memo((props: SwitchUIProps) => {
          >
             {labelLeft}
          </Text>
-         <div className={cls.Switch} ref={switchRef}>
-            <label htmlFor={htmlFor} {...otherProps} className={cls.label}>
+         <div
+            className={cls.Switch}
+            ref={switchRef}
+            onClick={() => onToggle(variant)}
+         >
+            <label htmlFor={variant} {...otherProps} className={cls.label}>
                <input
-                  id={htmlFor}
-                  name={htmlFor}
+                  id={variant}
+                  name={variant}
                   value={value}
-                  className={htmlFor === 'theme' ? cls.inputTheme : cls.input}
+                  className={variant === 'theme' ? cls.inputTheme : cls.input}
                   type='checkbox'
                   checked={isChecked}
-                  onChange={(e) => onChangeModel(e)}
+                  readOnly
+                  // onChange={(e) => onChangeModel(e)} с readOnly не надо
                />
                <span
-                  className={htmlFor === 'theme' ? cls.sliderTheme : cls.slider}
+                  className={variant === 'theme' ? cls.sliderTheme : cls.slider}
                ></span>
             </label>
          </div>

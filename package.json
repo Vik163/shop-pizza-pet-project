@@ -1,11 +1,13 @@
 {
    "name": "frontend-shop",
    "version": "1.0.0",
+   "homepage": "https://pizzashop63.online",
    "description": "",
    "main": "index.ts",
    "scripts": {
       "dev": "webpack serve --env port=3000",
-      "build": "webpack",
+      "build": "webpack --env mode=production",
+      "deploy": "npm run build && scp -r ./build/* vik@77.222.52.250:/home/vik/shop-pizza-pet-project/build",
       "server": "cd ../backend && nest start --watch",
       "dev:vite": "vite",
       "dev:server": "concurrently \"npm run server\" \"npm dev\"",

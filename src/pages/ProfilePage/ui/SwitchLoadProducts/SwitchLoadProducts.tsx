@@ -49,7 +49,7 @@ export const SwitchLoadProducts = memo(() => {
             Метод загрузки товаров
          </Text>
          <SwitchUI
-            htmlFor='load'
+            variant='load'
             labelLeft='прокрутка'
             labelRight='страницы'
             fontSizeLabel={FontSize.SIZE_14}

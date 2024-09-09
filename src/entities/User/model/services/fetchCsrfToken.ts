@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { host } from '@/shared/api/api';
 
 export const fetchCsrfToken = async (): Promise<string | undefined> => {
    try {
-      const token = await axios.get('https://pizzashop163.ru/api/csrf');
+      const token = await axios.get(`${host}/csrf`);
 
       const csrfToken: string = token.data;
 

@@ -21,6 +21,7 @@ import {
 } from '../../../model/selectors/authPhoneSelectors';
 import { usePhoneValidator } from '@/shared/lib/hooks/usePhoneValidator';
 import { firebaseApi } from '@/entities/User';
+import { host } from '@/shared/api/api';
 
 export const PhoneFormComponent = memo(() => {
    const dispatch = useAppDispatch();
@@ -76,7 +77,7 @@ export const PhoneFormComponent = memo(() => {
    // Отправляю лишний запрос для прокидывания токена и создания сессии ================
    // Переадресация через яндекс сессию не возвращает
    const onLoginYa = async () => {
-      await axios.get('https://pizzashop163.ru/api/yandex', {
+      await axios.get(`${host}/yandex`, {
          headers: { 'x-yandex-state': stateToken },
          withCredentials: true,
       });
