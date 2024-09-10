@@ -122,7 +122,7 @@ export const PhoneFormComponent = memo(() => {
                   <a
                      className={cls.yaButton}
                      aria-label='yandex'
-                     href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=https://pizzashop163.ru/api/yandex`}
+                     href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=${host}/yandex`}
                      onClick={onLoginYa}
                   >
                      <Icon src={yandexID} width={73} height={30} />
