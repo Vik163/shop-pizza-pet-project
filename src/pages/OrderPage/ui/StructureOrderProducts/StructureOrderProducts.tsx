@@ -33,7 +33,7 @@ export const StructureOrderProducts = memo(
                >
                   {basketProducts.map((item: BasketOneProduct) => (
                      <HStack
-                        key={item.product._id}
+                        key={item.id}
                         className={cls.container}
                         justify={FlexJustify.BETWEEN}
                      >

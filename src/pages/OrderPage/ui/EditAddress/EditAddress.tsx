@@ -16,6 +16,7 @@ export const EditAddress = memo(() => {
    const dispatch = useAppDispatch();
    const [openModal, setOpenModal] = useState(false);
    const deliveryInfo = useSelector(getDeliveryInfo);
+   console.log('deliveryInfo:', deliveryInfo);
 
    const title =
       deliveryInfo?.typeDelivery === 'Доставка' ? 'Дом' : 'Адрес пиццерии';
