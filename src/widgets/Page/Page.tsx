@@ -14,6 +14,7 @@ import cls from './Page.module.scss';
 import { useInfiniteScroll } from '@/shared/lib/hooks/useInfiniteScroll';
 import { getSaveScroll } from '@/features/ScrollSave';
 import { pathProducts } from '@/shared/const/product_const';
+import { ScrollTopPage } from '@/features/ScrollTopPage';
 
 export enum PageDirection {
    VIRTICAL = 'vertical',
@@ -111,7 +112,7 @@ export const Page = memo((props: PageProps) => {
       >
          {children}
          <div className={cls.trigger} ref={triggerRef} />
-         {/* <ScrollTopPage scrollValue={scrollValue} /> */}
+         <ScrollTopPage />
       </section>
    );
 });

@@ -6,14 +6,8 @@ import { Icon } from '@/shared/ui/Icon';
 import arrow from '../../shared/assets/icons/icon-arrow-top.svg';
 import { useTrottle } from '@/shared/lib/hooks/useTrottle';
 
-interface ScrollTopPageProps {
-   scrollValue?: number;
-}
-
-export const ScrollTopPage = memo((props: ScrollTopPageProps) => {
-   const { scrollValue } = props;
+export const ScrollTopPage = memo(() => {
    const [scroll, setScroll] = useState(0);
-   console.log('scroll:', scroll);
    const { pathname } = useLocation();
 
    const scrollTop = () => {

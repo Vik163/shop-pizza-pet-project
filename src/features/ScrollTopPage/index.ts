@@ -1,2 +1,1 @@
-// export { ScrollTopPage } from './ScrollTopPage';
-export {};
+export { ScrollTopPage } from './ScrollTopPage';
