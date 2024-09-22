@@ -32,6 +32,7 @@ export const AdditivesCard = memo((props: AdditivesCardProps) => {
 
    return (
       <Card
+         id={card._id}
          radius={CardRadius.RADIUS_12}
          className={classNames(cls.AdditivesCard, { [cls.active]: isActive }, [
             className,

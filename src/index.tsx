@@ -1,6 +1,4 @@
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-
 import App from './app/App';
 import '@/app/styles/index.scss';
 import { StoreProvider } from './app/providers/StoreProvider';
@@ -18,12 +16,12 @@ const root = createRoot(container);
 
 root.render(
    // <StrictMode>
-   <BrowserRouter>
-      <StoreProvider>
-         <ThemeProvider>
-            <App />
-         </ThemeProvider>
-      </StoreProvider>
-   </BrowserRouter>,
+   // <BrowserRouter>
+   <StoreProvider>
+      <ThemeProvider>
+         <App />
+      </ThemeProvider>
+   </StoreProvider>,
+   // </BrowserRouter>,
    // </StrictMode>,
 );

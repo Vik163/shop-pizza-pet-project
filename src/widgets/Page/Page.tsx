@@ -2,20 +2,18 @@ import {
    type ReactNode,
    memo,
    MutableRefObject,
-   useRef,
    useEffect,
-   SyntheticEvent,
+   useRef,
    useState,
 } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Page.module.scss';
 import { useInfiniteScroll } from '@/shared/lib/hooks/useInfiniteScroll';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { getSaveScroll, scrollSaveActions } from '@/features/ScrollSave';
-import { useTrottle } from '@/shared/lib/hooks/useTrottle';
+import { getSaveScroll } from '@/features/ScrollSave';
+import { pathProducts } from '@/shared/const/product_const';
 
 export enum PageDirection {
    VIRTICAL = 'vertical',
@@ -33,10 +31,8 @@ interface PageProps {
    children: ReactNode;
    direction?: PageDirection;
    align?: PageAlign;
-   saveScroll?: boolean;
    onScrollEnd?: () => void;
    scrollTriggerRef?: MutableRefObject<HTMLDivElement> | undefined;
-   hasScroll?: boolean;
    animationScroll?: boolean;
 }
 
@@ -50,16 +46,17 @@ export const Page = memo((props: PageProps) => {
       onScrollEnd,
       scrollTriggerRef,
       align = PageAlign.CENTER,
-      hasScroll = false,
       animationScroll = false,
-      saveScroll = false,
    } = props;
    const triggerRef = useRef() as MutableRefObject<HTMLDivElement>;
    const pageWithScrollRef = useRef() as MutableRefObject<HTMLDivElement>;
-   const dispatch = useAppDispatch();
    const { pathname } = useLocation();
-   const scroll = useSelector(getSaveScroll);
-   const [delayScroll, setDelayScroll] = useState<boolean>(false);
+   const [scrollData, setScrollData] = useState({
+      path: '',
+      position: 0,
+   });
+
+   const scrollCard = useSelector(getSaveScroll);
 
    useInfiniteScroll({
       pageWithScrollRef,
@@ -68,67 +65,53 @@ export const Page = memo((props: PageProps) => {
    });
 
    useEffect(() => {
-      if (!saveScroll)
-         window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
+      if ('scrollRestoration' in window.history) {
+         window.history.scrollRestoration = 'manual';
+      }
+   }, []);
+
+   const moveScroll = (pos: number) => {
+      window.scrollTo({
+         top: pos,
+         behavior: animationScroll ? 'smooth' : 'auto',
+      });
+   };
+
+   useEffect(() => {
+      if (!pathProducts.includes(pathname)) {
+         moveScroll(0);
+      } else if (scrollCard[pathname] && scrollCard[pathname].position) {
+         //* запоминает данные скрола  при переходе на другую страницу (для обновления компонента)
+         setScrollData({
+            path: scrollCard[pathname].path,
+            position: scrollCard[pathname].position,
          });
-
-      if (animationScroll) {
-         // с анимацией
-         const scrollWithoutPathname = pathname === '/' ? 0 : 600;
-
-         window.scrollTo({
-            top: scroll[pathname] ? scroll[pathname] : scrollWithoutPathname,
-            behavior: 'smooth',
-         });
-
-         setDelayScroll(false);
-         setTimeout(() => {
-            setDelayScroll(true);
-         }, 2000);
-      } else if (hasScroll && !animationScroll) {
-         // без анимации
-         pageWithScrollRef.current.scrollTop = scroll[pathname];
-      } else {
-         window.scrollY = scroll[pathname];
       }
    }, [pathname]);
 
-   const onScroll = useTrottle((e: SyntheticEvent<HTMLDivElement>) => {
-      dispatch(
-         scrollSaveActions.setScrollPosition({
-            position: hasScroll ? e.currentTarget.scrollTop : window.scrollY,
-            //
-            path: pathname,
-         }),
-      );
-   }, 500);
-
    useEffect(() => {
-      if (!hasScroll && delayScroll && saveScroll) {
-         window.addEventListener('scroll', onScroll);
-
-         return () => {
-            window.removeEventListener('scroll', onScroll);
-         };
+      if (pathProducts.includes(pathname)) {
+         if (scrollCard[pathname] && scrollCard[pathname].position) {
+            moveScroll(scrollData.position);
+         } else {
+            moveScroll(600);
+         }
       }
-   }, [delayScroll]);
+   }, [pathname, scrollData]);
 
    return (
       <section
          // ставится если нужен внутренный скролл в page
-         ref={hasScroll ? pageWithScrollRef : null}
          className={classNames(cls.Page, {}, [
             className,
             cls[direction],
             cls[align],
          ])}
          id={PAGE_ID}
-         onScroll={hasScroll && saveScroll ? onScroll : undefined}
       >
          {children}
          <div className={cls.trigger} ref={triggerRef} />
+         {/* <ScrollTopPage scrollValue={scrollValue} /> */}
       </section>
    );
 });

@@ -24,6 +24,8 @@ import {
    ButtonRadius,
    ButtonVariant,
 } from '@/shared/ui/Button';
+import { AppLink } from '@/shared/ui/AppLink';
+import { getRouteAbout } from '@/shared/const/router';
 
 interface FooterProps {
    className?: string;
@@ -40,7 +42,12 @@ export const Footer = memo((props: FooterProps) => {
       >
          <HStack className={cls.footerContainer} justify={FlexJustify.BETWEEN}>
             <VStack className={cls.sidesContainers} align={FlexAlign.START}>
-               <Icon src={Logo} width={80} height={60} />
+               <HStack max justify={FlexJustify.BETWEEN}>
+                  <Icon src={Logo} width={80} height={60} />
+                  <AppLink className={cls.aboutBtn} to={getRouteAbout()}>
+                     <span>О проекте</span>
+                  </AppLink>
+               </HStack>
                <HStack className={cls.infoLinks} wrap={FlexWrap.WPAP}>
                   <Text
                      fontSize={FontSize.SIZE_16}

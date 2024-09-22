@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ScrollSaveSchema } from '../types/scrollSaveSchema';
+import { ScrollSaveSchema, ScrollSchema } from '../types/scrollSaveSchema';
 
 const initialState: ScrollSaveSchema = {
    scroll: {},
@@ -10,11 +10,14 @@ export const scrollSaveSlice = createSlice({
    name: 'scrollSave',
    initialState,
    reducers: {
-      setScrollPosition: (
-         state,
-         { payload }: PayloadAction<{ path: string; position: number }>,
-      ) => {
-         state.scroll = { ...state.scroll, [payload.path]: payload.position };
+      setScrollPosition: (state, { payload }: PayloadAction<ScrollSchema>) => {
+         state.scroll = {
+            ...state.scroll,
+            [payload.path]: {
+               path: payload.path,
+               position: payload.position,
+            },
+         };
       },
    },
 });

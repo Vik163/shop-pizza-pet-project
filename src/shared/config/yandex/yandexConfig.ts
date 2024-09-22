@@ -1,14 +1,4 @@
-// import { uid } from 'uid';
+const appYaId = process.env.REACT_APP_YA_CLIENT_ID;
+const appYaIdServer = process.env.REACT_APP_YA_CLIENT_ID_SERVER;
 
-import { host } from '@/shared/api/api';
-
-// const state = uid(32);
-
-export const yandexIdConfig = {
-   options: {
-      client_id: process.env.REACT_APP_YA_CLIENT_ID,
-      response_type: 'token',
-      // state,
-   },
-   urlPage: host,
-};
+export const yaClientId = appYaIdServer || appYaId;

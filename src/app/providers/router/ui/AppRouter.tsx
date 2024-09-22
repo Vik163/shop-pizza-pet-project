@@ -1,20 +1,31 @@
-import { Suspense, memo, useCallback } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Suspense, memo } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { type AppRoutesProps } from '@/shared/types/router';
 import { routeConfig } from '../config/routeConfig';
 import { PageLoader } from '@/widgets/PageLoader';
+import { HomePage } from '@/pages/HomePage';
 
 const AppRouter = () => {
-   const renderWithWrapper = useCallback((route: AppRoutesProps) => {
+   const renderWithWrapper = (route: AppRoutesProps) => {
       // лоадер для подгружаемых файлов
       const element = (
          <Suspense fallback={<PageLoader />}>{route.element}</Suspense>
       );
 
-      return <Route key={route.path} path={route.path} element={element} />;
-   }, []);
+      return { path: route.path, element };
+   };
 
-   return <Routes>{Object.values(routeConfig).map(renderWithWrapper)}</Routes>;
+   const routes = [
+      {
+         path: '/',
+         element: <HomePage />,
+         children: Object.values(routeConfig).map(renderWithWrapper),
+      },
+   ];
+
+   const router = createBrowserRouter(routes);
+
+   return <RouterProvider router={router} />;
 };
 
 export default memo(AppRouter);

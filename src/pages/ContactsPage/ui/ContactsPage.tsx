@@ -21,10 +21,10 @@ export const ContactsPage = memo((props: ContactsPageProps) => {
    const { className } = props;
    const addresses = Object.keys(coordsStores);
 
-   window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-   });
+   // window.scrollTo({
+   //    top: 0,
+   //    behavior: 'smooth',
+   // });
 
    return (
       <Page

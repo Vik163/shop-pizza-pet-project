@@ -41,7 +41,6 @@ export const MainPage = memo((props: MainPageProps) => {
          scrollTriggerRef={scrollTriggerRef}
          className={classNames(cls.MainPage, {}, [className])}
          animationScroll
-         saveScroll={viewLoadProducts === 'scroll'}
       >
          <ActionCards />
          <NewProducts />

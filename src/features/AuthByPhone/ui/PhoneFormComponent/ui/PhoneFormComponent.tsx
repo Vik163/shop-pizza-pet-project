@@ -22,12 +22,13 @@ import {
 import { usePhoneValidator } from '@/shared/lib/hooks/usePhoneValidator';
 import { firebaseApi } from '@/entities/User';
 import { host } from '@/shared/api/api';
+import { yaClientId } from '@/shared/config/yandex/yandexConfig';
 
 export const PhoneFormComponent = memo(() => {
    const dispatch = useAppDispatch();
    const [errorValidate, setErrorValidate] = useState('');
    const authPhoneNumber = useSelector(getPhoneNumber);
-   const appYaId = process.env.REACT_APP_YA_CLIENT_ID;
+
    const stateToken = uid(32);
    const isConfirmCode = useSelector(getIsConfirmCode);
    const { checkValidate } = usePhoneValidator();
@@ -118,11 +119,11 @@ export const PhoneFormComponent = memo(() => {
                   value='+7'
                   fixedChangeValue={18}
                />
-               {appYaId && (
+               {yaClientId && (
                   <a
                      className={cls.yaButton}
                      aria-label='yandex'
-                     href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${appYaId}&state=${stateToken}&force_confirm=yes&redirect_uri=${host}/yandex`}
+                     href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${yaClientId}&state=${stateToken}&force_confirm=yes&redirect_uri=${host}/yandex`}
                      onClick={onLoginYa}
                   >
                      <Icon src={yandexID} width={73} height={30} />

@@ -5,6 +5,7 @@ export enum AppRoutes {
    DRINKS = 'drinks',
    SNACKS = 'snacks',
    ACTIONS = 'actions',
+   ABOUT = 'about',
    PROFILE = 'profile',
    CONTACTS = 'contacts',
    BASKET = 'basket',
@@ -20,6 +21,7 @@ export const RoutePath = {
    [AppRoutes.MAIN]: '/',
    [AppRoutes.CONTACTS]: '/contacts',
    [AppRoutes.ACTIONS]: '/actions',
+   [AppRoutes.ABOUT]: '/about',
    [AppRoutes.COMBOS]: '/combos',
    [AppRoutes.DRINKS]: '/drinks',
    [AppRoutes.PROFILE]: '/profile',
@@ -37,6 +39,7 @@ export const RoutePath = {
 export const getRouteMain = () => '/';
 export const getRouteContacts = () => '/contacts';
 export const getRouteActions = () => '/actions';
+export const getRouteAbout = () => '/about';
 export const getRouteProfile = (id: string) => `/profile/${id}`;
 export const getRouteYaLogin = () => '/ya_login';
 export const getRoutePizzas = () => '/pizzas';
@@ -55,6 +58,7 @@ export const AppRouteByPathPattern: Record<string, AppRoutes> = {
    [getRouteMain()]: AppRoutes.MAIN,
    [getRouteContacts()]: AppRoutes.CONTACTS,
    [getRouteActions()]: AppRoutes.ACTIONS,
+   [getRouteAbout()]: AppRoutes.ABOUT,
    [getRouteProfile(':id')]: AppRoutes.PROFILE,
    [getRoutePizzas()]: AppRoutes.PIZZAS,
    [getRouteSauces()]: AppRoutes.SAUCES,

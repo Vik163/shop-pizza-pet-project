@@ -18,7 +18,10 @@ export const ActionItem = memo((props: ActionItemProps) => {
    const { className, action } = props;
 
    return (
-      <Card className={classNames(cls.ActionItem, {}, [className])}>
+      <Card
+         id={action.title}
+         className={classNames(cls.ActionItem, {}, [className])}
+      >
          <img className={cls.image} src={action.image} alt={action.title} />
          <VStack className={cls.info} align={FlexAlign.START}>
             <Text fontSize={FontSize.SIZE_20} fontWeight={FontWeight.TEXT_700}>

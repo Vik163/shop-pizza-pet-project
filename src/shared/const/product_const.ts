@@ -6,6 +6,8 @@ export const nameViewProducts = {
    snacks: 'Закуски',
 };
 
+export const pathProducts = Object.keys(nameViewProducts).map((i) => `/${i}`);
+
 export enum ProductSortField {
    VIEWS = 'views',
    TITLE = 'title',

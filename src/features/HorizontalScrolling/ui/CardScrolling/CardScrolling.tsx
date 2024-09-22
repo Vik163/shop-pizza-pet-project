@@ -48,6 +48,7 @@ export const CardScrolling = memo((props: CardScrollingProps) => {
 
    return (
       <Card
+         id={card._id}
          horizontal={horizontalCard}
          className={classNames(cls.CardScrolling, {}, additionalClass)}
          onMouseDown={onDown}

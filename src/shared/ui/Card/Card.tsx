@@ -16,6 +16,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
    radius?: CardRadius;
    justify?: FlexJustify;
    horizontal?: boolean;
+   id: string;
 }
 
 export const Card = memo((props: CardProps) => {
@@ -25,6 +26,7 @@ export const Card = memo((props: CardProps) => {
       horizontal,
       justify = FlexJustify.BETWEEN,
       radius = CardRadius.RADIUS_14,
+      id,
       ...otherProps
    } = props;
 
@@ -38,6 +40,7 @@ export const Card = memo((props: CardProps) => {
       </HStack>
    ) : (
       <VStack
+         id={id}
          className={classNames(cls.Card, {}, [className, cls[radius]])}
          justify={justify}
          {...otherProps}

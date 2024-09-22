@@ -132,7 +132,10 @@ const MainPageProducts = forwardRef(
       // Бесконечный скролл =======================================
       const onLoadNextPart = () => {
          if (scroll[viewProduct]) {
-            if (hasMoreProducts && window.scrollY > scroll[viewProduct])
+            if (
+               hasMoreProducts &&
+               window.scrollY > scroll[viewProduct].position
+            )
                dispatch(
                   fetchViewProducts({
                      page: page + 1,

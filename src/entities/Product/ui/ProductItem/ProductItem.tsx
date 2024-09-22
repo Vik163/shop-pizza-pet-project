@@ -39,6 +39,7 @@ export const ProductItem = memo((props: ProductItemProps) => {
 
    return (
       <Card
+         id={card._id}
          key={card.title}
          className={cls.card}
          radius={CardRadius.RADIUS_14}

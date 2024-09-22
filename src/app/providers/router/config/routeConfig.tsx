@@ -1,3 +1,4 @@
+import { AboutProjectPage } from '@/pages/AboutProjectPage';
 import { ActionsPage } from '@/pages/ActionsPage';
 import { BasketPage } from '@/pages/BasketPage';
 import { ContactsPage } from '@/pages/ContactsPage';
@@ -9,7 +10,6 @@ import {
    AppRoutes,
    getRouteActions,
    getRouteContacts,
-   getRouteMain,
    getRouteNotFound,
    getRouteProfile,
    getRouteCombos,
@@ -19,6 +19,8 @@ import {
    getRouteSnacks,
    getRouteBasket,
    getRouteOrder,
+   getRouteAbout,
+   getRouteMain,
 } from '@/shared/const/router';
 import { type AppRoutesProps } from '@/shared/types/router';
 
@@ -50,6 +52,10 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
    [AppRoutes.ACTIONS]: {
       path: getRouteActions(),
       element: <ActionsPage />,
+   },
+   [AppRoutes.ABOUT]: {
+      path: getRouteAbout(),
+      element: <AboutProjectPage />,
    },
    [AppRoutes.CONTACTS]: {
       path: getRouteContacts(),

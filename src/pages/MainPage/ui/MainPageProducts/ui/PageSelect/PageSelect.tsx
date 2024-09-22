@@ -68,10 +68,6 @@ export const PageSelect = memo((props: PageSelectProps) => {
                setNumPage(page - (buttons - 3));
             }
          }
-         window.scrollTo({
-            top: 600,
-            behavior: 'smooth',
-         });
       });
    };
 

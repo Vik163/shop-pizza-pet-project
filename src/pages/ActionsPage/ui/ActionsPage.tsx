@@ -12,10 +12,10 @@ export const ActionsPage = memo(() => {
    const dispatch = useAppDispatch();
    const actions = useSelector(getActions);
 
-   window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-   });
+   // window.scrollTo({
+   //    top: 0,
+   //    behavior: 'smooth',
+   // });
 
    useEffect(() => {
       if (!actions?.length) dispatch(fetchActions());
