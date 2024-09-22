@@ -1,6 +1,7 @@
 import { memo } from 'react';
 
 import VisibilitySensor from 'react-visibility-sensor';
+import { useSelector } from 'react-redux';
 import cls from './ProductsList.module.scss';
 import { HStack } from '@/shared/ui/Stack';
 import { FlexWrap } from '@/shared/ui/Stack/Flex';
@@ -11,6 +12,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { scrollSaveActions } from '@/features/ScrollSave';
 import { pathProducts } from '@/shared/const/product_const';
+import { getUserSettings } from '@/entities/User';
 
 interface ProductsListProps {
    products?: Product[];
@@ -22,6 +24,7 @@ interface ProductsListProps {
 export const ProductsList = memo((props: ProductsListProps) => {
    const { products, isLoading, skeletonElements, onModal } = props;
    const dispatch = useAppDispatch();
+   const { viewLoadProducts } = useSelector(getUserSettings);
 
    const getSkeleton = () => {
       return new Array(skeletonElements).fill(0).map((item, index) => (
@@ -51,7 +54,10 @@ export const ProductsList = memo((props: ProductsListProps) => {
                      key={card._id}
                      scrollCheck
                      scrollThrottle={1}
-                     onChange={visibilityChange(card.type, index)}
+                     onChange={
+                        viewLoadProducts === 'scroll' &&
+                        visibilityChange(card.type, index)
+                     }
                   >
                      <ProductItem
                         key={card.title}

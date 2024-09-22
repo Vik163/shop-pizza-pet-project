@@ -15,6 +15,7 @@ import { useInfiniteScroll } from '@/shared/lib/hooks/useInfiniteScroll';
 import { getSaveScroll } from '@/features/ScrollSave';
 import { pathProducts } from '@/shared/const/product_const';
 import { ScrollTopPage } from '@/features/ScrollTopPage';
+import { getUserSettings } from '@/entities/User';
 
 export enum PageDirection {
    VIRTICAL = 'vertical',
@@ -52,6 +53,8 @@ export const Page = memo((props: PageProps) => {
    const triggerRef = useRef() as MutableRefObject<HTMLDivElement>;
    const pageWithScrollRef = useRef() as MutableRefObject<HTMLDivElement>;
    const { pathname } = useLocation();
+   const { viewLoadProducts } = useSelector(getUserSettings);
+   const positionTopProducts = 600;
    const [scrollData, setScrollData] = useState({
       path: '',
       position: 0,
@@ -79,9 +82,20 @@ export const Page = memo((props: PageProps) => {
    };
 
    useEffect(() => {
+      if (viewLoadProducts === 'pages') {
+         setScrollData({
+            path: '',
+            position: positionTopProducts,
+         });
+      }
+
       if (!pathProducts.includes(pathname)) {
          moveScroll(0);
-      } else if (scrollCard[pathname] && scrollCard[pathname].position) {
+      } else if (
+         viewLoadProducts === 'scroll' &&
+         scrollCard[pathname] &&
+         scrollCard[pathname].position
+      ) {
          //* запоминает данные скрола  при переходе на другую страницу (для обновления компонента)
          setScrollData({
             path: scrollCard[pathname].path,
@@ -95,7 +109,7 @@ export const Page = memo((props: PageProps) => {
          if (scrollCard[pathname] && scrollCard[pathname].position) {
             moveScroll(scrollData.position);
          } else {
-            moveScroll(600);
+            moveScroll(positionTopProducts);
          }
       }
    }, [pathname, scrollData]);
