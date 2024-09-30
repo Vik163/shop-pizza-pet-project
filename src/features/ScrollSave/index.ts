@@ -6,4 +6,5 @@ export {
 export {
    // getSaveScrollByPath,
    getSaveScroll,
+   getSaveScrollDirection,
 } from './model/selectors/scrollSaveSelector';

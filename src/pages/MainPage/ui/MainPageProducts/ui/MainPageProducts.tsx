@@ -5,6 +5,7 @@ import {
    useEffect,
    useImperativeHandle,
    useRef,
+   useState,
 } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -12,11 +13,11 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './MainPageProducts.module.scss';
 import {
+   PaginateData,
+   ProductView,
    ViewProducts,
    getEntityProducts,
    getIsLoadingProducts,
-   getPageHasMore,
-   getPageProductsNum,
    getViewProducts,
    type Product,
 } from '@/entities/Product';
@@ -32,9 +33,9 @@ import { fetchViewProducts } from '../../../../../entities/Product/model/service
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
 import { mainPageActions } from '../../../model/slices/mainPageSlice';
-import { ProductsList } from '@/entities/Product';
+import { ProductsList, getPaginateData } from '@/entities/Product';
 import { paginateElements } from '@/shared/const/paginate_elements';
-import { getSaveScroll } from '@/features/ScrollSave';
+import { getSaveScroll, getSaveScrollDirection } from '@/features/ScrollSave';
 import { getCards } from '../../../model/selectors/productsSelector';
 
 import { nameViewProducts } from '@/shared/const/product_const';
@@ -58,23 +59,46 @@ const MainPageProducts = forwardRef(
 
       const dispatch = useAppDispatch();
       const { pathname } = useLocation();
-      // const [productInfo, setProductInfo] = useState<Product>();
-      // const [isOpenModal, setIsOpenModal] = useState(false);
       const products: Product[] = useSelector(getEntityProducts.selectAll);
       const cards = useSelector(getCards);
       const isLoading = useSelector(getIsLoadingProducts);
       const refProducts = useRef<HTMLDivElement>(null);
       const { onChangeViewProducts } = useProductsFilters();
       const scroll = useSelector(getSaveScroll);
-      const viewProduct = useSelector(getViewProducts);
-      const page = useSelector(getPageProductsNum);
-      const hasMoreProducts = useSelector(getPageHasMore);
+      const viewProduct = useSelector(getViewProducts) as ProductView;
+      const paginate = useSelector(getPaginateData);
       const { viewLoadProducts } = useSelector(getUserSettings);
+      const scrollDirection = useSelector(getSaveScrollDirection);
+      const [paginateData, setPaginateData] = useState<PaginateData>();
+      // console.log('paginateData:', paginateData);
+
+      const productsFromPageLoud = (arr: Product[]) => {
+         if (paginateData)
+            return arr.filter(
+               (item, index) =>
+                  index >= (paginateData.page - 1) * paginateElements &&
+                  index < paginateData.page * paginateElements &&
+                  item,
+            );
+      };
 
       // Преобразуем путь (убираем слеш) ====================
       const checkViewProductFromPath = () => {
          const path = pathname.slice(1) as keyof ViewProducts;
          if (path && nameViewProducts[path]) return path;
+      };
+
+      // Для старта если в cards есть данные
+      // для определения номера страницы. paginateData не успевает. Если добавить ее в зависимость, то бесконечный запрос
+      const getNumPage = () => {
+         const currentNum = cards[viewProduct]?.length;
+
+         const numPages =
+            currentNum &&
+            currentNum >= paginateElements &&
+            currentNum / paginateElements;
+
+         return numPages;
       };
 
       useEffect(() => {
@@ -86,27 +110,29 @@ const MainPageProducts = forwardRef(
       // Запрос при переключении вида загрузки и сброс стейта
       useEffect(() => {
          dispatch(mainPageActions.setProducts({}));
-         dispatch(
-            fetchViewProducts({
-               page: 1,
-               // меняет, а не добавляет
-               replace: pathname,
-            }),
-         );
       }, [viewLoadProducts]);
 
       // Сбор данных в стейт =========================
       useEffect(() => {
-         if (products.length) {
-            if (viewProduct === products[0].type) {
-               if (viewLoadProducts === 'scroll') {
+         if (products.length && viewProduct === products[0].type) {
+            if (viewLoadProducts === 'scroll') {
+               dispatch(
+                  mainPageActions.setProducts({
+                     ...cards,
+                     [viewProduct as string]: products,
+                  }),
+               );
+            } else if (viewLoadProducts === 'pages') {
+               // при переходе на выбор страниц отрисовывает элементы, на которых остановилась прокрутка (при бесконечном скролле)
+               // выбирает из массива нужные
+               if (products.length > paginateElements) {
                   dispatch(
                      mainPageActions.setProducts({
-                        ...cards,
-                        [viewProduct as string]: products,
+                        [viewProduct as string]: productsFromPageLoud(products),
                      }),
                   );
                } else {
+                  // обычная отрисовка
                   dispatch(
                      mainPageActions.setProducts({
                         [viewProduct as string]: products,
@@ -115,38 +141,73 @@ const MainPageProducts = forwardRef(
                }
             }
          }
-      }, [products]);
+      }, [products, viewLoadProducts, viewProduct]);
 
       // первоначальный запрос при изменении страницы если нет данных в стейте
       useEffect(() => {
          if (!cards[viewProduct]) {
-            dispatch(
-               fetchViewProducts({
-                  page: 1,
-                  replace: viewProduct || '',
-               }),
-            );
+            // разбиваю на два, чтобы не было второго запроса
+            if (viewProduct === pathname.slice(1)) {
+               dispatch(
+                  fetchViewProducts({
+                     page: 1,
+                     replace: viewProduct,
+                  }),
+               );
+            } else if (pathname === '/') {
+               dispatch(
+                  fetchViewProducts({
+                     page: 1,
+                     replace: 'pizzas',
+                  }),
+               );
+            }
+         } else {
+            // Понадобился из-за бага. При загрузке стартовой страницы в cards-pizzas записываются карточки. Не скроля эту страницу
+            // перехожу на другую и т ам скролю. Возвращаюсь на pizzas - бесконечный скролл не работает. Причина createEntityAdapter
+            // в productsSlice (addMany добавляет в конец, setAll перезатирает) пришлось добавить в запросе replace то,чтобы отработал setAll
+            // иначе добавлялись разных видов карты
+            const page = getNumPage();
+            if (page && page === 1)
+               dispatch(
+                  fetchViewProducts({
+                     page: 1,
+                     replace: viewProduct,
+                  }),
+               );
          }
-      }, [viewProduct, cards]);
+      }, [viewProduct, viewLoadProducts]);
+
+      useEffect(() => {
+         if (viewProduct) setPaginateData(paginate[viewProduct]);
+      }, [viewProduct, viewLoadProducts, paginate]);
 
       // Бесконечный скролл =======================================
       const onLoadNextPart = () => {
-         if (scroll[viewProduct]) {
-            if (
-               hasMoreProducts &&
-               window.scrollY > scroll[viewProduct].position
-            )
-               dispatch(
-                  fetchViewProducts({
-                     page: page + 1,
-                  }),
-               );
-         } else if (hasMoreProducts)
-            dispatch(
-               fetchViewProducts({
-                  page: page + 1,
-               }),
-            );
+         if (paginateData) {
+            if (scrollDirection === 'down') {
+               if (scroll[viewProduct]) {
+                  if (
+                     paginateData.hasMore &&
+                     window.scrollY > scroll[viewProduct].position
+                  ) {
+                     dispatch(
+                        fetchViewProducts({
+                           page: paginateData.page + 1,
+                        }),
+                     );
+                  }
+               }
+               //
+               else if (paginateData.hasMore) {
+                  dispatch(
+                     fetchViewProducts({
+                        page: paginateData.page + 1,
+                     }),
+                  );
+               }
+            }
+         }
       };
 
       useImperativeHandle(ref, () => ({
@@ -188,7 +249,9 @@ const MainPageProducts = forwardRef(
                skeletonElements={paginateElements}
                onModal={openModal}
             />
-            {viewLoadProducts === 'pages' && <PageSelect />}
+            {viewLoadProducts === 'pages' && paginateData && (
+               <PageSelect paginateData={paginateData} />
+            )}
             <ModalOrderProduct ref={childRef} onCloseModal={onCloseModal} />
          </div>
       );

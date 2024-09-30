@@ -6,9 +6,9 @@ export type {
    ProductView,
 } from './model/types/product';
 export type {
-   PaginateSchema,
    ProductSchema,
    ViewProducts,
+   PaginateData,
 } from './model/types/productSchema';
 
 export { ProductItem } from './ui/ProductItem/ProductItem';
@@ -22,10 +22,8 @@ export {
 export {
    getIsLoadingProducts,
    getLimitProducts,
-   getPageHasMore,
-   getPageProductsNum,
-   getTotalProducts,
    getViewProducts,
+   getPaginateData,
 } from './model/selectors/productSelector';
 export { fetchViewProducts } from './model/services/fetchViewProducts';
 export { ProductSortField } from '../../shared/const/product_const';

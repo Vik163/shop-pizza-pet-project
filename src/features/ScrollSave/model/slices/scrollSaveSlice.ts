@@ -3,6 +3,7 @@ import { ScrollSaveSchema, ScrollSchema } from '../types/scrollSaveSchema';
 
 const initialState: ScrollSaveSchema = {
    scroll: {},
+   direction: '',
 };
 
 // 9_2
@@ -18,6 +19,9 @@ export const scrollSaveSlice = createSlice({
                position: payload.position,
             },
          };
+      },
+      setScrollDirection: (state, { payload }: PayloadAction<string>) => {
+         state.direction = payload;
       },
    },
 });

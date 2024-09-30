@@ -6,7 +6,7 @@ import {
    getLimitProducts,
    getViewProducts,
 } from '../selectors/productSelector';
-import { PaginateSchema } from '../types/productSchema';
+import { ProductSchema } from '../types/productSchema';
 
 interface FetchViewProductsProps {
    page?: number;
@@ -14,7 +14,7 @@ interface FetchViewProductsProps {
 }
 
 export const fetchViewProducts = createAsyncThunk<
-   PaginateSchema,
+   ProductSchema,
    FetchViewProductsProps,
    ThunkConfig<string>
 >('mainPageProducts/fetchFetchViewProducts', async (props, thunkApi) => {
@@ -27,7 +27,7 @@ export const fetchViewProducts = createAsyncThunk<
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
 
    try {
-      const response = await extra.api.get<PaginateSchema>('/products', {
+      const response = await extra.api.get<ProductSchema>('/products', {
          params: {
             _expand: userId || 'user',
             view,

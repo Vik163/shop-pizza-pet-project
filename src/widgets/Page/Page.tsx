@@ -12,10 +12,12 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Page.module.scss';
 import { useInfiniteScroll } from '@/shared/lib/hooks/useInfiniteScroll';
-import { getSaveScroll } from '@/features/ScrollSave';
+import { getSaveScroll, scrollSaveActions } from '@/features/ScrollSave';
 import { pathProducts } from '@/shared/const/product_const';
 import { ScrollTopPage } from '@/features/ScrollTopPage';
 import { getUserSettings } from '@/entities/User';
+import { useTrottle } from '@/shared/lib/hooks/useTrottle';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
 export enum PageDirection {
    VIRTICAL = 'vertical',
@@ -53,13 +55,15 @@ export const Page = memo((props: PageProps) => {
    const triggerRef = useRef() as MutableRefObject<HTMLDivElement>;
    const pageWithScrollRef = useRef() as MutableRefObject<HTMLDivElement>;
    const { pathname } = useLocation();
+   const dispatch = useAppDispatch();
    const { viewLoadProducts } = useSelector(getUserSettings);
    const positionTopProducts = 600;
+   const [scrollPosition, setScrollPosition] = useState(0);
    const [scrollData, setScrollData] = useState({
       path: '',
       position: 0,
    });
-
+   let lastScrollTop = 0;
    const scrollCard = useSelector(getSaveScroll);
 
    useInfiniteScroll({
@@ -68,12 +72,33 @@ export const Page = memo((props: PageProps) => {
       callback: onScrollEnd,
    });
 
+   // Направление скролла и его положение
+   const onScroll = useTrottle(() => {
+      setScrollPosition(window.pageYOffset);
+
+      const st = window.pageYOffset;
+      if (st < lastScrollTop) {
+         dispatch(scrollSaveActions.setScrollDirection('up'));
+      } else if (st > lastScrollTop) {
+         dispatch(scrollSaveActions.setScrollDirection('down'));
+      }
+
+      lastScrollTop = st;
+   }, 200);
+
+   useEffect(() => {
+      document.addEventListener('scroll', onScroll);
+
+      return () => document.removeEventListener('scroll', onScroll);
+   }, []);
+
    useEffect(() => {
       if ('scrollRestoration' in window.history) {
          window.history.scrollRestoration = 'manual';
       }
    }, []);
 
+   // Еще один scrollTo в файле PageSelect, прокручивает при выборе следующих элементов
    const moveScroll = (pos: number) => {
       window.scrollTo({
          top: pos,
@@ -125,8 +150,8 @@ export const Page = memo((props: PageProps) => {
          id={PAGE_ID}
       >
          {children}
+         <ScrollTopPage scrollPosition={scrollPosition} />
          <div className={cls.trigger} ref={triggerRef} />
-         <ScrollTopPage />
       </section>
    );
 });

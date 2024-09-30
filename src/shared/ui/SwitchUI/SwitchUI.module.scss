@@ -10,6 +10,7 @@
    position: relative;
    min-width: var(--switch);
    min-height: calc(var(--switch) / 2.8);
+   cursor: pointer;
 }
 
 .label {
@@ -19,7 +20,6 @@
    background-color: var(--color-grey-blue-dark);
    border: 1px solid var(--color-grey-blue-dark);
    border-radius: 50px;
-   cursor: pointer;
 }
 
 .slider,

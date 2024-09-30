@@ -1,10 +1,4 @@
-export type ProductView =
-   | 'pizzas'
-   | 'combos'
-   | 'drinks'
-   | 'sauces'
-   | 'snacks'
-   | '';
+export type ProductView = 'pizzas' | 'combos' | 'drinks' | 'sauces' | 'snacks';
 
 export interface Ingredients {
    caloricValue: number;

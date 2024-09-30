@@ -7,28 +7,26 @@ import cls from './PageSelect.module.scss';
 import { Button } from '@/shared/ui/Button';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { fetchViewProducts } from '../../../../../../entities/Product/model/services/fetchViewProducts';
-import {
-   getLimitProducts,
-   getPageProductsNum,
-   getTotalProducts,
-} from '@/entities/Product';
+import { getLimitProducts, PaginateData } from '@/entities/Product';
 
 interface PageSelectProps {
    className?: string;
    countButtons?: number;
+   paginateData: PaginateData;
 }
 
 export const PageSelect = memo((props: PageSelectProps) => {
-   const { className, countButtons = 5 } = props;
+   const { className, countButtons = 5, paginateData } = props;
    const { pathname } = useLocation();
    const dispatch = useAppDispatch();
    const [numPage, setNumPage] = useState(1);
-   const pageProducts = useSelector(getPageProductsNum);
-   const totalProducts = useSelector(getTotalProducts);
+   console.log('numPage:', numPage);
    const limitProducts = useSelector(getLimitProducts);
+   const { page, totalItems } = paginateData;
+   console.log('page:', page);
 
    // определяем количество полученных страниц и количество видимых кнопок
-   const pages = Math.ceil(totalProducts / limitProducts);
+   const pages = Math.ceil(totalItems / limitProducts);
    const buttons = pages < countButtons ? pages : countButtons;
 
    // массив для отрисовки кнопок (зависит от количества кнопок и выбранной страницы)
@@ -43,6 +41,7 @@ export const PageSelect = memo((props: PageSelectProps) => {
    };
 
    const arrPages = initialArr();
+   console.log('arrPages:', arrPages);
 
    // При обновлении страницы возвращает первоначальную нумерацию
    useEffect(() => {
@@ -50,22 +49,28 @@ export const PageSelect = memo((props: PageSelectProps) => {
    }, [pathname]);
 
    // После запроса устанавливает нужную нумерацию и переводит скролл
-   const clickPage = (page: number) => {
+   const clickPage = (pageProducts: number) => {
+      console.log('pageProducts:', pageProducts);
+
       dispatch(
          fetchViewProducts({
-            page,
-            replace: pathname,
+            page: pageProducts,
+            replace: pathname.slice(1),
          }),
       ).then((data) => {
          if (data.payload) {
-            if (page < 3) {
+            window.scrollTo({
+               top: 600,
+               behavior: 'smooth',
+            });
+            if (pageProducts < 3) {
                setNumPage(1);
-            } else if (page === pages) {
-               setNumPage(page - (buttons - 1));
-            } else if (page === pages - 1) {
-               setNumPage(page - (buttons - 2));
+            } else if (pageProducts === pages) {
+               setNumPage(pageProducts - (buttons - 1));
+            } else if (pageProducts === pages - 1) {
+               setNumPage(pageProducts - (buttons - 2));
             } else {
-               setNumPage(page - (buttons - 3));
+               setNumPage(pageProducts - (buttons - 3));
             }
          }
       });
@@ -105,7 +110,7 @@ export const PageSelect = memo((props: PageSelectProps) => {
                   key={item}
                   className={classNames(
                      cls.page,
-                     { [cls.active]: item === pageProducts },
+                     { [cls.active]: item === page },
                      [],
                   )}
                   onClick={() => clickPage(item)}
