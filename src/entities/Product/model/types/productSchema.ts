@@ -7,43 +7,31 @@ export type ViewProducts = {
 
 export interface PaginateData {
    totalItems: number;
-
-   // pagination
    page: number;
    hasMore: boolean;
-
-   // фильтры 9_3
    view: string;
 }
 
-export type PaginateProduct = Record<string, PaginateData>;
+export interface SavePageData {
+   page: number;
+   view: string;
+}
+
+export interface ScrollSchema {
+   path: string;
+   position: number;
+}
 
 export interface ProductSchema extends EntityState<Product> {
    isLoadingProducts?: boolean;
    error?: string;
    replace?: string;
-   totalItems: number;
    items: Product[];
    view: string;
+   totalItems: number;
    page: number;
-   limit: number;
    hasMore: boolean;
-   paginateData: PaginateProduct;
+   savePage: Record<string, SavePageData>;
+   paginateProduct: Record<string, PaginateData>;
+   saveScroll: Record<string, ScrollSchema>;
 }
-
-// export interface ProductSchema extends EntityState<Product> {
-//    isLoadingProducts?: boolean;
-//    error?: string;
-//    replace?: string;
-
-//    items: Product[];
-//    totalItems: number;
-
-//    // pagination
-//    page: number;
-//    limit: number;
-//    hasMore: boolean;
-
-//    // фильтры 9_3
-//    view: ProductView;
-// }

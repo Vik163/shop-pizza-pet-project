@@ -1,13 +1,17 @@
 import { memo, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './PageSelect.module.scss';
 import { Button } from '@/shared/ui/Button';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { fetchViewProducts } from '../../../../../../entities/Product/model/services/fetchViewProducts';
-import { getLimitProducts, PaginateData } from '@/entities/Product';
+import {
+   fetchViewProducts,
+   PaginateData,
+   productActions,
+   ProductSchema,
+} from '@/entities/Product';
+import { paginateElements } from '@/shared/const/paginate_elements';
 
 interface PageSelectProps {
    className?: string;
@@ -20,13 +24,10 @@ export const PageSelect = memo((props: PageSelectProps) => {
    const { pathname } = useLocation();
    const dispatch = useAppDispatch();
    const [numPage, setNumPage] = useState(1);
-   console.log('numPage:', numPage);
-   const limitProducts = useSelector(getLimitProducts);
    const { page, totalItems } = paginateData;
-   console.log('page:', page);
 
    // определяем количество полученных страниц и количество видимых кнопок
-   const pages = Math.ceil(totalItems / limitProducts);
+   const pages = Math.ceil(totalItems / paginateElements);
    const buttons = pages < countButtons ? pages : countButtons;
 
    // массив для отрисовки кнопок (зависит от количества кнопок и выбранной страницы)
@@ -41,7 +42,6 @@ export const PageSelect = memo((props: PageSelectProps) => {
    };
 
    const arrPages = initialArr();
-   console.log('arrPages:', arrPages);
 
    // При обновлении страницы возвращает первоначальную нумерацию
    useEffect(() => {
@@ -50,15 +50,17 @@ export const PageSelect = memo((props: PageSelectProps) => {
 
    // После запроса устанавливает нужную нумерацию и переводит скролл
    const clickPage = (pageProducts: number) => {
-      console.log('pageProducts:', pageProducts);
-
       dispatch(
          fetchViewProducts({
             page: pageProducts,
             replace: pathname.slice(1),
          }),
-      ).then((data) => {
-         if (data.payload) {
+      ).then((res) => {
+         if (res.payload) {
+            const { view } = res.payload as ProductSchema;
+
+            dispatch(productActions.setSavePage({ view, page: pageProducts }));
+
             window.scrollTo({
                top: 600,
                behavior: 'smooth',

@@ -10,7 +10,6 @@ import { $api } from '@/shared/api/api';
 import { rtkApi } from '@/shared/api/rtkApi';
 import { createReducerManager } from './reducerManager';
 import { mainPageReducer } from '@/pages/MainPage';
-import { scrollSaveReducer } from '@/features/ScrollSave';
 import { actionsReducer } from '@/entities/Action';
 import { basketReducer } from '@/entities/Basket';
 import { productReducer } from '@/entities/Product';
@@ -30,7 +29,6 @@ export function createReduxStore(
       basket: basketReducer,
       mainPage: mainPageReducer,
       csrfToken: csrfTokenReducer,
-      scroll: scrollSaveReducer,
       actions: actionsReducer,
       product: productReducer,
       [rtkApi.reducerPath]: rtkApi.reducer, // 11_2 8min

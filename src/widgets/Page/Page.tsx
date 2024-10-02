@@ -1,23 +1,14 @@
-import {
-   type ReactNode,
-   memo,
-   MutableRefObject,
-   useEffect,
-   useRef,
-   useState,
-} from 'react';
+import { type ReactNode, memo, MutableRefObject, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Page.module.scss';
 import { useInfiniteScroll } from '@/shared/lib/hooks/useInfiniteScroll';
-import { getSaveScroll, scrollSaveActions } from '@/features/ScrollSave';
-import { pathProducts } from '@/shared/const/product_const';
+import { getSaveScroll } from '@/entities/Product';
 import { ScrollTopPage } from '@/features/ScrollTopPage';
 import { getUserSettings } from '@/entities/User';
-import { useTrottle } from '@/shared/lib/hooks/useTrottle';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { useMoveScroll } from '@/shared/lib/hooks/useMoveScroll';
 
 export enum PageDirection {
    VIRTICAL = 'vertical',
@@ -55,89 +46,21 @@ export const Page = memo((props: PageProps) => {
    const triggerRef = useRef() as MutableRefObject<HTMLDivElement>;
    const pageWithScrollRef = useRef() as MutableRefObject<HTMLDivElement>;
    const { pathname } = useLocation();
-   const dispatch = useAppDispatch();
    const { viewLoadProducts } = useSelector(getUserSettings);
-   const positionTopProducts = 600;
-   const [scrollPosition, setScrollPosition] = useState(0);
-   const [scrollData, setScrollData] = useState({
-      path: '',
-      position: 0,
-   });
-   let lastScrollTop = 0;
    const scrollCard = useSelector(getSaveScroll);
+
+   const position = useMoveScroll({
+      pathname,
+      animationScroll,
+      viewLoadProducts,
+      scrollCard,
+   });
 
    useInfiniteScroll({
       pageWithScrollRef,
       scrollTriggerRef,
       callback: onScrollEnd,
    });
-
-   // Направление скролла и его положение
-   const onScroll = useTrottle(() => {
-      setScrollPosition(window.pageYOffset);
-
-      const st = window.pageYOffset;
-      if (st < lastScrollTop) {
-         dispatch(scrollSaveActions.setScrollDirection('up'));
-      } else if (st > lastScrollTop) {
-         dispatch(scrollSaveActions.setScrollDirection('down'));
-      }
-
-      lastScrollTop = st;
-   }, 200);
-
-   useEffect(() => {
-      document.addEventListener('scroll', onScroll);
-
-      return () => document.removeEventListener('scroll', onScroll);
-   }, []);
-
-   useEffect(() => {
-      if ('scrollRestoration' in window.history) {
-         window.history.scrollRestoration = 'manual';
-      }
-   }, []);
-
-   // Еще один scrollTo в файле PageSelect, прокручивает при выборе следующих элементов
-   const moveScroll = (pos: number) => {
-      window.scrollTo({
-         top: pos,
-         behavior: animationScroll ? 'smooth' : 'auto',
-      });
-   };
-
-   useEffect(() => {
-      if (viewLoadProducts === 'pages') {
-         setScrollData({
-            path: '',
-            position: positionTopProducts,
-         });
-      }
-
-      if (!pathProducts.includes(pathname)) {
-         moveScroll(0);
-      } else if (
-         viewLoadProducts === 'scroll' &&
-         scrollCard[pathname] &&
-         scrollCard[pathname].position
-      ) {
-         //* запоминает данные скрола  при переходе на другую страницу (для обновления компонента)
-         setScrollData({
-            path: scrollCard[pathname].path,
-            position: scrollCard[pathname].position,
-         });
-      }
-   }, [pathname]);
-
-   useEffect(() => {
-      if (pathProducts.includes(pathname)) {
-         if (scrollCard[pathname] && scrollCard[pathname].position) {
-            moveScroll(scrollData.position);
-         } else {
-            moveScroll(positionTopProducts);
-         }
-      }
-   }, [pathname, scrollData]);
 
    return (
       <section
@@ -150,7 +73,7 @@ export const Page = memo((props: PageProps) => {
          id={PAGE_ID}
       >
          {children}
-         <ScrollTopPage scrollPosition={scrollPosition} />
+         <ScrollTopPage scrollPosition={position} />
          <div className={cls.trigger} ref={triggerRef} />
       </section>
    );

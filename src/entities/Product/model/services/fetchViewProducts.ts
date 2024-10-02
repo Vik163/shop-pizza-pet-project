@@ -2,11 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/StoreProvider';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 
-import {
-   getLimitProducts,
-   getViewProducts,
-} from '../selectors/productSelector';
+import { getViewProducts } from '../selectors/productSelector';
 import { ProductSchema } from '../types/productSchema';
+import { paginateElements } from '@/shared/const/paginate_elements';
 
 interface FetchViewProductsProps {
    page?: number;
@@ -20,7 +18,6 @@ export const fetchViewProducts = createAsyncThunk<
 >('mainPageProducts/fetchFetchViewProducts', async (props, thunkApi) => {
    const { extra, rejectWithValue, getState } = thunkApi;
    const { page, replace } = props;
-   const limit = getLimitProducts(getState());
    // const search = getMainPageSearch(getState());
 
    const view = getViewProducts(getState());
@@ -31,7 +28,7 @@ export const fetchViewProducts = createAsyncThunk<
          params: {
             _expand: userId || 'user',
             view,
-            _limit: limit,
+            _limit: paginateElements,
             _page: page,
             _replace: replace,
             // q: search, // 9_3 24min

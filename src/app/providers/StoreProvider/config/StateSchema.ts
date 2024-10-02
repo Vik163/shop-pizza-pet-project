@@ -10,7 +10,6 @@ import { type TokenSchema, type UserSchema } from '@/entities/User';
 import { type AuthPhoneSchema } from '@/features/AuthByPhone';
 import { type rtkApi } from '@/shared/api/rtkApi';
 import { type MainPageSchema } from '@/pages/MainPage';
-import { type ScrollSaveSchema } from '@/features/ScrollSave';
 import { ActionsSchema } from '@/entities/Action';
 import { BasketSchema } from '@/entities/Basket';
 import { AdditivesSchema } from '@/entities/Additives';
@@ -22,7 +21,6 @@ export interface StateSchema {
    mainPage: MainPageSchema;
    user: UserSchema;
    csrfToken: TokenSchema;
-   scroll: ScrollSaveSchema;
    actions: ActionsSchema;
    basket: BasketSchema;
    product: ProductSchema;

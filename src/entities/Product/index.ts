@@ -21,9 +21,10 @@ export {
 } from './model/slice/productsSlice';
 export {
    getIsLoadingProducts,
-   getLimitProducts,
    getViewProducts,
-   getPaginateData,
+   getPaginateProduct,
+   getSavePage,
+   getSaveScroll,
 } from './model/selectors/productSelector';
 export { fetchViewProducts } from './model/services/fetchViewProducts';
 export { ProductSortField } from '../../shared/const/product_const';

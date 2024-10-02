@@ -4,25 +4,28 @@ import {
    createEntityAdapter,
    createSlice,
 } from '@reduxjs/toolkit';
-import { ProductSchema } from '../types/productSchema';
+import {
+   ProductSchema,
+   SavePageData,
+   ScrollSchema,
+} from '../types/productSchema';
 import { Product } from '../types/product';
 import { StateSchema } from '@/app/providers/StoreProvider';
 import { fetchViewProducts } from '../services/fetchViewProducts';
 
-// const productAdapter = createEntityAdapter
-
 const initialState: ProductSchema = {
    isLoadingProducts: false,
    error: undefined,
-   paginateData: {},
+   paginateProduct: {},
    view: 'pizzas',
+   totalItems: 0,
+   hasMore: true,
    page: 1,
+   savePage: {},
    ids: [],
    entities: {},
-   hasMore: true,
    items: [],
-   limit: 0,
-   totalItems: 0,
+   saveScroll: {},
 };
 
 export const productsAdapter = createEntityAdapter<Product>({
@@ -40,8 +43,26 @@ const productSlice = createSlice({
    reducers: {
       setView: (state, { payload }: PayloadAction<string>) => {
          state.view = payload;
+      },
 
-         // localStorage.setItem(LOCALSTORAGE_PRODUCTS_VIEW_KEY, action.payload);
+      setSavePage: (state, { payload }: PayloadAction<SavePageData>) => {
+         state.savePage = {
+            ...state.savePage,
+            [payload.view]: {
+               view: payload.view,
+               page: payload.page,
+            },
+         };
+      },
+
+      setScrollPosition: (state, { payload }: PayloadAction<ScrollSchema>) => {
+         state.saveScroll = {
+            ...state.saveScroll,
+            [payload.path]: {
+               path: payload.path,
+               position: payload.position,
+            },
+         };
       },
    },
    extraReducers: (builder) => {
@@ -54,8 +75,8 @@ const productSlice = createSlice({
             fetchViewProducts.fulfilled,
             (state, { payload }: PayloadAction<ProductSchema>) => {
                state.isLoadingProducts = false;
-               state.paginateData = {
-                  ...state.paginateData,
+               state.paginateProduct = {
+                  ...state.paginateProduct,
                   [payload.view]: {
                      view: payload.view,
                      page: payload.page,
