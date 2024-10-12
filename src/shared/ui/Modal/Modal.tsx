@@ -14,7 +14,6 @@ interface ModalProps {
    onClose: () => void;
    onAnimate?: (bool: boolean) => void;
    isOpen: boolean;
-   lazy?: boolean;
    isCenter?: boolean;
    delayClose?: number;
    buttonCloseWidth: number;
@@ -30,7 +29,6 @@ export const Modal = memo((props: ModalProps) => {
       className,
       onClose,
       isOpen,
-      lazy,
       onAnimate,
       buttonCloseHeight,
       buttonCloseRight,
@@ -42,7 +40,7 @@ export const Modal = memo((props: ModalProps) => {
    } = props;
 
    //* выношу логику в хук
-   const { handleClose, onContentClick, isMounted } = useModal({
+   const { handleClose, onContentClick } = useModal({
       isOpen,
       onClose,
       onAnimate,
@@ -58,42 +56,42 @@ export const Modal = memo((props: ModalProps) => {
       if (hover) handleClose();
    };
 
-   if (lazy && !isMounted) return;
-
    return (
-      <Portal>
-         <div className={classNames(cls.Modal, mods, [])}>
-            <div
-               className={classNames(
-                  cls.overlay,
-                  { [cls.centerOverlay]: isCenter },
-                  [],
-               )}
-               onClick={handleClose}
-            >
+      isOpen && (
+         <Portal>
+            <div id='modal' className={classNames(cls.Modal, mods, [])}>
                <div
-                  className={classNames(cls.content, {}, [className])}
-                  onClick={onContentClick}
-                  onMouseLeave={closeHoverModal}
+                  className={classNames(
+                     cls.overlay,
+                     { [cls.centerOverlay]: isCenter },
+                     [],
+                  )}
+                  onClick={handleClose}
                >
-                  <Button
-                     style={{
-                        top: `${buttonCloseTop}px`,
-                        right: `${buttonCloseRight}px`,
-                     }}
-                     className={cls.close}
-                     onClick={handleClose}
+                  <div
+                     className={classNames(cls.content, {}, [className])}
+                     onClick={onContentClick}
+                     onMouseLeave={closeHoverModal}
                   >
-                     <Icon
-                        width={buttonCloseWidth}
-                        height={buttonCloseHeight}
-                        Svg={close}
-                     />
-                  </Button>
-                  {children}
+                     <Button
+                        style={{
+                           top: `${buttonCloseTop}px`,
+                           right: `${buttonCloseRight}px`,
+                        }}
+                        className={cls.close}
+                        onClick={handleClose}
+                     >
+                        <Icon
+                           width={buttonCloseWidth}
+                           height={buttonCloseHeight}
+                           Svg={close}
+                        />
+                     </Button>
+                     {children}
+                  </div>
                </div>
             </div>
-         </div>
-      </Portal>
+         </Portal>
+      )
    );
 });

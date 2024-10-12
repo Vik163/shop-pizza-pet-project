@@ -32,6 +32,8 @@ import { RefTypeModal } from '@/features/ModalOrderProduct';
 import { SelectAddressModal } from '@/features/SelectAddressModal';
 import { orderActions, orderReducer } from '@/entities/Order';
 import { Page } from '@/widgets/Page';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
+import { UnauthModal } from '@/features/UnauthModal';
 
 export interface BasketPageProps {
    className?: string;
@@ -50,6 +52,7 @@ const BasketPage = memo((props: BasketPageProps) => {
    const [openModal, setOpenModal] = useState(false);
    const totalPrice = useSelector(getBasketTotalPrice);
    const additionToOrder = useSelector(getAdditionToOrder);
+   const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
 
    useEffect(() => {
       dispatch(fetchAdditionToOrder());
@@ -142,7 +145,11 @@ const BasketPage = memo((props: BasketPageProps) => {
                   isOpen={openModal}
                   onClose={closeModal}
                >
-                  <SelectAddressModal closeModal={closeModal} />
+                  {userId ? (
+                     <SelectAddressModal closeModal={closeModal} />
+                  ) : (
+                     <UnauthModal closeModal={closeModal} />
+                  )}
                </Modal>
             )}
          </Page>

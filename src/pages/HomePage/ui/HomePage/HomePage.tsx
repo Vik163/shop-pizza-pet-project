@@ -30,13 +30,13 @@ export const HomePage = memo(() => {
    // Yandex query ответ
    const initYaData = searchParams.get('user');
    const userYaData = initYaData && JSON.parse(initYaData);
+   const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
 
    useEffect(() => {
-      dispatch(fetchBasket());
+      if (userId) dispatch(fetchBasket(userId));
    }, []);
 
    useEffect(() => {
-      const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
       // Авторизация Яндекс
       if (initYaData && !inited) {
          // Запрос для получения токенов (из-за переадресации не получилось отправить с бека)

@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { $apiTokens } from '@/shared/api/api';
 import { ThunkConfig } from '@/app/providers/StoreProvider';
 import { BasketData } from '../types/basket';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 
 export const fetchDelete = createAsyncThunk<
    BasketData,
@@ -11,7 +12,11 @@ export const fetchDelete = createAsyncThunk<
    const { rejectWithValue } = thunkApi;
 
    try {
-      const basketData = await $apiTokens.delete(`order/basket/${id}`);
+      const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+
+      const basketData = await $apiTokens.delete(
+         `/users/${userId}/basket/${id}`,
+      );
 
       const basket = basketData.data;
 

@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -14,8 +14,7 @@ import { getInited, getUserData, UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
-import { BasketOneProduct, getBasketProducts } from '@/entities/Basket';
-import { ModalOrderProduct, RefTypeModal } from '@/features/ModalOrderProduct';
+import { getBasketProducts } from '@/entities/Basket';
 import { ModalBasket } from '@/features/ModalBasket';
 
 interface NavbarProps {
@@ -24,7 +23,6 @@ interface NavbarProps {
 
 export const Navbar = memo((props: NavbarProps) => {
    const { className } = props;
-   const childRef = useRef<RefTypeModal>(null);
    const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
    const [isOpenModalBasket, setIsOpenModalBasket] = useState(false);
 
@@ -48,12 +46,12 @@ export const Navbar = memo((props: NavbarProps) => {
       [],
    );
 
-   const onModalProduct = (basket: BasketOneProduct) => {
-      childRef.current?.openModal(undefined, basket);
-   };
-
    const openBasket = () => {
       if (basketProducts?.length > 0) setIsOpenModalBasket(true);
+   };
+
+   const closeBasket = () => {
+      setIsOpenModalBasket(false);
    };
 
    return (
@@ -94,14 +92,10 @@ export const Navbar = memo((props: NavbarProps) => {
                isOpenModal={isOpenModalAuth}
             />
          )}
-         {isOpenModalBasket && (
-            <ModalBasket
-               setIsOpenModalBasket={setIsOpenModalBasket}
-               isOpenModalBasket={isOpenModalBasket}
-               onModalProduct={onModalProduct}
-            />
-         )}
-         {isOpenModalBasket && <ModalOrderProduct ref={childRef} />}
+         <ModalBasket
+            isOpenModalBasket={isOpenModalBasket}
+            closeBasket={closeBasket}
+         />
       </HStack>
    );
 });

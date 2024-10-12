@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 interface UseModalProps {
    isOpen: boolean;
@@ -9,7 +9,6 @@ interface UseModalProps {
 
 export function useModal(props: UseModalProps) {
    const { isOpen, onClose, onAnimate, delayClose } = props;
-   const [isMounted, setIsMounted] = useState(false);
    const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
    //  высчитывает ширину скрола ---------------------------------
@@ -22,17 +21,7 @@ export function useModal(props: UseModalProps) {
       e.stopPropagation();
    };
 
-   useEffect(() => {
-      if (isOpen) {
-         setIsMounted(true);
-         if (onAnimate) {
-            timerRef.current = setTimeout(() => {
-               onAnimate(true);
-            }, 50);
-         }
-      }
-   }, [isOpen]);
-
+   // Если есть анимация закрывает с нужной для анимации задержкой (delayClose)
    const handleClose = useCallback(() => {
       if (onAnimate) {
          onAnimate(false);
@@ -43,7 +32,7 @@ export function useModal(props: UseModalProps) {
       } else {
          onClose();
       }
-   }, [delayClose, onAnimate]);
+   }, [delayClose, onAnimate, onClose]);
 
    const onKeyDown = useCallback(
       (e: KeyboardEvent) => {
@@ -56,19 +45,26 @@ export function useModal(props: UseModalProps) {
 
    useEffect(() => {
       if (isOpen) {
+         // задержка нужна для монтирования модалки (из-за display: none css)
+         if (onAnimate) {
+            timerRef.current = setTimeout(() => {
+               onAnimate(true);
+            }, 50);
+         }
+
          document.addEventListener('keydown', onKeyDown);
          // не прокручивается страница
          document.body.style.overflow = 'hidden';
       }
-      // скролл добавляю при размонтировании
-      return () => {
-         if (!isOpen) {
-            clearTimeout(timerRef.current);
-            document.removeEventListener('keydown', onKeyDown);
-         }
+      // скролл добавляю когда все модалки закрыты
+      if (!isOpen) {
+         clearTimeout(timerRef.current);
          document.body.style.overflow = 'unset';
+      }
+      return () => {
+         document.removeEventListener('keydown', onKeyDown);
       };
-   }, [isOpen, onKeyDown]);
+   }, [isOpen]);
 
-   return { handleClose, onContentClick, isMounted };
+   return { handleClose, onContentClick };
 }

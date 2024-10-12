@@ -47,6 +47,7 @@ export enum FontSize {
 }
 
 export enum HeaderTagType {
+   H_1 = 'h1',
    H_2 = 'h2',
    H_3 = 'h3',
    H_4 = 'h4',

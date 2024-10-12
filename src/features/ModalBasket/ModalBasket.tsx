@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, memo, useCallback, useState } from 'react';
+import { memo, Suspense, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -18,24 +18,25 @@ import { Scrollbar } from '@/shared/ui/Scrollbar';
 import { AppLink } from '@/shared/ui/AppLink';
 import { getRouteBasket } from '@/shared/const/router';
 import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
+import { ModalOrderProduct, RefTypeModal } from '../ModalOrderProduct';
+import { Loader } from '@/shared/ui/Loader';
 
 interface ModalBasketProps {
-   setIsOpenModalBasket: Dispatch<SetStateAction<boolean>>;
    isOpenModalBasket: boolean;
-   onModalProduct: (product: BasketOneProduct) => void;
+   closeBasket: () => void;
 }
 
 export const ModalBasket = memo((props: ModalBasketProps) => {
-   const { setIsOpenModalBasket, isOpenModalBasket, onModalProduct } = props;
-
+   const { isOpenModalBasket, closeBasket } = props;
+   const childRef = useRef<RefTypeModal>(null);
    const [isClosingBasket, setIsClosingBasket] = useState(false);
    const basketProducts: BasketOneProduct[] = useSelector(getBasketProducts);
    const totalPrice = useSelector(getBasketTotalPrice);
    const { word } = useChangeWord(basketProducts.length);
 
-   const onCloseBasketModal = useCallback(() => {
-      setIsOpenModalBasket(false);
-   }, []);
+   const onModalProduct = (basket: BasketOneProduct) => {
+      childRef.current?.openModal(undefined, basket);
+   };
 
    const handleAnimateBasket = (bool: boolean) => {
       setIsClosingBasket(bool);
@@ -72,7 +73,7 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
          isCenter={false}
          onAnimate={handleAnimateBasket}
          isOpen={isOpenModalBasket}
-         onClose={onCloseBasketModal}
+         onClose={closeBasket}
          className={classNames(
             cls.basketPopup,
             { [cls.basketPopupActive]: isClosingBasket },
@@ -96,7 +97,7 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
                {basketProducts.length} {word} на &nbsp;
                <span className={cls.sum}>{totalPrice} &#8381;</span>
             </Text>
-            <AppLink to={getRouteBasket()} onClick={onCloseBasketModal}>
+            <AppLink to={getRouteBasket()} onClick={closeBasket}>
                <Button
                   width={330}
                   height={40}
@@ -108,6 +109,9 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
                   Перейти в корзину
                </Button>
             </AppLink>
+            <Suspense fallback={<Loader />}>
+               <ModalOrderProduct ref={childRef} />
+            </Suspense>
          </VStack>
       </Modal>
    );

@@ -5,13 +5,13 @@ import { BasketData } from '../types/basket';
 
 export const fetchBasket = createAsyncThunk<
    BasketData,
-   void,
+   string,
    ThunkConfig<string>
->('orderProducts/fetchBasket', async (_, thunkApi) => {
+>('orderProducts/fetchBasket', async (id, thunkApi) => {
    const { rejectWithValue } = thunkApi;
 
    try {
-      const basketData = await $api.get('/order/basket');
+      const basketData = await $api.get(`/users/${id}/basket`);
       const basket = basketData.data;
 
       if (!basket) rejectWithValue('Корзина не найдена');

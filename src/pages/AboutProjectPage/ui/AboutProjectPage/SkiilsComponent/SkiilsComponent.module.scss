@@ -1,0 +1,34 @@
+.Layout {
+   display: flex;
+   flex-direction: column;
+   align-items: start;
+   gap: 10px;
+}
+
+.skills {
+   width: 100%;
+}
+
+.titleSkill {
+   padding: 0 30px;
+   font-size: var(--size-18);
+   color: var(--color-input-active);
+   font-weight: var(--weight-500);
+
+   &.cursorDefault {
+      cursor: default;
+   }
+}
+
+.addIcon {
+   margin-right: 10px;
+   fill: Yellow;
+}
+
+.text {
+   margin: 5px 0 5px 70px;
+   line-height: 22px;
+   font-style: italic;
+   font-size: var(--size-16);
+   font-weight: var(--weight-500);
+}

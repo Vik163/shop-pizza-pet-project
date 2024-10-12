@@ -33,7 +33,6 @@ export const AuthByPhone = memo((props: AuthByPhoneProps) => {
             { [cls.authModalActive]: isClosing },
             [],
          )}
-         lazy
          isCenter
          delayClose={300}
          buttonCloseHeight={40}

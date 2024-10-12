@@ -31,6 +31,7 @@ export const $apiTokens = axios.create({
 
 $apiTokens.interceptors.request.use(async (config: IRequest) => {
    const token = getCookie('accessToken');
+
    // обходим правило eslint (no-param-reassign)
    const newConfig = { ...config };
    if (
@@ -58,6 +59,8 @@ $apiTokens.interceptors.request.use(async (config: IRequest) => {
 
    const response = await axios.get(`${host}/refresh/${userId}`);
 
+   if (response.data.status === 'delete')
+      localStorage.removeItem(LOCALSTORAGE_USER_KEY);
    if (!(response.status === 200))
       throw Error('Не обновлены токены безопасности');
 

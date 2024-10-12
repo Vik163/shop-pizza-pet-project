@@ -24,6 +24,7 @@ export interface RefTypeModal {
    openModal: (cardProduct?: Product, basket?: BasketOneProduct) => void;
 }
 
+// выбрал пробросить ref (функция открытия модалки с пропсом карточки)
 export const ModalOrderProduct = forwardRef(
    (props: ModalOrderProductProps, ref: Ref<RefTypeModal>) => {
       const { onCloseModal } = props;
@@ -77,7 +78,6 @@ export const ModalOrderProduct = forwardRef(
                   [],
                )}
                delayClose={300}
-               lazy
                buttonCloseHeight={40}
                buttonCloseRight={30}
                buttonCloseTop={30}
