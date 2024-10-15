@@ -36,6 +36,7 @@ import { useCookie } from '@/shared/lib/hooks/useCookie';
 import { fetchLogoutUser } from '../../model/services/fetchLogout';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { DateSelect } from '../DateSelect/DateSelect';
+import { basketActions } from '@/entities/Basket';
 
 interface PersonalDataProps {
    className?: string;
@@ -79,6 +80,7 @@ export const PersonalData = memo((props: PersonalDataProps) => {
    const logout = async (e: SyntheticEvent) => {
       e.preventDefault();
       deleteCookie('accessToken');
+      dispatch(basketActions.setBasket({ basketProducts: [], totalPrice: 0 }));
 
       // выход из firebase
       const signoutFirebase = await firebaseApi.signout();

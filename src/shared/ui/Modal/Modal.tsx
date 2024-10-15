@@ -13,6 +13,7 @@ interface ModalProps {
    children?: ReactNode;
    onClose: () => void;
    onAnimate?: (bool: boolean) => void;
+   existAnimateComponent?: boolean;
    isOpen: boolean;
    isCenter?: boolean;
    delayClose?: number;
@@ -37,10 +38,11 @@ export const Modal = memo((props: ModalProps) => {
       isCenter = true,
       delayClose = 300,
       hover = false,
+      existAnimateComponent = false,
    } = props;
 
    //* выношу логику в хук
-   const { handleClose, onContentClick } = useModal({
+   const { handleClose, onContentClick, isAnimate } = useModal({
       isOpen,
       onClose,
       onAnimate,
@@ -63,13 +65,26 @@ export const Modal = memo((props: ModalProps) => {
                <div
                   className={classNames(
                      cls.overlay,
-                     { [cls.centerOverlay]: isCenter },
+                     {
+                        [cls.nonAnimate]: Boolean(!delayClose),
+                        [cls.centerOverlay]: isCenter,
+                        [cls.overlayActive]: isAnimate,
+                     },
                      [],
                   )}
                   onClick={handleClose}
                >
                   <div
-                     className={classNames(cls.content, {}, [className])}
+                     className={classNames(
+                        cls.content,
+                        {
+                           [cls.nonAnimate]: Boolean(!delayClose),
+                           [cls.modalActive]:
+                              isAnimate && !existAnimateComponent,
+                           [cls.modalAnimate]: !existAnimateComponent,
+                        },
+                        [className],
+                     )}
                      onClick={onContentClick}
                      onMouseLeave={closeHoverModal}
                   >

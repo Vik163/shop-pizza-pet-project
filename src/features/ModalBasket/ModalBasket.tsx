@@ -20,6 +20,7 @@ import { getRouteBasket } from '@/shared/const/router';
 import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
 import { ModalOrderProduct, RefTypeModal } from '../ModalOrderProduct';
 import { Loader } from '@/shared/ui/Loader';
+import { modalDelay } from '@/shared/const/modal_delay';
 
 interface ModalBasketProps {
    isOpenModalBasket: boolean;
@@ -79,11 +80,12 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
             { [cls.basketPopupActive]: isClosingBasket },
             [],
          )}
-         delayClose={300}
+         delayClose={modalDelay}
          buttonCloseHeight={30}
          buttonCloseRight={20}
          buttonCloseTop={20}
          buttonCloseWidth={30}
+         existAnimateComponent
       >
          <VStack
             align={FlexAlign.START}

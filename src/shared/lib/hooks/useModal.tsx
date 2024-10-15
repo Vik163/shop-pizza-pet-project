@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 interface UseModalProps {
    isOpen: boolean;
@@ -10,6 +10,7 @@ interface UseModalProps {
 export function useModal(props: UseModalProps) {
    const { isOpen, onClose, onAnimate, delayClose } = props;
    const timerRef = useRef<ReturnType<typeof setTimeout>>();
+   const [isAnimate, setIsAnimate] = useState(false);
 
    //  высчитывает ширину скрола ---------------------------------
    // нужно было когда .root был {max-width: 100vw}
@@ -23,8 +24,9 @@ export function useModal(props: UseModalProps) {
 
    // Если есть анимация закрывает с нужной для анимации задержкой (delayClose)
    const handleClose = useCallback(() => {
-      if (onAnimate) {
-         onAnimate(false);
+      if (delayClose) {
+         if (onAnimate) onAnimate(false);
+         setIsAnimate(false);
 
          timerRef.current = setTimeout(() => {
             onClose();
@@ -44,11 +46,13 @@ export function useModal(props: UseModalProps) {
    );
 
    useEffect(() => {
+      console.log('isOpen:', isOpen);
       if (isOpen) {
          // задержка нужна для монтирования модалки (из-за display: none css)
-         if (onAnimate) {
+         if (delayClose) {
             timerRef.current = setTimeout(() => {
-               onAnimate(true);
+               if (onAnimate) onAnimate(true);
+               setIsAnimate(true);
             }, 50);
          }
 
@@ -66,5 +70,5 @@ export function useModal(props: UseModalProps) {
       };
    }, [isOpen]);
 
-   return { handleClose, onContentClick };
+   return { handleClose, onContentClick, isAnimate };
 }

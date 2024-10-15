@@ -1,3 +1,4 @@
+import { BasketOneProduct } from '@/entities/Basket';
 import { type UserSettings } from './userSettings';
 
 enum RoleUser {
@@ -18,6 +19,7 @@ export interface UserData {
    phoneNumber: number;
    email?: string;
    birthday?: Birthday;
+   basket?: BasketOneProduct[];
    role?: RoleUser;
    userSettings: UserSettings;
 }

@@ -5,11 +5,13 @@
    background-color: var(--block-bg-primary);
    padding: 30px;
    position: relative;
+   opacity: 0;
    transform: scale(0.9);
-   transition: 0.3s transform;
+   transition: 0.2s;
 
    &.modalActive {
+      opacity: 1;
       transform: scale(1);
-      transition: 0.3s transform;
+      transition: 0.2s;
    }
 }

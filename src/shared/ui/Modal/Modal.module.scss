@@ -21,16 +21,43 @@
    height: 100%;
    width: 100%;
    background: rgba(100, 86, 23, 0.4);
+   opacity: 0;
+   transition: 0.2s;
+
+   &.nonAnimate {
+      opacity: 1;
+   }
 
    &.centerOverlay {
       display: flex;
       justify-content: center;
       align-items: center;
    }
+
+   &.overlayActive {
+      opacity: 1;
+      transition: 0.2s;
+   }
 }
 
 .content {
    position: relative;
+
+   &.modaleAnimate {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: 0.2s;
+   }
+
+   &.nonAnimate {
+      opacity: 1;
+   }
+
+   &.modalActive {
+      opacity: 1;
+      transform: scale(1);
+      transition: 0.2s;
+   }
 }
 
 .close {

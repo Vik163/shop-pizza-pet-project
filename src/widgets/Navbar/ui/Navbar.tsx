@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, Suspense, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -16,6 +16,7 @@ import man from '@/shared/assets/icons/user_auth.svg';
 import { getRouteProfile } from '@/shared/const/router';
 import { getBasketProducts } from '@/entities/Basket';
 import { ModalBasket } from '@/features/ModalBasket';
+import { Loader } from '@/shared/ui/Loader';
 
 interface NavbarProps {
    className?: string;
@@ -54,6 +55,10 @@ export const Navbar = memo((props: NavbarProps) => {
       setIsOpenModalBasket(false);
    };
 
+   const closeAuthModal = () => {
+      setIsOpenModalAuth(false);
+   };
+
    return (
       <HStack className={classNames(cls.Navbar, {}, [className])} max>
          <HStack
@@ -85,13 +90,12 @@ export const Navbar = memo((props: NavbarProps) => {
                {basketProducts?.length || 0}
             </span>
          </Button>
-
-         {isOpenModalAuth && (
+         <Suspense fallback={<Loader />}>
             <AuthByPhone
-               setIsOpenModal={setIsOpenModalAuth}
+               closeAuthModal={closeAuthModal}
                isOpenModal={isOpenModalAuth}
             />
-         )}
+         </Suspense>
          <ModalBasket
             isOpenModalBasket={isOpenModalBasket}
             closeBasket={closeBasket}

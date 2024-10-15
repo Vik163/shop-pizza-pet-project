@@ -34,7 +34,7 @@ export const HomePage = memo(() => {
 
    useEffect(() => {
       if (userId) dispatch(fetchBasket(userId));
-   }, []);
+   }, [userId]);
 
    useEffect(() => {
       // Авторизация Яндекс

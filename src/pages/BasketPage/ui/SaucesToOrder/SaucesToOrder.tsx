@@ -23,14 +23,15 @@ import {
 } from '@/entities/Product';
 import { VStack } from '@/shared/ui/Stack';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
-import { BasketOneProduct, fetchAddBasket } from '@/entities/Basket';
+import { BasketOneProduct } from '@/entities/Basket';
 
 interface SaucesToOrderProps {
    className?: string;
+   onModalProduct: (product: BasketOneProduct) => void;
 }
 
 export const SaucesToOrder = memo((props: SaucesToOrderProps) => {
-   const { className } = props;
+   const { className, onModalProduct } = props;
    const dispatch = useAppDispatch();
    const [sauces, setSauces] = useState<Product[]>();
    const products: Product[] = useSelector(getEntityProducts.selectAll);
@@ -57,7 +58,8 @@ export const SaucesToOrder = memo((props: SaucesToOrderProps) => {
          image: card.imageSmall,
          price: card.price[0],
       };
-      dispatch(fetchAddBasket(order));
+      onModalProduct(order);
+      // dispatch(fetchAddBasket(order));
    };
 
    return (

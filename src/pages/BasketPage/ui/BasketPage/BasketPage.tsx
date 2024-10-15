@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, Suspense, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
@@ -28,12 +28,14 @@ import { SaucesToOrder } from '../SaucesToOrder/SaucesToOrder';
 import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
 import arrow from '@/shared/assets/icons/arrow-yellow.svg';
 import { Modal } from '@/shared/ui/Modal';
-import { RefTypeModal } from '@/features/ModalOrderProduct';
+import { ModalOrderProduct, RefTypeModal } from '@/features/ModalOrderProduct';
 import { SelectAddressModal } from '@/features/SelectAddressModal';
 import { orderActions, orderReducer } from '@/entities/Order';
 import { Page } from '@/widgets/Page';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 import { UnauthModal } from '@/features/UnauthModal';
+import { modalDelay } from '@/shared/const/modal_delay';
+import { Loader } from '@/shared/ui/Loader';
 
 export interface BasketPageProps {
    className?: string;
@@ -50,17 +52,13 @@ const BasketPage = memo((props: BasketPageProps) => {
    const childRef = useRef<RefTypeModal>(null);
 
    const [openModal, setOpenModal] = useState(false);
+
    const totalPrice = useSelector(getBasketTotalPrice);
    const additionToOrder = useSelector(getAdditionToOrder);
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
 
    useEffect(() => {
       dispatch(fetchAdditionToOrder());
-
-      // window.scrollTo({
-      //    top: 0,
-      //    behavior: 'smooth',
-      // });
    }, [dispatch]);
 
    const onModalProduct = (basket: BasketOneProduct) => {
@@ -107,9 +105,12 @@ const BasketPage = memo((props: BasketPageProps) => {
                </Text>
                <BasketPageProducts onModalProduct={onModalProduct} />
                {additionToOrder && (
-                  <AdditionToOrder additions={additionToOrder} />
+                  <AdditionToOrder
+                     additions={additionToOrder}
+                     onModalProduct={onModalProduct}
+                  />
                )}
-               <SaucesToOrder />
+               <SaucesToOrder onModalProduct={onModalProduct} />
                <Text fontSize={FontSize.SIZE_24} className={cls.price}>
                   Сумма заказа:
                   <span className={cls.sum}>{totalPrice} &#8381;</span>
@@ -136,22 +137,24 @@ const BasketPage = memo((props: BasketPageProps) => {
                </HStack>
             </VStack>
             <div className={cls.line} />
-            {openModal && (
-               <Modal
-                  buttonCloseHeight={40}
-                  buttonCloseRight={35}
-                  buttonCloseTop={35}
-                  buttonCloseWidth={40}
-                  isOpen={openModal}
-                  onClose={closeModal}
-               >
-                  {userId ? (
-                     <SelectAddressModal closeModal={closeModal} />
-                  ) : (
-                     <UnauthModal closeModal={closeModal} />
-                  )}
-               </Modal>
-            )}
+            <Modal
+               buttonCloseHeight={40}
+               buttonCloseRight={35}
+               buttonCloseTop={35}
+               buttonCloseWidth={40}
+               isOpen={openModal}
+               onClose={closeModal}
+               delayClose={modalDelay}
+            >
+               {userId ? (
+                  <SelectAddressModal closeModal={closeModal} />
+               ) : (
+                  <UnauthModal closeModal={closeModal} />
+               )}
+            </Modal>
+            <Suspense fallback={<Loader />}>
+               <ModalOrderProduct ref={childRef} />
+            </Suspense>
          </Page>
       </DynamicReducersLoader>
    );

@@ -1,22 +1,19 @@
-import { Dispatch, SetStateAction, memo, useState } from 'react';
+import { memo, useState } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './AuthByPhone.module.scss';
 import { Modal } from '@/shared/ui/Modal';
 import { PhoneFormAsync as PhoneForm } from '../../ui/PhoneForm/PhoneForm.async';
+import { modalDelay } from '@/shared/const/modal_delay';
 
 interface AuthByPhoneProps {
-   setIsOpenModal: Dispatch<SetStateAction<boolean>>;
+   closeAuthModal: () => void;
    isOpenModal: boolean;
 }
 
 export const AuthByPhone = memo((props: AuthByPhoneProps) => {
-   const { setIsOpenModal, isOpenModal } = props;
+   const { closeAuthModal, isOpenModal } = props;
    const [isClosing, setIsClosing] = useState(false);
-
-   const onCloseAuthModal = () => {
-      setIsOpenModal(false);
-   };
 
    const onAnimateAuthModal = (bool: boolean) => {
       setIsClosing(bool);
@@ -26,7 +23,7 @@ export const AuthByPhone = memo((props: AuthByPhoneProps) => {
       // если нет то модалка не встраивается
       <Modal
          onAnimate={onAnimateAuthModal}
-         onClose={onCloseAuthModal}
+         onClose={closeAuthModal}
          isOpen={isOpenModal}
          className={classNames(
             cls.phoneModal,
@@ -34,13 +31,13 @@ export const AuthByPhone = memo((props: AuthByPhoneProps) => {
             [],
          )}
          isCenter
-         delayClose={300}
+         delayClose={modalDelay}
          buttonCloseHeight={40}
          buttonCloseRight={30}
          buttonCloseTop={30}
          buttonCloseWidth={40}
       >
-         <PhoneForm onCloseModal={onCloseAuthModal} />
+         <PhoneForm onCloseModal={closeAuthModal} />
       </Modal>
    );
 });

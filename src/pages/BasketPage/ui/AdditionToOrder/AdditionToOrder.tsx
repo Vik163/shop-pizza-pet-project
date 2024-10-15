@@ -16,17 +16,16 @@ import {
 } from '@/features/HorizontalScrolling';
 import { Product } from '@/entities/Product';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
-import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { BasketOneProduct, fetchAddBasket } from '@/entities/Basket';
+import { BasketOneProduct } from '@/entities/Basket';
 
 interface AdditionToOrderProps {
    className?: string;
    additions: Product[];
+   onModalProduct: (product: BasketOneProduct) => void;
 }
 
 export const AdditionToOrder = memo((props: AdditionToOrderProps) => {
-   const { className, additions } = props;
-   const dispatch = useAppDispatch();
+   const { className, additions, onModalProduct } = props;
 
    const onCard = (card: Product) => {
       const order: BasketOneProduct = {
@@ -34,7 +33,9 @@ export const AdditionToOrder = memo((props: AdditionToOrderProps) => {
          image: card.imageSmall,
          price: card.price[0],
       };
-      dispatch(fetchAddBasket(order));
+      onModalProduct(order);
+
+      // dispatch(fetchAddBasket(order));
    };
 
    return (

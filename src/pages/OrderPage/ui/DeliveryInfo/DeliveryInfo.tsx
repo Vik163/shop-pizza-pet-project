@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, Suspense, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -10,6 +10,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { EditAddress } from '../EditAddress/EditAddress';
 import { AuthByPhone } from '@/features/AuthByPhone';
 import { FontColor, FontSize, Text } from '@/shared/ui/Text';
+import { Loader } from '@/shared/ui/Loader';
 
 interface DeliveryInfoProps {
    className?: string;
@@ -39,6 +40,10 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
 
    const onAuthModal = () => {
       setIsOpenModalAuth(true);
+   };
+
+   const closeAuthModal = () => {
+      setIsOpenModalAuth(false);
    };
 
    return (
@@ -115,12 +120,12 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
             value={String(userPhone) || ''}
             disabled
          />
-         {isOpenModalAuth && (
+         <Suspense fallback={<Loader />}>
             <AuthByPhone
-               setIsOpenModal={setIsOpenModalAuth}
+               closeAuthModal={closeAuthModal}
                isOpenModal={isOpenModalAuth}
             />
-         )}
+         </Suspense>
       </VStack>
    );
 });

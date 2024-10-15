@@ -33,6 +33,10 @@ const basketSlice = createSlice({
       setViewDough: (state, { payload }: PayloadAction<TDoughPizza>) => {
          state.dough = payload;
       },
+      setBasket: (state, { payload }: PayloadAction<BasketData>) => {
+         state.basketProducts = payload.basketProducts;
+         state.totalPrice = payload.totalPrice;
+      },
    },
    extraReducers: (builder) => {
       builder

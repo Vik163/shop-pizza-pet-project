@@ -15,6 +15,7 @@ import { Modal } from '@/shared/ui/Modal';
 import { OrderProduct } from '../OrderProductsModal/OrderProduct';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { SizePizza, ViewDough } from '@/shared/const/product_const';
+import { modalDelay } from '@/shared/const/modal_delay';
 
 interface ModalOrderProductProps {
    onCloseModal?: () => void;
@@ -54,6 +55,7 @@ export const ModalOrderProduct = forwardRef(
 
       const onClose = useCallback(() => {
          setProductInfo(undefined);
+
          setIsOpenModal(false);
          // сброс кнопок выбора
          dispatch(basketActions.setSizePizza(SizePizza.SMALL));
@@ -67,29 +69,29 @@ export const ModalOrderProduct = forwardRef(
       }));
 
       return (
-         productInfo && (
-            <Modal
-               onAnimate={handleAnimate}
-               isOpen={isOpenModal}
-               onClose={onClose}
-               className={classNames(
-                  cls.modal,
-                  { [cls.modalActive]: isClosing },
-                  [],
-               )}
-               delayClose={300}
-               buttonCloseHeight={40}
-               buttonCloseRight={30}
-               buttonCloseTop={30}
-               buttonCloseWidth={40}
-            >
+         <Modal
+            onAnimate={handleAnimate}
+            isOpen={isOpenModal}
+            onClose={onClose}
+            className={classNames(
+               cls.modal,
+               { [cls.modalActive]: isClosing },
+               [],
+            )}
+            delayClose={modalDelay}
+            buttonCloseHeight={40}
+            buttonCloseRight={30}
+            buttonCloseTop={30}
+            buttonCloseWidth={40}
+         >
+            {productInfo && (
                <OrderProduct
                   onCloseModal={onClose}
                   productInfo={productInfo}
                   existingOrder={existingOrder}
                />
-            </Modal>
-         )
+            )}
+         </Modal>
       );
    },
 );
