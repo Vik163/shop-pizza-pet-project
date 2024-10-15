@@ -53,7 +53,7 @@ export const PageSelect = memo((props: PageSelectProps) => {
       dispatch(
          fetchViewProducts({
             page: pageProducts,
-            replace: pathname.slice(1),
+            replace: pathname === '/' ? 'pizzas' : pathname.slice(1),
          }),
       ).then((res) => {
          if (res.payload) {
