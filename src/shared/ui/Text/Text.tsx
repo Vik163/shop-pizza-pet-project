@@ -15,6 +15,7 @@ export enum FontColor {
    TEXT_GREY_BLUE_DARK = 'text_grey_blue_dark',
    TEXT_CARD_BUTTON_DARK = 'text_card_button_dark',
    TEXT_INPUT_EDIT = 'text_input_edit',
+   TEXT_ORANGE = 'text_orange',
 }
 export enum TextAlign {
    TEXT_LEFT = 'left',

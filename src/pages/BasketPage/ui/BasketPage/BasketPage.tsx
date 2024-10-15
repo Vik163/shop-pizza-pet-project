@@ -32,8 +32,6 @@ import { ModalOrderProduct, RefTypeModal } from '@/features/ModalOrderProduct';
 import { SelectAddressModal } from '@/features/SelectAddressModal';
 import { orderActions, orderReducer } from '@/entities/Order';
 import { Page } from '@/widgets/Page';
-import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
-import { UnauthModal } from '@/features/UnauthModal';
 import { modalDelay } from '@/shared/const/modal_delay';
 import { Loader } from '@/shared/ui/Loader';
 
@@ -55,7 +53,6 @@ const BasketPage = memo((props: BasketPageProps) => {
 
    const totalPrice = useSelector(getBasketTotalPrice);
    const additionToOrder = useSelector(getAdditionToOrder);
-   const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
 
    useEffect(() => {
       dispatch(fetchAdditionToOrder());
@@ -146,11 +143,7 @@ const BasketPage = memo((props: BasketPageProps) => {
                onClose={closeModal}
                delayClose={modalDelay}
             >
-               {userId ? (
-                  <SelectAddressModal closeModal={closeModal} />
-               ) : (
-                  <UnauthModal closeModal={closeModal} />
-               )}
+               <SelectAddressModal closeModal={closeModal} />
             </Modal>
             <Suspense fallback={<Loader />}>
                <ModalOrderProduct ref={childRef} />

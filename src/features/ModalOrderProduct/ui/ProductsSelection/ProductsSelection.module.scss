@@ -14,3 +14,15 @@
 .description {
    margin: 10px 0 15px;
 }
+
+.modal {
+   width: 760px;
+   height: 300px;
+   border-radius: 18px;
+   background-color: var(--block-bg-primary);
+   padding: 30px;
+   position: relative;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}

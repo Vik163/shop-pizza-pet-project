@@ -1,9 +1,15 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import cls from './ProductsSelection.module.scss';
 import { VStack } from '@/shared/ui/Stack';
-import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
+import {
+   FontColor,
+   FontSize,
+   FontWeight,
+   Text,
+   TextAlign,
+} from '@/shared/ui/Text';
 import { Product } from '@/entities/Product';
 import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
 import { ButtonsSelect } from '../ButtonsSelect/ButtonsSelect';
@@ -25,6 +31,8 @@ import {
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { useCountPrice } from '../../lib/hooks/useCountPrice';
 import { SizePizza, ViewDough } from '@/shared/const/product_const';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
+import { Modal } from '@/shared/ui/Modal';
 
 interface ProductsSelectionProps {
    productInfo: Product;
@@ -42,6 +50,9 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
    const orderAdditivesTitle = orderAdditives?.orderAdditivesTitle;
    const additivesPrice = orderAdditives?.price;
    const totalPrice = useCountPrice({ productInfo, sizePizza, additivesPrice });
+   const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+   const [isAuth, setIsAuth] = useState(false);
+   const [isOpenModal, setIsOpenModal] = useState(false);
 
    const dataPizza =
       productInfo.type === 'pizzas'
@@ -53,35 +64,45 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
       : '';
 
    const onSubmit = () => {
-      let order: BasketOneProduct;
+      if (userId) {
+         setIsAuth(true);
+         let order: BasketOneProduct;
 
-      if (productInfo.type === 'pizzas') {
-         order = {
-            product: productInfo,
-            image: productInfo.imageSmall,
-            sizePizza,
-            dia: ingredients.dia,
-            dough: viewDough,
-            additives: orderAdditivesTitle || existingOrder?.additives,
-            price: totalPrice,
-            existingOrderId: existingOrder?.id,
-         };
-      } else {
-         order = {
-            product: productInfo,
-            image: productInfo.imageSmall,
-            price: totalPrice,
-         };
-      }
-
-      dispatch(fetchAddBasket(order)).then((data) => {
-         if (data.payload) {
-            onCloseModal();
-            // сброс кнопок выбора
-            dispatch(basketActions.setSizePizza(SizePizza.SMALL));
-            dispatch(basketActions.setViewDough(ViewDough.TRADITIONAL));
+         if (productInfo.type === 'pizzas') {
+            order = {
+               product: productInfo,
+               image: productInfo.imageSmall,
+               sizePizza,
+               dia: ingredients.dia,
+               dough: viewDough,
+               additives: orderAdditivesTitle || existingOrder?.additives,
+               price: totalPrice,
+               existingOrderId: existingOrder?.id,
+            };
+         } else {
+            order = {
+               product: productInfo,
+               image: productInfo.imageSmall,
+               price: totalPrice,
+            };
          }
-      });
+
+         dispatch(fetchAddBasket(order)).then((data) => {
+            if (data.payload) {
+               onCloseModal();
+               // сброс кнопок выбора
+               dispatch(basketActions.setSizePizza(SizePizza.SMALL));
+               dispatch(basketActions.setViewDough(ViewDough.TRADITIONAL));
+            }
+         });
+      } else {
+         setIsAuth(false);
+         setIsOpenModal(true);
+      }
+   };
+
+   const closeUnAuth = () => {
+      setIsOpenModal(false);
    };
 
    return (
@@ -126,6 +147,25 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
          >
             Добавить в корзину за {totalPrice} &#8381;
          </Button>
+         {!isAuth && (
+            <Modal
+               isOpen={isOpenModal}
+               onClose={closeUnAuth}
+               className={cls.modal}
+               buttonCloseHeight={30}
+               buttonCloseRight={30}
+               buttonCloseTop={30}
+               buttonCloseWidth={30}
+            >
+               <Text
+                  fontColor={FontColor.TEXT_YELLOW}
+                  fontSize={FontSize.SIZE_26}
+                  align={TextAlign.TEXT_CENTER}
+               >
+                  Для добавления товаров в корзину необходимо авторизоваться!
+               </Text>
+            </Modal>
+         )}
       </VStack>
    );
 });
