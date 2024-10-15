@@ -45,8 +45,15 @@ export function useModal(props: UseModalProps) {
       [handleClose],
    );
 
+   // количество открытых модалок (для того чтобы скролл появлялся после закрытия всех модалок)
+   const countOpenModal = () => {
+      const num = document.querySelectorAll('#modal');
+      return num.length;
+   };
+
    useEffect(() => {
-      console.log('isOpen:', isOpen);
+      const numOpenModals = countOpenModal();
+
       if (isOpen) {
          // задержка нужна для монтирования модалки (из-за display: none css)
          if (delayClose) {
@@ -63,7 +70,7 @@ export function useModal(props: UseModalProps) {
       // скролл добавляю когда все модалки закрыты
       if (!isOpen) {
          clearTimeout(timerRef.current);
-         document.body.style.overflow = 'unset';
+         if (numOpenModals === 0) document.body.style.overflow = 'unset';
       }
       return () => {
          document.removeEventListener('keydown', onKeyDown);
