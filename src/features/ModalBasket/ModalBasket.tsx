@@ -107,6 +107,7 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
                   bgColor={ButtonBgColor.YELLOW}
                   fontColor={FontColor.TEXT_BUTTON}
                   fontSize={FontSize.SIZE_14}
+                  disabled={basketProducts.length === 0}
                >
                   Перейти в корзину
                </Button>

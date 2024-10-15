@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { useSelector } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 import cls from './ProductItem.module.scss';
 
 import { Card, CardRadius } from '@/shared/ui/Card';
@@ -25,7 +25,9 @@ interface ProductItemProps {
 
 export const ProductItem = memo((props: ProductItemProps) => {
    const { card, onClick } = props;
-   const basketProducts = useSelector(getBasketProducts);
+
+   //* функция shallowEqual из пакета react-redux для сравнения объектов из стора. Она передается вторым аргументом в useSelector (из-за перерендеров)
+   const basketProducts = useSelector(getBasketProducts, shallowEqual);
 
    const isInBasket = basketProducts.some(
       (i) => i.product.title === card.title,
