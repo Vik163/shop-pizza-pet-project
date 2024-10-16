@@ -18,6 +18,8 @@ import { FlexAlign } from '@/shared/ui/Stack/Flex';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { Navbar } from '@/widgets/Navbar';
 import { phoneHeader } from '@/shared/const/main_info';
+import { AppLink } from '@/shared/ui/AppLink';
+import { getRouteAbout } from '@/shared/const/router';
 
 interface HeaderProps {
    className?: string;
@@ -75,15 +77,17 @@ export const Header = memo((props: HeaderProps) => {
                className={classNames(cls.button)}
                variant={ButtonVariant.FILLED}
                bgColor={ButtonBgColor.GREY}
-               fontColor={FontColor.TEXT_BUTTON}
                fontSize={FontSize.SIZE_14}
                fontWeight={FontWeight.TEXT_700}
                width={180}
                height={42}
                radius={ButtonRadius.RADIUS_28}
             >
-               Заказать звонок
+               <AppLink className={cls.aboutBtn} to={getRouteAbout()}>
+                  <span>О проекте</span>
+               </AppLink>
             </Button>
+
             <Text
                fontColor={FontColor.TEXT_YELLOW}
                fontWeight={FontWeight.TEXT_700}

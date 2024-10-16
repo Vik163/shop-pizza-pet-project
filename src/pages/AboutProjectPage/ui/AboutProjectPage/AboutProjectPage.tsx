@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './AboutProjectPage.module.scss';
-import { FontSize, HeaderTagType, Text } from '@/shared/ui/Text';
+import { FontSize, FontWeight, HeaderTagType, Text } from '@/shared/ui/Text';
 import { Page } from '@/widgets/Page';
 import { VStack } from '@/shared/ui/Stack';
 
@@ -67,20 +67,33 @@ const AboutProjectPage = memo((props: AboutProjectPageProps) => {
                   max
                   align={FlexAlign.START}
                >
-                  <Button
-                     className={cls.titleTechnology}
-                     fontSize={FontSize.SIZE_22}
-                     onClick={() => openBlock(item.name)}
-                  >
-                     <Icon
-                        Svg={nameOpenBlock.includes(item.name) ? minus : plus}
-                        className={cls.addIcon}
-                        width={20}
-                        height={20}
-                     />
-                     {item.name}
-                  </Button>
-                  {nameOpenBlock.includes(item.name) && (
+                  {item.skills ? (
+                     <Button
+                        className={cls.titleTechnology}
+                        fontSize={FontSize.SIZE_22}
+                        onClick={() => openBlock(item.name)}
+                     >
+                        <Icon
+                           Svg={
+                              nameOpenBlock.includes(item.name) ? minus : plus
+                           }
+                           className={cls.addIcon}
+                           width={20}
+                           height={20}
+                        />
+
+                        {item.name}
+                     </Button>
+                  ) : (
+                     <Text
+                        fontSize={FontSize.SIZE_22}
+                        fontWeight={FontWeight.TEXT_700}
+                        className={cls.text}
+                     >
+                        {item.name}
+                     </Text>
+                  )}
+                  {nameOpenBlock.includes(item.name) && item.skills && (
                      <SkiilsComponent skills={item.skills} />
                   )}
                </VStack>

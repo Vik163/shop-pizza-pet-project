@@ -55,6 +55,7 @@ module.exports = {
          2,
          { extensions: ['.js', '.jsx', '.tsx'] },
       ],
+      // 'max-len': ['error', { code: 130 }],
       'import/no-unresolved': 'off',
       'import/prefer-default-export': 'off',
       '@typescript-eslint/no-unused-vars': 'error',

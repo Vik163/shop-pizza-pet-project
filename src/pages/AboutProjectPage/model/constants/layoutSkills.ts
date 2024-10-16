@@ -1,5 +1,5 @@
 export const layoutSkills = {
-   SCSS: ['Он мне нравиться своими возможностями, хотя пользовался ими мало.'],
+   SCSS: ['Нравиться своими возможностями, хотя пользовался ими мало.'],
    'CSS Modules': undefined,
    Flex: undefined,
    Grid: undefined,

@@ -17,6 +17,10 @@ export const technologies = [
       skills: backendSkills,
    },
    {
+      name: 'TypeScript',
+      skills: undefined,
+   },
+   {
       name: 'Deploy',
       skills: deploySkills,
    },

@@ -26,5 +26,11 @@
 
 .addIcon {
    margin-right: 15px;
-   fill: Yellow;
+   fill: var(--color-input-active, #ff9a2e);
+}
+
+.text {
+   margin-left: 34px;
+   margin-bottom: 20px;
+   cursor: default;
 }

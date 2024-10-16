@@ -9,6 +9,7 @@ import { Icon } from '@/shared/ui/Icon';
 import { Button } from '@/shared/ui/Button';
 import { useOpenBlock } from '../../../lib/hooks/useOpenBlock';
 import { Text } from '@/shared/ui/Text';
+import github from '@/shared/assets/icons/github_logo.svg';
 
 interface SkiilsComponentProps {
    className?: string;
@@ -37,11 +38,24 @@ export const SkiilsComponent = memo((props: SkiilsComponentProps) => {
                      {name}
                   </Button>
                   {nameOpenBlock.includes(name) &&
-                     value.map((text) => (
-                        <Text key={text} className={cls.text}>
-                           {text}
-                        </Text>
-                     ))}
+                     value.map((text) =>
+                        text.includes('->') ? (
+                           <Text key={text} className={cls.text}>
+                              &ensp;{text.split('->')[0]} ➜
+                              <a
+                                 href={text.split('->')[1]}
+                                 target='_blank'
+                                 className={cls.link}
+                              >
+                                 <Icon className={cls.iconGit} Svg={github} />
+                              </a>
+                           </Text>
+                        ) : (
+                           <Text key={text} className={cls.text}>
+                              &ensp;{text}
+                           </Text>
+                        ),
+                     )}
                </li>
             ) : (
                <li
@@ -50,7 +64,7 @@ export const SkiilsComponent = memo((props: SkiilsComponentProps) => {
                   ])}
                   key={name}
                >
-                  &emsp;&ensp;{name}
+                  &emsp;&ensp;&nbsp;{name}
                </li>
             ),
          )}

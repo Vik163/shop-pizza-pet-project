@@ -3,13 +3,7 @@ import React, { memo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import cls from './ProductsSelection.module.scss';
 import { VStack } from '@/shared/ui/Stack';
-import {
-   FontColor,
-   FontSize,
-   FontWeight,
-   Text,
-   TextAlign,
-} from '@/shared/ui/Text';
+import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
 import { Product } from '@/entities/Product';
 import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
 import { ButtonsSelect } from '../ButtonsSelect/ButtonsSelect';
@@ -32,7 +26,8 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { useCountPrice } from '../../lib/hooks/useCountPrice';
 import { SizePizza, ViewDough } from '@/shared/const/product_const';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
-import { Modal } from '@/shared/ui/Modal';
+// eslint-disable-next-line ulbi-tv-plugin/layer-imports
+import { AuthByPhone } from '@/features/AuthByPhone';
 
 interface ProductsSelectionProps {
    productInfo: Product;
@@ -148,23 +143,27 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
             Добавить в корзину за {totalPrice} &#8381;
          </Button>
          {!isAuth && (
-            <Modal
-               isOpen={isOpenModal}
-               onClose={closeUnAuth}
-               className={cls.modal}
-               buttonCloseHeight={30}
-               buttonCloseRight={30}
-               buttonCloseTop={30}
-               buttonCloseWidth={30}
-            >
-               <Text
-                  fontColor={FontColor.TEXT_YELLOW}
-                  fontSize={FontSize.SIZE_26}
-                  align={TextAlign.TEXT_CENTER}
-               >
-                  Для добавления товаров в корзину необходимо авторизоваться!
-               </Text>
-            </Modal>
+            <AuthByPhone
+               closeAuthModal={closeUnAuth}
+               isOpenModal={isOpenModal}
+            />
+            // <Modal
+            //    isOpen={isOpenModal}
+            //    onClose={closeUnAuth}
+            //    className={cls.modal}
+            //    buttonCloseHeight={30}
+            //    buttonCloseRight={30}
+            //    buttonCloseTop={30}
+            //    buttonCloseWidth={30}
+            // >
+            //    <Text
+            //       fontColor={FontColor.TEXT_YELLOW}
+            //       fontSize={FontSize.SIZE_26}
+            //       align={TextAlign.TEXT_CENTER}
+            //    >
+            //       Для добавления товаров в корзину необходимо авторизоваться!
+            //    </Text>
+            // </Modal>
          )}
       </VStack>
    );

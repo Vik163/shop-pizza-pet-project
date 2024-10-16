@@ -21,8 +21,8 @@
 }
 
 .addIcon {
-   margin-right: 10px;
-   fill: Yellow;
+   margin-right: 11px;
+   fill: var(--color-input-active, #ff9a2e);
 }
 
 .text {
@@ -31,4 +31,18 @@
    font-style: italic;
    font-size: var(--size-16);
    font-weight: var(--weight-500);
+   display: flex;
+   align-items: center;
+}
+
+.link {
+   width: 25px;
+   height: 25px;
+   margin-left: 10px;
+}
+
+.iconGit {
+   width: 25px;
+   height: 25px;
+   fill: var(--color-primary);
 }

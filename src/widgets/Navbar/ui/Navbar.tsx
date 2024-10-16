@@ -84,7 +84,11 @@ export const Navbar = memo((props: NavbarProps) => {
             </AppLink>
          )}
 
-         <Button onClick={openBasket} className={cls.basket}>
+         <Button
+            onClick={openBasket}
+            className={cls.basket}
+            disabled={basketProducts?.length === 0}
+         >
             Корзина
             <span className={classNames(cls.basket_quantity)}>
                {basketProducts?.length || 0}
