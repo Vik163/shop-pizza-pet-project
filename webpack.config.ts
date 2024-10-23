@@ -8,7 +8,6 @@ import {
    type BuildPaths,
 } from './config/build/types/config';
 
-// деплой 14_18 7min
 function getApiUrl(mode: BuildMode, apiUrl?: string) {
    if (apiUrl) {
       return apiUrl;
@@ -33,7 +32,7 @@ export default (env: BuildEnv) => {
    };
 
    // логика development или production ----
-   const mode = env?.mode || 'development'; // env? 14_11
+   const mode = env?.mode || 'development';
    const PORT = env?.port || 3000;
    const apiUrl = getApiUrl(mode, env?.apiUrl);
 

@@ -3,27 +3,13 @@ import { MainPageSchema } from '../types/mainPageSchema';
 import { fetchPopularProducts } from '../services/fetchPopularProducts';
 import { ViewProducts } from '@/entities/Product';
 
-// 8_4
 const initialStateMainPage: MainPageSchema = {
    isLoading: false,
    isLoadingPopularProducts: false,
    error: undefined,
-   //    _inited: false,
    cards: {},
    popularProducts: [],
-   //    sort: ArticleSortField.CREATED,
-   //    search: '',
-   //    type: ArticleType.ALL,
 };
-
-// export const productsAdapter = createEntityAdapter<Product>({
-//    selectId: (product) => product._id,
-// });
-
-// // Селекторы
-// export const getEntityProducts = productsAdapter.getSelectors<StateSchema>(
-//    (state) => state.mainPage || productsAdapter.getInitialState(),
-// );
 
 const mainPageSlice = createSlice({
    name: 'mainPageSlice',
@@ -41,15 +27,6 @@ const mainPageSlice = createSlice({
       //   },
       //   setSearch: (state, action: PayloadAction<string>) => {
       //      state.search = action.payload;
-      //   },
-      //   initState: (state) => {
-      //      const view = localStorage.getItem(
-      //         ARTICLES_VIEW_LOCALSTORAGE_KEY,
-      //      ) as ArticleView;
-      //      state.view = view;
-      //      // пагинация
-      //      state.limit = view === ArticleView.BIG ? 4 : 9;
-      //      state._inited = true; // 9_1 5min
       //   },
    },
    extraReducers: (builder) => {

@@ -1,25 +1,23 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/StoreProvider';
 import { Product } from '@/entities/Product';
-import { $api } from '@/shared/api/api';
+import { getAdditionalToOrder } from '../../api/basketPageApi';
 
 export const fetchAdditionToOrder = createAsyncThunk<
    Product[],
    void,
    ThunkConfig<string>
 >('basketPage/fetchAdditionToOrder', async (_, thunkApi) => {
-   const { rejectWithValue } = thunkApi;
+   const { rejectWithValue, dispatch } = thunkApi;
 
    try {
-      const data = await $api.get('/products/addition_order');
+      const additions = await dispatch(getAdditionalToOrder()).unwrap();
 
-      const additions = data.data;
-
-      if (!additions) rejectWithValue('Дополнения к заказу не найдены');
+      if (!additions) return rejectWithValue('Дополнения к заказу не найдены');
 
       return additions;
    } catch (err) {
       console.log(err);
-      rejectWithValue('Дополнения к заказу не найдены');
+      return rejectWithValue('Дополнения к заказу не найдены');
    }
 });

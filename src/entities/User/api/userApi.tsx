@@ -1,8 +1,11 @@
-import { rtkApi } from '@/shared/api/rtkApi';
+import { rtkApi, rtkApiTokens } from '@/shared/api/rtkApi';
 import { UpdateUserData, type UserData } from '../model/types/user';
 import { type UserSettings } from '../model/types/userSettings';
 
-// 15_5 8min пользовательские json настройки
+interface UserSignUp {
+   user: { phoneNumber: string | null };
+   csrf: string;
+}
 
 interface SetUserSettingsArg {
    userId: string;
@@ -15,6 +18,32 @@ interface SetUpdateUserDataArg {
 }
 
 const userApi = rtkApi.injectEndpoints({
+   endpoints: (build) => ({
+      signUpUser: build.query<UserData, UserSignUp>({
+         query: ({ user, csrf }) => ({
+            url: '/firebase',
+            method: 'POST',
+            headers: { 'x-csrf-token': csrf },
+            body: user,
+         }),
+      }),
+      getUserDataById: build.query<UserData, string>({
+         query: (userId) => ({
+            url: `/auth/${userId}`,
+            method: 'GET',
+         }),
+      }),
+      logout: build.query<Response, void>({
+         query: () => ({
+            url: '/signout',
+            method: 'GET',
+            // validateStatus: (response) => response.status === 200,
+         }),
+      }),
+   }),
+});
+
+const userApiTokens = rtkApiTokens.injectEndpoints({
    endpoints: (build) => ({
       setUpdateUserData: build.mutation<UserData, SetUpdateUserDataArg>({
          query: ({ userId, updateData }) => ({
@@ -34,19 +63,17 @@ const userApi = rtkApi.injectEndpoints({
             },
          }),
       }),
-      getUserDataById: build.query<UserData, string>({
-         query: (userId) => ({
-            url: `/auth/${userId}`,
-            method: 'GET',
-         }),
-      }),
    }),
 });
 
+export const signUpUser = userApi.endpoints.signUpUser.initiate;
+
 export const setUpdateUserDataMutation =
-   userApi.endpoints.setUpdateUserData.initiate;
+   userApiTokens.endpoints.setUpdateUserData.initiate;
 
 export const setUserSettingsMutation =
-   userApi.endpoints.setUserSettings.initiate;
+   userApiTokens.endpoints.setUserSettings.initiate;
 
 export const getUserDataByIdQuery = userApi.endpoints.getUserDataById.initiate;
+
+export const userLogout = userApi.endpoints.logout.initiate;

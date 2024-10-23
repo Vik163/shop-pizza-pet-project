@@ -18,9 +18,9 @@ import {
 } from '../../../model/selectors/popularProductsSelector';
 import { NewProductsSkeleton } from './NewProductsSkeleton/NewProductsSkeleton';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { fetchPopularProducts } from '../../../model/services/fetchPopularProducts';
 import { Product } from '@/entities/Product';
 import { ModalOrderProduct, RefTypeModal } from '@/features/ModalOrderProduct';
+import { fetchPopularProducts } from '../../../model/services/fetchPopularProducts';
 
 export const NewProducts = memo(() => {
    const dispatch = useAppDispatch();

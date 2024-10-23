@@ -20,7 +20,7 @@ export function buildWebpackConfig(
       filename: "[name].[contenthash].js", // Создает файлы main с хешем
       path: paths.build,
       clean: true, // Очищает папку build
-      publicPath: "/", // 7_2 9мин - путь для :id
+      publicPath: "/", // путь для :id
     },
     plugins: buildPlugins(options),
     module: {
@@ -29,7 +29,7 @@ export function buildWebpackConfig(
     },
     resolve: buildResolvers(options), // Чтобы не указывать расширение при импорте
     // Не срабатывают при production
-    // devtool: isDev ? 'eval-cheap-module-source-map' : undefined, // позволяет видеть кде в коде произошла ошибка
+    // devtool: isDev ? 'eval-cheap-module-source-map' : undefined, // позволяет видеть где в коде произошла ошибка
     devtool: isDev ? "eval-cheap-module-source-map" : undefined,
     devServer: isDev ? buildDevServer(options) : undefined,
     // Яндекс карты =============================

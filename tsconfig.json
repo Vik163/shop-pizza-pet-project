@@ -47,10 +47,9 @@
          "module": "CommonJS"
       }
    },
-   // добавлял ля eslint
+   // добавлял для eslint
    "include": [
       "./config/build/loaders/buildBabelLoader.ts",
-      "./vite.config.ts",
       "./.eslintrc.js",
       "./src/**/*.ts",
       "./src/**/*.tsx"

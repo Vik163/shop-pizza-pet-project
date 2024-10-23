@@ -30,10 +30,10 @@ import {
    updateUserData,
    userAction,
    UpdateUserData,
+   userLogout,
 } from '@/entities/User';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { useCookie } from '@/shared/lib/hooks/useCookie';
-import { fetchLogoutUser } from '../../model/services/fetchLogout';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { DateSelect } from '../DateSelect/DateSelect';
 import { basketActions } from '@/entities/Basket';
@@ -87,9 +87,9 @@ export const PersonalData = memo((props: PersonalDataProps) => {
 
       if (signoutFirebase) {
          // выход из БД (возвращает булевое значение)
-         const data = await fetchLogoutUser();
+         const data = await dispatch(userLogout());
 
-         if (data) {
+         if (data.status === 'fulfilled') {
             // удаление токенов
             dispatch(userAction.logout());
             navigate('/');

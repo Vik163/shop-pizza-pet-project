@@ -46,8 +46,9 @@ export const SkiilsComponent = memo((props: SkiilsComponentProps) => {
                                  href={text.split('->')[1]}
                                  target='_blank'
                                  className={cls.link}
+                                 rel='noreferrer'
                               >
-                                 <Icon className={cls.iconGit} Svg={github} />
+                                 <Icon className={cls.iconGit} Svg={github} />{' '}
                               </a>
                            </Text>
                         ) : (

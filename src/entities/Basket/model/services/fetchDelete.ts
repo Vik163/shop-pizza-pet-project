@@ -1,28 +1,29 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { $apiTokens } from '@/shared/api/api';
 import { ThunkConfig } from '@/app/providers/StoreProvider';
 import { BasketData } from '../types/basket';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
+import { setBasketDeleteDataMutation } from '../../api/basketApi';
 
 export const fetchDelete = createAsyncThunk<
    BasketData,
    string,
    ThunkConfig<string>
->('basket/fetchDelete', async (id, thunkApi) => {
-   const { rejectWithValue } = thunkApi;
+>('basket/fetchDelete', async (productId, thunkApi) => {
+   const { rejectWithValue, dispatch } = thunkApi;
 
    try {
-      const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+      const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY) || '';
 
-      const basketData = await $apiTokens.delete(
-         `/users/${userId}/basket/${id}`,
-      );
+      const basket = await dispatch(
+         setBasketDeleteDataMutation({ userId, productId }),
+      ).unwrap();
 
-      const basket = basketData.data;
+      if (!basket)
+         return rejectWithValue('Не удалось удалить из корзины товар');
 
       return basket;
    } catch (err) {
       console.log(err);
-      rejectWithValue('Не удалось удалить из корзины товар');
+      return rejectWithValue('Не удалось удалить из корзины товар');
    }
 });

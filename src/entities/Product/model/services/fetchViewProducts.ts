@@ -5,6 +5,7 @@ import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 import { getViewProducts } from '../selectors/productSelector';
 import { ProductSchema } from '../types/productSchema';
 import { paginateElements } from '@/shared/const/paginate_elements';
+import { getProducts } from '../../api/productApi';
 
 interface FetchViewProductsProps {
    page?: number;
@@ -16,7 +17,7 @@ export const fetchViewProducts = createAsyncThunk<
    FetchViewProductsProps,
    ThunkConfig<string>
 >('mainPageProducts/fetchFetchViewProducts', async (props, thunkApi) => {
-   const { extra, rejectWithValue, getState } = thunkApi;
+   const { rejectWithValue, getState, dispatch } = thunkApi;
    const { page, replace } = props;
    // const search = getMainPageSearch(getState());
 
@@ -24,24 +25,24 @@ export const fetchViewProducts = createAsyncThunk<
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
 
    try {
-      const response = await extra.api.get<ProductSchema>('/products', {
-         params: {
-            _expand: userId || 'user',
-            view,
-            _limit: paginateElements,
-            _page: page,
-            _replace: replace,
-            // q: search, // 9_3 24min
-         },
-      });
+      const params = {
+         _expand: userId || 'user',
+         view,
+         _limit: paginateElements,
+         _page: page,
+         _replace: replace,
+         // q: search, // 9_3 24min
+      };
 
-      if (!response.data) {
-         throw new Error();
+      const products = dispatch(getProducts(params)).unwrap();
+
+      if (!products) {
+         return rejectWithValue('Товары не найдены');
       }
 
       // console.log('response.data:', response.data);
-      return response.data;
+      return products;
    } catch (e) {
-      return rejectWithValue('error');
+      return rejectWithValue('Товары не найдены');
    }
 });

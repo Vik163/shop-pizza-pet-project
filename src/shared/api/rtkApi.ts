@@ -5,13 +5,22 @@ import axios from 'axios';
 import { useCookie } from '../lib/hooks/useCookie';
 import { StateSchema } from '@/app/providers/StoreProvider';
 import { LOCALSTORAGE_USER_KEY } from '../const/localstorage';
-import { host } from './api';
+import { host } from '../const/host';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const { getCookie } = useCookie();
 
+// Добавить в store обе api  и типы в схему
 export const rtkApi = createApi({
-   reducerPath: 'api',
+   reducerPath: 'api', // Для каждого api должно быть свое имя (по умолчанию 'api')
+   baseQuery: fetchBaseQuery({
+      baseUrl: __API__,
+   }),
+   endpoints: () => ({}),
+});
+
+export const rtkApiTokens = createApi({
+   reducerPath: 'apiTokens',
    baseQuery: fetchBaseQuery({
       baseUrl: __API__,
       prepareHeaders: async (headers, { getState }) => {
@@ -43,6 +52,5 @@ export const rtkApi = createApi({
       },
       credentials: 'include',
    }),
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   endpoints: (builder) => ({}),
+   endpoints: () => ({}),
 });

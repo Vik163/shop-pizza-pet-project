@@ -1,24 +1,23 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/app/providers/StoreProvider';
-import { $api } from '@/shared/api/api';
 import { BasketData } from '../types/basket';
+import { getBasket } from '../../api/basketApi';
 
 export const fetchBasket = createAsyncThunk<
    BasketData,
    string,
    ThunkConfig<string>
 >('orderProducts/fetchBasket', async (id, thunkApi) => {
-   const { rejectWithValue } = thunkApi;
+   const { rejectWithValue, dispatch } = thunkApi;
 
    try {
-      const basketData = await $api.get(`/users/${id}/basket`);
-      const basket = basketData.data;
+      const basket = await dispatch(getBasket(id)).unwrap();
 
-      if (!basket) rejectWithValue('Корзина не найдена');
+      if (!basket) return rejectWithValue('Корзина не найдена');
 
       return basket;
    } catch (err) {
       console.log(err);
-      rejectWithValue('Корзина не найдена');
+      return rejectWithValue('Корзина не найдена');
    }
 });

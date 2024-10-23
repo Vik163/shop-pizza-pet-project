@@ -1,17 +1,22 @@
-import axios from 'axios';
-import { host } from '@/shared/api/api';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { ThunkConfig } from '@/app/providers/StoreProvider';
+import { setCsrfToken } from '../../api/csrfApi';
 
-export const fetchCsrfToken = async (): Promise<string | undefined> => {
+export const fetchCsrfToken = createAsyncThunk<
+   string,
+   void,
+   ThunkConfig<string>
+>('csrfToken/fetchCsrfToken', async (_, thunkApi) => {
+   const { rejectWithValue, dispatch } = thunkApi;
+
    try {
-      const token = await axios.get(`${host}/csrf`);
+      const csrfToken = await dispatch(setCsrfToken()).unwrap();
 
-      const csrfToken: string = token.data;
+      if (!csrfToken) return rejectWithValue('csrf не получен');
 
-      if (csrfToken) return csrfToken;
-
-      return 'csrf не получен';
+      return csrfToken;
    } catch (err) {
       console.log(err);
-      return 'csrf не получен';
+      return rejectWithValue('csrf не получен');
    }
-};
+});

@@ -4,10 +4,9 @@ import {
    type ReducersMapObject,
    configureStore,
 } from '@reduxjs/toolkit';
-import { type StateSchema, type ThunkExtraArg } from './StateSchema';
+import { type StateSchema } from './StateSchema';
 import { csrfTokenReducer, userReducer } from '@/entities/User';
-import { $api } from '@/shared/api/api';
-import { rtkApi } from '@/shared/api/rtkApi';
+import { rtkApi, rtkApiTokens } from '@/shared/api/rtkApi';
 import { createReducerManager } from './reducerManager';
 import { mainPageReducer } from '@/pages/MainPage';
 import { actionsReducer } from '@/entities/Action';
@@ -31,16 +30,17 @@ export function createReduxStore(
       csrfToken: csrfTokenReducer,
       actions: actionsReducer,
       product: productReducer,
-      [rtkApi.reducerPath]: rtkApi.reducer, // 11_2 8min
+      [rtkApi.reducerPath]: rtkApi.reducer, // Добавить все api сюда и в middleware ниже
+      [rtkApiTokens.reducerPath]: rtkApiTokens.reducer,
    };
 
    // Для удаления и добавления ассинхронный редьюсеров 5_1 14min
    const reducerManager = createReducerManager(rootReducers);
 
    // настраиваем thunk добавляем через extraArgument настройку axios
-   const extraArg: ThunkExtraArg = {
-      api: $api,
-   };
+   // const extraArg: ThunkExtraArg = {
+   //    api: $api,
+   // };
 
    const store = configureStore({
       // as Reducer<CombinedState<StateSchema>> 5_6 - 13 min 18min
@@ -51,11 +51,15 @@ export function createReduxStore(
       // axios
       // добавляем в thunk через extraArgument настройку axios 5_4 2min
       middleware: (getDefaultMiddleware) =>
-         getDefaultMiddleware({
-            thunk: {
-               extraArgument: extraArg,
-            },
-         }).concat(rtkApi.middleware),
+         getDefaultMiddleware().concat(
+            //    {
+            //    thunk: {
+            //       extraArgument: extraArg,
+            //    },
+            // }
+            rtkApi.middleware,
+            rtkApiTokens.middleware,
+         ),
    });
 
    // в store поля reducerManager не существует, добавляем его

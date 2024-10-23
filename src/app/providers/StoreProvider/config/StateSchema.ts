@@ -5,10 +5,9 @@ import {
    type Reducer,
    type ReducersMapObject,
 } from '@reduxjs/toolkit';
-import { type AxiosInstance } from 'axios';
 import { type TokenSchema, type UserSchema } from '@/entities/User';
 import { type AuthPhoneSchema } from '@/features/AuthByPhone';
-import { type rtkApi } from '@/shared/api/rtkApi';
+import { rtkApiTokens, type rtkApi } from '@/shared/api/rtkApi';
 import { type MainPageSchema } from '@/pages/MainPage';
 import { ActionsSchema } from '@/entities/Action';
 import { BasketSchema } from '@/entities/Basket';
@@ -25,7 +24,8 @@ export interface StateSchema {
    basket: BasketSchema;
    product: ProductSchema;
 
-   [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>; // 11_2 9min
+   [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>;
+   [rtkApiTokens.reducerPath]: ReturnType<typeof rtkApiTokens.reducer>;
 
    // Асинхронные редюсеры (необязательные)
    authPhone?: AuthPhoneSchema;
@@ -56,15 +56,15 @@ export interface ReduxStoreWithManager extends EnhancedStore<StateSchema> {
 // ========================================================================
 
 // настраиваем thunk добавляем через extraArgument настройку axios
-export interface ThunkExtraArg {
-   api: AxiosInstance;
-}
+// export interface ThunkExtraArg {
+//    api: AxiosInstance;
+// }
 
 // thunkAPI - { rejectValue: string, extra: ThunkExtraArg }
 // преобразуем
 // дженерик Т - тип ошибки
 export interface ThunkConfig<T> {
    rejectValue: T;
-   extra: ThunkExtraArg;
+   // extra: ThunkExtraArg;
    state: StateSchema;
 }

@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { type AuthPhoneSchema } from '../types/authPhone';
-import { fetchSignupUser } from '../services/fetchSignupUser';
 
 const initialState: AuthPhoneSchema = {
    phoneNumber: '',
@@ -29,19 +28,6 @@ const authPhoneSlice = createSlice({
       ) => {
          state.isConfirmCode = payload.isConfirmCode;
       },
-   },
-   extraReducers: (builder) => {
-      builder
-         .addCase(fetchSignupUser.pending, (state) => {
-            state.isLoading = true;
-         })
-         .addCase(fetchSignupUser.fulfilled, (state) => {
-            state.isLoading = false;
-         })
-         .addCase(fetchSignupUser.rejected, (state, action) => {
-            state.isLoading = false;
-            state.error = action.error.message;
-         });
    },
 });
 

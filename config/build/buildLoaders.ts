@@ -8,10 +8,10 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
 
     const svgLoader = {
         test: /\.svg$/,
-        use: [{ // 16_2 2min
-            loader: '@svgr/webpack',
+        use: [{
+            loader: '@svgr/webpack', // преобразование SVG-файлов в компоненты React
             options: {
-                icon: true,
+                icon: true, // пользовательское значение width и height
                 svgoConfig: {
                     // Заменяет захардкоженные fill=цвет на fill=currentColor
                     plugins: [ 
@@ -27,8 +27,6 @@ export function buildLoaders(options: BuildOptions): webpack.RuleSetRule[] {
         }],
     };
 
-    // const babelLoader = buildBabelLoader(options);
-    // 11_10 4min
     const codeBabelLoader = buildBabelLoader({ ...options, isTsx: false });
     const tsxCodeBabelLoader = buildBabelLoader({ ...options, isTsx: true });
 

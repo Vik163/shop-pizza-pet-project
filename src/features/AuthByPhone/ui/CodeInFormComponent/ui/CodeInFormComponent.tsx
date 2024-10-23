@@ -38,9 +38,12 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
             if (value)
                if (value.length === lengthConfirmCode) {
                   const user = await firebaseApi.verifyCode(value);
-                  if (user) createUser(user);
+                  if (user) {
+                     createUser(user);
+                  } else {
+                     dispatch(authPhoneActions.setIsError('Неверный код'));
+                  }
                   // Если код неверный возвращается null
-                  dispatch(authPhoneActions.setIsError('Неверный код'));
                }
             return value;
          } catch (err) {

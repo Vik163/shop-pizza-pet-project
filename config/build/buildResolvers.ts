@@ -11,7 +11,7 @@ export function buildResolvers(options: BuildOptions): ResolveOptions {
         mainFiles: ['index'],
         // если оставляем пустой объект, не надо указвать @
         alias: {
-            '@': options.paths.src, // 12_5 2min
+            '@': options.paths.src, 
         },
     };
 }

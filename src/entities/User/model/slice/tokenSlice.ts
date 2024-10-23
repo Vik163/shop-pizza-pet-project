@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { type TokenSchema } from '../types/token';
+import { fetchCsrfToken } from '../services/fetchCsrfToken';
 
 const initialState: TokenSchema = {
    _csrfToken: '',
@@ -9,10 +10,18 @@ const initialState: TokenSchema = {
 const csrfTokenSlice = createSlice({
    name: 'csrfToken',
    initialState,
-   reducers: {
-      setToken: (state, { payload }: PayloadAction<string>) => {
-         state._csrfToken = payload;
-      },
+   reducers: {},
+   extraReducers: (builder) => {
+      builder
+         .addCase(
+            fetchCsrfToken.fulfilled,
+            (state, { payload }: PayloadAction<string>) => {
+               state._csrfToken = payload;
+            },
+         )
+         .addCase(fetchCsrfToken.rejected, (state, { payload }) => {
+            state.errorMessage = payload;
+         });
    },
 });
 

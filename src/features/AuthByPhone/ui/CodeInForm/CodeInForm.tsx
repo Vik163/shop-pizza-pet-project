@@ -16,9 +16,9 @@ import {
 } from '../../model/selectors/authPhoneSelectors';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
-import { fetchSignupUser } from '../../model/services/fetchSignupUser';
 import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
 import { CodeInFormComponent } from '../CodeInFormComponent/ui/CodeInFormComponent';
+import { fetchSignupUser } from '@/entities/User';
 
 interface CodeInFormProps {
    className?: string;

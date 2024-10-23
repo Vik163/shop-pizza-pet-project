@@ -34,7 +34,7 @@ export interface ValidationErrors {
 export interface UserSchema {
    authData: UserData | null;
    _userUid?: string;
-
+   isLoading?: boolean;
    _inited?: boolean;
    message?: string;
    error: string | null | undefined;

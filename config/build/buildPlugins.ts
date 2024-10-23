@@ -16,12 +16,16 @@ export function buildPlugins({
    const isProd = !isDev; // 13_17 улучшаем сборку
    dotenv.config();
 
+   // упрощает создание HTML-файлов для обслуживания ваших пакетов webpack. Это особенно полезно для пакетов webpack, которые содержат хэш в имени файла
    const plugins = [
       new HtmlWebpackPlugin({
          template: paths.html,
          favicon: paths.favicon,
       }),
+
+      // отображения отчетов о ходе выполнения во время компиляции
       new webpack.ProgressPlugin(),
+
       // прокидывает глобальные переменные
       new webpack.DefinePlugin({
          'process.env': JSON.stringify(process.env),
@@ -29,12 +33,15 @@ export function buildPlugins({
          __API__: JSON.stringify(apiUrl),
          __PROJECT__: JSON.stringify(project),
       }),
-      // кольцевые зависимости 11_9
+
+      // кольцевые зависимости 
       new CircularDependencyPlugin({
          exclude: /node_modules/,
          failOnError: true, // при обнаружении выпадает ошибка
       }),
-      // миграция на babel-loader 11_10 8min обработка типов отдельно при загрузке
+
+      // миграция на babel-loader
+      //  ускоряет проверку типов TypeScript и проверку ESLint, перемещая их в отдельные процессы (обработка типов отдельно)
       new ForkTsCheckerWebpackPlugin({
          typescript: {
             diagnosticOptions: {
@@ -59,7 +66,7 @@ export function buildPlugins({
    }
 
    if (isProd) {
-      // 13_17 улучшаем сборку
+      // Этот плагин извлекает CSS из отдельных файлов. Он создаёт файл CSS для каждого JS-файла, содержащего CSS. Он поддерживает загрузку CSS по требованию и SourceMaps
       plugins.push(
          new MiniCssExtractPlugin({
             filename: 'css/[name].[contenthash:8].css',
