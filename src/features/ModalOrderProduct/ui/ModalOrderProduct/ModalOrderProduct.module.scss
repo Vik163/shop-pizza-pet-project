@@ -1,3 +1,5 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .modal {
    width: 960px;
    height: 650px;
@@ -13,5 +15,13 @@
       opacity: 1;
       transform: scale(1);
       transition: 0.2s;
+   }
+}
+
+@media screen and (max-width: $mobile) {
+   .modal {
+      width: 300px;
+      height: auto;
+      padding: 15px;
    }
 }

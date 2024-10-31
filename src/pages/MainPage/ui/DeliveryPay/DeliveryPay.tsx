@@ -62,7 +62,7 @@ export const DeliveryPay = memo((props: DeliveryPayProps) => {
                >
                   <Icon src={icon} className={cls.icon} />
                   <Text
-                     fontSize={FontSize.SIZE_14}
+                     className={cls.textButton}
                      fontWeight={FontWeight.TEXT_700}
                      fontColor={FontColor.TEXT_CARD_BUTTON_DARK}
                      max

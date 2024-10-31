@@ -1,0 +1,26 @@
+.overlay {
+   position: absolute;
+   top: 0;
+   left: 0;
+   height: 100%;
+   width: 100%;
+   background: rgba(100, 86, 23, 0.4);
+   opacity: 0;
+   transition: 0.2s;
+   z-index: 1;
+
+   &.nonAnimate {
+      opacity: 1;
+   }
+
+   &.centerOverlay {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
+
+   &.overlayActive {
+      opacity: 1;
+      transition: 0.2s;
+   }
+}

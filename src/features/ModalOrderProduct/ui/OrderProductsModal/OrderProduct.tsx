@@ -11,6 +11,7 @@ import { DynamicReducersLoader } from '@/shared/lib/components/DynamicReducersLo
 import { additivesReducer } from '@/entities/Additives';
 import { BasketOneProduct } from '@/entities/Basket';
 import { SizePizza } from '@/shared/const/product_const';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface OrderProductProps {
    className?: string;
@@ -26,21 +27,22 @@ const initialReducer = {
 export const OrderProduct = memo((props: OrderProductProps) => {
    const { className, productInfo, onCloseModal, existingOrder } = props;
    const sizePizza = useSelector(getSizePizza);
+   const { isMobile } = useResize();
 
    const imageMods: Mods = {
-      [cls.imageBig]: sizePizza === SizePizza.BIG,
-      [cls.imageAverage]: sizePizza === SizePizza.AVERAGE,
-      [cls.imageSmall]: sizePizza === SizePizza.SMALL,
+      [cls.imageBig]: sizePizza === SizePizza.BIG && !isMobile,
+      [cls.imageAverage]: sizePizza === SizePizza.AVERAGE && !isMobile,
+      [cls.imageSmall]: sizePizza === SizePizza.SMALL || isMobile,
    };
 
    return (
       <DynamicReducersLoader removeAfterUnmount reducers={initialReducer}>
          <HStack
-            gap={23}
+            gap={isMobile ? 1 : 23}
             className={classNames(cls.OrderProducts, {}, [className])}
          >
             <div className={cls.imageContainer}>
-               {productInfo.type === 'pizzas' && (
+               {productInfo.type === 'pizzas' && !isMobile && (
                   <svg viewBox='0 0 500 500'>
                      <circle
                         cx='250'
@@ -58,7 +60,7 @@ export const OrderProduct = memo((props: OrderProductProps) => {
                )}
                <img
                   className={classNames('', imageMods, [])}
-                  src={productInfo.image}
+                  src={isMobile ? productInfo.imageAverage : productInfo.image}
                   alt={productInfo.title}
                />
             </div>

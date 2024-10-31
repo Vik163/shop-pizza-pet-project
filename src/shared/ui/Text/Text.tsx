@@ -45,6 +45,7 @@ export enum FontSize {
    SIZE_12 = 'size_12',
    SIZE_11 = 'size_11',
    SIZE_10 = 'size_10',
+   SIZE_9 = 'size_9',
 }
 
 export enum HeaderTagType {
@@ -83,6 +84,7 @@ const mapSizeToClass: Record<FontSize, string> = {
    size_12: cls.size_12,
    size_11: cls.size_11,
    size_10: cls.size_10,
+   size_9: cls.size_9,
 };
 
 export const Text = memo((props: TextProps) => {
@@ -102,6 +104,7 @@ export const Text = memo((props: TextProps) => {
    const sizeClass = mapSizeToClass[fontSize];
    const additionalClasses = [
       className,
+
       cls[fontColor],
       cls[align],
       cls[fontWeight],

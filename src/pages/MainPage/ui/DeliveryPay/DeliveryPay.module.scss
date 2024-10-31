@@ -6,6 +6,7 @@
 
 .title {
    margin: 56px 0 35px;
+   font-size: var(--size-30);
 }
 
 .container {
@@ -18,8 +19,11 @@
    position: relative;
    padding-top: 10px;
    width: 255px;
-   height: 100px;
    background-color: var(--color-delivery-info);
+}
+
+.textButton {
+   font-size: var(--size-14);
 }
 
 .button::before {
@@ -29,14 +33,14 @@
    width: 77px;
    height: 77px;
    border-radius: 50%;
-   top: -38px;
+   top: -30px;
 }
 
 .icon {
    position: absolute;
    width: 44px;
    height: 44px;
-   top: -23px;
+   top: -16px;
 }
 
 .map {
@@ -45,3 +49,4 @@
    border-radius: 14px;
    overflow: hidden;
 }
+@import './DeliveryPayAdapt.module.scss';

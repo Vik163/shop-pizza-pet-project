@@ -1,3 +1,5 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .buttonsContainer {
    width: 330px;
    margin-bottom: 19px;
@@ -21,4 +23,20 @@
 
 .buttonActive {
    background-color: var(--color-yellow);
+}
+
+@media screen and (max-width: $mobile) {
+   .buttonsContainer {
+      width: 280px;
+   }
+
+   .buttonSmall {
+      width: 86px;
+      font-size: var(--size-12);
+   }
+
+   .buttonBig {
+      width: 135px;
+      font-size: var(--size-12);
+   }
 }

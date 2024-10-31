@@ -11,6 +11,7 @@ import arrow from '@/shared/assets/icons/arrow.png';
 import { ScrollingCards } from '../model/types/scrollingCards';
 import { CardVariant } from './CardScrolling/CardScrolling';
 import { Product } from '@/entities/Product';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface HorizontalScrollingProps {
    className?: string;
@@ -26,7 +27,7 @@ interface HorizontalScrollingProps {
    shadowsOpacity?: number;
    visibleElements?: number;
    cardVariant?: CardVariant;
-   clickCard?: (card: Product) => void;
+   clickCard?: (card: Product | undefined) => void;
 }
 
 export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
@@ -46,12 +47,18 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
       clickCard,
    } = props;
    const index = useRef(0);
+   const { isMobile } = useResize();
    // width + gap
    const width = widthElement + gap;
    // половина ширины экрана для определения нужной стрелки
    const widthForArrow = window.innerWidth / 2;
 
+   const [leftArrowCurtainsActive, setLeftArrowCurtainsActive] =
+      useState<boolean>();
+   const [rightArrowCurtainsActive, setRightArrowCurtainsActive] =
+      useState<boolean>();
    const [indexActiveCard, setIndexActiveCard] = useState(0);
+   const [isArrowActive, setIsArrowActive] = useState(false);
    const sizeBlock = {
       width: widthBlock + gap,
       height: heightBlock,
@@ -61,24 +68,45 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
    if (curtains && elements.length <= visibleElements) curtains = false;
 
    // Добавляем длину из-за смешения влево на 1
-   const [obj, api] = useSprings(elements.length + 1, (i) => {
-      return {
-         // Смещаем на один элемент влево
-         x: (i - 1) * width + shiftShadow,
-         display: 'block',
-         scaleElements: 1,
-      };
-   });
+   const [obj, api] = useSprings(
+      elements.length + 1,
+      (i) => {
+         return {
+            // Смещаем на один элемент влево
+            x: (i - 1) * width + shiftShadow,
+            display: 'block',
+            scaleElements: 1,
+         };
+      },
+      [widthElement], // добавляю зависимость для переключения размера карточек (isMobile)
+   );
+
+   //* происходит два клика по кнопке и карточке (не нашел решения)
+   //* костыль с задержкой времени отменяет второй клик
+   const clickCardChance = (card: Product | undefined) => {
+      if (clickCard)
+         if (!card) {
+            setIsArrowActive(true);
+            setTimeout(() => {
+               if (card) clickCard(undefined);
+               setIsArrowActive(false);
+            }, 200);
+         } else if (!isArrowActive) clickCard(card);
+   };
 
    const bind = useDrag(
       ({ xy, currentTarget, target, active, movement: [mx], cancel }) => {
          // Добавляю рендер для обновления
          const indexIncrease = () => {
+            clickCardChance(undefined);
+
             index.current += 1;
             setIndexActiveCard(indexActiveCard + 1);
          };
 
          const indexDecrease = () => {
+            clickCardChance(undefined);
+
             index.current -= 1;
             setIndexActiveCard(indexActiveCard - 1);
          };
@@ -124,6 +152,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                      cancel();
                      return;
                   }
+
                   indexDecrease();
                }
                // направление прокрутки влево
@@ -153,6 +182,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                      cancel();
                      return;
                   }
+
                   indexIncrease();
                }
             }
@@ -182,6 +212,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                      (active ? mx : 0)) *
                   //  растояние между элементами  (уменьшаем scaleElements < 0, увеличиваем > 0)
                   scaleElements;
+
                return { x, scaleElements };
             }
          });
@@ -192,14 +223,28 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
    const cardsVisible = obj.filter((item, i) => {
       return i <= indexActiveCard + visibleElements + 1 && i >= indexActiveCard;
    });
-   const leftArrowCurtainsActive = curtains && indexActiveCard !== -1;
-   const rightArrowCurtainsActive =
-      curtains &&
-      indexActiveCard !== elements.length - visibleElements - 1 &&
-      elements.length >= cardsVisible.length; // если нет боковых
+
+   // задержка времени нужна для -> исчезают быстро стрелки и кликаются карточки вместе со стрелками
+   setTimeout(() => {
+      setLeftArrowCurtainsActive(curtains && indexActiveCard !== -1);
+   }, 100);
+
+   setTimeout(() => {
+      setRightArrowCurtainsActive(
+         curtains &&
+            indexActiveCard !==
+               elements.length - visibleElements - (isMobile ? 0 : 1) &&
+            elements.length >= cardsVisible.length, // если нет боковых
+      );
+   }, 100);
+
+   // const rightArrowCurtainsActive =
+   //    curtains &&
+   //    indexActiveCard !== elements.length - visibleElements - 1 &&
+   //    elements.length >= cardsVisible.length; // если нет боковых
    const rightArrowActive =
       !curtains &&
-      cardsVisible.length > visibleElements + 1 &&
+      cardsVisible.length > visibleElements + (isMobile ? -2 : 1) &&
       indexActiveCard !== -1; //* вместо >  было !==
 
    const leftArrowActive = !curtains && indexActiveCard !== 0;
@@ -222,12 +267,15 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
          >
             {(leftArrowCurtainsActive || leftArrowActive) && (
                <animated.button
-                  style={{ backgroundImage: `url(${arrow})` }}
+                  style={{
+                     backgroundImage: `url(${arrow})`,
+                  }}
                   className={classNames(
                      cls.icon,
                      {
                         [cls.iconLeft]: !curtains,
                         [cls.iconLeftCurtains]: curtains,
+                        [cls.iconLeftMobile]: isMobile,
                      },
                      [],
                   )}
@@ -248,12 +296,14 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
          >
             {(rightArrowCurtainsActive || rightArrowActive) && (
                <animated.button
+                  id='button'
                   style={{ backgroundImage: `url(${arrow})` }}
                   className={classNames(
                      cls.icon,
                      {
                         [cls.iconRight]: !curtains,
                         [cls.iconRightCurtains]: curtains,
+                        [cls.iconRightMobile]: isMobile,
                      },
                      [],
                   )}
@@ -278,7 +328,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                visibleElements={visibleElements}
                indexActiveCard={indexActiveCard}
                cardVariant={cardVariant}
-               clickCard={clickCard}
+               clickCard={clickCardChance}
                bind={bind}
             />
          ))}

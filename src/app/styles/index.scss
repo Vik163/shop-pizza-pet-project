@@ -2,6 +2,7 @@
 
 @import 'reset';
 @import 'variables/global.scss';
+@import 'variables/mixins.scss';
 @import 'themes/dark.scss';
 @import 'themes/normal.scss';
 
@@ -15,4 +16,10 @@ body {
    padding: 0 calc(20px - (100vw - 100%)) 0 0;
    overflow-x: hidden;
    background-color: var(--color-bg-primary);
+}
+
+@media screen and (max-width: $mobile) {
+   .root {
+      padding: 0;
+   }
 }

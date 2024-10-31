@@ -3,7 +3,7 @@ import { memo } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import cls from './ProductItem.module.scss';
 
-import { Card, CardRadius } from '@/shared/ui/Card';
+import { Card } from '@/shared/ui/Card';
 import { Product } from '../../model/types/product';
 import { Mods, classNames } from '@/shared/lib/classNames/classNames';
 import { HStack, VStack } from '@/shared/ui/Stack';
@@ -17,6 +17,7 @@ import {
 } from '@/shared/ui/Button';
 import { getBasketProducts } from '@/entities/Basket';
 import { AppLink } from '@/shared/ui/AppLink';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface ProductItemProps {
    card: Product;
@@ -25,6 +26,7 @@ interface ProductItemProps {
 
 export const ProductItem = memo((props: ProductItemProps) => {
    const { card, onClick } = props;
+   const { isMobile } = useResize();
 
    //* функция shallowEqual из пакета react-redux для сравнения объектов из стора. Она передается вторым аргументом в useSelector (из-за перерендеров)
    const basketProducts = useSelector(getBasketProducts, shallowEqual);
@@ -44,7 +46,6 @@ export const ProductItem = memo((props: ProductItemProps) => {
          id={card._id}
          key={card.title}
          className={cls.card}
-         radius={CardRadius.RADIUS_14}
          onClick={onClick}
       >
          <VStack className={cls.container}>
@@ -55,27 +56,28 @@ export const ProductItem = memo((props: ProductItemProps) => {
             )}
             <img
                className={cls.image}
-               src={card.imageAverage}
+               src={isMobile ? card.imageSmall : card.imageAverage}
                alt={card.title}
             />
-            <Text
-               className={cls.title}
-               fontSize={FontSize.SIZE_20}
-               fontWeight={FontWeight.TEXT_700}
-               fontColor={FontColor.TEXT_TITLE_CARD}
-               max
-            >
-               {card.title}
-            </Text>
-            <Text
-               className={cls.text}
-               fontSize={FontSize.SIZE_13}
-               fontWeight={FontWeight.TEXT_500}
-               fontColor={FontColor.TEXT_CARD}
-               max
-            >
-               {card.description}
-            </Text>
+            <VStack className={cls.containerInfo}>
+               <Text
+                  className={cls.title}
+                  fontSize={isMobile ? FontSize.SIZE_10 : FontSize.SIZE_20}
+                  fontWeight={FontWeight.TEXT_700}
+                  fontColor={FontColor.TEXT_TITLE_CARD}
+               >
+                  {card.title}
+               </Text>
+               <Text
+                  className={cls.text}
+                  fontSize={isMobile ? FontSize.SIZE_9 : FontSize.SIZE_13}
+                  fontWeight={FontWeight.TEXT_500}
+                  fontColor={FontColor.TEXT_CARD}
+                  max
+               >
+                  {card.description}
+               </Text>
+            </VStack>
          </VStack>
          <HStack
             justify={FlexJustify.BETWEEN}

@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -13,6 +13,7 @@ import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
 import { getActions } from '../../../../entities/Action/model/selectors/actionsSelector';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { fetchActions } from '../../../../entities/Action/model/services/fetchActions';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface ActionCardsProps {
    className?: string;
@@ -24,15 +25,51 @@ export const ActionCards = memo((props: ActionCardsProps) => {
    const actions = useSelector(getActions);
    const isLoading = useSelector(getMainPageIsLoading);
    const actionsScrolling = actions as ScrollingCards[];
+   const [sizesCard, setSizesCard] = useState({
+      width: 540,
+      height: 312,
+      gap: 30,
+      widthBlock: 1110,
+      heightBlock: 372,
+   });
+   const { isMobile } = useResize();
 
    useEffect(() => {
       dispatch(fetchActions());
    }, [dispatch]);
 
+   useEffect(() => {
+      if (isMobile) {
+         setSizesCard({
+            width: 213,
+            height: 124,
+            gap: 12,
+            widthBlock: 300,
+            heightBlock: 184,
+         });
+      } else {
+         setSizesCard({
+            width: 540,
+            height: 312,
+            gap: 30,
+            widthBlock: 1110,
+            heightBlock: 372,
+         });
+      }
+   }, [isMobile]);
+
    const actionsSkeleton = (
-      <HStack gap={30} className={cls.ActionCardsSkeleton}>
-         <Skeleton width={540} height={312} border='14px' />
-         <Skeleton width={540} height={312} border='14px' />
+      <HStack gap={sizesCard.gap} className={cls.ActionCardsSkeleton}>
+         <Skeleton
+            width={sizesCard.width}
+            height={sizesCard.height}
+            border='14px'
+         />
+         <Skeleton
+            width={sizesCard.width}
+            height={sizesCard.height}
+            border='14px'
+         />
       </HStack>
    );
 
@@ -45,11 +82,11 @@ export const ActionCards = memo((props: ActionCardsProps) => {
                     elements={actionsScrolling}
                     curtains
                     scale
-                    widthBlock={1110}
-                    heightBlock={372}
-                    widthElement={540}
-                    heightElement={312}
-                    gap={30}
+                    widthBlock={sizesCard.widthBlock}
+                    heightBlock={sizesCard.heightBlock}
+                    widthElement={sizesCard.width}
+                    heightElement={sizesCard.height}
+                    gap={sizesCard.gap}
                     shadowsOpacity={0.26}
                  />
               )}

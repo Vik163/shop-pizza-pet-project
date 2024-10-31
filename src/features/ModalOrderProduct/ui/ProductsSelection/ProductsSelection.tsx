@@ -110,7 +110,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
             >
                {productInfo.title}
             </Text>
-            <Text fontSize={FontSize.SIZE_14} fontWeight={FontWeight.TEXT_500}>
+            <Text className={cls.parameters} fontWeight={FontWeight.TEXT_500}>
                {dataProduct}
             </Text>
             <Text
@@ -130,12 +130,10 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
             )}
          </VStack>
          <Button
-            width={330}
-            height={60}
+            className={cls.submitButton}
             variant={ButtonVariant.FILLED}
             radius={ButtonRadius.RADIUS_8}
             bgColor={ButtonBgColor.YELLOW}
-            fontSize={FontSize.SIZE_15}
             fontWeight={FontWeight.TEXT_900}
             fontColor={FontColor.TEXT_BUTTON}
             onClick={onSubmit}

@@ -7,10 +7,10 @@
    z-index: 6;
 }
 
-.loginContainer {
-   display: flex;
-   gap: 20px;
-}
+// .loginContainer {
+//    display: flex;
+//    gap: 20px;
+// }
 
 .loginButton {
    width: 90px;
@@ -53,3 +53,5 @@
    font-weight: var(--weight-700);
    outline: none;
 }
+
+@import './NavbarAdapt.module.scss';

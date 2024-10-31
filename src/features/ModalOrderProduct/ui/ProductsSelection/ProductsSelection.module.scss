@@ -1,3 +1,5 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .container {
    width: 330px;
    height: 590px;
@@ -8,11 +10,22 @@
 }
 
 .title {
+   font-size: var(--size-20);
    margin-bottom: 10px;
+}
+
+.parameters {
+   font-size: var(--size-14);
 }
 
 .description {
    margin: 10px 0 15px;
+}
+
+.submitButton {
+   width: 330px;
+   height: 60px;
+   font-size: var(--size-15);
 }
 
 .modal {
@@ -25,4 +38,47 @@
    display: flex;
    justify-content: center;
    align-items: center;
+}
+
+@media screen and (max-width: $mobile) {
+   .container {
+      width: 300px;
+      height: auto;
+      padding: 10px;
+   }
+
+   .infoContainer {
+      width: 100%;
+   }
+
+   .title {
+      font-size: var(--size-15);
+      margin-bottom: 10px;
+   }
+
+   .parameters {
+      font-size: var(--size-11);
+   }
+
+   .description {
+      font-size: var(--size-10);
+      margin: 10px 0 15px;
+   }
+
+   .submitButton {
+      width: 280px;
+      font-size: var(--size-13);
+   }
+
+   .modal {
+      width: 760px;
+      height: 300px;
+      border-radius: 18px;
+      background-color: var(--block-bg-primary);
+      padding: 30px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
 }

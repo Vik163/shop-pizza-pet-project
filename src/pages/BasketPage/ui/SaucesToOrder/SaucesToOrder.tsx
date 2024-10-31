@@ -52,7 +52,8 @@ export const SaucesToOrder = memo((props: SaucesToOrderProps) => {
       setSauces(saucesSelected);
    }, [products]);
 
-   const onCard = (card: Product) => {
+   const onCard = (card: Product | undefined) => {
+      if (!card) return;
       const order: BasketOneProduct = {
          product: card,
          image: card.imageSmall,

@@ -1,0 +1,91 @@
+@import '../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .Footer {
+      width: 100%;
+      height: auto;
+      padding: 26px 10px 10px;
+   }
+
+   .footerContainer {
+      width: 100%;
+      flex-direction: column;
+   }
+
+   .sidesContainers:first-child {
+      width: 100%;
+      height: auto;
+   }
+
+   .sidesContainers:last-child {
+      align-items: center;
+
+      width: 100%;
+      height: auto;
+   }
+
+   .infoLinks {
+      gap: 26px;
+      margin: 30px 0 10px;
+   }
+
+   .infoLink {
+      font-size: var(--size-10);
+   }
+
+   .messengersLinks {
+      width: 100%;
+      gap: 34px;
+   }
+
+   .messengers {
+      width: fit-content;
+      line-height: 21px;
+   }
+
+   .infoDate {
+      width: 100%;
+      margin-top: 18px;
+   }
+
+   .date {
+      width: text;
+   }
+
+   .payCards {
+      gap: 8px;
+
+      img {
+         width: 23px;
+         height: 23px;
+      }
+   }
+
+   .titleRight {
+      margin: 18px 0 15px;
+   }
+
+   .messengersButtons {
+      width: 300px;
+      gap: 12px;
+   }
+
+   .messengerButton {
+      width: 40px;
+      height: 38px;
+      border: 2px solid var(--color-grey-blue);
+      border-radius: 8px;
+
+      img {
+         width: 21px;
+      }
+   }
+
+   .messengerButton:last-child {
+      width: 300px;
+   }
+
+   .numberPhon {
+      margin: 0 0 5px;
+   }
+}

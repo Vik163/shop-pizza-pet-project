@@ -6,17 +6,16 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import cls from './MainPage.module.scss';
 import { Page } from '@/widgets/Page';
 
-import Man from '@/shared/assets/images/man.png';
-import Woman from '@/shared/assets/images/woman.png';
-
-import { DeliveryPay } from '../DeliveryPay/DeliveryPay';
 import {
    MainPageProductsMemo,
    RefType,
 } from '../MainPageProducts/ui/MainPageProducts';
-import { NewProducts } from '../NewProducts/ui/NewProducts';
 import { ActionCards } from '../ActionCards/ActionCards';
 import { getUserSettings } from '@/entities/User';
+import { NewProducts } from '../NewProducts/ui/NewProducts';
+import Woman from '@/shared/assets/images/woman.png';
+import Man from '@/shared/assets/images/man.png';
+import { DeliveryPay } from '../DeliveryPay/DeliveryPay';
 
 interface MainPageProps {
    className?: string;

@@ -33,6 +33,12 @@
    margin: 43px 0 30px;
 }
 
+.infoLink {
+   font-size: var(--size-16);
+   font-weight: var(--weight-700);
+   color: var(--color-primary);
+}
+
 .messengersLinks {
    width: 500px;
 }
@@ -40,6 +46,7 @@
 .messengers {
    width: 163px;
    line-height: 33px;
+   color: var(--color-primary);
 }
 
 .infoDate {
@@ -67,6 +74,7 @@
    width: 101px;
    height: 52px;
    border: 2px solid var(--color-grey-blue);
+   border-radius: 14px;
 }
 
 .messengerButton:last-child {
@@ -76,3 +84,5 @@
 .numberPhon {
    margin: 47px 0 20px;
 }
+
+@import './FooterAdapt.module.scss';

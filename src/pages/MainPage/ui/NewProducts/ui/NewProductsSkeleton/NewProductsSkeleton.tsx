@@ -5,18 +5,21 @@ import cls from './NewProductsSkeleton.module.scss';
 import { HStack, VStack } from '@/shared/ui/Stack';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
 import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
+import { SizedCard } from '../../../../model/types/sizesCard';
 
 interface NewProductsSkeletonProps {
    className?: string;
    elements: number;
+   sizesCard?: SizedCard;
+   isMobile?: boolean;
 }
 
 export const NewProductsSkeleton = memo((props: NewProductsSkeletonProps) => {
-   const { className, elements } = props;
+   const { className, elements, sizesCard, isMobile } = props;
 
    return (
       <HStack
-         gap={30}
+         gap={sizesCard?.gap}
          className={classNames(cls.NewProductsSkeleton, {}, [className])}
       >
          {new Array(elements).fill(0).map((item, index) => (
@@ -24,13 +27,25 @@ export const NewProductsSkeleton = memo((props: NewProductsSkeletonProps) => {
                className={classNames(cls.CardSkeleton, {}, [className])}
                // eslint-disable-next-line react/no-array-index-key
                key={index}
-               gap={30}
+               gap={sizesCard?.gap}
                justify={FlexJustify.CENTER}
             >
-               <Skeleton width={70} height={70} border='3%' />
-               <VStack gap={20}>
-                  <Skeleton width={110} height={25} border='3%' />
-                  <Skeleton width={110} height={25} border='3%' />
+               <Skeleton
+                  width={isMobile ? 56 : 70}
+                  height={isMobile ? 56 : 70}
+                  border='3%'
+               />
+               <VStack gap={isMobile ? 15 : 20}>
+                  <Skeleton
+                     width={110}
+                     height={isMobile ? 15 : 25}
+                     border='3%'
+                  />
+                  <Skeleton
+                     width={110}
+                     height={isMobile ? 15 : 25}
+                     border='3%'
+                  />
                </VStack>
             </HStack>
          ))}

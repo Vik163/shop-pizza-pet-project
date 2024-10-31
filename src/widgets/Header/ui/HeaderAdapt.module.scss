@@ -1,0 +1,24 @@
+@import '@/app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .header {
+      height: 63px;
+      padding: 0 11px;
+      justify-content: center;
+   }
+
+   .headerContainer {
+      width: 100%;
+   }
+
+   .iconMenu {
+      width: 39px;
+      height: 27px;
+      fill: var(--color-primary, gray);
+      cursor: pointer;
+
+      &.navActive {
+         fill: var(--color-primary, rgb(83, 83, 83));
+      }
+   }
+}

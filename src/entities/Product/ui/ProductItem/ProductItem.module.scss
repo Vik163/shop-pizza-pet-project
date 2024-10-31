@@ -5,6 +5,7 @@
    height: 465px;
    background-color: var(--block-bg-primary);
    border: 1px solid var(--color-border-cards);
+   border-radius: 14px;
    box-shadow: 0 0 8px 0 var(--color-shadow);
 }
 
@@ -45,7 +46,12 @@
    }
 }
 
+.containerInfo {
+   gap: 14px;
+}
+
 .title {
    width: 235px;
-   text-align: start;
 }
+
+@import './ProductItemAdapt.module.scss';

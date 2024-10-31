@@ -1,0 +1,28 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .DeliveryPay {
+      width: 100vw;
+      height: auto;
+      padding: 26px 0;
+   }
+
+   .title {
+      margin: 0 0 18px;
+      font-size: var(--size-20);
+   }
+
+   .container {
+      gap: 45px;
+      flex-direction: column;
+      margin: 35px 0;
+   }
+
+   .textButton {
+      font-size: var(--size-11);
+   }
+
+   .map {
+      width: 300px;
+   }
+}

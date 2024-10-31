@@ -1,0 +1,42 @@
+@import '@/app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .Navbar {
+      width: 100%;
+      flex-direction: column;
+      background-color: inherit;
+      gap: 20px;
+      position: absolute;
+      //   top: 63px;
+      padding-bottom: 31px;
+   }
+
+   //    .loginContainer {
+   //       display: flex;
+   //       gap: 20px;
+   //    }
+
+   .loginButton {
+      width: 90px;
+      height: 36px;
+   }
+
+   .links {
+      flex-direction: column;
+      gap: 15px;
+      flex-grow: 1;
+      height: auto;
+   }
+
+   .link {
+      @include font(var(--size-15), var(--weight-700), black);
+   }
+
+   .account {
+      fill: black;
+   }
+
+   .basket {
+      background-color: var(--color-white);
+   }
+}

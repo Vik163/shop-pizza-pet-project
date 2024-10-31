@@ -24,14 +24,6 @@ export const fetchSignupUser = createAsyncThunk<
          // role: 'CLIENT', //! ?
       };
 
-      //   const authData = await $api.post<UserData>('/firebase', data, {
-      //      headers: {
-      //         'x-csrf-token': csrfToken,
-      //      },
-      //      withCredentials: true,
-      //   });
-      //! возвращать .data
-
       const userData = await dispatch(
          signUpUser({ user: data, csrf: csrfToken }),
       ).unwrap();

@@ -47,6 +47,7 @@ import { PageSelect } from './PageSelect/PageSelect';
 import { getUserSettings } from '@/entities/User';
 import { additivesActions } from '@/entities/Additives';
 import { ModalOrderProduct, RefTypeModal } from '@/features/ModalOrderProduct';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface MainPageProductsProps {
    className?: string;
@@ -72,8 +73,9 @@ const MainPageProducts = forwardRef(
       const savePage = useSelector(getSavePage);
       const viewProduct = useSelector(getViewProducts) as ProductView;
       const paginate = useSelector(getPaginateProduct);
-      const { viewLoadProducts } = useSelector(getUserSettings);
       const [paginateData, setPaginateData] = useState<PaginateData>();
+      const { isMobile } = useResize();
+      const { viewLoadProducts } = useSelector(getUserSettings);
 
       const productsFromPageLoud = (arr: Product[]) => {
          if (paginateData)
@@ -117,14 +119,14 @@ const MainPageProducts = forwardRef(
       // Сбор данных в стейт =========================
       useEffect(() => {
          if (products.length && viewProduct === products[0].type) {
-            if (viewLoadProducts === 'scroll') {
+            if (viewLoadProducts === 'scroll' || isMobile) {
                dispatch(
                   mainPageActions.setProducts({
                      ...cards,
                      [viewProduct as string]: products,
                   }),
                );
-            } else if (viewLoadProducts === 'pages') {
+            } else if (viewLoadProducts === 'pages' && !isMobile) {
                // при переходе на выбор страниц отрисовывает элементы, на которых остановилась прокрутка (при бесконечном скролле)
                // выбирает из массива нужные
                if (products.length > paginateElements) {
@@ -147,7 +149,7 @@ const MainPageProducts = forwardRef(
 
       // первоначальный запрос при изменении страницы если нет данных в стейте
       useEffect(() => {
-         if (viewLoadProducts === 'scroll') {
+         if (viewLoadProducts === 'scroll' || isMobile) {
             if (!cards[viewProduct]) {
                // разбиваю на два, чтобы не было второго запроса
                if (viewProduct === pathname.slice(1)) {
@@ -179,7 +181,7 @@ const MainPageProducts = forwardRef(
                      }),
                   );
             }
-         } else if (viewLoadProducts === 'pages') {
+         } else if (viewLoadProducts === 'pages' && !isMobile) {
             dispatch(
                fetchViewProducts({
                   page: savePage[viewProduct] ? savePage[viewProduct].page : 1,
@@ -254,7 +256,7 @@ const MainPageProducts = forwardRef(
                skeletonElements={paginateElements}
                onModal={openModal}
             />
-            {viewLoadProducts === 'pages' && paginateData && (
+            {viewLoadProducts === 'pages' && paginateData && !isMobile && (
                <PageSelect paginateData={paginateData} />
             )}
             <ModalOrderProduct ref={childRef} onCloseModal={onCloseModal} />

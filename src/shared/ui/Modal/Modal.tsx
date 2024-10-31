@@ -7,6 +7,7 @@ import close from '@/shared/assets/icons/close.svg';
 import { Icon } from '../Icon';
 import { Portal } from '../Portal/Portal';
 import { useModal } from '@/shared/lib/hooks/useModal';
+import { Overlay } from '../Overlay';
 
 interface ModalProps {
    className?: string;
@@ -64,47 +65,38 @@ export const Modal = memo((props: ModalProps) => {
             <div id='modal' className={classNames(cls.Modal, mods, [])}>
                <div
                   className={classNames(
-                     cls.overlay,
+                     cls.content,
                      {
                         [cls.nonAnimate]: Boolean(!delayClose),
-                        [cls.centerOverlay]: isCenter,
-                        [cls.overlayActive]: isAnimate,
+                        [cls.modalActive]: isAnimate && !existAnimateComponent,
+                        [cls.modalAnimate]: !existAnimateComponent,
                      },
-                     [],
+                     [className],
                   )}
-                  onClick={handleClose}
+                  onClick={onContentClick}
+                  onMouseLeave={closeHoverModal}
                >
-                  <div
-                     className={classNames(
-                        cls.content,
-                        {
-                           [cls.nonAnimate]: Boolean(!delayClose),
-                           [cls.modalActive]:
-                              isAnimate && !existAnimateComponent,
-                           [cls.modalAnimate]: !existAnimateComponent,
-                        },
-                        [className],
-                     )}
-                     onClick={onContentClick}
-                     onMouseLeave={closeHoverModal}
+                  <Button
+                     style={{
+                        top: `${buttonCloseTop}px`,
+                        right: `${buttonCloseRight}px`,
+                     }}
+                     className={cls.close}
+                     onClick={handleClose}
                   >
-                     <Button
-                        style={{
-                           top: `${buttonCloseTop}px`,
-                           right: `${buttonCloseRight}px`,
-                        }}
-                        className={cls.close}
-                        onClick={handleClose}
-                     >
-                        <Icon
-                           width={buttonCloseWidth}
-                           height={buttonCloseHeight}
-                           Svg={close}
-                        />
-                     </Button>
-                     {children}
-                  </div>
+                     <Icon
+                        width={buttonCloseWidth}
+                        height={buttonCloseHeight}
+                        Svg={close}
+                     />
+                  </Button>
+                  {children}
                </div>
+               <Overlay
+                  onClick={handleClose}
+                  isAnimate={isAnimate}
+                  delayClose={delayClose}
+               />
             </div>
          </Portal>
       )

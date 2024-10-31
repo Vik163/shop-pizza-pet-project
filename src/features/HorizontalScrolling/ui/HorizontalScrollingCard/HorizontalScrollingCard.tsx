@@ -46,6 +46,7 @@ export const HorizontalScrollingCard = memo(
          clickCard,
          bind,
       } = props;
+
       // const [mouseMoveX, setMouseMoveX] = useState(0);
 
       // индекс каждой карточки независимо от индекса массива cards
@@ -91,6 +92,7 @@ export const HorizontalScrollingCard = memo(
             className={classNames(cls.cards)}
             {...bind()}
             key={i}
+            onClick={() => clickCard && clickCard(card)}
             style={{
                boxShadow: styleShadow,
                width: widthElement,
@@ -112,11 +114,7 @@ export const HorizontalScrollingCard = memo(
                   }}
                />
             ) : (
-               <CardScrolling
-                  clickCard={clickCard}
-                  card={card}
-                  cardVariant={cardVariant}
-               />
+               <CardScrolling card={card} cardVariant={cardVariant} />
             )}
          </animated.div>
       );

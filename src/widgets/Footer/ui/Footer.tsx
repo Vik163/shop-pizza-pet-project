@@ -24,8 +24,7 @@ import {
    ButtonRadius,
    ButtonVariant,
 } from '@/shared/ui/Button';
-import { AppLink } from '@/shared/ui/AppLink';
-import { getRouteAbout } from '@/shared/const/router';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface FooterProps {
    className?: string;
@@ -34,6 +33,7 @@ interface FooterProps {
 export const Footer = memo((props: FooterProps) => {
    const { className } = props;
    const year = new Date().getFullYear();
+   const { isMobile } = useResize();
 
    return (
       <VStack
@@ -42,34 +42,40 @@ export const Footer = memo((props: FooterProps) => {
       >
          <HStack className={cls.footerContainer} justify={FlexJustify.BETWEEN}>
             <VStack className={cls.sidesContainers} align={FlexAlign.START}>
-               <HStack max justify={FlexJustify.BETWEEN}>
+               {isMobile ? (
+                  <HStack justify={FlexJustify.BETWEEN} max>
+                     <Icon src={Logo} width={80} height={60} />
+                     <VStack align={FlexAlign.END}>
+                        <Text
+                           className={cls.numberPhon}
+                           fontSize={FontSize.SIZE_22}
+                           fontWeight={FontWeight.TEXT_700}
+                           fontColor={FontColor.TEXT_YELLOW}
+                        >
+                           8 499 391-84-49
+                        </Text>
+                        <Button
+                           variant={ButtonVariant.FILLED}
+                           bgColor={ButtonBgColor.GREY}
+                           radius={ButtonRadius.RADIUS_28}
+                           fontColor={FontColor.TEXT_BUTTON}
+                           fontSize={FontSize.SIZE_10}
+                           fontWeight={FontWeight.TEXT_700}
+                           width={131}
+                           height={32}
+                        >
+                           Заказать звонок
+                        </Button>
+                     </VStack>
+                  </HStack>
+               ) : (
                   <Icon src={Logo} width={80} height={60} />
-                  <AppLink className={cls.aboutBtn} to={getRouteAbout()}>
-                     <span>О проекте</span>
-                  </AppLink>
-               </HStack>
+               )}
+
                <HStack className={cls.infoLinks} wrap={FlexWrap.WPAP}>
-                  <Text
-                     fontSize={FontSize.SIZE_16}
-                     fontWeight={FontWeight.TEXT_700}
-                     fontColor={FontColor.TEXT_PRIMARY}
-                  >
-                     Калорийность и состав
-                  </Text>
-                  <Text
-                     fontSize={FontSize.SIZE_16}
-                     fontWeight={FontWeight.TEXT_700}
-                     fontColor={FontColor.TEXT_PRIMARY}
-                  >
-                     Правовая информация
-                  </Text>
-                  <Text
-                     fontSize={FontSize.SIZE_16}
-                     fontWeight={FontWeight.TEXT_700}
-                     fontColor={FontColor.TEXT_PRIMARY}
-                  >
-                     Мы в соцсетях
-                  </Text>
+                  <Text className={cls.infoLink}>Калорийность и состав</Text>
+                  <Text className={cls.infoLink}>Правовая информация</Text>
+                  <Text className={cls.infoLink}>Мы в соцсетях</Text>
                </HStack>
                <HStack
                   className={cls.messengersLinks}
@@ -77,52 +83,54 @@ export const Footer = memo((props: FooterProps) => {
                >
                   <Text
                      className={cls.messengers}
-                     fontSize={FontSize.SIZE_16}
+                     fontSize={isMobile ? FontSize.SIZE_10 : FontSize.SIZE_16}
                      fontWeight={FontWeight.TEXT_700}
-                     fontColor={FontColor.TEXT_PRIMARY}
                   >
                      YouTube <br /> Instagram
                   </Text>
                   <Text
                      className={cls.messengers}
-                     fontSize={FontSize.SIZE_16}
+                     fontSize={isMobile ? FontSize.SIZE_10 : FontSize.SIZE_16}
                      fontWeight={FontWeight.TEXT_700}
-                     fontColor={FontColor.TEXT_PRIMARY}
                   >
                      Facebook <br /> ВКонтакте
                   </Text>
                   <Text
                      className={cls.messengers}
-                     fontSize={FontSize.SIZE_14}
+                     fontSize={isMobile ? FontSize.SIZE_10 : FontSize.SIZE_14}
                      fontWeight={FontWeight.TEXT_500}
-                     fontColor={FontColor.TEXT_PRIMARY}
                   >
                      Москва ул. Проспект Вернадского 86В
                   </Text>
                </HStack>
-               <HStack className={cls.infoDate} justify={FlexJustify.BETWEEN}>
-                  <Text
-                     className={cls.date}
-                     fontSize={FontSize.SIZE_14}
-                     fontWeight={FontWeight.TEXT_500}
-                     fontColor={FontColor.TEXT_PRIMARY}
-                  >
-                     YaBao Все права защищены &copy;{year}
-                  </Text>
+               {!isMobile && (
                   <HStack
+                     className={cls.infoDate}
                      justify={FlexJustify.BETWEEN}
-                     className={cls.payCards}
                   >
-                     <Icon src={Viza} />
-                     <Icon src={Pay} />
-                     <Icon src={Master} />
+                     <Text
+                        className={cls.date}
+                        fontSize={FontSize.SIZE_14}
+                        fontWeight={FontWeight.TEXT_500}
+                        fontColor={FontColor.TEXT_PRIMARY}
+                     >
+                        YaBao Все права защищены &copy;{year}
+                     </Text>
+                     <HStack
+                        justify={FlexJustify.BETWEEN}
+                        className={cls.payCards}
+                     >
+                        <Icon src={Viza} />
+                        <Icon src={Pay} />
+                        <Icon src={Master} />
+                     </HStack>
                   </HStack>
-               </HStack>
+               )}
             </VStack>
             <VStack className={cls.sidesContainers} align={FlexAlign.START}>
                <Text
                   className={cls.titleRight}
-                  fontSize={FontSize.SIZE_14}
+                  fontSize={isMobile ? FontSize.SIZE_10 : FontSize.SIZE_14}
                   fontWeight={FontWeight.TEXT_700}
                   fontColor={FontColor.TEXT_PRIMARY}
                >
@@ -132,74 +140,94 @@ export const Footer = memo((props: FooterProps) => {
                   <Button
                      className={cls.messengerButton}
                      variant={ButtonVariant.OUTLINE}
-                     radius={ButtonRadius.RADIUS_14}
                   >
                      <Icon src={Telegram} />
                   </Button>
                   <Button
                      className={cls.messengerButton}
                      variant={ButtonVariant.OUTLINE}
-                     radius={ButtonRadius.RADIUS_14}
                   >
                      <Icon src={Viber} />
                   </Button>
                   <Button
                      className={cls.messengerButton}
                      variant={ButtonVariant.OUTLINE}
-                     radius={ButtonRadius.RADIUS_14}
                   >
                      <Icon src={Skype} />
                   </Button>
                   <Button
                      className={cls.messengerButton}
                      variant={ButtonVariant.OUTLINE}
-                     radius={ButtonRadius.RADIUS_14}
                   >
                      <Icon src={FB} />
                   </Button>
                   <Button
                      className={cls.messengerButton}
                      variant={ButtonVariant.OUTLINE}
-                     radius={ButtonRadius.RADIUS_14}
                   >
                      <Icon src={VK} />
                   </Button>
                   <Button
                      className={cls.messengerButton}
                      variant={ButtonVariant.OUTLINE}
-                     radius={ButtonRadius.RADIUS_14}
                   >
                      <Icon src={WhatsApp} />
                   </Button>
                   <Button
                      className={cls.messengerButton}
                      variant={ButtonVariant.OUTLINE}
-                     radius={ButtonRadius.RADIUS_14}
                   >
                      Написать нам
                   </Button>
                </HStack>
-               <Text
-                  className={cls.numberPhon}
-                  fontSize={FontSize.SIZE_30}
-                  fontWeight={FontWeight.TEXT_700}
-                  fontColor={FontColor.TEXT_YELLOW}
-               >
-                  8 499 391-84-49
-               </Text>
 
-               <Button
-                  variant={ButtonVariant.FILLED}
-                  bgColor={ButtonBgColor.GREY}
-                  radius={ButtonRadius.RADIUS_28}
-                  fontColor={FontColor.TEXT_BUTTON}
-                  fontSize={FontSize.SIZE_14}
-                  fontWeight={FontWeight.TEXT_700}
-                  width={180}
-                  height={42}
-               >
-                  Заказать звонок
-               </Button>
+               {!isMobile && (
+                  <Text
+                     className={cls.numberPhon}
+                     fontSize={FontSize.SIZE_30}
+                     fontWeight={FontWeight.TEXT_700}
+                     fontColor={FontColor.TEXT_YELLOW}
+                  >
+                     8 499 391-84-49
+                  </Text>
+               )}
+               {!isMobile && (
+                  <Button
+                     variant={ButtonVariant.FILLED}
+                     bgColor={ButtonBgColor.GREY}
+                     radius={ButtonRadius.RADIUS_28}
+                     fontColor={FontColor.TEXT_BUTTON}
+                     fontSize={FontSize.SIZE_14}
+                     fontWeight={FontWeight.TEXT_700}
+                     width={180}
+                     height={42}
+                  >
+                     Заказать звонок
+                  </Button>
+               )}
+               {isMobile && (
+                  <HStack
+                     className={cls.infoDate}
+                     justify={FlexJustify.BETWEEN}
+                  >
+                     <Text
+                        className={cls.date}
+                        fontSize={FontSize.SIZE_10}
+                        fontWeight={FontWeight.TEXT_500}
+                        fontColor={FontColor.TEXT_PRIMARY}
+                     >
+                        YaBao Все права защищены &copy;{year}
+                     </Text>
+                     <HStack
+                        justify={FlexJustify.BETWEEN}
+                        className={cls.payCards}
+                     >
+                        <Icon src={Viza} />
+                        <Icon src={Pay} />
+                        <Icon src={Master} />
+                     </HStack>
+                  </HStack>
+               )}
             </VStack>
          </HStack>
       </VStack>

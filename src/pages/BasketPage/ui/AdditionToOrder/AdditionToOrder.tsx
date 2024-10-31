@@ -27,7 +27,8 @@ interface AdditionToOrderProps {
 export const AdditionToOrder = memo((props: AdditionToOrderProps) => {
    const { className, additions, onModalProduct } = props;
 
-   const onCard = (card: Product) => {
+   const onCard = (card: Product | undefined) => {
+      if (!card) return;
       const order: BasketOneProduct = {
          product: card,
          image: card.imageSmall,

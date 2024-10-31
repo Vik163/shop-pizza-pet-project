@@ -4,6 +4,7 @@ import App from './app/App';
 import '@/app/styles/index.scss';
 import { StoreProvider } from './app/providers/StoreProvider';
 import { ThemeProvider } from './app/providers/ThemeProvider';
+import { ResizeProvider } from './app/providers/ResizeProvider';
 
 const container = document.getElementById('root');
 
@@ -18,9 +19,11 @@ const root = createRoot(container);
 root.render(
    // <StrictMode>
    <StoreProvider>
-      <ThemeProvider>
-         <App />
-      </ThemeProvider>
+      <ResizeProvider>
+         <ThemeProvider>
+            <App />
+         </ThemeProvider>
+      </ResizeProvider>
    </StoreProvider>,
    // </StrictMode>,
 );

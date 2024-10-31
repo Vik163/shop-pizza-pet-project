@@ -1,0 +1,17 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .OrderProducts {
+      flex-direction: column;
+   }
+
+   .imageContainer {
+      width: 251px;
+      height: 251px;
+   }
+
+   .imageSmall {
+      width: 200px;
+      height: 200px;
+   }
+}

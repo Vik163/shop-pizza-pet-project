@@ -16,6 +16,7 @@ import { OrderProduct } from '../OrderProductsModal/OrderProduct';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { SizePizza, ViewDough } from '@/shared/const/product_const';
 import { modalDelay } from '@/shared/const/modal_delay';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface ModalOrderProductProps {
    onCloseModal?: () => void;
@@ -34,6 +35,7 @@ export const ModalOrderProduct = forwardRef(
       const [productInfo, setProductInfo] = useState<Product>();
       const [isOpenModal, setIsOpenModal] = useState(false);
       const [existingOrder, setExistingOrder] = useState<BasketOneProduct>();
+      const { isMobile } = useResize();
 
       const handleAnimate = (bool: boolean) => {
          setIsClosing(bool);
@@ -79,10 +81,10 @@ export const ModalOrderProduct = forwardRef(
                [],
             )}
             delayClose={modalDelay}
-            buttonCloseHeight={40}
-            buttonCloseRight={30}
-            buttonCloseTop={30}
-            buttonCloseWidth={40}
+            buttonCloseHeight={isMobile ? 30 : 40}
+            buttonCloseRight={isMobile ? 25 : 30}
+            buttonCloseTop={isMobile ? 25 : 30}
+            buttonCloseWidth={isMobile ? 30 : 40}
          >
             {productInfo && (
                <OrderProduct

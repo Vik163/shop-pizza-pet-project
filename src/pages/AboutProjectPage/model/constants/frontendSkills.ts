@@ -17,10 +17,12 @@ export const frontendSkills = {
       ' - EntityAdapter',
       ' - RTK Query',
    ],
-   Axios: ['- Перехват запросов'],
-   Авторизация: [],
-   CSRF: [],
+   Axios: undefined,
    'Feature-Sliced Design': undefined,
    Eslint: undefined,
-   Prettier: undefined,
+   Авторизация: ['- По номеру телефона - Firebase,', '- Яндекс ID'],
+   CSRF: [
+      '- При регистрации или аутентификации получаю новый токен с сервера и сохраняю его в стейт',
+      '- При отправке формы, в перехватчике запросов, получаю токен из стейта и добавляю его в заголовок запроса',
+   ],
 };

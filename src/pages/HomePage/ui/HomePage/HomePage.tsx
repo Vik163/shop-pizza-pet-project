@@ -12,12 +12,12 @@ import cls from './HomePage.module.scss';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import { Header } from '@/widgets/Header';
-import { Footer } from '@/widgets/Footer';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
 import { getInited, initAuthData, userAction } from '@/entities/User';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 import { fetchBasket } from '@/entities/Basket';
+import { Footer } from '@/widgets/Footer';
 
 export const HomePage = memo(() => {
    const dispatch = useAppDispatch();

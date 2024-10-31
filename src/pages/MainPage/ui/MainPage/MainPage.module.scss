@@ -1,6 +1,4 @@
-.titleNewProduct {
-   margin: 45px 0 30px;
-}
+@import '../../../../app//styles/variables/mixins.scss';
 
 .man {
    position: absolute;
@@ -15,4 +13,16 @@
    width: 10%;
    right: 0;
    bottom: 1138px;
+}
+
+@media screen and (max-width: $mobile) {
+   .man {
+      width: 15%;
+      top: 320px;
+   }
+
+   .woman {
+      width: 15%;
+      bottom: 409px;
+   }
 }

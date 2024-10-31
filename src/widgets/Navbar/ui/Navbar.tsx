@@ -5,7 +5,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import cls from './Navbar.module.scss';
 import { HStack } from '@/shared/ui/Stack/HStack/HStack';
 import { Button, ButtonVariant } from '@/shared/ui/Button';
-import { FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
+import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
 import { navbarItems } from '../model/items';
 import { AppLink } from '@/shared/ui/AppLink';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
@@ -13,10 +13,13 @@ import { AuthByPhone } from '@/features/AuthByPhone';
 import { getInited, getUserData, UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
+
 import { getRouteProfile } from '@/shared/const/router';
 import { getBasketProducts } from '@/entities/Basket';
 import { ModalBasket } from '@/features/ModalBasket';
 import { Loader } from '@/shared/ui/Loader';
+import { phoneHeader } from '@/shared/const/main_info';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface NavbarProps {
    className?: string;
@@ -30,6 +33,7 @@ export const Navbar = memo((props: NavbarProps) => {
    const inited = useSelector(getInited);
    const user = useSelector(getUserData) as UserData;
    const basketProducts = useSelector(getBasketProducts);
+   const { isMobile } = useResize();
 
    const pathProfile = user?.userId && getRouteProfile(user?.userId);
 
@@ -83,7 +87,15 @@ export const Navbar = memo((props: NavbarProps) => {
                <Icon className={cls.account} Svg={man} />
             </AppLink>
          )}
-
+         {isMobile && (
+            <Text
+               fontColor={FontColor.TEXT_BUTTON}
+               fontWeight={FontWeight.TEXT_700}
+               fontSize={FontSize.SIZE_22}
+            >
+               {phoneHeader}
+            </Text>
+         )}
          <Button
             onClick={openBasket}
             className={cls.basket}

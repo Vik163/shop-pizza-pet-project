@@ -1,0 +1,41 @@
+.Drawer {
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   display: flex;
+   z-index: 15;
+}
+
+.opened {
+   pointer-events: auto;
+   opacity: 1;
+   z-index: 100;
+
+   .content {
+      transform: translateY(0%);
+   }
+}
+
+.sheet {
+   z-index: 16;
+   position: fixed;
+   width: 100%;
+   height: 475px;
+   touch-action: none;
+   background-color: var(--color-yellow);
+}
+
+.logoContainer {
+   width: 100%;
+   height: 63px;
+   padding: 0 11px;
+}
+
+.iconMenu {
+   width: 39px;
+   height: 27px;
+   fill: rgb(57, 57, 57);
+   cursor: pointer;
+}

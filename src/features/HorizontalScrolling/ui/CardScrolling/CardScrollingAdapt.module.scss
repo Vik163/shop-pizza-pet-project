@@ -1,0 +1,93 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .CardScrolling {
+      background-color: var(--block-bg-primary);
+      justify-content: flex-start;
+
+      &.horizontal_big_font {
+         gap: 25px;
+         width: 200px;
+         height: 100%;
+         padding: 0 17px;
+      }
+
+      &.horizontal_small_font {
+         gap: 15px;
+         width: 200px;
+         height: 100%;
+         padding: 0 9px 0 17px;
+      }
+      &.vertical_small_font {
+         padding: 14px 12px 20px;
+         height: 100%;
+         gap: 9px;
+      }
+   }
+
+   .image {
+      min-width: 56px;
+      height: 56px;
+   }
+
+   .cardInfo {
+      margin: 0;
+
+      &.horizontal_big_font {
+         gap: 4px;
+         width: 122px;
+      }
+
+      &.horizontal_small_font {
+         gap: 8px;
+      }
+      &.vertical_small_font {
+         align-items: center;
+         height: 60px;
+         justify-content: space-between;
+      }
+   }
+
+   .textHover {
+      padding: 8px;
+      position: absolute;
+      top: -33px;
+      left: 0;
+      width: 300px;
+      border-radius: 8px;
+      visibility: hidden;
+      opacity: 0;
+      transition: 0.2s;
+   }
+
+   .text {
+      &.horizontal_big_font {
+         font-size: var(--size-14);
+      }
+
+      &.horizontal_small_font {
+         font-size: var(--size-13);
+      }
+
+      &.vertical_small_font {
+         font-size: var(--size-13);
+         text-align: center;
+         font-weight: var(--weight-500);
+      }
+   }
+
+   .price {
+      &.horizontal_big_font {
+         font-size: var(--size-13);
+      }
+
+      &.horizontal_small_font {
+         font-size: var(--size-14);
+         color: var(--color-pink);
+      }
+      &.vertical_small_font {
+         font-size: var(--size-14);
+         color: var(--color-pink);
+      }
+   }
+}

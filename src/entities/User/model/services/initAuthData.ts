@@ -24,10 +24,6 @@ export const initAuthData = createAsyncThunk<
 
       const userData = await dispatch(getUserDataByIdQuery(userId)).unwrap();
 
-      // const response = await $api.get(`/auth/${userId}`, {
-      //    withCredentials: true,
-      // });
-
       if (!userData.phoneNumber) {
          return rejectWithValue({
             errorMessage: 'Пользователь не авторизован',

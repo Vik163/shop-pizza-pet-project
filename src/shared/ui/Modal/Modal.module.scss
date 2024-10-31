@@ -10,6 +10,9 @@
 
    &.center {
       z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
    }
 
    &.opened {
@@ -17,31 +20,9 @@
    }
 }
 
-.overlay {
-   height: 100%;
-   width: 100%;
-   background: rgba(100, 86, 23, 0.4);
-   opacity: 0;
-   transition: 0.2s;
-
-   &.nonAnimate {
-      opacity: 1;
-   }
-
-   &.centerOverlay {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-   }
-
-   &.overlayActive {
-      opacity: 1;
-      transition: 0.2s;
-   }
-}
-
 .content {
    position: relative;
+   z-index: 5;
 
    &.modaleAnimate {
       opacity: 0;
