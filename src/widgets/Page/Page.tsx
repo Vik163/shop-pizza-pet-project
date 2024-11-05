@@ -9,6 +9,7 @@ import { getSaveScroll } from '@/entities/Product';
 import { ScrollTopPage } from '@/features/ScrollTopPage';
 import { getUserSettings } from '@/entities/User';
 import { useMoveScroll } from '@/shared/lib/hooks/useMoveScroll';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 export enum PageDirection {
    VIRTICAL = 'vertical',
@@ -48,12 +49,15 @@ export const Page = memo((props: PageProps) => {
    const { pathname } = useLocation();
    const { viewLoadProducts } = useSelector(getUserSettings);
    const scrollCard = useSelector(getSaveScroll);
+   const { isMobile } = useResize();
+   const devices = isMobile ? 'mobile' : '';
 
    const position = useMoveScroll({
       pathname,
       animationScroll,
       viewLoadProducts,
       scrollCard,
+      devices,
    });
 
    useInfiniteScroll({

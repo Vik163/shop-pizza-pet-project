@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTrottle } from './useTrottle';
 import { pathProducts } from '@/shared/const/product_const';
+import { Devices } from '@/shared/types/devices';
 
 interface ScrollSchema {
    path: string;
@@ -12,12 +13,14 @@ interface MoveScrollProps {
    animationScroll?: boolean;
    viewLoadProducts?: string;
    scrollCard?: Record<string, ScrollSchema>;
+   devices?: Devices;
 }
 
 export const useMoveScroll = (props: MoveScrollProps) => {
-   const { pathname, animationScroll, viewLoadProducts, scrollCard } = props;
+   const { pathname, animationScroll, viewLoadProducts, scrollCard, devices } =
+      props;
 
-   const positionTopProducts = 600;
+   const positionTopProducts = devices === 'mobile' ? 320 : 600;
    const [scrollData, setScrollData] = useState({
       path: '',
       position: 0,

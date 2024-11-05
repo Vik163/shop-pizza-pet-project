@@ -23,6 +23,7 @@ interface ModalProps {
    buttonCloseTop: number;
    buttonCloseRight: number;
    hover?: boolean;
+   zIndex?: number;
 }
 
 export const Modal = memo((props: ModalProps) => {
@@ -40,6 +41,7 @@ export const Modal = memo((props: ModalProps) => {
       delayClose = 300,
       hover = false,
       existAnimateComponent = false,
+      zIndex = 1,
    } = props;
 
    //* выношу логику в хук
@@ -62,8 +64,13 @@ export const Modal = memo((props: ModalProps) => {
    return (
       isOpen && (
          <Portal>
-            <div id='modal' className={classNames(cls.Modal, mods, [])}>
+            <div
+               id='modal'
+               style={{ zIndex }}
+               className={classNames(cls.Modal, mods, [])}
+            >
                <div
+                  style={{ zIndex }}
                   className={classNames(
                      cls.content,
                      {

@@ -38,7 +38,7 @@
    justify-content: space-between;
    position: relative;
    gap: 15px;
-   color: var(--color-input);
+   color: var(--color-primary);
 }
 
 .errorWarning {
@@ -67,3 +67,5 @@
       background: var(--color-pink);
    }
 }
+
+@import './CodeInFormComponentAdapt.module.scss';

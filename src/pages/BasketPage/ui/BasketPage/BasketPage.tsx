@@ -34,6 +34,8 @@ import { orderActions, orderReducer } from '@/entities/Order';
 import { Page } from '@/widgets/Page';
 import { modalDelay } from '@/shared/const/modal_delay';
 import { Loader } from '@/shared/ui/Loader';
+import { Header } from '@/widgets/Header';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 export interface BasketPageProps {
    className?: string;
@@ -48,7 +50,7 @@ const BasketPage = memo((props: BasketPageProps) => {
    const { className } = props;
    const dispatch = useAppDispatch();
    const childRef = useRef<RefTypeModal>(null);
-
+   const { isMobile } = useResize();
    const [openModal, setOpenModal] = useState(false);
 
    const totalPrice = useSelector(getBasketTotalPrice);
@@ -86,8 +88,9 @@ const BasketPage = memo((props: BasketPageProps) => {
          reducers={initialReducers}
       >
          <Page className={classNames(cls.BasketPage, {}, [className])}>
+            {isMobile && <Header />}
             <HStack max justify={FlexJustify.BETWEEN} className={cls.header}>
-               <Icon src={logo} />
+               {!isMobile && <Icon src={logo} />}
                <OrderLevel />
             </HStack>
             <VStack className={cls.main} align={FlexAlign.START}>

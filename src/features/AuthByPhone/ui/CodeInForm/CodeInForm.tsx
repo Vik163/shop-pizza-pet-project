@@ -19,6 +19,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
 import { CodeInFormComponent } from '../CodeInFormComponent/ui/CodeInFormComponent';
 import { fetchSignupUser } from '@/entities/User';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface CodeInFormProps {
    className?: string;
@@ -33,6 +34,7 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
    const dispatch = useAppDispatch();
    const isLoading = useSelector(getIsLoading);
    const error = useSelector(getIsError);
+   const { isMobile } = useResize();
 
    // 3 После верификации запрашиваем пользователя в БД, и если не найден, то создаем
    const createUser = useCallback(
@@ -49,8 +51,24 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
    // -----------------------------------------------------------------------------
    const codeFormWithLoading = isLoading ? (
       <form className={cls.formByPhone}>
-         <Skeleton border='10px' height={60} width={587} />
-         <Skeleton border='10px' height={60} width={587} />
+         <Text
+            className={cls.title}
+            fontSize={FontSize.SIZE_32}
+            fontWeight={FontWeight.TEXT_700}
+            max
+         >
+            Вход на сайт
+         </Text>
+         <Skeleton
+            border='10px'
+            height={isMobile ? 45 : 65}
+            width={isMobile ? 260 : 587}
+         />
+         <Skeleton
+            border='10px'
+            height={isMobile ? 45 : 65}
+            width={isMobile ? 260 : 587}
+         />
       </form>
    ) : (
       <CodeInFormComponent

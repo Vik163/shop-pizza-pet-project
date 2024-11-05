@@ -1,4 +1,5 @@
-import { memo, useState } from 'react';
+import { memo, Suspense, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Header.module.scss';
@@ -23,23 +24,47 @@ import { AppLink } from '@/shared/ui/AppLink';
 import { getRouteAbout } from '@/shared/const/router';
 import { useResize } from '@/shared/lib/hooks/useResize';
 import { Drawer } from '@/shared/ui/Drawer';
+import { ModalBasket } from '@/features/ModalBasket';
+import { getBasketProducts } from '@/entities/Basket';
+import { Loader } from '@/shared/ui/Loader';
+import { AuthByPhone } from '@/features/AuthByPhone';
 
-interface HeaderProps {
-   className?: string;
-}
-
-export const Header = memo((props: HeaderProps) => {
-   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   const { className } = props;
+export const Header = memo(() => {
    const { isMobile } = useResize();
    const [isOpenNav, setIsOpenNav] = useState(false);
+   const [isCloseNav, setIsCloseNav] = useState(false);
+   const [isOpenModalBasket, setIsOpenModalBasket] = useState(false);
+   const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
+
+   const basketProducts = useSelector(getBasketProducts);
+
+   const closeAuthModal = () => {
+      setIsOpenModalAuth(false);
+   };
 
    const openNavbar = () => {
       setIsOpenNav(true);
    };
 
+   // закрывает drawer при клике на ссылки
+   const closeNavbarFromNav = () => {
+      setIsCloseNav(true);
+   };
+
    const closeNavbar = () => {
       setIsOpenNav(false);
+      setIsCloseNav(false);
+   };
+
+   const openModal = (name: string) => {
+      if (name === 'auth') setIsOpenModalAuth(true);
+      if (name === 'basket' && basketProducts?.length > 0)
+         setIsOpenModalBasket(true);
+      closeNavbarFromNav(); // можно добавить задержку закрытия drawer
+   };
+
+   const closeBasket = () => {
+      setIsOpenModalBasket(false);
    };
 
    const headerContent = (
@@ -126,14 +151,31 @@ export const Header = memo((props: HeaderProps) => {
             </HStack>
          )}
          {!isMobile ? (
-            <Navbar />
+            <Navbar openModal={openModal} />
          ) : (
             isOpenNav && (
-               <Drawer isOpen={isOpenNav} onClose={closeNavbar}>
-                  <Navbar />
+               <Drawer
+                  isOpen={isOpenNav}
+                  onClose={closeNavbar}
+                  isCloseNav={isCloseNav}
+               >
+                  <Navbar
+                     openModal={openModal}
+                     closeNavbarModal={closeNavbarFromNav}
+                  />
                </Drawer>
             )
          )}
+         <ModalBasket
+            isOpenModalBasket={isOpenModalBasket}
+            closeBasket={closeBasket}
+         />
+         <Suspense fallback={<Loader />}>
+            <AuthByPhone
+               closeAuthModal={closeAuthModal}
+               isOpenModal={isOpenModalAuth}
+            />
+         </Suspense>
       </header>
    );
 });

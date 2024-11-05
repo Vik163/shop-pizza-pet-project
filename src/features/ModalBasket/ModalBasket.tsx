@@ -21,6 +21,7 @@ import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
 import { ModalOrderProduct, RefTypeModal } from '../ModalOrderProduct';
 import { Loader } from '@/shared/ui/Loader';
 import { modalDelay } from '@/shared/const/modal_delay';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface ModalBasketProps {
    isOpenModalBasket: boolean;
@@ -34,6 +35,7 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
    const basketProducts: BasketOneProduct[] = useSelector(getBasketProducts);
    const totalPrice = useSelector(getBasketTotalPrice);
    const { word } = useChangeWord(basketProducts.length);
+   const { isMobile } = useResize();
 
    const onModalProduct = (basket: BasketOneProduct) => {
       childRef.current?.openModal(undefined, basket);
@@ -43,9 +45,9 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
       setIsClosingBasket(bool);
    };
    const content =
-      basketProducts.length > 4 ? (
+      basketProducts.length > 4 || isMobile ? (
          <Scrollbar
-            heightContainer={552}
+            heightContainer={isMobile ? 374 : 552}
             name='basket'
             scrollWidth={3}
             className={cls.scrollbar}
@@ -75,6 +77,7 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
          onAnimate={handleAnimateBasket}
          isOpen={isOpenModalBasket}
          onClose={closeBasket}
+         zIndex={isMobile ? 15 : 3}
          className={classNames(
             cls.basketPopup,
             { [cls.basketPopupActive]: isClosingBasket },
@@ -101,7 +104,7 @@ export const ModalBasket = memo((props: ModalBasketProps) => {
             </Text>
             <AppLink to={getRouteBasket()} onClick={closeBasket}>
                <Button
-                  width={330}
+                  width={isMobile ? 280 : 330}
                   height={40}
                   variant={ButtonVariant.FILLED}
                   bgColor={ButtonBgColor.YELLOW}

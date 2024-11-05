@@ -21,7 +21,13 @@
 @media screen and (max-width: $mobile) {
    .modal {
       width: 300px;
-      height: auto;
       padding: 15px;
+      max-height: 85vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+
+      &::-webkit-scrollbar {
+         display: none;
+      }
    }
 }

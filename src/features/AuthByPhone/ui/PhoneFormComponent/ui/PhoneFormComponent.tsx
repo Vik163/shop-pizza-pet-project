@@ -23,6 +23,7 @@ import { firebaseApi } from '@/entities/User';
 import { host } from '@/shared/const/host';
 import { yaClientId } from '@/shared/config/yandex/yandexConfig';
 import { fetchYandexId } from '../../../api/rtkApiYandex';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 export const PhoneFormComponent = memo(() => {
    const dispatch = useAppDispatch();
@@ -32,6 +33,7 @@ export const PhoneFormComponent = memo(() => {
    const stateToken = uid(32);
    const isConfirmCode = useSelector(getIsConfirmCode);
    const { checkValidate } = usePhoneValidator();
+   const { isMobile } = useResize();
 
    // 1 значение инпута - убираем ненужные символы и отправляем в стейт ======
    const onChangeNumberPhone = useCallback(
@@ -86,6 +88,17 @@ export const PhoneFormComponent = memo(() => {
    };
 
    // -----------------------------------------------------------------------------
+   const yaSign = yaClientId && (
+      <a
+         className={cls.yaButton}
+         aria-label='yandex'
+         href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${yaClientId}&state=${stateToken}&force_confirm=yes&redirect_uri=${host}/yandex`}
+         onClick={onLoginYa}
+      >
+         <Icon src={yandexID} width={73} height={30} />
+      </a>
+   );
+
    const inputVariant = isConfirmCode
       ? InputVariant.INPUT_CLEAR
       : InputVariant.INPUT_OUTLINE;
@@ -104,13 +117,20 @@ export const PhoneFormComponent = memo(() => {
             className={classNames(cls.formByPhone, {}, [])}
             onSubmit={onSubmit}
          >
-            <HStack max justify={FlexJustify.BETWEEN}>
+            {isMobile && yaSign}
+
+            <HStack
+               max
+               justify={FlexJustify.BETWEEN}
+               className={cls.phoneContainer}
+            >
                <Input
                   id='phone'
                   classNameInputWithLabel={cls.loginInput}
                   name='phone'
                   placeholder='+7 (999) 999-99-99'
-                  labelLeft='Номер телефона'
+                  labelLeft={!isMobile ? 'Номер телефона' : ''}
+                  labelTop={isMobile ? 'Номер телефона' : ''}
                   type='tel'
                   withoutButtons
                   widthInput={255}
@@ -120,16 +140,7 @@ export const PhoneFormComponent = memo(() => {
                   value='+7'
                   fixedChangeValue={18}
                />
-               {yaClientId && (
-                  <a
-                     className={cls.yaButton}
-                     aria-label='yandex'
-                     href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${yaClientId}&state=${stateToken}&force_confirm=yes&redirect_uri=${host}/yandex`}
-                     onClick={onLoginYa}
-                  >
-                     <Icon src={yandexID} width={73} height={30} />
-                  </a>
-               )}
+               {!isMobile && yaSign}
             </HStack>
             {errorValidate && (
                <Text
@@ -147,7 +158,7 @@ export const PhoneFormComponent = memo(() => {
             >
                <Button
                   id='sign-in-button'
-                  width={224}
+                  width={isMobile ? 255 : 224}
                   height={55}
                   variant={ButtonVariant.FILLED}
                   bgColor={ButtonBgColor.YELLOW}

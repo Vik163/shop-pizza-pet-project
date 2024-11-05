@@ -1,4 +1,4 @@
-import { memo, Suspense, useMemo, useState } from 'react';
+import { memo, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -9,26 +9,24 @@ import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
 import { navbarItems } from '../model/items';
 import { AppLink } from '@/shared/ui/AppLink';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
-import { AuthByPhone } from '@/features/AuthByPhone';
 import { getInited, getUserData, UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 
 import { getRouteProfile } from '@/shared/const/router';
 import { getBasketProducts } from '@/entities/Basket';
-import { ModalBasket } from '@/features/ModalBasket';
-import { Loader } from '@/shared/ui/Loader';
 import { phoneHeader } from '@/shared/const/main_info';
 import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface NavbarProps {
    className?: string;
+   closeNavbarModal?: () => void;
+   openModal: (name: string) => void;
 }
 
 export const Navbar = memo((props: NavbarProps) => {
-   const { className } = props;
-   const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
-   const [isOpenModalBasket, setIsOpenModalBasket] = useState(false);
+   const { className, closeNavbarModal, openModal } = props;
+   // const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
 
    const inited = useSelector(getInited);
    const user = useSelector(getUserData) as UserData;
@@ -44,6 +42,7 @@ export const Navbar = memo((props: NavbarProps) => {
                key={item.text}
                to={item.path}
                className={classNames(cls.link)}
+               onClick={isMobile ? closeNavbarModal : undefined}
             >
                {item.text}
             </AppLink>
@@ -51,16 +50,17 @@ export const Navbar = memo((props: NavbarProps) => {
       [],
    );
 
-   const openBasket = () => {
-      if (basketProducts?.length > 0) setIsOpenModalBasket(true);
-   };
+   // const openAuthModal = () => {
+   //    setIsOpenModalAuth(true);
+   //    if (closeNavbarModal) closeNavbarModal(); // после открытия модалки auth закрывает drawer
+   // };
 
-   const closeBasket = () => {
-      setIsOpenModalBasket(false);
-   };
+   // const closeAuthModal = () => {
+   //    setIsOpenModalAuth(false);
+   // };
 
-   const closeAuthModal = () => {
-      setIsOpenModalAuth(false);
+   const openProfilePage = () => {
+      if (closeNavbarModal) closeNavbarModal();
    };
 
    return (
@@ -78,12 +78,16 @@ export const Navbar = memo((props: NavbarProps) => {
                fontColor={FontColor.TEXT_PRIMARY}
                fontWeight={FontWeight.TEXT_700}
                fontSize={FontSize.SIZE_16}
-               onClick={() => setIsOpenModalAuth(true)}
+               onClick={() => openModal('auth')}
             >
                Войти
             </Button>
          ) : (
-            <AppLink to={pathProfile || '/'} className={classNames(cls.link)}>
+            <AppLink
+               to={pathProfile || '/'}
+               className={classNames(cls.link)}
+               onClick={openProfilePage}
+            >
                <Icon className={cls.account} Svg={man} />
             </AppLink>
          )}
@@ -97,7 +101,7 @@ export const Navbar = memo((props: NavbarProps) => {
             </Text>
          )}
          <Button
-            onClick={openBasket}
+            onClick={() => openModal('basket')}
             className={cls.basket}
             disabled={basketProducts?.length === 0}
          >
@@ -106,16 +110,12 @@ export const Navbar = memo((props: NavbarProps) => {
                {basketProducts?.length || 0}
             </span>
          </Button>
-         <Suspense fallback={<Loader />}>
+         {/* <Suspense fallback={<Loader />}>
             <AuthByPhone
                closeAuthModal={closeAuthModal}
                isOpenModal={isOpenModalAuth}
             />
-         </Suspense>
-         <ModalBasket
-            isOpenModalBasket={isOpenModalBasket}
-            closeBasket={closeBasket}
-         />
+         </Suspense> */}
       </HStack>
    );
 });

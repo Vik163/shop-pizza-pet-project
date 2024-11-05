@@ -20,6 +20,7 @@ import { Scrollbar } from '@/shared/ui/Scrollbar';
 import { IAdditives } from '../../model/types/additives';
 import { fetchAdditives } from '../../model/services/fetchAddivites';
 import { AdditivesCard } from '../AdditivesCard/AdditivesCard';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 export interface AdditivesProps {
    existingOrderAdditives?: string[];
@@ -36,6 +37,7 @@ const Additives = memo((props: AdditivesProps) => {
    const cards = useSelector(getAdditives);
    const orderAdditives = useSelector(getOrderAdditives);
    const orderAdditivesTitle = orderAdditives?.orderAdditivesTitle;
+   const { isMobile } = useResize();
 
    useEffect(() => {
       if (!cards) dispatch(fetchAdditives());
@@ -73,7 +75,7 @@ const Additives = memo((props: AdditivesProps) => {
       <DynamicReducersLoader removeAfterUnmount reducers={initialReducer}>
          {cards && (
             <Scrollbar
-               heightContainer={302}
+               heightContainer={isMobile ? 270 : 302}
                name='additives'
                scrollWidth={5}
                className={classNames(cls.Additives, {}, [])}

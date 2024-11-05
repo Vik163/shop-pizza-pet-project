@@ -1,3 +1,5 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .AdditivesCard {
    width: 96px;
    height: 145px;
@@ -21,4 +23,11 @@
    fill: var(--color-bg-addInfo-card);
    width: 20px;
    height: 20px;
+}
+
+@media screen and (max-width: $mobile) {
+   .AdditivesCard {
+      width: 102px;
+      height: 159px;
+   }
 }

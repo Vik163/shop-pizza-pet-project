@@ -5,6 +5,7 @@ import cls from './AuthByPhone.module.scss';
 import { Modal } from '@/shared/ui/Modal';
 import { PhoneFormAsync as PhoneForm } from '../../ui/PhoneForm/PhoneForm.async';
 import { modalDelay } from '@/shared/const/modal_delay';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface AuthByPhoneProps {
    closeAuthModal: () => void;
@@ -14,6 +15,7 @@ interface AuthByPhoneProps {
 export const AuthByPhone = memo((props: AuthByPhoneProps) => {
    const { closeAuthModal, isOpenModal } = props;
    const [isClosing, setIsClosing] = useState(false);
+   const { isMobile } = useResize();
 
    const onAnimateAuthModal = (bool: boolean) => {
       setIsClosing(bool);
@@ -25,6 +27,7 @@ export const AuthByPhone = memo((props: AuthByPhoneProps) => {
          onAnimate={onAnimateAuthModal}
          onClose={closeAuthModal}
          isOpen={isOpenModal}
+         zIndex={isMobile ? 15 : 3}
          className={classNames(
             cls.phoneModal,
             { [cls.authModalActive]: isClosing },
@@ -32,10 +35,10 @@ export const AuthByPhone = memo((props: AuthByPhoneProps) => {
          )}
          isCenter
          delayClose={modalDelay}
-         buttonCloseHeight={40}
-         buttonCloseRight={30}
-         buttonCloseTop={30}
-         buttonCloseWidth={40}
+         buttonCloseHeight={isMobile ? 26 : 40}
+         buttonCloseRight={isMobile ? 20 : 30}
+         buttonCloseTop={isMobile ? 20 : 30}
+         buttonCloseWidth={isMobile ? 26 : 40}
       >
          <PhoneForm onCloseModal={closeAuthModal} />
       </Modal>

@@ -1,3 +1,5 @@
+@import '../../app/styles/variables/mixins.scss';
+
 .OrderLevel {
    width: 435px;
    height: 66px;
@@ -45,4 +47,30 @@
    letter-spacing: 2px;
    width: 100px;
    right: 48px;
+}
+
+@media screen and (max-width: $mobile) {
+   .OrderLevel {
+      width: 300px;
+      height: 100%;
+   }
+
+   .levelContainer {
+      &:first-child {
+         width: 80px;
+      }
+
+      &:last-child {
+         width: 80px;
+      }
+   }
+
+   .text {
+      font-size: var(--size-11);
+   }
+
+   .dotted {
+      width: 45px;
+      right: 48px;
+   }
 }

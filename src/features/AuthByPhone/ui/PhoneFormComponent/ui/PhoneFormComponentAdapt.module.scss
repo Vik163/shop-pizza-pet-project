@@ -1,0 +1,38 @@
+@import '../../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .title {
+      font-size: var(--size-24);
+   }
+
+   .formByPhone {
+      padding-top: 28px;
+      width: 280px;
+      height: auto;
+   }
+
+   .loginInput {
+      width: 255px;
+      gap: 10px;
+   }
+
+   .yaButton {
+      margin-bottom: 15px;
+   }
+
+   .text {
+      width: 255px;
+      font-size: var(--size-10);
+      margin-top: 10px;
+   }
+
+   .submitCode {
+      flex-direction: column;
+      width: 255px;
+      margin-top: 8px;
+   }
+
+   .errorNumber {
+      margin-bottom: 30px;
+   }
+}

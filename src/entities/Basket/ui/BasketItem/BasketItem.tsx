@@ -19,6 +19,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { Button } from '@/shared/ui/Button';
 import { fetchDelete } from '../../model/services/fetchDelete';
 import { ItemChangeQuantity } from '../ItemChangeQuantity/ItemChangeQuantity';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 export enum BasketVariant {
    BASKET_MODAL = 'basket_modal',
@@ -34,6 +35,7 @@ interface BasketItemProps {
 export const BasketItem = memo((props: BasketItemProps) => {
    const { card, onModalProduct, variant = BasketVariant.BASKET_MODAL } = props;
    const dispatch = useAppDispatch();
+   const { isMobile } = useResize();
 
    const deleteProduct = () => {
       if (card.id) dispatch(fetchDelete(card.id));
@@ -66,32 +68,59 @@ export const BasketItem = memo((props: BasketItemProps) => {
                   alt={card.product.title}
                   className={cls.image}
                />
-               <VStack
-                  align={FlexAlign.START}
-                  gap={7}
-                  className={classNames(
-                     cls.textContainer,
-                     {},
-                     additionalClasses,
-                  )}
-               >
-                  <Text
-                     title={HeaderTagType.H_4}
-                     fontSize={FontSize.SIZE_14}
-                     className={classNames(cls.title, {}, additionalClasses)}
+               {isMobile && variant === BasketVariant.BASKET_PAGE && (
+                  <HStack
+                     justify={FlexJustify.BETWEEN}
+                     className={classNames(
+                        cls.priceContainer,
+                        {},
+                        additionalClasses,
+                     )}
                   >
-                     {card.product.title}
-                  </Text>
-                  {card.sizePizza && (
+                     <ItemChangeQuantity card={card} />
                      <Text
-                        fontSize={FontSize.SIZE_11}
-                        fontColor={FontColor.TEXT_CARD}
-                        className={cls.info}
+                        fontSize={FontSize.SIZE_16}
+                        fontColor={FontColor.TEXT_YELLOW}
+                        fontWeight={FontWeight.TEXT_700}
+                        className={classNames(
+                           cls.totalPrice,
+                           {},
+                           additionalClasses,
+                        )}
                      >
-                        {orderInfo}
+                        {card.totalPrice} &#8381;
                      </Text>
-                  )}
-               </VStack>
+                  </HStack>
+               )}
+               {((isMobile && variant === BasketVariant.BASKET_MODAL) ||
+                  !isMobile) && (
+                  <VStack
+                     align={FlexAlign.START}
+                     gap={7}
+                     className={classNames(
+                        cls.textContainer,
+                        {},
+                        additionalClasses,
+                     )}
+                  >
+                     <Text
+                        title={HeaderTagType.H_4}
+                        fontSize={FontSize.SIZE_14}
+                        className={classNames(cls.title, {}, additionalClasses)}
+                     >
+                        {card.product.title}
+                     </Text>
+                     {card.sizePizza && (
+                        <Text
+                           fontSize={FontSize.SIZE_11}
+                           fontColor={FontColor.TEXT_CARD}
+                           className={cls.info}
+                        >
+                           {orderInfo}
+                        </Text>
+                     )}
+                  </VStack>
+               )}
             </HStack>
             <Button onClick={deleteProduct}>
                <Icon
@@ -100,20 +129,47 @@ export const BasketItem = memo((props: BasketItemProps) => {
                />
             </Button>
          </HStack>
-         <HStack
-            justify={FlexJustify.BETWEEN}
-            className={classNames(cls.priceContainer, {}, additionalClasses)}
-         >
-            <Text
-               fontSize={FontSize.SIZE_16}
-               fontColor={FontColor.TEXT_YELLOW}
-               fontWeight={FontWeight.TEXT_700}
-               className={classNames(cls.totalPrice, {}, additionalClasses)}
+         {((isMobile && variant === BasketVariant.BASKET_MODAL) ||
+            !isMobile) && (
+            <HStack
+               justify={FlexJustify.BETWEEN}
+               className={classNames(cls.priceContainer, {}, additionalClasses)}
             >
-               {card.totalPrice} &#8381;
-            </Text>
-            <ItemChangeQuantity card={card} />
-         </HStack>
+               <Text
+                  fontSize={FontSize.SIZE_16}
+                  fontColor={FontColor.TEXT_YELLOW}
+                  fontWeight={FontWeight.TEXT_700}
+                  className={classNames(cls.totalPrice, {}, additionalClasses)}
+               >
+                  {card.totalPrice} &#8381;
+               </Text>
+               <ItemChangeQuantity card={card} />
+            </HStack>
+         )}
+         {isMobile && variant === BasketVariant.BASKET_PAGE && (
+            <VStack
+               align={FlexAlign.START}
+               gap={7}
+               className={classNames(cls.textContainer, {}, additionalClasses)}
+            >
+               <Text
+                  title={HeaderTagType.H_4}
+                  fontSize={FontSize.SIZE_14}
+                  className={classNames(cls.title, {}, additionalClasses)}
+               >
+                  {card.product.title}
+               </Text>
+               {card.sizePizza && (
+                  <Text
+                     fontSize={FontSize.SIZE_11}
+                     fontColor={FontColor.TEXT_CARD}
+                     className={classNames(cls.info, {}, additionalClasses)}
+                  >
+                     {orderInfo}
+                  </Text>
+               )}
+            </VStack>
+         )}
       </HStack>
    );
 });

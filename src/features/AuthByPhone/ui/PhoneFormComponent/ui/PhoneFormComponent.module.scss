@@ -9,6 +9,10 @@
    position: relative;
 }
 
+.phoneContainer {
+   color: var(--color-primary);
+}
+
 .loginInput {
    width: 414px;
    font-size: var(--size-13);
@@ -40,3 +44,5 @@
 .errorNumber {
    margin-bottom: 30px;
 }
+
+@import './PhoneFormComponentAdapt.module.scss';

@@ -1,5 +1,14 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .ProfilePage {
    width: 1110px;
    padding: 0 0 87px;
    align-items: start;
+}
+
+@media screen and (max-width: $mobile) {
+   .ProfilePage {
+      width: 300px;
+      padding: 0 0 26px;
+   }
 }

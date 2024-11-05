@@ -25,16 +25,18 @@ interface DrawerProps {
    children: ReactNode;
    isOpen?: boolean;
    onClose?: () => void;
+   isCloseNav?: boolean;
 }
 
 // высота - общий размер окна
 const height = 480;
 
 export const DrawerContent = memo((props: DrawerProps) => {
+   const { className, children, onClose, isOpen, isCloseNav } = props;
+
    const { Spring, Gesture } = useAnimationLibs();
    const [{ y }, api] = Spring.useSpring(() => ({ y: height * -1 }));
    const { theme } = useTheme();
-   const { className, children, onClose, isOpen } = props;
    const [isOpenDrawer, setIsOpenDrawer] = useState(false);
    const [isOpenOverlayWithAnimation, setIsOpenOverlayWithAnimation] =
       useState(false);
@@ -45,7 +47,7 @@ export const DrawerContent = memo((props: DrawerProps) => {
 
    const onCloseDrawer = () => {
       setIsOpenDrawer(false);
-      if (onClose) onClose();
+      if (onClose) onClose(); // после анимации удаляет модалку
    };
 
    const openDrawer = useCallback(() => {
@@ -71,6 +73,13 @@ export const DrawerContent = memo((props: DrawerProps) => {
          openDrawer();
       }
    }, [api, isOpen, openDrawer]);
+
+   // после открытия корзины закрывается drawer
+   useEffect(() => {
+      if (isCloseNav) {
+         close();
+      }
+   }, [isCloseNav]);
 
    // возвращает хандлеры (onDrag и т.п.), необходимые для drag-and-drop
    const bind = Gesture.useDrag(

@@ -37,6 +37,7 @@ import { useCookie } from '@/shared/lib/hooks/useCookie';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { DateSelect } from '../DateSelect/DateSelect';
 import { basketActions } from '@/entities/Basket';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface PersonalDataProps {
    className?: string;
@@ -52,6 +53,9 @@ export const PersonalData = memo((props: PersonalDataProps) => {
    const userEmail = useSelector(getUserEmail);
    const userSettings = useSelector(getUserSettings);
    const { addAdvertisement } = userSettings;
+   const { isMobile } = useResize();
+   const widthInput = isMobile ? 300 : 350;
+   const widthInputAndButton = isMobile ? 300 : 446;
 
    const saveValue = useCallback(
       async (name: string, value: string | Birthday): Promise<boolean> => {
@@ -105,7 +109,6 @@ export const PersonalData = memo((props: PersonalDataProps) => {
          <Text
             title={HeaderTagType.H_2}
             className={cls.title}
-            fontSize={FontSize.SIZE_30}
             fontWeight={FontWeight.TEXT_900}
             fontColor={FontColor.TEXT_YELLOW}
          >
@@ -116,8 +119,8 @@ export const PersonalData = memo((props: PersonalDataProps) => {
                classNameInputWithLabel={cls.input}
                labelTop='Имя'
                name='name'
-               widthInput={350}
-               widthInputAndEditButtonRight={446}
+               widthInput={widthInput}
+               widthInputAndEditButtonRight={widthInputAndButton}
                heightInput={48}
                placeholder={userName || 'без имени'}
                placeholderAsValue
@@ -130,7 +133,7 @@ export const PersonalData = memo((props: PersonalDataProps) => {
                labelTop='Номер телефона'
                name='phone'
                type='number'
-               widthInput={350}
+               widthInput={widthInput}
                placeholder={String(userPhone) || '+7 (999) 999-99-99'}
                heightInput={48}
                // value={String(userPhone) || '+7 (999) 999-99-99'}
@@ -138,8 +141,9 @@ export const PersonalData = memo((props: PersonalDataProps) => {
                disabled
             />
             <Text
+               className={cls.textSelect}
                fontSize={FontSize.SIZE_14}
-               fontWeight={FontWeight.TEXT_700}
+               fontWeight={FontWeight.TEXT_500}
                fontColor={FontColor.TEXT_PRIMARY}
             >
                День рождения
@@ -147,7 +151,7 @@ export const PersonalData = memo((props: PersonalDataProps) => {
             <DateSelect
                className={classNames(cls.dateSelect)}
                height={48}
-               width={350}
+               width={widthInput}
                saveValue={saveValue}
             />
             <Input
@@ -156,8 +160,8 @@ export const PersonalData = memo((props: PersonalDataProps) => {
                labelTop='Электронная почта'
                placeholder={userEmail || 'Email'}
                placeholderAsValue
-               widthInput={350}
-               widthInputAndEditButtonRight={446}
+               widthInput={widthInput}
+               widthInputAndEditButtonRight={widthInputAndButton}
                heightInput={48}
                value={userEmail || ''}
                disabled

@@ -1,0 +1,36 @@
+@import '../../../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .PersonalData {
+      width: 300px;
+   }
+
+   .title {
+      margin: 0 0 20px;
+      font-size: var(--size-24);
+   }
+
+   .input {
+      margin-bottom: 12px;
+   }
+
+   .checkbox {
+      width: 100%;
+   }
+
+   .form {
+      width: 100%;
+   }
+
+   .dateSelect {
+      margin: 12px 0;
+   }
+
+   .subscriptions {
+      margin: 30px 0 15px;
+   }
+
+   .submit {
+      margin-top: 32px;
+   }
+}

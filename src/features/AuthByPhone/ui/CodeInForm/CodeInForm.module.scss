@@ -1,13 +1,36 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .formByPhone {
-   padding-top: 41px;
    width: 587px;
-   height: 180px;
    display: flex;
    flex-direction: column;
    justify-content: space-between;
    align-items: start;
+   gap: 20px;
+}
+
+.title {
+   width: 260px;
+   margin-bottom: 30px;
 }
 
 .error {
    margin-top: 90px;
+}
+
+@media screen and (max-width: $mobile) {
+   .formByPhone {
+      width: 260px;
+      gap: 10px;
+   }
+
+   .title {
+      font-size: var(--size-24);
+      width: 260px;
+      margin-bottom: 10px;
+   }
+
+   .error {
+      margin-top: 90px;
+   }
 }

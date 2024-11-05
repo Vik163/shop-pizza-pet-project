@@ -6,6 +6,7 @@ import cls from './OrderLevel.module.scss';
 import { HStack, VStack } from '@/shared/ui/Stack';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
 import { Text } from '@/shared/ui/Text';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface OrderLevelProps {
    className?: string;
@@ -16,6 +17,7 @@ export const OrderLevel = memo((props: OrderLevelProps) => {
    const { pathname } = useLocation();
    const activeBasket = pathname === '/basket' || pathname === '/order';
    const activeOrder = pathname === '/order';
+   const { isMobile } = useResize();
 
    return (
       <HStack
@@ -52,7 +54,10 @@ export const OrderLevel = memo((props: OrderLevelProps) => {
                   [],
                )}
             >
-               2<Text className={cls.dotted}>-------------</Text>
+               2
+               <Text className={cls.dotted}>
+                  {isMobile ? '------' : '-------------'}
+               </Text>
             </div>
             <Text
                className={classNames(
@@ -72,7 +77,10 @@ export const OrderLevel = memo((props: OrderLevelProps) => {
                   [],
                )}
             >
-               3<Text className={cls.dotted}>-------------</Text>
+               3
+               <Text className={cls.dotted}>
+                  {isMobile ? '------' : '-------------'}
+               </Text>
             </div>
             <Text
                className={classNames(cls.text, { [cls.textActive]: false }, [])}

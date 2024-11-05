@@ -1,3 +1,5 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .switch {
    width: 350px;
    gap: 5px;
@@ -11,4 +13,17 @@
    border-top: 1px solid var(--color-line);
    padding: 24px 19px;
    cursor: default;
+}
+
+@media screen and (max-width: $mobile) {
+   .switch {
+      width: 100%;
+      margin-bottom: 30px;
+   }
+
+   .switchTheme {
+      width: 290px;
+      padding: 24px 0;
+      gap: 0;
+   }
 }

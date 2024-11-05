@@ -1,4 +1,13 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .titleAdd {
    width: 795px;
    margin: 39px 0 32px;
+}
+
+@media screen and (max-width: $mobile) {
+   .titleAdd {
+      width: 300px;
+      margin: 39px 0 32px;
+   }
 }

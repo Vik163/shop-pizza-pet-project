@@ -1,3 +1,5 @@
+@import '../../../../../../app/styles/variables/mixins.scss';
+
 .select {
    position: relative;
    display: flex;
@@ -47,5 +49,14 @@
    color: var(--color-primary);
    &.editActive {
       color: var(--color-input-active);
+   }
+}
+
+@media screen and (max-width: $mobile) {
+   .selectEdit {
+      position: absolute;
+      top: -34px;
+      right: 30px;
+      margin-left: 0;
    }
 }

@@ -1,0 +1,13 @@
+@import '../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .InputWrapper {
+      position: relative;
+   }
+
+   .buttonRight {
+      position: absolute;
+      right: 30px;
+      top: -34px;
+   }
+}

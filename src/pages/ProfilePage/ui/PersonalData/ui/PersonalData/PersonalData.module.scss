@@ -1,5 +1,6 @@
 .title {
    margin: 44px 0 24px;
+   font-size: var(--size-30);
 }
 
 .input {
@@ -16,6 +17,10 @@
    button {
       font-size: var(--size-14);
    }
+}
+
+.textSelect {
+   margin-bottom: 16px;
 }
 
 .checkbox {
@@ -45,3 +50,5 @@
 .submit {
    margin-top: 42px;
 }
+
+@import './PersonalDataAdapt.module.scss';

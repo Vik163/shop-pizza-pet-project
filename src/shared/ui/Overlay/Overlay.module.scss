@@ -1,13 +1,13 @@
 .overlay {
-   position: absolute;
+   position: fixed;
    top: 0;
    left: 0;
-   height: 100%;
-   width: 100%;
+   height: 100vh;
+   width: 100vw;
    background: rgba(100, 86, 23, 0.4);
    opacity: 0;
    transition: 0.2s;
-   z-index: 1;
+   z-index: var(--index-min);
 
    &.nonAnimate {
       opacity: 1;

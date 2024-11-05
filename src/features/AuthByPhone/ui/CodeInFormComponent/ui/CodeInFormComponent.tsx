@@ -17,6 +17,7 @@ import { firebaseApi } from '@/entities/User';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { authPhoneActions } from '../../../model/slice/authPhoneSlice';
 import { lengthConfirmCode } from '../../../model/constants/constants';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface CodeInFormComponentProps {
    onEditPhone: () => void;
@@ -30,6 +31,7 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
 
    const authPhoneNumber = useSelector(getPhoneNumber);
    const error = useSelector(getIsError);
+   const { isMobile } = useResize();
 
    // 3 вводим код подтверждения и вызываем верификацию =====================
    const onChangeNumberCode = useCallback(
@@ -98,14 +100,15 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
             Вход на сайт
          </Text>
          <form className={classNames(cls.formByPhone, {}, [])}>
+            {isMobile && <Text className={cls.labelPhone}>Номер телефона</Text>}
             <HStack
                className={cls.phoneContainer}
                justify={FlexJustify.BETWEEN}
             >
-               <Text>Номер телефона</Text>
+               {!isMobile && <Text>Номер телефона</Text>}
                <Text
                   className={cls.phone}
-                  fontSize={FontSize.SIZE_15}
+                  fontSize={isMobile ? FontSize.SIZE_14 : FontSize.SIZE_15}
                   fontColor={FontColor.TEXT_PRIMARY}
                   fontWeight={FontWeight.TEXT_700}
                >
@@ -130,7 +133,8 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
                   heightInput={48}
                   widthInputAndEditButtonRight={88}
                   name='confirmCode'
-                  labelLeft='Код из СМС'
+                  labelLeft={!isMobile ? 'Код из СМС' : ''}
+                  labelTop={!isMobile ? '' : 'Код из СМС'}
                   type='number'
                   error={error}
                   focusInput
@@ -143,6 +147,7 @@ export const CodeInFormComponent = memo((props: CodeInFormComponentProps) => {
                   fontWeight={FontWeight.TEXT_500}
                   fontSize={FontSize.SIZE_14}
                   onClick={onRequestCode}
+                  className={cls.btnNewCode}
                >
                   Получить новый код
                </Button>

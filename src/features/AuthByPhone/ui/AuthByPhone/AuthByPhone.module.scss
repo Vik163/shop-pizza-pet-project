@@ -1,3 +1,5 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .phoneModal {
    width: 668px;
    height: 320px;
@@ -15,5 +17,13 @@
       opacity: 1;
       transform: scale(1);
       transition: 0.2s;
+   }
+}
+
+@media screen and (max-width: $mobile) {
+   .phoneModal {
+      width: 300px;
+      height: auto;
+      padding: 20px;
    }
 }

@@ -1,3 +1,5 @@
+@import '../../app/styles/variables/mixins.scss';
+
 .ScrollTopPage {
    position: fixed;
    right: 2vw;
@@ -19,5 +21,17 @@
    svg {
       width: 25px;
       opacity: 0.5;
+   }
+}
+
+@media screen and (max-width: $mobile) {
+   .ScrollTopPage {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+
+      svg {
+         width: 20px;
+      }
    }
 }

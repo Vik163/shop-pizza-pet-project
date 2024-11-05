@@ -1,0 +1,64 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .BasketItem {
+      margin-bottom: 3px;
+
+      &.basket_modal {
+         width: 280px;
+         padding-top: 15px;
+      }
+
+      &.basket_page {
+         width: 300px;
+         padding: 20px 0;
+      }
+   }
+
+   .image {
+      width: 60px;
+      height: 60px;
+   }
+
+   .linkCard {
+      align-items: flex-end;
+   }
+
+   .textContainer {
+      &.basket_modal {
+         width: 160px;
+         padding-top: 3px;
+      }
+
+      &.basket_page {
+         margin-top: 13px;
+         width: 100%;
+      }
+   }
+
+   .info {
+      &.basket_page {
+         font-size: var(--size-13);
+      }
+   }
+
+   .priceContainer {
+      &.basket_modal {
+         padding: 0 20px;
+         width: 280px;
+         height: 44px;
+      }
+
+      &.basket_page {
+         padding: 0 20px 0 30px;
+         width: 230px;
+         height: 30px;
+      }
+   }
+
+   .totalPrice {
+      &.basket_page {
+         font-size: 20px;
+      }
+   }
+}

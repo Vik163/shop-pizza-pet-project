@@ -1,3 +1,5 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .selectWrapper {
    position: relative;
 }
@@ -40,4 +42,10 @@
 
 .selectOpenBottom {
    bottom: 0;
+}
+
+@media screen and (max-width: $mobile) {
+   .placeholder {
+      padding: 0 10px;
+   }
 }

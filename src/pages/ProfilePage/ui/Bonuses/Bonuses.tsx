@@ -12,6 +12,7 @@ import {
 } from '@/shared/ui/Text';
 import sale from '@/shared/assets/images/sale.png';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface BonusesProps {
    className?: string;
@@ -20,6 +21,7 @@ interface BonusesProps {
 export const Bonuses = memo((props: BonusesProps) => {
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const { className } = props;
+   const { isMobile } = useResize();
 
    return (
       <section className={cls.Bonuses}>
@@ -29,7 +31,7 @@ export const Bonuses = memo((props: BonusesProps) => {
             gap={33}
          >
             <Text
-               fontSize={FontSize.SIZE_32}
+               fontSize={isMobile ? FontSize.SIZE_30 : FontSize.SIZE_32}
                fontWeight={FontWeight.TEXT_900}
                fontColor={FontColor.TEXT_YELLOW}
                title={HeaderTagType.H_3}
