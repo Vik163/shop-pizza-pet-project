@@ -19,3 +19,5 @@ const defaultUserSettings: UserSettings = {
 
 export const getUserSettings = (state: StateSchema) =>
    state.user?.authData?.userSettings ?? defaultUserSettings;
+export const getLoadProducts = (state: StateSchema) =>
+   state.user?.loadProductMobile || 'scroll';

@@ -15,7 +15,10 @@ export {
    getUserBirthday,
    getUserPhone,
 } from './model/selectors/userDataSelector';
-export { getUserSettings } from './model/selectors/userSettingsSelector';
+export {
+   getUserSettings,
+   getLoadProducts,
+} from './model/selectors/userSettingsSelector';
 export { initAuthData } from './model/services/initAuthData';
 export { saveUserSettings } from './model/services/saveUserSettings';
 export { updateUserData } from './model/services/updateUserData';

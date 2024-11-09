@@ -1,0 +1,61 @@
+@import '../../../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .main {
+      width: 300px;
+   }
+
+   .title {
+      margin-bottom: 20px;
+      font-size: var(--size-26);
+   }
+
+   .form {
+      width: 100%;
+   }
+
+   .titlePromo {
+      font-size: var(--size-18);
+      margin: 20px 0 14px;
+   }
+
+   .promoButton {
+      background-color: var(--color-yellow);
+      color: var(--color-text-button);
+      border-radius: 0 8px 8px 0;
+      font-size: var(--size-13);
+      font-weight: var(--weight-700);
+   }
+
+   .checkbox {
+      height: auto;
+      width: 100%;
+      margin: 10px 0 33px;
+   }
+
+   .label {
+      margin-top: 10px;
+   }
+
+   .btnContainer {
+      margin-top: 40px;
+      flex-direction: column-reverse;
+   }
+
+   .link {
+      margin-top: 15px;
+   }
+
+   .button {
+      position: relative;
+      gap: 15px;
+   }
+
+   .arrow {
+      position: absolute;
+      right: 20px;
+      height: 10px;
+      fill: var(--color-primary);
+      stroke: var(--color-text-button);
+   }
+}

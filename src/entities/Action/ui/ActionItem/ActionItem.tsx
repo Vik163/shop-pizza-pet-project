@@ -24,7 +24,7 @@ export const ActionItem = memo((props: ActionItemProps) => {
       >
          <img className={cls.image} src={action.image} alt={action.title} />
          <VStack className={cls.info} align={FlexAlign.START}>
-            <Text fontSize={FontSize.SIZE_20} fontWeight={FontWeight.TEXT_700}>
+            <Text className={cls.title} fontWeight={FontWeight.TEXT_700}>
                {action.title}
             </Text>
             <Text

@@ -111,11 +111,15 @@ const BasketPage = memo((props: BasketPageProps) => {
                   />
                )}
                <SaucesToOrder onModalProduct={onModalProduct} />
-               <Text fontSize={FontSize.SIZE_24} className={cls.price}>
+               <Text className={cls.price}>
                   Сумма заказа:
                   <span className={cls.sum}>{totalPrice} &#8381;</span>
                </Text>
-               <HStack max justify={FlexJustify.BETWEEN}>
+               <HStack
+                  max
+                  justify={FlexJustify.BETWEEN}
+                  className={cls.btnContainer}
+               >
                   <Link to='/' className={cls.link}>
                      <Icon className={cls.arrowBack} Svg={arrow} /> Вернуться в
                      магазин
@@ -138,13 +142,15 @@ const BasketPage = memo((props: BasketPageProps) => {
             </VStack>
             <div className={cls.line} />
             <Modal
-               buttonCloseHeight={40}
-               buttonCloseRight={35}
-               buttonCloseTop={35}
-               buttonCloseWidth={40}
+               buttonCloseHeight={isMobile ? 25 : 40}
+               buttonCloseRight={isMobile ? 20 : 35}
+               buttonCloseTop={isMobile ? 20 : 35}
+               buttonCloseWidth={isMobile ? 25 : 40}
                isOpen={openModal}
                onClose={closeModal}
                delayClose={modalDelay}
+               zIndex={isMobile ? 15 : 5}
+               className={cls.modalAddress}
             >
                <SelectAddressModal closeModal={closeModal} />
             </Modal>

@@ -1,0 +1,21 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .addressContainer {
+      gap: 12px;
+   }
+
+   .address {
+      width: 260px;
+   }
+
+   .hint {
+      padding: 5px 10px;
+      width: 260px;
+      font-size: var(--size-14);
+   }
+
+   .inputs {
+      font-size: var(--size-13);
+   }
+}

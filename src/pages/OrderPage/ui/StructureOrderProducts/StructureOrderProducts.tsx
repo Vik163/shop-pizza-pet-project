@@ -8,6 +8,7 @@ import { FontSize, FontWeight, Text } from '@/shared/ui/Text';
 import { BasketOneProduct, getBasketProducts } from '@/entities/Basket';
 import { FlexAlign, FlexJustify } from '@/shared/ui/Stack/Flex';
 import { Scrollbar } from '@/shared/ui/Scrollbar';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface StructureOrderProductsProps {
    className?: string;
@@ -17,6 +18,7 @@ export const StructureOrderProducts = memo(
    (props: StructureOrderProductsProps) => {
       const { className } = props;
       const basketProducts = useSelector(getBasketProducts);
+      const { isMobile } = useResize();
 
       return (
          <VStack
@@ -28,7 +30,7 @@ export const StructureOrderProducts = memo(
                   name='structure'
                   countChildren={basketProducts.length}
                   heightContainer={267}
-                  widthContainer={308}
+                  widthContainer={isMobile ? 260 : 308}
                   scrollWidth={3}
                >
                   {basketProducts.map((item: BasketOneProduct) => (
@@ -38,7 +40,6 @@ export const StructureOrderProducts = memo(
                         justify={FlexJustify.BETWEEN}
                      >
                         <Text
-                           fontSize={FontSize.SIZE_16}
                            fontWeight={FontWeight.TEXT_500}
                            className={cls.title}
                         >

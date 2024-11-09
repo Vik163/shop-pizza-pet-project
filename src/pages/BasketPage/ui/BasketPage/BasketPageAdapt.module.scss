@@ -11,12 +11,6 @@
       margin-top: 53px;
    }
 
-   .line {
-      width: 100%;
-      color: var(--color-line);
-      border-bottom: 1px solid var(--color-line);
-   }
-
    .main {
       padding: 30px 0;
       width: 300px;
@@ -28,42 +22,27 @@
    }
 
    .price {
-      align-self: flex-end;
-      margin: 45px 0;
+      font-size: var(--size-20);
+      align-self: flex-start;
+      margin: 31px 0 40px;
    }
 
    .sum {
-      font-size: var(--size-38);
-      font-weight: var(--weight-900);
-      color: var(--color-yellow);
+      font-size: var(--size-26);
       margin-left: 15px;
    }
 
+   .btnContainer {
+      flex-direction: column-reverse;
+   }
+
    .link {
-      text-decoration: none;
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      font-size: 15px;
-      color: var(--color-primary);
+      margin-top: 18px;
    }
 
-   .arrowBack {
-      height: 13px;
-      fill: var(--color-primary);
-      transform: rotate(180deg);
-   }
-
-   .button {
-      position: relative;
-      gap: 15px;
-   }
-
-   .arrow {
-      position: absolute;
-      right: 20px;
-      height: 10px;
-      fill: var(--color-primary);
-      stroke: var(--color-text-button);
+   .modalAddress {
+      max-height: 85vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
    }
 }

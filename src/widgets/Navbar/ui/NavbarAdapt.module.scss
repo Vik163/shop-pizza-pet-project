@@ -27,6 +27,12 @@
       @include font(var(--size-15), var(--weight-700), black);
    }
 
+   .project {
+      font-size: var(--size-17);
+      color: var(--color-black);
+      font-weight: var(--weight-700);
+   }
+
    .account {
       fill: black;
    }

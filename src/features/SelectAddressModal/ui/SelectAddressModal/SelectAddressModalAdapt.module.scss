@@ -1,0 +1,41 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .SelectAddressModal {
+      width: 300px;
+
+      padding: 20px;
+      line-height: unset;
+   }
+
+   .title {
+      font-size: var(--size-22);
+      margin-bottom: 26px;
+   }
+
+   .address {
+      margin: 12px 0;
+      font-size: var(--size-13);
+   }
+
+   .comment {
+      padding: 5px 10px;
+      margin-bottom: 18px;
+      font-size: var(--size-13);
+
+      &::placeholder {
+         font-size: var(--size-14);
+      }
+   }
+
+   .warning {
+      width: 250px;
+      margin-left: 50px;
+      line-height: 25px;
+   }
+
+   .mapContainer {
+      height: 328px;
+      width: 100%;
+   }
+}

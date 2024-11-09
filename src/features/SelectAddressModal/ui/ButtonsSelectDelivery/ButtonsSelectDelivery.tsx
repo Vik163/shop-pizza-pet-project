@@ -27,7 +27,7 @@ export const ButtonsSelectDelivery = memo(
       };
 
       return (
-         <HStack gap={15} wrap={FlexWrap.WPAP} className={cls.buttonsContainer}>
+         <HStack wrap={FlexWrap.WPAP} className={cls.buttonsContainer}>
             <Button
                onClick={() => clickTypeDelivery('Доставка')}
                className={classNames(

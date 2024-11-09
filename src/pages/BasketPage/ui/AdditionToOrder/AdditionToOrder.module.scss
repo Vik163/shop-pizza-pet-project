@@ -2,12 +2,14 @@
 
 .titleAdd {
    width: 795px;
-   margin: 39px 0 32px;
+   margin: 38px 0 32px;
+   font-size: var(--size-24);
 }
 
 @media screen and (max-width: $mobile) {
    .titleAdd {
       width: 300px;
-      margin: 39px 0 32px;
+      margin: 38px 0 28px;
+      font-size: var(--size-20);
    }
 }

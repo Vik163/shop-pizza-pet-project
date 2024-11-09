@@ -11,6 +11,7 @@ import { EditAddress } from '../EditAddress/EditAddress';
 import { AuthByPhone } from '@/features/AuthByPhone';
 import { FontColor, FontSize, Text } from '@/shared/ui/Text';
 import { Loader } from '@/shared/ui/Loader';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface DeliveryInfoProps {
    className?: string;
@@ -22,6 +23,8 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
    const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
    const userName = useSelector(getUserName) as string;
    const userPhone = useSelector(getUserPhone);
+   const { isMobile } = useResize();
+   const widthInput = isMobile ? 300 : 539;
 
    const saveValue = useCallback(
       async (name: string, value: string): Promise<boolean> => {
@@ -52,16 +55,33 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
          className={classNames(cls.DeliveryInfo, {}, [className])}
       >
          <Input
-            widthInput={539}
+            widthInput={widthInput}
             heightInput={48}
             name='name'
             labelLeft={
-               <Text
-                  fontSize={FontSize.SIZE_16}
-                  fontColor={FontColor.TEXT_PRIMARY}
-               >
-                  Имя
-               </Text>
+               !isMobile ? (
+                  <Text
+                     fontSize={FontSize.SIZE_16}
+                     fontColor={FontColor.TEXT_PRIMARY}
+                  >
+                     Имя
+                  </Text>
+               ) : (
+                  ''
+               )
+            }
+            labelTop={
+               isMobile ? (
+                  <Text
+                     fontSize={FontSize.SIZE_16}
+                     fontColor={FontColor.TEXT_PRIMARY}
+                     className={cls.labelTop}
+                  >
+                     Имя
+                  </Text>
+               ) : (
+                  ''
+               )
             }
             classNameInputWithLabel={cls.inputContainer}
             classNameButtons={cls.inputButtons}
@@ -75,16 +95,33 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
          />
          <Input
             type='number'
-            widthInput={539}
+            widthInput={widthInput}
             heightInput={48}
             name='phone'
             labelLeft={
-               <Text
-                  fontSize={FontSize.SIZE_16}
-                  fontColor={FontColor.TEXT_PRIMARY}
-               >
-                  Номер телефона
-               </Text>
+               !isMobile ? (
+                  <Text
+                     fontSize={FontSize.SIZE_16}
+                     fontColor={FontColor.TEXT_PRIMARY}
+                  >
+                     Номер телефона
+                  </Text>
+               ) : (
+                  ''
+               )
+            }
+            labelTop={
+               isMobile ? (
+                  <Text
+                     fontSize={FontSize.SIZE_16}
+                     fontColor={FontColor.TEXT_PRIMARY}
+                     className={cls.labelTop}
+                  >
+                     Номер телефона
+                  </Text>
+               ) : (
+                  ''
+               )
             }
             classNameInputWithLabel={cls.inputContainer}
             classNameButtons={cls.inputButtons}
@@ -99,16 +136,33 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
          />
          <EditAddress />
          <Input
-            widthInput={539}
+            widthInput={widthInput}
             heightInput={48}
             name='delivery'
             labelLeft={
-               <Text
-                  fontSize={FontSize.SIZE_16}
-                  fontColor={FontColor.TEXT_PRIMARY}
-               >
-                  Время доставки
-               </Text>
+               !isMobile ? (
+                  <Text
+                     fontSize={FontSize.SIZE_16}
+                     fontColor={FontColor.TEXT_PRIMARY}
+                  >
+                     Время доставки
+                  </Text>
+               ) : (
+                  ''
+               )
+            }
+            labelTop={
+               isMobile ? (
+                  <Text
+                     fontSize={FontSize.SIZE_16}
+                     fontColor={FontColor.TEXT_PRIMARY}
+                     className={cls.labelTop}
+                  >
+                     Время доставки
+                  </Text>
+               ) : (
+                  ''
+               )
             }
             classNameInputWithLabel={cls.inputContainer}
             classNameButtons={cls.inputButtons}

@@ -1,0 +1,36 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .OrderPay {
+      height: auto;
+      margin: 30px 0 12px;
+      padding: 24px;
+   }
+
+   .priceContainer {
+      position: relative;
+   }
+
+   .inputLabel {
+      width: 100%;
+   }
+
+   .labelTop {
+      margin-bottom: 15px;
+   }
+
+   .radio {
+      margin-bottom: 22px;
+
+      &:first-of-type {
+         margin: 20px 0 10px 0;
+      }
+   }
+
+   .checkboxChange {
+      position: absolute;
+      left: 140px;
+      bottom: 15px;
+      gap: 6px;
+   }
+}

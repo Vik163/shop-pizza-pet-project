@@ -1,8 +1,23 @@
+@import '../../../app/styles/variables/mixins.scss';
+
 .ActionsPage {
    gap: 30px;
-   padding-top: 30px;
+   padding: 30px 10px 0;
 }
 
 .title {
-   width: 800px;
+   width: 100%;
+   font-size: var(--size-30);
+}
+
+@media screen and (max-width: $mobile) {
+   .ActionsPage {
+      gap: 20px;
+      padding-top: 20px;
+   }
+
+   .title {
+      padding-left: 10px;
+      font-size: var(--size-26);
+   }
 }

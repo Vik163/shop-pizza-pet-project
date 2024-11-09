@@ -44,10 +44,11 @@ import { getCards } from '../../../model/selectors/productsSelector';
 
 import { nameViewProducts } from '@/shared/const/product_const';
 import { PageSelect } from './PageSelect/PageSelect';
-import { getUserSettings } from '@/entities/User';
 import { additivesActions } from '@/entities/Additives';
 import { ModalOrderProduct, RefTypeModal } from '@/features/ModalOrderProduct';
 import { useResize } from '@/shared/lib/hooks/useResize';
+import { getUserSettings, getLoadProducts, userAction } from '@/entities/User';
+import { ViewLoad } from '@/shared/const/view_load';
 
 interface MainPageProductsProps {
    className?: string;
@@ -75,7 +76,16 @@ const MainPageProducts = forwardRef(
       const paginate = useSelector(getPaginateProduct);
       const [paginateData, setPaginateData] = useState<PaginateData>();
       const { isMobile } = useResize();
-      const { viewLoadProducts } = useSelector(getUserSettings);
+      const { viewLoadProducts } = useSelector(getUserSettings); // настройки пользователя из БД
+      const loadProducts = useSelector(getLoadProducts); // динамически меняемая (если isMobile то 'scroll')
+
+      useEffect(() => {
+         if (isMobile) {
+            dispatch(userAction.setLoadProductsMobile(ViewLoad.SCROLL));
+         } else {
+            dispatch(userAction.setLoadProductsMobile(viewLoadProducts));
+         }
+      }, [viewLoadProducts, isMobile]);
 
       const productsFromPageLoud = (arr: Product[]) => {
          if (paginateData)
@@ -119,14 +129,14 @@ const MainPageProducts = forwardRef(
       // Сбор данных в стейт =========================
       useEffect(() => {
          if (products.length && viewProduct === products[0].type) {
-            if (viewLoadProducts === 'scroll' || isMobile) {
+            if (loadProducts === 'scroll') {
                dispatch(
                   mainPageActions.setProducts({
                      ...cards,
                      [viewProduct as string]: products,
                   }),
                );
-            } else if (viewLoadProducts === 'pages' && !isMobile) {
+            } else if (loadProducts === 'pages') {
                // при переходе на выбор страниц отрисовывает элементы, на которых остановилась прокрутка (при бесконечном скролле)
                // выбирает из массива нужные
                if (products.length > paginateElements) {
@@ -149,7 +159,7 @@ const MainPageProducts = forwardRef(
 
       // первоначальный запрос при изменении страницы если нет данных в стейте
       useEffect(() => {
-         if (viewLoadProducts === 'scroll' || isMobile) {
+         if (loadProducts === 'scroll') {
             if (!cards[viewProduct]) {
                // разбиваю на два, чтобы не было второго запроса
                if (viewProduct === pathname.slice(1)) {
@@ -181,7 +191,7 @@ const MainPageProducts = forwardRef(
                      }),
                   );
             }
-         } else if (viewLoadProducts === 'pages' && !isMobile) {
+         } else if (loadProducts === 'pages') {
             dispatch(
                fetchViewProducts({
                   page: savePage[viewProduct] ? savePage[viewProduct].page : 1,

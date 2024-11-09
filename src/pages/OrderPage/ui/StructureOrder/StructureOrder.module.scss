@@ -1,3 +1,5 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .StructureOrder {
    width: 340px;
    height: 495px;
@@ -9,6 +11,35 @@
    margin-top: 30px;
 }
 
+.title {
+   font-size: var(--size-16);
+}
+
 .price {
    margin-bottom: 20px;
+}
+
+.delivery {
+   font-size: var(--size-16);
+}
+
+@media screen and (max-width: $mobile) {
+   .StructureOrder {
+      width: 100%;
+      height: auto;
+      padding: 20px;
+      margin-top: 0;
+   }
+
+   .title {
+      font-size: var(--size-15);
+   }
+
+   .price {
+      margin-bottom: 20px;
+   }
+
+   .delivery {
+      font-size: var(--size-15);
+   }
 }

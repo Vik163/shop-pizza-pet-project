@@ -1,3 +1,5 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .OrderPage {
    width: 1110px;
 }
@@ -15,4 +17,25 @@
    width: 100%;
    color: var(--color-line);
    border-bottom: 1px solid var(--color-line);
+}
+
+@media screen and (max-width: $mobile) {
+   .OrderPage {
+      width: 300px;
+   }
+
+   .header {
+      height: 93px;
+      border-bottom: 1px solid var(--color-line);
+   }
+
+   .main {
+      margin: 32px 0;
+   }
+
+   .line {
+      width: 100%;
+      color: var(--color-line);
+      border-bottom: 1px solid var(--color-line);
+   }
 }

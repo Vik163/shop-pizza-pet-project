@@ -1,0 +1,26 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .ActionItem {
+      width: 300px;
+      height: 407px;
+   }
+
+   .image {
+      width: 100%;
+   }
+
+   .info {
+      height: 253px;
+      padding: 20px;
+   }
+
+   .title {
+      font-size: var(--size-16);
+   }
+
+   .description {
+      margin: 10px 0 14px;
+      font-size: var(--size-12);
+   }
+}

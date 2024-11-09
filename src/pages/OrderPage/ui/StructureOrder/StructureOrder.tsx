@@ -29,9 +29,9 @@ export const StructureOrder = memo((props: StructureOrderProps) => {
          className={classNames(cls.StructureOrder, {}, [className])}
       >
          <Text
-            fontSize={FontSize.SIZE_16}
             fontColor={FontColor.TEXT_YELLOW}
             fontWeight={FontWeight.TEXT_700}
+            className={cls.title}
          >
             Состав заказа
          </Text>
@@ -46,9 +46,9 @@ export const StructureOrder = memo((props: StructureOrderProps) => {
          </HStack>
          <Text
             max
-            fontSize={FontSize.SIZE_16}
             fontWeight={FontWeight.TEXT_700}
             align={TextAlign.TEXT_CENTER}
+            className={cls.delivery}
          >
             Бесплатная доставка
          </Text>

@@ -4,15 +4,20 @@ import { type UserSchema, type UserData } from '../types/user';
 import { type UserSettings } from '../types/userSettings';
 import { saveUserSettings } from '../services/saveUserSettings';
 import { initAuthData } from '../services/initAuthData';
-import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
+import {
+   LOCAL_STORAGE_VIEW_LOAD_KEY,
+   LOCALSTORAGE_USER_KEY,
+} from '@/shared/const/localstorage';
 import { updateUserData } from '../services/updateUserData';
 import { fetchSignupUser } from '../services/fetchSignupUser';
+import { ViewLoad } from '@/shared/const/view_load';
 
 const initialState: UserSchema = {
    _inited: false,
    _userUid: '',
    error: undefined,
    authData: null,
+   loadProductMobile: ViewLoad.SCROLL,
 };
 
 export const userSlice = createSlice({
@@ -23,6 +28,10 @@ export const userSlice = createSlice({
          state.authData = payload;
          state._inited = true;
          localStorage.setItem(LOCALSTORAGE_USER_KEY, payload.userId);
+      },
+      setLoadProductsMobile: (state, { payload }: PayloadAction<ViewLoad>) => {
+         state.loadProductMobile = payload;
+         localStorage.setItem(LOCAL_STORAGE_VIEW_LOAD_KEY, payload);
       },
       logout: (state) => {
          state._inited = false;

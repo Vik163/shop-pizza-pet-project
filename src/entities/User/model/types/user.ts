@@ -1,5 +1,6 @@
 import { BasketOneProduct } from '@/entities/Basket';
 import { type UserSettings } from './userSettings';
+import { ViewLoad } from '@/shared/const/view_load';
 
 enum RoleUser {
    ADMIN = 'ADMIN',
@@ -37,5 +38,6 @@ export interface UserSchema {
    isLoading?: boolean;
    _inited?: boolean;
    message?: string;
+   loadProductMobile?: ViewLoad;
    error: string | null | undefined;
 }

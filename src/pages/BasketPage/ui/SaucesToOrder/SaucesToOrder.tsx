@@ -4,13 +4,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './SaucesToOrder.module.scss';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import {
-   FontColor,
-   FontSize,
-   FontWeight,
-   HeaderTagType,
-   Text,
-} from '@/shared/ui/Text';
+import { FontColor, FontWeight, HeaderTagType, Text } from '@/shared/ui/Text';
 import {
    HorizontalScrolling,
    CardVariant,
@@ -24,6 +18,7 @@ import {
 import { VStack } from '@/shared/ui/Stack';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { BasketOneProduct } from '@/entities/Basket';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface SaucesToOrderProps {
    className?: string;
@@ -35,6 +30,7 @@ export const SaucesToOrder = memo((props: SaucesToOrderProps) => {
    const dispatch = useAppDispatch();
    const [sauces, setSauces] = useState<Product[]>();
    const products: Product[] = useSelector(getEntityProducts.selectAll);
+   const { isMobile } = useResize();
 
    useEffect(() => {
       dispatch(productActions.setView('sauces'));
@@ -69,7 +65,6 @@ export const SaucesToOrder = memo((props: SaucesToOrderProps) => {
          className={classNames(cls.AddToOrder, {}, [className])}
       >
          <Text
-            fontSize={FontSize.SIZE_24}
             fontColor={FontColor.TEXT_YELLOW}
             fontWeight={FontWeight.TEXT_700}
             className={cls.title}
@@ -80,12 +75,12 @@ export const SaucesToOrder = memo((props: SaucesToOrderProps) => {
          {sauces && sauces.length > 0 && (
             <HorizontalScrolling
                elements={sauces}
-               widthBlock={780}
+               widthBlock={isMobile ? 300 : 780}
                heightBlock={173}
                widthElement={115}
                heightElement={173}
-               gap={20}
-               visibleElements={6}
+               gap={isMobile ? 15 : 20}
+               visibleElements={isMobile ? 2 : 6}
                cardVariant={CardVariant.VERTICAl_SMALL_FONT}
                clickCard={onCard}
             />

@@ -13,6 +13,7 @@ import { orderReducer } from '@/entities/Order';
 import { Page } from '@/widgets/Page';
 import { OrderMainInfo } from '../OrderMainInfo/ui/OrderMainInfo/OrderMainInfo';
 import { StructureOrder } from '../StructureOrder/StructureOrder';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 export interface OrderPageProps {
    className?: string;
@@ -24,6 +25,7 @@ const initialReducers = {
 
 const OrderPage = memo((props: OrderPageProps) => {
    const { className } = props;
+   const { isMobile } = useResize();
 
    return (
       <DynamicReducersLoader
@@ -32,7 +34,7 @@ const OrderPage = memo((props: OrderPageProps) => {
       >
          <Page className={classNames(cls.OrderPage, {}, [className])}>
             <HStack max justify={FlexJustify.BETWEEN} className={cls.header}>
-               <Icon src={logo} />
+               {!isMobile && <Icon src={logo} />}
                <OrderLevel />
             </HStack>
             <HStack
@@ -42,7 +44,7 @@ const OrderPage = memo((props: OrderPageProps) => {
                className={cls.main}
             >
                <OrderMainInfo />
-               <StructureOrder />
+               {!isMobile && <StructureOrder />}
             </HStack>
             <div className={cls.line} />
          </Page>

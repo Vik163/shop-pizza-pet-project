@@ -1,8 +1,16 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .card {
    padding: 15px;
    width: 255px;
-   height: 465px;
    background-color: var(--block-bg-primary);
    border: 1px solid var(--color-border-cards);
    box-shadow: 0 0 8px 0 var(--color-shadow);
+}
+
+@media screen and (max-width: $mobile) {
+   .card {
+      padding: 15px;
+      width: 100%;
+   }
 }

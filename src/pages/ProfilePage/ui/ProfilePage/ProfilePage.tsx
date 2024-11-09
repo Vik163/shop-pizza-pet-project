@@ -9,6 +9,7 @@ import { Bonuses } from '../Bonuses/Bonuses';
 import { SwitchTheme } from '../SwitchTheme/SwitchTheme';
 import { SwitchLoadProducts } from '../SwitchLoadProducts/SwitchLoadProducts';
 import { PersonalData } from '../PersonalData';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 export interface ProfilePageProps {
    className?: string;
@@ -16,12 +17,13 @@ export interface ProfilePageProps {
 
 const ProfilePage = memo((props: ProfilePageProps) => {
    const { className } = props;
+   const { isMobile } = useResize();
 
    return (
       <Page className={classNames(cls.ProfilePage, {}, [className])}>
          <Bonuses />
          <SwitchTheme />
-         <SwitchLoadProducts />
+         {!isMobile && <SwitchLoadProducts />}
          <PersonalData />
       </Page>
    );

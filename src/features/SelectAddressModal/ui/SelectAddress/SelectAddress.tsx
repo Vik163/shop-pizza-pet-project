@@ -14,6 +14,7 @@ import { FlexWrap } from '@/shared/ui/Stack/Flex';
 import { Address, getAddress, orderActions } from '@/entities/Order';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { classNames } from '@/shared/lib/classNames/classNames';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 export const SelectAddress = memo(() => {
    const dispatch = useAppDispatch();
@@ -21,6 +22,8 @@ export const SelectAddress = memo(() => {
    const [city, setCity] = useState<DaDataSuggestion<DaDataAddress>>();
    const [street, setStreet] = useState<DaDataSuggestion<DaDataAddress>>();
    const addressClient = useSelector(getAddress) as Address;
+   const { isMobile } = useResize();
+   const widthInput = isMobile ? 124 : 135;
 
    useEffect(() => {
       dispatch(
@@ -87,7 +90,7 @@ export const SelectAddress = memo(() => {
    if (!addressClient) return;
 
    return (
-      <HStack gap={16} wrap={FlexWrap.WPAP} className={cls.addressContainer}>
+      <HStack wrap={FlexWrap.WPAP} className={cls.addressContainer}>
          <AddressSuggestions
             inputProps={propsInputCity}
             token={process.env.REACT_APP_DADATA_API_KEY}
@@ -116,7 +119,7 @@ export const SelectAddress = memo(() => {
          <Input
             className={classNames(cls.inputs, {}, [cls.inputsRequired])}
             withoutButtons
-            widthInput={135}
+            widthInput={widthInput}
             heightInput={48}
             value={addressClient.house}
             name='house'
@@ -128,7 +131,7 @@ export const SelectAddress = memo(() => {
          <Input
             className={cls.inputs}
             withoutButtons
-            widthInput={135}
+            widthInput={widthInput}
             heightInput={48}
             name='apartment'
             value={addressClient.apartment}
@@ -140,7 +143,7 @@ export const SelectAddress = memo(() => {
          <Input
             className={cls.inputs}
             withoutButtons
-            widthInput={135}
+            widthInput={widthInput}
             heightInput={48}
             value={addressClient.entrance}
             name='entrance'
@@ -152,7 +155,7 @@ export const SelectAddress = memo(() => {
          <Input
             className={cls.inputs}
             withoutButtons
-            widthInput={135}
+            widthInput={widthInput}
             heightInput={48}
             value={addressClient.floor}
             name='floor'

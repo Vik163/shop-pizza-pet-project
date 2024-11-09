@@ -11,7 +11,7 @@ import { type Mods, classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './Input.module.scss';
 import { HStack, VStack } from '../Stack';
-import { FontColor, FontSize, FontWeight, Text } from '../Text';
+import { FontColor } from '../Text';
 import { FlexAlign, FlexJustify } from '../Stack/Flex';
 import { Button } from '../Button';
 import checkmark from '@/shared/assets/icons/Checkmark.svg';
@@ -51,11 +51,8 @@ interface InputProps extends InputTypeProps {
    withoutButtons?: boolean;
    withoutButtonRight?: boolean;
    labelLeft?: ReactNode;
-   labelTop?: string;
+   labelTop?: ReactNode;
    labelRight?: ReactNode;
-   fontLabelWeight?: FontWeight;
-   fontLabelColor?: FontColor;
-   fontLabelSize?: FontSize;
    variant?: InputVariant; // стиль инпута
 
    saveValue?: (name: string, value: string) => Promise<boolean>;
@@ -84,9 +81,6 @@ export const Input = memo((props: InputProps) => {
       labelLeft,
       labelTop,
       labelRight,
-      fontLabelWeight,
-      fontLabelColor,
-      fontLabelSize,
       readonly,
       variant = InputVariant.INPUT_OUTLINE,
       value,
@@ -366,14 +360,7 @@ export const Input = memo((props: InputProps) => {
             align={FlexAlign.START}
             justify={FlexJustify.BETWEEN}
          >
-            <Text
-               fontColor={fontLabelColor}
-               fontSize={fontLabelSize}
-               fontWeight={fontLabelWeight}
-               className={cls.text}
-            >
-               {labelTop}
-            </Text>
+            {labelTop}
             {input}
          </VStack>
       );

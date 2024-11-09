@@ -11,11 +11,13 @@ import { SelectAddressModal } from '@/features/SelectAddressModal';
 import { TypeDelivery, getDeliveryInfo, orderActions } from '@/entities/Order';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { HStack, VStack } from '@/shared/ui/Stack';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 export const EditAddress = memo(() => {
    const dispatch = useAppDispatch();
    const [openModal, setOpenModal] = useState(false);
    const deliveryInfo = useSelector(getDeliveryInfo);
+   const { isMobile } = useResize();
 
    const title =
       deliveryInfo?.typeDelivery === 'Доставка' ? 'Дом' : 'Адрес пиццерии';
@@ -53,9 +55,7 @@ export const EditAddress = memo(() => {
          align={FlexAlign.START}
          justify={FlexJustify.BETWEEN}
       >
-         <Text className={cls.title} fontSize={FontSize.SIZE_16}>
-            Адрес доставки
-         </Text>
+         <Text className={cls.title}>Адрес доставки</Text>
 
          <HStack
             max
@@ -70,14 +70,14 @@ export const EditAddress = memo(() => {
                align={FlexAlign.START}
             >
                <Text
-                  fontSize={FontSize.SIZE_17}
+                  fontSize={isMobile ? FontSize.SIZE_13 : FontSize.SIZE_17}
                   fontColor={FontColor.TEXT_INPUT_EDIT}
                >
                   {title}
                </Text>
                {deliveryInfo?.textAddress && (
                   <Text
-                     fontSize={FontSize.SIZE_17}
+                     fontSize={isMobile ? FontSize.SIZE_13 : FontSize.SIZE_17}
                      fontColor={FontColor.TEXT_INPUT_EDIT}
                   >
                      {deliveryInfo?.textAddress}
@@ -92,7 +92,7 @@ export const EditAddress = memo(() => {
             >
                <Button
                   fontColor={FontColor.TEXT_GREY_BLUE_DARK}
-                  fontSize={FontSize.SIZE_15}
+                  fontSize={isMobile ? FontSize.SIZE_13 : FontSize.SIZE_15}
                   fontWeight={FontWeight.TEXT_700}
                   onClick={() =>
                      onOpenModal(
@@ -104,7 +104,7 @@ export const EditAddress = memo(() => {
                </Button>
                <Button
                   fontColor={FontColor.TEXT_GREY_BLUE_DARK}
-                  fontSize={FontSize.SIZE_15}
+                  fontSize={isMobile ? FontSize.SIZE_13 : FontSize.SIZE_15}
                   fontWeight={FontWeight.TEXT_700}
                   onClick={() =>
                      onOpenModal(
@@ -119,12 +119,13 @@ export const EditAddress = memo(() => {
 
          {openModal && (
             <Modal
-               buttonCloseHeight={40}
-               buttonCloseRight={35}
-               buttonCloseTop={35}
-               buttonCloseWidth={40}
+               buttonCloseHeight={isMobile ? 25 : 40}
+               buttonCloseRight={isMobile ? 20 : 35}
+               buttonCloseTop={isMobile ? 20 : 35}
+               buttonCloseWidth={isMobile ? 25 : 40}
                isOpen={openModal}
                onClose={closeModal}
+               zIndex={isMobile ? 15 : 5}
             >
                <SelectAddressModal closeModal={closeModal} />
             </Modal>

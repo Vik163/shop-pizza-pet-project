@@ -5,6 +5,7 @@
 
 .title {
    margin-top: 20px;
+   font-size: var(--size-16);
 }
 
 .addressContainer {
@@ -29,6 +30,8 @@
    color: var(--color-bg-addInfo-card);
 }
 
-.inputDelivery {
-   margin-top: 110px;
-}
+// .inputDelivery {
+//    margin-top: 110px;
+// }
+
+@import './EditAddressAdapt.mobule.scss';

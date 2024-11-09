@@ -3,13 +3,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './AdditionToOrder.module.scss';
 import { VStack } from '@/shared/ui/Stack';
-import {
-   FontColor,
-   FontSize,
-   FontWeight,
-   HeaderTagType,
-   Text,
-} from '@/shared/ui/Text';
+import { FontColor, FontWeight, HeaderTagType, Text } from '@/shared/ui/Text';
 import {
    HorizontalScrolling,
    CardVariant,
@@ -17,6 +11,7 @@ import {
 import { Product } from '@/entities/Product';
 import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { BasketOneProduct } from '@/entities/Basket';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface AdditionToOrderProps {
    className?: string;
@@ -26,6 +21,7 @@ interface AdditionToOrderProps {
 
 export const AdditionToOrder = memo((props: AdditionToOrderProps) => {
    const { className, additions, onModalProduct } = props;
+   const { isMobile } = useResize();
 
    const onCard = (card: Product | undefined) => {
       if (!card) return;
@@ -45,7 +41,6 @@ export const AdditionToOrder = memo((props: AdditionToOrderProps) => {
          className={classNames(cls.AddToOrder, {}, [className])}
       >
          <Text
-            fontSize={FontSize.SIZE_24}
             fontColor={FontColor.TEXT_YELLOW}
             fontWeight={FontWeight.TEXT_700}
             className={cls.titleAdd}
@@ -56,7 +51,7 @@ export const AdditionToOrder = memo((props: AdditionToOrderProps) => {
          {additions && (
             <HorizontalScrolling
                elements={additions}
-               widthBlock={780}
+               widthBlock={isMobile ? 300 : 780}
                heightBlock={108}
                widthElement={255}
                heightElement={99}

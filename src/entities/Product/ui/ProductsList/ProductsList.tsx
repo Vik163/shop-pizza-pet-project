@@ -10,8 +10,8 @@ import { Product } from '../../model/types/product';
 import { ProductItemSkeleton } from '../ProductItemSkeleton/ProductItemSkeleton';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { pathProducts } from '@/shared/const/product_const';
-import { getUserSettings } from '@/entities/User';
 import { productActions } from '../../model/slice/productsSlice';
+import { getLoadProducts } from '@/entities/User';
 
 interface ProductsListProps {
    products?: Product[];
@@ -23,7 +23,7 @@ interface ProductsListProps {
 export const ProductsList = memo((props: ProductsListProps) => {
    const { products, isLoading, skeletonElements, onModal } = props;
    const dispatch = useAppDispatch();
-   const { viewLoadProducts } = useSelector(getUserSettings);
+   const loadProducts = useSelector(getLoadProducts);
 
    const getSkeleton = () => {
       return new Array(skeletonElements).fill(0).map((item, index) => (
@@ -53,7 +53,7 @@ export const ProductsList = memo((props: ProductsListProps) => {
                scrollCheck
                scrollThrottle={1}
                onChange={
-                  viewLoadProducts === 'scroll' &&
+                  loadProducts === 'scroll' &&
                   visibilityChange(card.type, index)
                }
             >
@@ -74,11 +74,9 @@ export const ProductsList = memo((props: ProductsListProps) => {
 
    return (
       <HStack wrap={FlexWrap.WPAP} className={cls.container}>
-         {viewLoadProducts === 'pages' && isLoading
-            ? getSkeleton()
-            : cardsProduct}
-         {viewLoadProducts === 'scroll' && cardsProduct}
-         {viewLoadProducts === 'scroll' && isLoading && getSkeleton()}
+         {loadProducts === 'pages' && isLoading ? getSkeleton() : cardsProduct}
+         {loadProducts === 'scroll' && cardsProduct}
+         {loadProducts === 'scroll' && isLoading && getSkeleton()}
       </HStack>
    );
 });

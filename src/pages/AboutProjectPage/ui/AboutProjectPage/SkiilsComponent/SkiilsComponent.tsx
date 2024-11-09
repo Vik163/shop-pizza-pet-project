@@ -41,7 +41,8 @@ export const SkiilsComponent = memo((props: SkiilsComponentProps) => {
                      value.map((text) =>
                         text.includes('->') ? (
                            <Text key={text} className={cls.text}>
-                              &ensp;{text.split('->')[0]} ➜
+                              {' '}
+                              {text.split('->')[0]} ➜
                               <a
                                  href={text.split('->')[1]}
                                  target='_blank'

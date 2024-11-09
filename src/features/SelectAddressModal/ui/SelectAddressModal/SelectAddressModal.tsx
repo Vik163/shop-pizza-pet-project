@@ -19,6 +19,7 @@ import { AppLink } from '@/shared/ui/AppLink';
 import { getRouteOrder } from '@/shared/const/router';
 import { Button, ButtonBgColor, ButtonVariant } from '@/shared/ui/Button';
 import { MapOrListAddresses } from '../MapOrListAddresses/MapOrListAddresses';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface SelectAddressModalProps {
    closeModal: () => void;
@@ -33,6 +34,7 @@ export const SelectAddressModal = memo((props: SelectAddressModalProps) => {
    const buttonActive =
       (addressClient.city && addressClient.street && addressClient.house) ||
       (textAddress !== 'Название адреса' && typeDelivery !== 'Доставка');
+   const { isMobile } = useResize();
 
    useEffect(() => {
       if (addressClient) {
@@ -132,7 +134,6 @@ export const SelectAddressModal = memo((props: SelectAddressModalProps) => {
    return (
       <VStack className={cls.SelectAddressModal} align={FlexAlign.START}>
          <Text
-            fontSize={FontSize.SIZE_32}
             fontColor={FontColor.TEXT_YELLOW}
             fontWeight={FontWeight.TEXT_900}
             className={cls.title}
@@ -155,7 +156,7 @@ export const SelectAddressModal = memo((props: SelectAddressModalProps) => {
                )}
             >
                <Button
-                  width={224}
+                  width={isMobile ? 260 : 224}
                   height={55}
                   className={classNames(
                      '',

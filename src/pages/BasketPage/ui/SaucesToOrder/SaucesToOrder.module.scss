@@ -1,3 +1,13 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .title {
-   margin: 40px 0 30px 0;
+   margin: 38px 0 28px;
+   font-size: var(--size-24);
+}
+
+@media screen and (max-width: $mobile) {
+   .title {
+      width: 300px;
+      font-size: var(--size-20);
+   }
 }

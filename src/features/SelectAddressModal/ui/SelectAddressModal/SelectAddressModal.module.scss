@@ -8,6 +8,7 @@
 }
 
 .title {
+   font-size: var(--size-32);
    margin-bottom: 48px;
 }
 
@@ -74,3 +75,5 @@
    height: 328px;
    width: 100%;
 }
+
+@import './SelectAddressModalAdapt.module.scss';

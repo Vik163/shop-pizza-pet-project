@@ -95,7 +95,7 @@ export const NewProducts = memo(() => {
                   heightElement={sizesCard.height}
                   gap={sizesCard.gap}
                   shadowsOpacity={0.06}
-                  visibleElements={4}
+                  visibleElements={isMobile ? 3 : 4}
                   clickCard={onCard}
                />
             )

@@ -3,7 +3,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './ContactsPage.module.scss';
 import { Page, PageAlign } from '@/widgets/Page';
-import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
+import { FontColor, FontWeight, Text } from '@/shared/ui/Text';
 import {
    coordCar,
    coordsStores,
@@ -40,7 +40,6 @@ export const ContactsPage = memo((props: ContactsPageProps) => {
          />
          <Text
             className={cls.phone}
-            fontSize={FontSize.SIZE_38}
             fontWeight={FontWeight.TEXT_700}
             fontColor={FontColor.TEXT_YELLOW}
          >
@@ -51,7 +50,6 @@ export const ContactsPage = memo((props: ContactsPageProps) => {
                <Text
                   key={item}
                   className={cls.address}
-                  fontSize={FontSize.SIZE_26}
                   fontWeight={FontWeight.TEXT_700}
                >
                   {item} <br />

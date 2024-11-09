@@ -5,7 +5,7 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import cls from './Navbar.module.scss';
 import { HStack } from '@/shared/ui/Stack/HStack/HStack';
 import { Button, ButtonVariant } from '@/shared/ui/Button';
-import { FontColor, FontSize, FontWeight, Text } from '@/shared/ui/Text';
+import { FontColor, FontSize, FontWeight } from '@/shared/ui/Text';
 import { navbarItems } from '../model/items';
 import { AppLink } from '@/shared/ui/AppLink';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
@@ -13,9 +13,8 @@ import { getInited, getUserData, UserData } from '@/entities/User';
 import { Icon } from '@/shared/ui/Icon';
 import man from '@/shared/assets/icons/user_auth.svg';
 
-import { getRouteProfile } from '@/shared/const/router';
+import { getRouteAbout, getRouteProfile } from '@/shared/const/router';
 import { getBasketProducts } from '@/entities/Basket';
-import { phoneHeader } from '@/shared/const/main_info';
 import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface NavbarProps {
@@ -50,16 +49,7 @@ export const Navbar = memo((props: NavbarProps) => {
       [],
    );
 
-   // const openAuthModal = () => {
-   //    setIsOpenModalAuth(true);
-   //    if (closeNavbarModal) closeNavbarModal(); // после открытия модалки auth закрывает drawer
-   // };
-
-   // const closeAuthModal = () => {
-   //    setIsOpenModalAuth(false);
-   // };
-
-   const openProfilePage = () => {
+   const openPage = () => {
       if (closeNavbarModal) closeNavbarModal();
    };
 
@@ -86,19 +76,19 @@ export const Navbar = memo((props: NavbarProps) => {
             <AppLink
                to={pathProfile || '/'}
                className={classNames(cls.link)}
-               onClick={openProfilePage}
+               onClick={openPage}
             >
                <Icon className={cls.account} Svg={man} />
             </AppLink>
          )}
          {isMobile && (
-            <Text
-               fontColor={FontColor.TEXT_BUTTON}
-               fontWeight={FontWeight.TEXT_700}
-               fontSize={FontSize.SIZE_22}
+            <AppLink
+               to={getRouteAbout()}
+               className={classNames(cls.project)}
+               onClick={openPage}
             >
-               {phoneHeader}
-            </Text>
+               О проекте
+            </AppLink>
          )}
          <Button
             onClick={() => openModal('basket')}

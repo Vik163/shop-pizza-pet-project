@@ -3,6 +3,10 @@
    border-bottom: 1px solid var(--color-primary);
 }
 
+.technologies {
+   gap: 30px;
+}
+
 .description {
    text-align: center;
    margin-top: 15px;
@@ -13,7 +17,12 @@
 }
 
 .title {
+   font-size: var(--size-32);
+}
+
+.titleAbout {
    width: 100%;
+   font-size: var(--size-18);
    text-align: center;
 }
 
@@ -21,6 +30,7 @@
    display: flex;
    align-items: center;
    cursor: pointer;
+   font-size: var(--size-22);
    margin-bottom: 20px;
 }
 
@@ -30,7 +40,10 @@
 }
 
 .text {
+   font-size: var(--size-22);
    margin-left: 34px;
    margin-bottom: 20px;
    cursor: default;
 }
+
+@import './AboutProjectPageAdapt.module.scss';

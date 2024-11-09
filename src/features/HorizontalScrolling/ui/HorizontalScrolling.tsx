@@ -130,11 +130,13 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                mx = 0;
             }
          }
+
          // перетаскивание.
          // длина массива меньше или равно видимым картам
          if (elements.length <= visibleElements) {
             return;
          }
+
          if (active && Math.abs(mx) > width / 2) {
             // направление прокрутки вправо  (меняю xDir на mx)
             if (mx > 0) {
@@ -172,6 +174,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
                      cancel();
                      return;
                   }
+
                   indexIncrease();
                } else {
                   // Не curtains - индекс последнего элемента elements.length - 4 видимых
@@ -191,6 +194,7 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
 
          api.start((i) => {
             // mx !== 0 убираем реагирование на щелчок мыши
+
             if (mx !== 0) {
                // Масштаб в зависисмости от движения мышкой
                const scaleElementsNum = () => {
@@ -238,14 +242,14 @@ export const HorizontalScrolling = (props: HorizontalScrollingProps) => {
       );
    }, 100);
 
-   // const rightArrowCurtainsActive =
-   //    curtains &&
-   //    indexActiveCard !== elements.length - visibleElements - 1 &&
-   //    elements.length >= cardsVisible.length; // если нет боковых
    const rightArrowActive =
       !curtains &&
-      cardsVisible.length > visibleElements + (isMobile ? -2 : 1) &&
-      indexActiveCard !== -1; //* вместо >  было !==
+      cardsVisible.length >
+         visibleElements +
+            (isMobile && cardVariant !== CardVariant.VERTICAl_SMALL_FONT
+               ? -1 //* число зависит от visibleElements и ориентации карточек
+               : 1) &&
+      indexActiveCard !== -1;
 
    const leftArrowActive = !curtains && indexActiveCard !== 0;
 

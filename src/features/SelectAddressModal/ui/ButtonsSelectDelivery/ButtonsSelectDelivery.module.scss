@@ -1,5 +1,8 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .buttonsContainer {
    margin-bottom: 20px;
+   gap: 15px;
 }
 
 .button {
@@ -14,4 +17,18 @@
 .buttonActive {
    background-color: var(--color-yellow);
    color: var(--color-text-button);
+}
+
+@media screen and (max-width: $mobile) {
+   .buttonsContainer {
+      gap: 12px;
+   }
+
+   .button {
+      width: 124px;
+      border-radius: 8px;
+      background-color: var(--color-background-button);
+      color: var(--color-input-edit);
+      font-size: var(--size-14);
+   }
 }

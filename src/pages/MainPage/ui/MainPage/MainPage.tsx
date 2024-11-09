@@ -11,11 +11,11 @@ import {
    RefType,
 } from '../MainPageProducts/ui/MainPageProducts';
 import { ActionCards } from '../ActionCards/ActionCards';
-import { getUserSettings } from '@/entities/User';
 import { NewProducts } from '../NewProducts/ui/NewProducts';
 import Woman from '@/shared/assets/images/woman.png';
 import Man from '@/shared/assets/images/man.png';
 import { DeliveryPay } from '../DeliveryPay/DeliveryPay';
+import { getLoadProducts } from '@/entities/User';
 
 interface MainPageProps {
    className?: string;
@@ -25,7 +25,7 @@ export const MainPage = memo((props: MainPageProps) => {
    const { className } = props;
    const childRef = useRef<RefType>(null);
    const scrollTriggerRef = useRef() as MutableRefObject<HTMLDivElement>;
-   const { viewLoadProducts } = useSelector(getUserSettings);
+   const loadProducts = useSelector(getLoadProducts);
 
    const onLoadNextPart = () => {
       childRef.current?.onLoadNextPart();
@@ -35,7 +35,7 @@ export const MainPage = memo((props: MainPageProps) => {
       <Page
          onScrollEnd={
             // выбираем вид подгрузки
-            viewLoadProducts === 'scroll' ? onLoadNextPart : undefined
+            loadProducts === 'scroll' ? onLoadNextPart : undefined
          }
          scrollTriggerRef={scrollTriggerRef}
          className={classNames(cls.MainPage, {}, [className])}

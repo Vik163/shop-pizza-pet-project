@@ -17,12 +17,19 @@
    padding: 20px;
 }
 
+.title {
+   font-size: var(--size-20);
+}
+
 .description {
    margin: 10px 0 20px;
    line-height: 20px;
+   font-size: var(--size-13);
 }
 
 .button {
    width: 159px;
    height: 45px;
 }
+
+@import './ActionItemAdapt.module.scss';

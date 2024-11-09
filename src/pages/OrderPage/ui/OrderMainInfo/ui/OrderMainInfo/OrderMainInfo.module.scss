@@ -4,6 +4,7 @@
 
 .title {
    margin-bottom: 30px;
+   font-size: var(--size-38);
 }
 
 .form {
@@ -11,6 +12,7 @@
 }
 
 .titlePromo {
+   font-size: var(--size-22);
    margin-bottom: 27px;
 }
 
@@ -73,3 +75,5 @@
    fill: var(--color-primary);
    stroke: var(--color-text-button);
 }
+
+@import './OrderMainInfoAdapt.module.scss';

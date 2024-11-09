@@ -14,6 +14,7 @@ import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { Input, InputVariant } from '@/shared/ui/Input';
 import cardIcon from '@/shared/assets/icons/card-pay.png';
 import { Icon } from '@/shared/ui/Icon';
+import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface OrderPayProps {
    className?: string;
@@ -22,6 +23,7 @@ interface OrderPayProps {
 export const OrderPay = memo((props: OrderPayProps) => {
    const { className } = props;
    const [valueRadio, setValueRadio] = useState('cash');
+   const { isMobile } = useResize();
 
    const onRadio = useCallback((value: string) => {
       setValueRadio(value);
@@ -76,19 +78,37 @@ export const OrderPay = memo((props: OrderPayProps) => {
             onClickCheckbox={onRadio}
             checked={valueRadio === 'cash'}
          />
-         <HStack gap={24}>
+         <HStack gap={24} className={cls.priceContainer}>
             <Input
                type='number'
                name='sum'
                widthInput={116}
                labelLeft={
-                  <Text
-                     fontSize={FontSize.SIZE_15}
-                     fontColor={FontColor.TEXT_INPUT_EDIT}
-                     fontWeight={FontWeight.TEXT_700}
-                  >
-                     С какой суммы подготовить сдачу?
-                  </Text>
+                  !isMobile ? (
+                     <Text
+                        fontSize={FontSize.SIZE_15}
+                        fontColor={FontColor.TEXT_INPUT_EDIT}
+                        fontWeight={FontWeight.TEXT_700}
+                     >
+                        С какой суммы подготовить сдачу?
+                     </Text>
+                  ) : (
+                     ''
+                  )
+               }
+               labelTop={
+                  isMobile ? (
+                     <Text
+                        fontSize={FontSize.SIZE_13}
+                        fontColor={FontColor.TEXT_INPUT_EDIT}
+                        fontWeight={FontWeight.TEXT_700}
+                        className={cls.labelTop}
+                     >
+                        С какой суммы подготовить сдачу?
+                     </Text>
+                  ) : (
+                     ''
+                  )
                }
                classNameInputWithLabel={cls.inputLabel}
                heightInput={46}

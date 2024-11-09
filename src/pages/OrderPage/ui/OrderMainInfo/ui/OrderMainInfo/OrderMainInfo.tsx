@@ -23,12 +23,15 @@ import { Input, InputVariant } from '@/shared/ui/Input';
 import { classNames } from '@/shared/lib/classNames/classNames';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { getUserSettings, saveUserSettings } from '@/entities/User';
+import { useResize } from '@/shared/lib/hooks/useResize';
+import { StructureOrder } from '../../../StructureOrder/StructureOrder';
 
 export const OrderMainInfo = memo(() => {
    const dispatch = useAppDispatch();
    const userSettings = useSelector(getUserSettings);
    const { addAdvertisement } = userSettings;
    const totalPrice = useSelector(getBasketTotalPrice);
+   const { isMobile } = useResize();
 
    const clickCheckbox = async () => {
       const newUserParametrs = {
@@ -47,7 +50,6 @@ export const OrderMainInfo = memo(() => {
    return (
       <VStack className={cls.main} align={FlexAlign.START}>
          <Text
-            fontSize={FontSize.SIZE_38}
             fontColor={FontColor.TEXT_YELLOW}
             fontWeight={FontWeight.TEXT_900}
             className={cls.title}
@@ -58,7 +60,6 @@ export const OrderMainInfo = memo(() => {
          <form onSubmit={submitOrder} className={cls.form}>
             <DeliveryInfo />
             <Text
-               fontSize={FontSize.SIZE_22}
                fontColor={FontColor.TEXT_YELLOW}
                fontWeight={FontWeight.TEXT_500}
                className={cls.titlePromo}
@@ -68,7 +69,7 @@ export const OrderMainInfo = memo(() => {
             </Text>
             <Input
                name='promo'
-               widthInput={353}
+               widthInput={isMobile ? 300 : 353}
                classNameButtons={cls.promoButton}
                className={classNames(cls.inputPromo, {}, [
                   cls.inputPromoPlaceholder,
@@ -96,13 +97,18 @@ export const OrderMainInfo = memo(() => {
                onClickCheckbox={clickCheckbox}
                checked={addAdvertisement}
             />
-            <HStack max justify={FlexJustify.BETWEEN}>
+            {isMobile && <StructureOrder />}
+            <HStack
+               max
+               justify={FlexJustify.BETWEEN}
+               className={cls.btnContainer}
+            >
                <Link to={getRouteBasket()} className={cls.link}>
                   <Icon className={cls.arrowBack} Svg={arrow} /> Назад в корзину
                </Link>
                <Button
-                  width={301}
-                  height={60}
+                  width={isMobile ? 224 : 301}
+                  height={isMobile ? 55 : 60}
                   variant={ButtonVariant.FILLED}
                   bgColor={ButtonBgColor.YELLOW}
                   className={cls.button}
@@ -110,7 +116,11 @@ export const OrderMainInfo = memo(() => {
                   fontColor={FontColor.TEXT_BUTTON}
                   fontWeight={FontWeight.TEXT_900}
                >
-                  Оформить заказ на {totalPrice} &#8381;
+                  {isMobile ? (
+                     <span>Оформить заказ</span>
+                  ) : (
+                     <span>Оформить заказ на {totalPrice} &#8381;</span>
+                  )}
                   <Icon className={cls.arrow} Svg={arrow} />
                </Button>
             </HStack>

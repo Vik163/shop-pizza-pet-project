@@ -16,7 +16,7 @@
    transform: rotate(270deg);
    transition: all 0.3s;
    border-radius: 10px;
-   z-index: 100;
+   z-index: var(--index-level-19);
 
    svg {
       width: 25px;

@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './AboutProjectPage.module.scss';
-import { FontSize, FontWeight, HeaderTagType, Text } from '@/shared/ui/Text';
+import { FontWeight, HeaderTagType, Text } from '@/shared/ui/Text';
 import { Page } from '@/widgets/Page';
 import { VStack } from '@/shared/ui/Stack';
 
@@ -34,7 +34,7 @@ const AboutProjectPage = memo((props: AboutProjectPageProps) => {
 
    return (
       <Page className={classNames(cls.AboutProject, {}, [className])}>
-         <Text title={HeaderTagType.H_1} fontSize={FontSize.SIZE_32}>
+         <Text title={HeaderTagType.H_1} className={cls.title}>
             О проекте
          </Text>
          <Text className={cls.description}>
@@ -46,17 +46,8 @@ const AboutProjectPage = memo((props: AboutProjectPageProps) => {
             Работа полностью не закончена. Считаю, остались мелочи, которые
             можно отложить.
          </Text>
-         <VStack
-            className={cls.technologies}
-            max
-            align={FlexAlign.START}
-            gap={30}
-         >
-            <Text
-               title={HeaderTagType.H_2}
-               className={cls.title}
-               fontSize={FontSize.SIZE_18}
-            >
+         <VStack className={cls.technologies} max align={FlexAlign.START}>
+            <Text title={HeaderTagType.H_2} className={cls.titleAbout}>
                Что и как применял.
             </Text>
 
@@ -70,7 +61,6 @@ const AboutProjectPage = memo((props: AboutProjectPageProps) => {
                   {item.skills ? (
                      <Button
                         className={cls.titleTechnology}
-                        fontSize={FontSize.SIZE_22}
                         onClick={() => openBlock(item.name)}
                      >
                         <Icon
@@ -86,7 +76,6 @@ const AboutProjectPage = memo((props: AboutProjectPageProps) => {
                      </Button>
                   ) : (
                      <Text
-                        fontSize={FontSize.SIZE_22}
                         fontWeight={FontWeight.TEXT_700}
                         className={cls.text}
                      >

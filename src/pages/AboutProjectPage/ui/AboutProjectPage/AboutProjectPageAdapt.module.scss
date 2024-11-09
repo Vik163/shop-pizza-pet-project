@@ -1,0 +1,42 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .AboutProject {
+      width: 320px;
+      padding: 30px 10px 50px;
+      border-bottom: 1px solid var(--color-primary);
+   }
+
+   .technologies {
+      gap: 15px;
+   }
+
+   .description {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: var(--size-15);
+   }
+
+   .title {
+      font-size: var(--size-26);
+   }
+
+   .titleAbout {
+      font-size: var(--size-20);
+   }
+
+   .titleTechnology {
+      margin-bottom: 10px;
+      font-size: var(--size-18);
+   }
+
+   .addIcon {
+      margin-right: 8px;
+   }
+
+   .text {
+      margin-left: 29px;
+      font-size: var(--size-18);
+      margin-bottom: 10px;
+   }
+}

@@ -1,3 +1,5 @@
+@import '../../../app/styles/variables/mixins.scss';
+
 .ContactsPage {
    padding: 38px 0 37px;
 }
@@ -11,13 +13,46 @@
 
 .phone {
    margin: 40px 0 20px;
+   font-size: var(--size-38);
 }
 
 .address {
    margin-bottom: 30px;
+   font-size: var(--size-26);
 }
 
 .time {
    font-size: var(--size-15);
    font-weight: var(--weight-500);
+}
+
+@media screen and (max-width: $mobile) {
+   .ContactsPage {
+      width: 320px;
+      padding: 12px 10px 40px;
+   }
+
+   .map {
+      width: 300px;
+      height: 322px;
+   }
+
+   .phone {
+      margin: 28px 0 10px;
+      font-size: var(--size-30);
+   }
+
+   .address {
+      margin-bottom: 20px;
+      font-size: var(--size-16);
+
+      &:last-of-type {
+         margin-bottom: 0;
+      }
+   }
+
+   .time {
+      line-height: 32px;
+      font-size: var(--size-12);
+   }
 }

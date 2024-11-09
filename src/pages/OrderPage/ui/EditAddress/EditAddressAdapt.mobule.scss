@@ -1,0 +1,23 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .EditAddress {
+      flex-direction: column;
+      height: 129px;
+   }
+
+   .title {
+      margin: 0 0 10px;
+      font-size: var(--size-15);
+   }
+
+   .addressContainer {
+      height: 100px;
+      width: 300px;
+      padding: 10px;
+   }
+
+   .address {
+      width: 300px;
+   }
+}

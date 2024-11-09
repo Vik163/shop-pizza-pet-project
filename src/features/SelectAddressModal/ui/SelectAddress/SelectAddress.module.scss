@@ -1,5 +1,6 @@
 .addressContainer {
    position: relative;
+   gap: 16px;
 }
 
 .address {
@@ -34,3 +35,5 @@
       }
    }
 }
+
+@import './SelectAddressAdapt.module.scss';

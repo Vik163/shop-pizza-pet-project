@@ -1,0 +1,29 @@
+@import '../../../../../app/styles/variables/mixins.scss';
+
+@media screen and (max-width: $mobile) {
+   .titleSkill {
+      padding: 0 0 0 10px;
+      font-size: var(--size-16);
+   }
+
+   .addIcon {
+      margin-right: 8px;
+   }
+
+   .text {
+      margin: 5px 0 5px 35px;
+      font-size: var(--size-13);
+   }
+
+   .link {
+      width: 25px;
+      height: 25px;
+      margin-left: 10px;
+   }
+
+   .iconGit {
+      width: 25px;
+      height: 25px;
+      fill: var(--color-primary);
+   }
+}
