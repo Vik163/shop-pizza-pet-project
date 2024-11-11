@@ -24,10 +24,12 @@ import { host } from '@/shared/const/host';
 import { yaClientId } from '@/shared/config/yandex/yandexConfig';
 import { fetchYandexId } from '../../../api/rtkApiYandex';
 import { useResize } from '@/shared/lib/hooks/useResize';
+import copyIcon from '@/shared/assets/icons/copy.svg';
 
 export const PhoneFormComponent = memo(() => {
    const dispatch = useAppDispatch();
    const [errorValidate, setErrorValidate] = useState('');
+   const [copyText, setCopyText] = useState('');
    const authPhoneNumber = useSelector(getPhoneNumber);
 
    const stateToken = uid(32);
@@ -36,6 +38,28 @@ export const PhoneFormComponent = memo(() => {
    const { isMobile } = useResize();
 
    // 1 значение инпута - убираем ненужные символы и отправляем в стейт ======
+   const onCopy = (copy: string) => {
+      if (copy === '123456') {
+         setCopyText(copy);
+         navigator.clipboard
+            .writeText(copy)
+            .then(() => {
+               console.log('Скопировано', copy);
+            })
+            .catch((error) => {
+               console.error(`Текст не скопирован ${error}`);
+            });
+      } else {
+         setCopyText(copy);
+
+         dispatch(
+            authPhoneActions.setPhoneNumber({
+               phoneNumber: copy,
+            }),
+         );
+      }
+   };
+
    const onChangeNumberPhone = useCallback(
       (phoneNumber?: string) => {
          if (phoneNumber)
@@ -118,6 +142,44 @@ export const PhoneFormComponent = memo(() => {
             onSubmit={onSubmit}
          >
             {isMobile && yaSign}
+            <Text className={cls.warning}>
+               Вход по телефону{' '}
+               <a
+                  href='https://firebase.google.com/'
+                  target='_blank'
+                  rel='noreferrer'
+               >
+                  Firebase
+               </a>{' '}
+               отменён в бесплатных проектах.
+               <br />
+               тестовый номер{' '}
+               <span
+                  className={classNames(
+                     cls.testNumber,
+                     {
+                        [cls.copyInactive]: copyText === '+7 (927) 222-33-44',
+                     },
+                     [],
+                  )}
+                  onClick={() => onCopy('+7 (927) 222-33-44')}
+               >
+                  +7(927)222-33-44
+                  <Icon Svg={copyIcon} className={cls.icon} />
+               </span>
+               <br /> код подтвержения{' '}
+               <span
+                  className={classNames(
+                     cls.testNumber,
+                     { [cls.copyInactive]: copyText === '123456' },
+                     [],
+                  )}
+                  onClick={() => onCopy('123456')}
+               >
+                  123456
+                  <Icon Svg={copyIcon} className={cls.icon} />
+               </span>
+            </Text>
 
             <HStack
                max
@@ -137,7 +199,7 @@ export const PhoneFormComponent = memo(() => {
                   heightInput={48}
                   variant={inputVariant}
                   onChange={onChangeNumberPhone}
-                  value='+7'
+                  value={copyText || '+7'}
                   fixedChangeValue={18}
                />
                {!isMobile && yaSign}

@@ -57,7 +57,7 @@ const PhoneForm = memo((props: PhoneFormProps) => {
 
    // Загрузка -----------------------------------------------------------
    const phoneFormWithLoading = isLoading ? (
-      <form className={cls.formByPhone}>
+      <div className={cls.formByPhone}>
          <Text
             className={cls.title}
             fontSize={FontSize.SIZE_32}
@@ -76,7 +76,7 @@ const PhoneForm = memo((props: PhoneFormProps) => {
             height={isMobile ? 45 : 65}
             width={isMobile ? 260 : 587}
          />
-      </form>
+      </div>
    ) : (
       <PhoneFormComponent />
    );

@@ -25,8 +25,6 @@ interface NavbarProps {
 
 export const Navbar = memo((props: NavbarProps) => {
    const { className, closeNavbarModal, openModal } = props;
-   // const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
-
    const inited = useSelector(getInited);
    const user = useSelector(getUserData) as UserData;
    const basketProducts = useSelector(getBasketProducts);
@@ -100,12 +98,6 @@ export const Navbar = memo((props: NavbarProps) => {
                {basketProducts?.length || 0}
             </span>
          </Button>
-         {/* <Suspense fallback={<Loader />}>
-            <AuthByPhone
-               closeAuthModal={closeAuthModal}
-               isOpenModal={isOpenModalAuth}
-            />
-         </Suspense> */}
       </HStack>
    );
 });

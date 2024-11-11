@@ -8,8 +8,7 @@ import React, {
 } from 'react';
 import { ResizeContext } from '@/shared/lib/context/ResizeContext';
 import { Devices, DevicesPosition, Position } from '@/shared/types/devices';
-
-const points = [600, 850, 1300];
+import { points } from '@/shared/const/pointsAdapt';
 
 interface ResizeProviderProps {
    children: ReactNode;

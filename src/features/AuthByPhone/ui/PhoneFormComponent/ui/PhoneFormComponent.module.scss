@@ -1,12 +1,44 @@
 .formByPhone {
    padding-top: 41px;
    width: 587px;
-   height: 200px;
+   height: 270px;
    display: flex;
    flex-direction: column;
    justify-content: space-between;
    align-items: start;
    position: relative;
+}
+
+.warning {
+   line-height: 24px;
+
+   a {
+      color: var(--color-input-active);
+   }
+}
+
+.testNumber {
+   color: var(--color-yellow);
+   cursor: pointer;
+   position: relative;
+   padding-right: 12px;
+
+   &.copyInactive {
+      color: var(--color-primary);
+      padding-right: 0;
+      .icon {
+         display: none;
+      }
+   }
+
+   .icon {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+   }
 }
 
 .phoneContainer {
