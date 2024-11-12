@@ -1,7 +1,4 @@
-$mobile: '600px';
-$pad: '850px';
-$note: '1300px';
-$miniDesk: '1450px';
+@import './global.scss';
 
 @mixin flex-center() {
    display: flex;

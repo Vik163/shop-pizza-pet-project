@@ -20,6 +20,7 @@ import { Skeleton } from '@/shared/ui/Sceleton/Skeleton';
 import { CodeInFormComponent } from '../CodeInFormComponent/ui/CodeInFormComponent';
 import { fetchSignupUser } from '@/entities/User';
 import { useResize } from '@/shared/lib/hooks/useResize';
+import { authPhoneActions } from '../../model/slice/authPhoneSlice';
 
 interface CodeInFormProps {
    className?: string;
@@ -42,6 +43,8 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
          const signupData = await dispatch(fetchSignupUser(user));
          if (signupData.payload) {
             onCloseModal();
+            dispatch(authPhoneActions.setIsLoading({ isLoading: false }));
+
             return signupData.payload;
          }
       },
@@ -50,7 +53,7 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
 
    // -----------------------------------------------------------------------------
    const codeFormWithLoading = isLoading ? (
-      <form className={cls.formByPhone}>
+      <div className={cls.formByPhone}>
          <Text
             className={cls.title}
             fontSize={FontSize.SIZE_32}
@@ -69,7 +72,7 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
             height={isMobile ? 45 : 65}
             width={isMobile ? 260 : 587}
          />
-      </form>
+      </div>
    ) : (
       <CodeInFormComponent
          forvardRef={forvardRef}

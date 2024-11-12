@@ -20,7 +20,7 @@ export const useMoveScroll = (props: MoveScrollProps) => {
    const { pathname, animationScroll, viewLoadProducts, scrollCard, devices } =
       props;
 
-   const positionTopProducts = devices === 'mobile' ? 320 : 600;
+   const positionTopProducts = devices === 'mobile' ? 345 : 600;
    const [scrollData, setScrollData] = useState({
       path: '',
       position: 0,

@@ -23,6 +23,7 @@ export const AuthByPhone = memo((props: AuthByPhoneProps) => {
 
    return (
       // если нет то модалка не встраивается
+
       <Modal
          onAnimate={onAnimateAuthModal}
          onClose={closeAuthModal}

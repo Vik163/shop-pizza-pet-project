@@ -13,12 +13,6 @@
       opacity: 1;
    }
 
-   &.centerOverlay {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-   }
-
    &.overlayActive {
       opacity: 1;
       transition: 0.2s;
