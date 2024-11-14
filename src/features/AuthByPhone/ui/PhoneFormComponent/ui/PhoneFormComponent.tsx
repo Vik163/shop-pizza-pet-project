@@ -103,24 +103,17 @@ export const PhoneFormComponent = memo(() => {
 
    // Отправляю лишний запрос для прокидывания токена и создания сессии ================
    // Переадресация через яндекс сессию не возвращает
+   // ссылку <a></a> не использовал. При клике переходил на другой сайт раньше вызова функции
    const onLoginYa = async () => {
-      await dispatch(fetchYandexId(stateToken));
-      // await axios.get(`${host}/yandex`, {
-      //    headers: { 'x-yandex-state': stateToken },
-      //    withCredentials: true,
-      // });
+      dispatch(fetchYandexId(stateToken));
+      window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${yaClientId}&state=${stateToken}&force_confirm=yes&redirect_uri=${host}/yandex`;
    };
-
    // -----------------------------------------------------------------------------
+
    const yaSign = yaClientId && (
-      <a
-         className={cls.yaButton}
-         aria-label='yandex'
-         href={`https://oauth.yandex.ru/authorize?response_type=code&client_id=${yaClientId}&state=${stateToken}&force_confirm=yes&redirect_uri=${host}/yandex`}
-         onClick={onLoginYa}
-      >
+      <Button className={cls.yaButton} aria-label='yandex' onClick={onLoginYa}>
          <Icon src={yandexID} width={73} height={30} />
-      </a>
+      </Button>
    );
 
    const inputVariant = isConfirmCode
