@@ -21,3 +21,9 @@ declare global {
       map: any;
    }
 }
+
+declare global {
+   interface Window {
+      __webpack_nonce__: any;
+   }
+}

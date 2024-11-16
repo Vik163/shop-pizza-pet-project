@@ -6,6 +6,9 @@ import CircularDependencyPlugin from 'circular-dependency-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import dotenv from 'dotenv';
 import { type BuildOptions } from './types/config';
+import { NonceInjector } from './plugins/nonceInjector';
+
+
 
 export function buildPlugins({
    paths,
@@ -21,6 +24,8 @@ export function buildPlugins({
       new HtmlWebpackPlugin({
          template: paths.html,
          favicon: paths.favicon,
+         apiMap: `https://api-maps.yandex.ru/v3/?apikey=${process.env.REACT_APP_YA_MAP_KEY}&lang=ru_RU`,
+         apiYaId: "https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js",
       }),
 
       // отображения отчетов о ходе выполнения во время компиляции
@@ -51,6 +56,8 @@ export function buildPlugins({
             mode: 'write-references',
          },
       }),
+      new NonceInjector("_NONCE_"),
+
    ];
 
    // CI (github actions) запускаются только при dev

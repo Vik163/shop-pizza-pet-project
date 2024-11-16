@@ -89,6 +89,7 @@
       "dayjs": "^1.11.10",
       "dotenv": "^16.3.1",
       "firebase": "^10.6.0",
+      "html-webpack-inject-plugin": "^5.3.1",
       "jwt-decode": "^4.0.0",
       "react": "^18.2.0",
       "react-dadata": "^2.23.1",

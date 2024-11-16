@@ -7,7 +7,7 @@
       "noImplicitAny": true,
       "module": "ESNext",
       // В какую спецификацию компилируем: для поддержки большинства браузеров
-      "target": "es5",
+      "target": "es2017",
       "jsx": "react-jsx",
       // Компилятор будет обрабатывать не только TS файлы, но и JS файлы
       "allowJs": true,
@@ -25,6 +25,7 @@
          "@/*": ["./src/*"], // 12_5 2min
          "ymaps3": ["./node_modules/@yandex/ymaps3-types"] // яндекс карты
       },
+
       // esModuleInterop позволяет работать с пакетами, которые используют
       // common js как с обычными пакета с помощью import (require() module.export) = common js
       // import Moment from 'moment';

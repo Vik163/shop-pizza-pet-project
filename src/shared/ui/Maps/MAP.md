@@ -3,7 +3,9 @@
 1. Использую [Яндекс карты](https://yandex.ru/dev/jsapi30/doc/ru/quickstart)
 2. Подключение
 
-   -  Загрузка через webpack (добавляю код в buildWebpackConfig)
+   -  Простое решение: по [документации](https://yandex.ru/dev/jsapi30/doc/ru/dg/concepts/integrations/reactify) (react)
+
+   -  (Замутил) Загрузка через webpack (добавляю код в buildWebpackConfig)
 
       ```javascript
        externalsType: 'script',
