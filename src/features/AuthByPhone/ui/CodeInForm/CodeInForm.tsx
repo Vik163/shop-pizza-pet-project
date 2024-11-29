@@ -2,6 +2,7 @@ import { MutableRefObject, memo, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { type User } from 'firebase/auth';
 
+import { useNavigate } from 'react-router-dom';
 import cls from './CodeInForm.module.scss';
 import {
    Text,
@@ -33,6 +34,7 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
    const { onEditPhone, onCloseModal, forvardRef } = props;
 
    const dispatch = useAppDispatch();
+   const navigate = useNavigate();
    const isLoading = useSelector(getIsLoading);
    const error = useSelector(getIsError);
    const { isMobile } = useResize();
@@ -44,6 +46,7 @@ export const CodeInForm = memo((props: CodeInFormProps) => {
          if (signupData.payload) {
             onCloseModal();
             dispatch(authPhoneActions.setIsLoading({ isLoading: false }));
+            navigate('/');
 
             return signupData.payload;
          }

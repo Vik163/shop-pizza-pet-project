@@ -1,11 +1,5 @@
 import React, { memo, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import {
-   Outlet,
-   useLocation,
-   useNavigate,
-   useSearchParams,
-} from 'react-router-dom';
+import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 
 import cls from './HomePage.module.scss';
 
@@ -14,15 +8,13 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import { Header } from '@/widgets/Header';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
-import { getInited, initAuthData, userAction } from '@/entities/User';
+import { initAuthData } from '@/entities/User';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
-import { fetchBasket } from '@/entities/Basket';
 import { Footer } from '@/widgets/Footer';
+import { fetchBasket } from '@/entities/Basket';
 
 export const HomePage = memo(() => {
    const dispatch = useAppDispatch();
-   const navigate = useNavigate();
-   const inited = useSelector(getInited);
    const { pathname } = useLocation();
    const basketPage = pathname === '/basket';
 
@@ -30,33 +22,24 @@ export const HomePage = memo(() => {
    // Yandex query ответ
    const initYaData = searchParams.get('user');
    const userYaData = initYaData && JSON.parse(initYaData);
+   if (userYaData && userYaData.userId)
+      localStorage.setItem(LOCALSTORAGE_USER_KEY, userYaData.userId);
+
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+   const errAuth = localStorage.getItem('error');
 
    useEffect(() => {
-      if (userId) dispatch(fetchBasket(userId));
-   }, [userId]);
-
-   useEffect(() => {
-      // Авторизация Яндекс
-      if (initYaData && !inited) {
-         // Запрос для получения токенов (из-за переадресации не получилось отправить с бека)
-         dispatch(initAuthData(userYaData.userId))
+      // Обновление сессии по пользователю
+      if (userId && !errAuth) {
+         dispatch(initAuthData(userId))
             .then((data) => {
-               if (data.payload) dispatch(userAction.setAuthData(userYaData));
-               navigate('/');
+               if (data.payload) dispatch(fetchBasket(userId));
             })
             .catch((err) => {
                console.log(err);
             });
       }
-
-      // Обновление сессии по пользователю
-      if (userId && !inited) {
-         dispatch(initAuthData(userId)).catch((err) => {
-            console.log(err);
-         });
-      }
-   }, [dispatch, initYaData, inited, navigate, userYaData]);
+   }, [dispatch, errAuth, userId]);
 
    return (
       <div className={classNames(cls.home, { [cls.basket]: basketPage }, [])}>

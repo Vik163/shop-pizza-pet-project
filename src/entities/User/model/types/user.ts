@@ -27,11 +27,6 @@ export interface UserData {
 
 export type UpdateUserData = { [key: string]: string | Birthday };
 
-export interface ValidationErrors {
-   errorMessage: string;
-   field_errors?: Record<string, string>;
-}
-
 export interface UserSchema {
    authData: UserData | null;
    _userUid?: string;

@@ -39,7 +39,7 @@ const initialReducers: ReducersList = {
    authPhone: authPhoneReducer,
 };
 
-const PhoneForm = memo((props: PhoneFormProps) => {
+export const PhoneForm = memo((props: PhoneFormProps) => {
    const { onCloseModal } = props;
    const dispatch = useAppDispatch();
    const captchaRef = useRef(null);
@@ -117,5 +117,3 @@ const PhoneForm = memo((props: PhoneFormProps) => {
       </DynamicReducersLoader>
    );
 });
-
-export default PhoneForm;

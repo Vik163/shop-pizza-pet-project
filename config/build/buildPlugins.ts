@@ -56,8 +56,8 @@ export function buildPlugins({
             mode: 'write-references',
          },
       }),
-      new NonceInjector("_NONCE_"),
 
+      new NonceInjector("_NONCE_"),
    ];
 
    // CI (github actions) запускаются только при dev

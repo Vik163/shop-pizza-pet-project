@@ -1,4 +1,4 @@
-import { memo, Suspense, useState } from 'react';
+import { memo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -26,7 +26,6 @@ import { useResize } from '@/shared/lib/hooks/useResize';
 import { Drawer } from '@/shared/ui/Drawer';
 import { ModalBasket } from '@/features/ModalBasket';
 import { getBasketProducts } from '@/entities/Basket';
-import { Loader } from '@/shared/ui/Loader';
 import { AuthByPhone } from '@/features/AuthByPhone';
 
 export const Header = memo(() => {
@@ -170,12 +169,10 @@ export const Header = memo(() => {
             isOpenModalBasket={isOpenModalBasket}
             closeBasket={closeBasket}
          />
-         <Suspense fallback={<Loader />}>
-            <AuthByPhone
-               closeAuthModal={closeAuthModal}
-               isOpenModal={isOpenModalAuth}
-            />
-         </Suspense>
+         <AuthByPhone
+            closeAuthModal={closeAuthModal}
+            isOpenModal={isOpenModalAuth}
+         />
       </header>
    );
 });

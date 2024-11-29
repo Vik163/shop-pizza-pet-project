@@ -75,7 +75,7 @@ export const ModalOrderProduct = forwardRef(
             onAnimate={handleAnimate}
             isOpen={isOpenModal}
             onClose={onClose}
-            zIndex={isMobile ? 17 : undefined}
+            zIndex={isMobile ? 17 : 5}
             className={classNames(
                cls.modal,
                { [cls.modalActive]: isClosing },

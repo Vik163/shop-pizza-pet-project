@@ -1,4 +1,4 @@
-import { memo, Suspense, useCallback, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
@@ -10,7 +10,6 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { EditAddress } from '../EditAddress/EditAddress';
 import { AuthByPhone } from '@/features/AuthByPhone';
 import { FontColor, FontSize, Text } from '@/shared/ui/Text';
-import { Loader } from '@/shared/ui/Loader';
 import { useResize } from '@/shared/lib/hooks/useResize';
 
 interface DeliveryInfoProps {
@@ -174,12 +173,10 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
             value={String(userPhone) || ''}
             disabled
          />
-         <Suspense fallback={<Loader />}>
-            <AuthByPhone
-               closeAuthModal={closeAuthModal}
-               isOpenModal={isOpenModalAuth}
-            />
-         </Suspense>
+         <AuthByPhone
+            closeAuthModal={closeAuthModal}
+            isOpenModal={isOpenModalAuth}
+         />
       </VStack>
    );
 });

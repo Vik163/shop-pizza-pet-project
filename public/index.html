@@ -3,6 +3,13 @@
    <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <!-- Нужно для стилей https://webpack.js.org/loaders/style-loader/#nonce -->
+      <!-- <meta property="csp-nonce" content="_NONCE_" />
+      <script type="text/javascript" nonce="_NONCE_">
+         window.__webpack_cspnonce__ = "_NONCE_";
+     </script> -->
+      <!-- -------------------------------------------------- -->
+
       <script nonce="_NONCE_" src="<%= htmlWebpackPlugin.options.apiYaId %>"></script>
       <script nonce="_NONCE_" src="<%= htmlWebpackPlugin.options.apiMap %>"></script> 
       <title>Доставка пиццы</title>

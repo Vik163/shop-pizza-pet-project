@@ -83,6 +83,7 @@ export const PersonalData = memo((props: PersonalDataProps) => {
 
    const logout = async (e: SyntheticEvent) => {
       e.preventDefault();
+
       deleteCookie('accessToken');
       dispatch(basketActions.setBasket({ basketProducts: [], totalPrice: 0 }));
 
@@ -91,13 +92,12 @@ export const PersonalData = memo((props: PersonalDataProps) => {
 
       if (signoutFirebase) {
          // выход из БД (возвращает булевое значение)
-         const data = await dispatch(userLogout());
+         await dispatch(userLogout());
+         console.log('i');
+         // удаление токенов
 
-         if (data.status === 'fulfilled') {
-            // удаление токенов
-            dispatch(userAction.logout());
-            navigate('/');
-         }
+         dispatch(userAction.logout());
+         navigate('/');
       }
    };
 

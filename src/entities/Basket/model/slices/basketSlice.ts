@@ -57,9 +57,12 @@ const basketSlice = createSlice({
                state.totalPrice = payload.totalPrice;
             },
          )
-         .addCase(fetchBasket.rejected, (state, action) => {
-            state.error = action.error.message;
-         })
+         .addCase(
+            fetchBasket.rejected,
+            (state, { payload }: PayloadAction<string | undefined>) => {
+               state.error = payload;
+            },
+         )
          .addCase(
             fetchDecreaseBasket.fulfilled,
             (state, { payload }: PayloadAction<BasketData>) => {

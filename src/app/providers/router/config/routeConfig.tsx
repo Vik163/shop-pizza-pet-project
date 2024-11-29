@@ -2,15 +2,14 @@ import { AboutProjectPage } from '@/pages/AboutProjectPage';
 import { ActionsPage } from '@/pages/ActionsPage';
 import { BasketPage } from '@/pages/BasketPage';
 import { ContactsPage } from '@/pages/ContactsPage';
+import { ErrorPage } from '@/pages/ErrorPage';
 import { MainPage } from '@/pages/MainPage';
-import { NotFoundPage } from '@/pages/NotFoundPage';
 import { OrderPage } from '@/pages/OrderPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 import {
    AppRoutes,
    getRouteActions,
    getRouteContacts,
-   getRouteNotFound,
    getRouteProfile,
    getRouteCombos,
    getRouteDrinks,
@@ -21,6 +20,7 @@ import {
    getRouteOrder,
    getRouteAbout,
    getRouteMain,
+   getRouteError,
 } from '@/shared/const/router';
 import { type AppRoutesProps } from '@/shared/types/router';
 
@@ -73,8 +73,9 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
       path: getRouteOrder(),
       element: <OrderPage />,
    },
-   [AppRoutes.NOT_FOUND]: {
-      path: getRouteNotFound(),
-      element: <NotFoundPage />,
+
+   [AppRoutes.ERROR]: {
+      path: getRouteError(),
+      element: <ErrorPage />,
    },
 };

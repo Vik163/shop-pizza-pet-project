@@ -71,7 +71,7 @@ export const userSlice = createSlice({
             state._inited = false;
             if (action.payload) {
                // Being that we passed in ValidationErrors to rejectType in `createAsyncThunk`, the payload will be available here.
-               state.error = action.payload.errorMessage;
+               state.error = action.payload;
             } else {
                state.error = action.error.message;
             }

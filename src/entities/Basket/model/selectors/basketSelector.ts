@@ -9,3 +9,4 @@ export const getBasketProducts = (state: StateSchema) =>
    state.basket.basketProducts || [];
 export const getBasketTotalPrice = (state: StateSchema) =>
    state.basket.totalPrice || 0;
+export const getErrorBasket = (state: StateSchema) => state.basket.error;

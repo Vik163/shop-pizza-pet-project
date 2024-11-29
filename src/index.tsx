@@ -1,19 +1,12 @@
+/* eslint-disable import/first */
 import { createRoot } from 'react-dom/client';
+// import './create-nonce'; // CSP nonce для стилей https://webpack.js.org/loaders/style-loader/#nonce
+import '@/app/styles/index.scss';
 
 import App from './app/App';
-import '@/app/styles/index.scss';
 import { StoreProvider } from './app/providers/StoreProvider';
 import { ThemeProvider } from './app/providers/ThemeProvider';
 import { ResizeProvider } from './app/providers/ResizeProvider';
-
-// // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// // @ts-ignore
-// // eslint-disable-next-line camelcase, no-undef
-// __webpack_nonce__ = window.__webpack_nonce__;
-// // eslint-disable-next-line no-undef
-// // @ts-ignore
-// // eslint-disable-next-line no-undef
-// console.log('__webpack_nonce__:', __webpack_nonce__);
 
 const container = document.getElementById('root');
 if (!container) {

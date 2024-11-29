@@ -3,9 +3,9 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './AuthByPhone.module.scss';
 import { Modal } from '@/shared/ui/Modal';
-import { PhoneFormAsync as PhoneForm } from '../../ui/PhoneForm/PhoneForm.async';
 import { modalDelay } from '@/shared/const/modal_delay';
 import { useResize } from '@/shared/lib/hooks/useResize';
+import { PhoneForm } from '../PhoneForm/PhoneForm';
 
 interface AuthByPhoneProps {
    closeAuthModal: () => void;

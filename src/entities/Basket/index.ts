@@ -12,6 +12,7 @@ export {
    getSizePizza,
    getBasketProducts,
    getBasketTotalPrice,
+   getErrorBasket,
 } from './model/selectors/basketSelector';
 
 export { fetchAddBasket } from './model/services/fetchAddBasket';

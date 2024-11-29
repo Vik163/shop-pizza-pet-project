@@ -17,7 +17,7 @@ export const fetchBasket = createAsyncThunk<
 
       return basket;
    } catch (err) {
-      console.log(err);
-      return rejectWithValue('Корзина не найдена');
+      const errData = err as Error;
+      return rejectWithValue(errData.message || 'Корзина не найдена');
    }
 });
