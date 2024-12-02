@@ -14,15 +14,18 @@
    .addInfo {
       right: 180px;
       top: 10px;
-      padding: 0 5px;
-      height: 16px;
+      padding: 5px 8px;
+      height: auto;
       font-size: 9px;
    }
 
    .image {
       margin: 0;
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      outline: 2px solid var(--block-bg-primary); // обводка внутри
+      outline-offset: -2px;
    }
 
    .containerInfo {
