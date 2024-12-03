@@ -1,9 +1,8 @@
 import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './ErrorPage.module.scss';
-import { FontColor, FontSize, Text } from '@/shared/ui/Text';
+import { FontColor, Text } from '@/shared/ui/Text';
 import { Button } from '@/shared/ui/Button';
 import { VStack } from '@/shared/ui/Stack';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
@@ -11,12 +10,7 @@ import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { basketActions } from '@/entities/Basket';
 import { firebaseApi, userAction, userLogout } from '@/entities/User';
 
-interface ErrorPageProps {
-   className?: string;
-}
-
-export const ErrorPage = memo((props: ErrorPageProps) => {
-   const { className } = props;
+export const ErrorPage = memo(() => {
    const dispatch = useAppDispatch();
    const navigate = useNavigate();
    const error = localStorage.getItem('error') || 'Страница не найдена';
@@ -50,20 +44,16 @@ export const ErrorPage = memo((props: ErrorPageProps) => {
    };
 
    return (
-      <VStack
-         className={classNames(cls.NotFoundPage, {}, [className])}
-         justify={FlexJustify.CENTER}
-         gap={50}
-      >
-         <Text fontSize={FontSize.SIZE_38} fontColor={FontColor.TEXT_ORANGE}>
+      <VStack className={cls.NotFoundPage} justify={FlexJustify.CENTER}>
+         <Text fontColor={FontColor.TEXT_ORANGE} className={cls.title}>
             {error}
          </Text>
 
-         <Button fontSize={FontSize.SIZE_17} onClick={goMainPage}>
+         <Button onClick={goMainPage} className={cls.btn}>
             🡰 &ensp; Перейти на главную страницу
          </Button>
          {error !== 'Ошибка авторизации' && (
-            <Button fontSize={FontSize.SIZE_17} onClick={goBack}>
+            <Button onClick={goBack} className={cls.btn}>
                🡰 &ensp; Вернуться назад
             </Button>
          )}

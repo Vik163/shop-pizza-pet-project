@@ -1,3 +1,31 @@
+@import '../../../../app/styles/variables/mixins.scss';
+
 .NotFoundPage {
-   height: calc(100vh - 450px - var(--header-height));
+   min-height: calc(100vh - 450px - var(--header-height));
+   gap: 50px;
+}
+
+.title {
+   font-size: var(--size-38);
+}
+
+.btn {
+   font-size: var(--size-17);
+}
+
+@media screen and (max-width: $mobile) {
+   .NotFoundPage {
+      padding: 80px 0;
+      min-height: calc(100vh - var(--header-height-mobile));
+      gap: 20px;
+   }
+
+   .title {
+      font-size: var(--size-24);
+      margin-bottom: 30px;
+   }
+
+   .btn {
+      font-size: var(--size-12);
+   }
 }
