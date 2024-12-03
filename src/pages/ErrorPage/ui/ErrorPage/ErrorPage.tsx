@@ -50,11 +50,13 @@ export const ErrorPage = memo(() => {
          </Text>
 
          <Button onClick={goMainPage} className={cls.btn}>
-            🡰 &ensp; Перейти на главную страницу
+            <span className={cls.arrow}>&#10141;</span> &ensp; Перейти на
+            главную страницу
          </Button>
          {error !== 'Ошибка авторизации' && (
             <Button onClick={goBack} className={cls.btn}>
-               🡰 &ensp; Вернуться назад
+               <span className={cls.arrow}>&#10141;</span> &ensp; Вернуться
+               назад
             </Button>
          )}
       </VStack>
