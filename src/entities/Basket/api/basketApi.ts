@@ -11,7 +11,7 @@ interface SetBasketDecreaseArg {
    productId: string;
 }
 
-const basketApi = rtkApiTokens.injectEndpoints({
+export const basketApi = rtkApiTokens.injectEndpoints({
    endpoints: (build) => ({
       getBasket: build.query<BasketData, string>({
          query: (userId) => ({
@@ -44,10 +44,9 @@ const basketApi = rtkApiTokens.injectEndpoints({
    }),
 });
 
-export const getBasket = basketApi.endpoints.getBasket.initiate;
-export const setBasketAddDataMutation =
-   basketApi.endpoints.setBasketAddData.initiate;
-export const setBasketDecreaseDataMutation =
-   basketApi.endpoints.setBasketDecreaseData.initiate;
-export const setBasketDeleteDataMutation =
-   basketApi.endpoints.setBasketDeleteData.initiate;
+export const {
+   useGetBasketQuery,
+   useSetBasketAddDataMutation,
+   useSetBasketDecreaseDataMutation,
+   useSetBasketDeleteDataMutation,
+} = basketApi;

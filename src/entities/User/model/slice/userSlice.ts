@@ -1,14 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { type UserSchema, type UserData } from '../types/user';
-import { type UserSettings } from '../types/userSettings';
-import { saveUserSettings } from '../services/saveUserSettings';
-import { initAuthData } from '../services/initAuthData';
 import {
    LOCAL_STORAGE_VIEW_LOAD_KEY,
    LOCALSTORAGE_USER_KEY,
 } from '@/shared/const/localstorage';
-import { updateUserData } from '../services/updateUserData';
 import { fetchSignupUser } from '../services/fetchSignupUser';
 import { ViewLoad } from '@/shared/const/view_load';
 
@@ -58,52 +54,7 @@ export const userSlice = createSlice({
          .addCase(fetchSignupUser.rejected, (state, { payload }) => {
             state.isLoading = false;
             state.error = payload as string;
-         })
-
-         .addCase(
-            initAuthData.fulfilled, // текущий пользователь (App)
-            (state, { payload }: PayloadAction<UserData>) => {
-               state.authData = payload;
-               state._inited = true;
-            },
-         )
-         .addCase(initAuthData.rejected, (state, action) => {
-            state._inited = false;
-            if (action.payload) {
-               // Being that we passed in ValidationErrors to rejectType in `createAsyncThunk`, the payload will be available here.
-               state.error = action.payload;
-            } else {
-               state.error = action.error.message;
-            }
-         })
-         .addCase(
-            saveUserSettings.fulfilled, // дополнительные параметры user (какой-то)
-            (state, { payload }: PayloadAction<UserSettings>) => {
-               if (state.authData) {
-                  state.authData.userSettings = payload;
-               }
-            },
-         )
-         .addCase(
-            saveUserSettings.rejected, // дополнительные параметры user (какой-то)
-            (state, { payload }) => {
-               state.error = payload;
-            },
-         )
-         .addCase(
-            updateUserData.fulfilled, // дополнительные параметры user (какой-то)
-            (state, { payload }: PayloadAction<UserData>) => {
-               if (state.authData) {
-                  state.authData = payload;
-               }
-            },
-         )
-         .addCase(
-            updateUserData.rejected, // дополнительные параметры user (какой-то)
-            (state, { payload }) => {
-               state.error = payload;
-            },
-         );
+         });
    },
 });
 

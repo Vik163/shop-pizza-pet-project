@@ -7,7 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 import { type TokenSchema, type UserSchema } from '@/entities/User';
 import { type AuthPhoneSchema } from '@/features/AuthByPhone';
-import { rtkApiTokens, type rtkApi } from '@/shared/api/rtkApi';
+import { rtkApiTokens } from '@/shared/api/rtkApi';
 import { type MainPageSchema } from '@/pages/MainPage';
 import { ActionsSchema } from '@/entities/Action';
 import { BasketSchema } from '@/entities/Basket';
@@ -24,7 +24,6 @@ export interface StateSchema {
    basket: BasketSchema;
    product: ProductSchema;
 
-   [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>;
    [rtkApiTokens.reducerPath]: ReturnType<typeof rtkApiTokens.reducer>;
 
    // Асинхронные редюсеры (необязательные)

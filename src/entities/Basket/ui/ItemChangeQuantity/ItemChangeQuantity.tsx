@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 
 import cls from './ItemChangeQuantity.module.scss';
 
@@ -11,9 +11,13 @@ import { Icon } from '@/shared/ui/Icon';
 import { Button } from '@/shared/ui/Button';
 import { BasketOneProduct } from '../../model/types/basket';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { fetchDelete } from '../../model/services/fetchDelete';
-import { fetchDecreaseBasket } from '../../model/services/fetchDecreaseBasket';
-import { fetchAddBasket } from '../../model/services/fetchAddBasket';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
+import {
+   useSetBasketAddDataMutation,
+   useSetBasketDecreaseDataMutation,
+   useSetBasketDeleteDataMutation,
+} from '../../api/basketApi';
+import { basketActions } from '../../model/slices/basketSlice';
 
 interface ItemChangeQuantityProps {
    card: BasketOneProduct;
@@ -22,15 +26,42 @@ interface ItemChangeQuantityProps {
 export const ItemChangeQuantity = memo((props: ItemChangeQuantityProps) => {
    const { card } = props;
    const dispatch = useAppDispatch();
+   const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+   const [setBasketAddData, resultAddData] = useSetBasketAddDataMutation();
+   const [setBasketDeleteData, resultDeleteData] =
+      useSetBasketDeleteDataMutation();
+   const [setBasketDecreaseData, resultDecreaseData] =
+      useSetBasketDecreaseDataMutation();
+
+   useEffect(() => {
+      if (resultAddData.data) {
+         dispatch(basketActions.setBasket(resultAddData.data));
+      }
+   }, [resultAddData.data]);
+
+   useEffect(() => {
+      if (resultDeleteData.data) {
+         dispatch(basketActions.setBasket(resultDeleteData.data));
+      }
+   }, [resultDeleteData.data]);
+
+   useEffect(() => {
+      if (resultDecreaseData.data) {
+         dispatch(basketActions.setBasket(resultDecreaseData.data));
+      }
+   }, [resultDecreaseData.data]);
 
    const decreaseProducts = () => {
-      if (card.id && card.quantity === 1) {
-         dispatch(fetchDelete(card.id));
-      } else if (card.id) dispatch(fetchDecreaseBasket(card.id));
+      const productId = card.id;
+      if (productId && userId)
+         if (card.quantity === 1) {
+            setBasketDeleteData({ userId, productId });
+         } else setBasketDecreaseData({ userId, productId });
    };
 
    const addProduct = useCallback(() => {
-      dispatch(fetchAddBasket(card));
+      const order = card;
+      if (userId) setBasketAddData({ userId, order });
    }, []);
 
    return (

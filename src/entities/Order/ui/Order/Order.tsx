@@ -1,14 +1,14 @@
-import { memo } from "react";
-import { classNames } from "@/shared/lib/classNames/classNames";
+import { memo } from 'react';
+import { classNames } from '@/shared/lib/classNames/classNames';
 
-import cls from "./Order.module.scss";
+import cls from './Order.module.scss';
 
 interface OrderProps {
-  className?: string;
+   className?: string;
 }
 
 export const Order = memo((props: OrderProps) => {
-  const { className } = props;
+   const { className } = props;
 
-  return <div className={classNames(cls.Order, {}, [className])}></div>;
+   return <div className={classNames(cls.Order, {}, [className])}></div>;
 });

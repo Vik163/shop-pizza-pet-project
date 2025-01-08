@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { memo, useEffect } from 'react';
 import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 
@@ -8,10 +9,10 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import { Header } from '@/widgets/Header';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
-import { initAuthData } from '@/entities/User';
+import { useGetUserDataByIdQuery, userAction } from '@/entities/User';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 import { Footer } from '@/widgets/Footer';
-import { fetchBasket } from '@/entities/Basket';
+import { basketActions, useGetBasketQuery } from '@/entities/Basket';
 
 export const HomePage = memo(() => {
    const dispatch = useAppDispatch();
@@ -27,19 +28,26 @@ export const HomePage = memo(() => {
 
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
    const errAuth = localStorage.getItem('error');
+   const { currentData } = useGetUserDataByIdQuery(userId!);
+   const { data } = useGetBasketQuery(userId!);
 
    useEffect(() => {
       // Обновление сессии по пользователю
       if (userId && !errAuth) {
-         dispatch(initAuthData(userId))
-            .then((data) => {
-               if (data.payload) dispatch(fetchBasket(userId));
-            })
-            .catch((err) => {
-               console.log(err);
-            });
+         if (currentData) {
+            dispatch(userAction.setAuthData(currentData));
+         }
       }
-   }, [dispatch, errAuth, userId]);
+   }, [currentData, dispatch, errAuth, userId]);
+
+   useEffect(() => {
+      // Обновление сессии по пользователю
+      if (userId && !errAuth) {
+         if (data) {
+            dispatch(basketActions.setBasket(data));
+         }
+      }
+   }, [data, dispatch, errAuth, userId]);
 
    return (
       <div className={classNames(cls.home, { [cls.basket]: basketPage }, [])}>

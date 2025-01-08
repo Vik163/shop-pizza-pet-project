@@ -1,4 +1,4 @@
-import { SyntheticEvent, memo, useCallback } from 'react';
+import { SyntheticEvent, memo, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { classNames } from '@/shared/lib/classNames/classNames';
@@ -26,11 +26,10 @@ import {
    getUserName,
    getUserPhone,
    getUserSettings,
-   saveUserSettings,
-   updateUserData,
    userAction,
    UpdateUserData,
-   userLogout,
+   useSetUpdateUserDataMutation,
+   useSetUserSettingsMutation,
 } from '@/entities/User';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { useCookie } from '@/shared/lib/hooks/useCookie';
@@ -38,6 +37,8 @@ import { FlexAlign } from '@/shared/ui/Stack/Flex';
 import { DateSelect } from '../DateSelect/DateSelect';
 import { basketActions } from '@/entities/Basket';
 import { useResize } from '@/shared/lib/hooks/useResize';
+import { $api } from '@/shared/api/axiosApi';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 
 interface PersonalDataProps {
    className?: string;
@@ -51,34 +52,47 @@ export const PersonalData = memo((props: PersonalDataProps) => {
    const userName = useSelector(getUserName);
    const userPhone = useSelector(getUserPhone);
    const userEmail = useSelector(getUserEmail);
-   const userSettings = useSelector(getUserSettings);
-   const { addAdvertisement } = userSettings;
+   const userSettingsData = useSelector(getUserSettings);
+   const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+   const [setUpdateUserData, result] = useSetUpdateUserDataMutation();
+   const [setUserSettings, resultSettings] = useSetUserSettingsMutation();
+   const { addAdvertisement } = userSettingsData;
    const { isMobile } = useResize();
    const widthInput = isMobile ? 300 : 350;
    const widthInputAndButton = isMobile ? 300 : 446;
+
+   useEffect(() => {
+      if (resultSettings.data) {
+         dispatch(userAction.setAuthData(resultSettings.data));
+      }
+   }, [dispatch, resultSettings.data]);
 
    const saveValue = useCallback(
       async (name: string, value: string | Birthday): Promise<boolean> => {
          const newData: UpdateUserData = {
             [name]: value,
          };
-         const data = await dispatch(updateUserData(newData));
-         if (data) {
+         if (!userId) {
+            return false;
+         }
+         setUpdateUserData({ userId, newData });
+         if (result.data) {
+            dispatch(userAction.setAuthData(result.data));
             return true;
          }
 
          return false;
       },
-      [dispatch],
+      [dispatch, result.data, setUpdateUserData, userId],
    );
 
    const clickCheckbox = async () => {
-      const newUserParametrs = {
-         ...userSettings,
+      const userSettings = {
+         ...userSettingsData,
          addAdvertisement: !addAdvertisement,
       };
-      dispatch(saveUserSettings(newUserParametrs));
-      // saveValue('userSettings', newUserParametrs);
+
+      if (userId) setUserSettings({ userId, userSettings });
    };
 
    const logout = async (e: SyntheticEvent) => {
@@ -92,8 +106,7 @@ export const PersonalData = memo((props: PersonalDataProps) => {
 
       if (signoutFirebase) {
          // выход из БД (возвращает булевое значение)
-         await dispatch(userLogout());
-         console.log('i');
+         await $api.get('/signout');
          // удаление токенов
 
          dispatch(userAction.logout());
@@ -164,6 +177,7 @@ export const PersonalData = memo((props: PersonalDataProps) => {
                widthInputAndEditButtonRight={widthInputAndButton}
                heightInput={48}
                value={userEmail || ''}
+               saveValue={saveValue}
                disabled
             />
             <Text

@@ -22,6 +22,7 @@ export class NonceInjector {
         "NonceInjector",
         (compilationHTML: Compilation, callback) => {
           const { headTags } = compilationHTML;
+
           headTags.forEach((tag) => {
             tag.attributes.nonce = this.NONCE_PLACEHOLDER;
           });

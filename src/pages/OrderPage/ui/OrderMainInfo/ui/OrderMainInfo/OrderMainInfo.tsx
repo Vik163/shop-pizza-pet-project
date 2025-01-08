@@ -1,4 +1,4 @@
-import { FormEvent, memo } from 'react';
+import { FormEvent, memo, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -22,29 +22,42 @@ import { getBasketTotalPrice } from '@/entities/Basket';
 import { Input, InputVariant } from '@/shared/ui/Input';
 import { classNames } from '@/shared/lib/classNames/classNames';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
-import { getUserSettings, saveUserSettings } from '@/entities/User';
+import {
+   getUserSettings,
+   userAction,
+   useSetUserSettingsMutation,
+} from '@/entities/User';
 import { useResize } from '@/shared/lib/hooks/useResize';
 import { StructureOrder } from '../../../StructureOrder/StructureOrder';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 
 export const OrderMainInfo = memo(() => {
    const dispatch = useAppDispatch();
-   const userSettings = useSelector(getUserSettings);
-   const { addAdvertisement } = userSettings;
+   const userSettingsData = useSelector(getUserSettings);
+   const { addAdvertisement } = userSettingsData;
    const totalPrice = useSelector(getBasketTotalPrice);
    const { isMobile } = useResize();
+   const [setUserSettings, resultSettings] = useSetUserSettingsMutation();
+   const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+
+   useEffect(() => {
+      if (resultSettings.data) {
+         dispatch(userAction.setAuthData(resultSettings.data));
+      }
+   }, [dispatch, resultSettings.data]);
 
    const clickCheckbox = async () => {
-      const newUserParametrs = {
-         ...userSettings,
+      const userSettings = {
+         ...userSettingsData,
          addAdvertisement: !addAdvertisement,
       };
-      dispatch(saveUserSettings(newUserParametrs));
-      // saveValue('userSettings', newUserParametrs);
+
+      if (userId) setUserSettings({ userId, userSettings });
    };
 
    const submitOrder = (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log('e', e);
+      console.log('submitOrder', e);
    };
 
    return (
@@ -125,32 +138,6 @@ export const OrderMainInfo = memo(() => {
                </Button>
             </HStack>
          </form>
-         {/* <Button
-       width={224}
-       height={55}
-       variant={ButtonVariant.FILLED}
-       bgColor={ButtonBgColor.YELLOW}
-       className={cls.button}
-       fontSize={FontSize.SIZE_15}
-       fontColor={FontColor.TEXT_BUTTON}
-       fontWeight={FontWeight.TEXT_900}
-       onClick={onOpenModal}
-    >
-       Оформить заказ
-       <Icon className={cls.arrow} Svg={arrow} />
-    </Button> */}
-         {/* {openModal && (
-               <Modal
-                  buttonCloseHeight={40}
-                  buttonCloseRight={30}
-                  buttonCloseTop={30}
-                  buttonCloseWidth={40}
-                  isOpen={openModal}
-                  onClose={closeModal}
-               >
-                  <SelectAddressModal />
-               </Modal>
-            )} */}
       </VStack>
    );
 });

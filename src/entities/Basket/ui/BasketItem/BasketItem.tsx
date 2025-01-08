@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { classNames } from '@/shared/lib/classNames/classNames';
 
 import cls from './BasketItem.module.scss';
@@ -17,9 +17,11 @@ import close from '@/shared/assets/icons/close.svg';
 
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { Button } from '@/shared/ui/Button';
-import { fetchDelete } from '../../model/services/fetchDelete';
 import { ItemChangeQuantity } from '../ItemChangeQuantity/ItemChangeQuantity';
 import { useResize } from '@/shared/lib/hooks/useResize';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
+import { useSetBasketDeleteDataMutation } from '../../api/basketApi';
+import { basketActions } from '../../model/slices/basketSlice';
 
 export enum BasketVariant {
    BASKET_MODAL = 'basket_modal',
@@ -36,9 +38,19 @@ export const BasketItem = memo((props: BasketItemProps) => {
    const { card, onModalProduct, variant = BasketVariant.BASKET_MODAL } = props;
    const dispatch = useAppDispatch();
    const { isMobile } = useResize();
+   const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+   const [setBasketDeleteData, resultDeleteData] =
+      useSetBasketDeleteDataMutation();
+
+   useEffect(() => {
+      if (resultDeleteData.data) {
+         dispatch(basketActions.setBasket(resultDeleteData.data));
+      }
+   }, [resultDeleteData.data]);
 
    const deleteProduct = () => {
-      if (card.id) dispatch(fetchDelete(card.id));
+      const productId = card.id;
+      if (productId && userId) setBasketDeleteData({ userId, productId });
    };
 
    const onModal = () => {

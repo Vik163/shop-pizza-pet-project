@@ -18,14 +18,18 @@ export function buildPlugins({
 }: BuildOptions): webpack.WebpackPluginInstance[] {
    const isProd = !isDev; // 13_17 улучшаем сборку
    dotenv.config();
+   const urlMap = `https://api-maps.yandex.ru/v3/?apikey=${process.env.REACT_APP_YA_MAP_KEY}&lang=ru_RU`;
 
    // упрощает создание HTML-файлов для обслуживания ваших пакетов webpack. Это особенно полезно для пакетов webpack, которые содержат хэш в имени файла
    const plugins = [
       new HtmlWebpackPlugin({
          template: paths.html,
          favicon: paths.favicon,
-         apiMap: `https://api-maps.yandex.ru/v3/?apikey=${process.env.REACT_APP_YA_MAP_KEY}&lang=ru_RU`,
-         apiYaId: "https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js",
+         // apiMap: `https://api-maps.yandex.ru/v3/?apikey=${process.env.REACT_APP_YA_MAP_KEY}&lang=ru_RU`,
+         // apiYaId: "https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js",
+         // eslint-disable-next-line no-useless-escape
+         scriptMap: `<script nonce="_NONCE_" src=\"${urlMap}\"></script>`,
+         scriptYaId: `<script nonce="_NONCE_" src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>`,
       }),
 
       // отображения отчетов о ходе выполнения во время компиляции

@@ -139,7 +139,7 @@ export const Input = memo((props: InputProps) => {
          setIsFocused(true);
          setIsDisable(false);
       }
-   }, [name, isEdit, disabled]);
+   }, [name, isEdit]);
    // ------------------------------------------------------
    useEffect(() => {
       if (isFocused) {
@@ -164,7 +164,7 @@ export const Input = memo((props: InputProps) => {
       }
 
       return () => {
-         document.body.addEventListener('click', onBlur);
+         document.body.removeEventListener('click', onBlur);
       };
    }, [isFocused]);
 

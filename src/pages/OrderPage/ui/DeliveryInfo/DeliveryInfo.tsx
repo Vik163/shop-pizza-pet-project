@@ -5,12 +5,18 @@ import { classNames } from '@/shared/lib/classNames/classNames';
 import cls from './DeliveryInfo.module.scss';
 import { VStack } from '@/shared/ui/Stack';
 import { Input, InputVariant } from '@/shared/ui/Input';
-import { getUserName, getUserPhone, updateUserData } from '@/entities/User';
+import {
+   getUserName,
+   getUserPhone,
+   userAction,
+   useSetUpdateUserDataMutation,
+} from '@/entities/User';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { EditAddress } from '../EditAddress/EditAddress';
 import { AuthByPhone } from '@/features/AuthByPhone';
 import { FontColor, FontSize, Text } from '@/shared/ui/Text';
 import { useResize } from '@/shared/lib/hooks/useResize';
+import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 
 interface DeliveryInfoProps {
    className?: string;
@@ -22,22 +28,28 @@ export const DeliveryInfo = memo((props: DeliveryInfoProps) => {
    const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
    const userName = useSelector(getUserName) as string;
    const userPhone = useSelector(getUserPhone);
+   const [setUpdateUserData, result] = useSetUpdateUserDataMutation();
    const { isMobile } = useResize();
    const widthInput = isMobile ? 300 : 539;
+   const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
 
    const saveValue = useCallback(
       async (name: string, value: string): Promise<boolean> => {
-         const newData = await dispatch(
-            updateUserData({
-               [name]: value,
-            }),
-         );
-         if (newData) {
+         if (!userId) {
+            return false;
+         }
+         const newData = {
+            [name]: value,
+         };
+         await setUpdateUserData({ userId, newData });
+         if (result.data) {
+            dispatch(userAction.setAuthData(result.data));
+
             return true;
          }
          return false;
       },
-      [dispatch],
+      [dispatch, result.data, setUpdateUserData, userId],
    );
 
    const onAuthModal = () => {

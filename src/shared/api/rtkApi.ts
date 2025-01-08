@@ -16,14 +16,7 @@ import { LOCALSTORAGE_USER_KEY } from '../const/localstorage';
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const { getCookie } = useCookie();
 
-// Добавить в store обе api  и типы в схему
-export const rtkApi = createApi({
-   reducerPath: 'api', // Для каждого api должно быть свое имя (по умолчанию 'api')
-   baseQuery: fetchBaseQuery({
-      baseUrl: __API__,
-   }),
-   endpoints: () => ({}),
-});
+// Добавить в store api  и типы в схему
 
 const checkToken = async () => {
    const token = getCookie('accessToken');

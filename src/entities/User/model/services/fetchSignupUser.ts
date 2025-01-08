@@ -2,18 +2,18 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { type User } from 'firebase/auth';
 
 import { ThunkConfig } from '@/app/providers/StoreProvider';
-import { fetchCsrfToken } from './fetchCsrfToken';
 import { UserData } from '../types/user';
-import { signUpUser } from '../../api/userApi';
+import { $api } from '@/shared/api/axiosApi';
 
 export const fetchSignupUser = createAsyncThunk<
    UserData,
    User,
    ThunkConfig<string>
 >('user/fetchSignupUser', async (user, thunkApi) => {
-   const { rejectWithValue, dispatch } = thunkApi;
+   const { rejectWithValue } = thunkApi;
    try {
-      const csrfToken = await dispatch(fetchCsrfToken()).unwrap();
+      const csrfToken = (await $api.get('/csrf')).data;
+      console.log('csrfToken:', csrfToken);
 
       if (!csrfToken) {
          return rejectWithValue('токен csrf не получен');
@@ -24,11 +24,14 @@ export const fetchSignupUser = createAsyncThunk<
          // role: 'CLIENT', //! ?
       };
 
-      const userData = await dispatch(
-         signUpUser({ user: data, csrf: csrfToken }),
-      ).unwrap();
+      const userData = await $api.post('/firebase', {
+         headers: { 'x-csrf-token': csrfToken },
+         body: {
+            user: data,
+         },
+      });
 
-      return userData;
+      return userData.data;
    } catch (e) {
       console.log(e);
       return rejectWithValue('Некоректная регистрация пользователя');

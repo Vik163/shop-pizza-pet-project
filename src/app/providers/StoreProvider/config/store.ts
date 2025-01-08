@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import { type StateSchema } from './StateSchema';
 import { csrfTokenReducer, userReducer } from '@/entities/User';
-import { rtkApi, rtkApiTokens } from '@/shared/api/rtkApi';
+import { rtkApiTokens } from '@/shared/api/rtkApi';
 import { createReducerManager } from './reducerManager';
 import { mainPageReducer } from '@/pages/MainPage';
 import { actionsReducer } from '@/entities/Action';
@@ -30,8 +30,7 @@ export function createReduxStore(
       csrfToken: csrfTokenReducer,
       actions: actionsReducer,
       product: productReducer,
-      [rtkApi.reducerPath]: rtkApi.reducer, // Добавить все api сюда и в middleware ниже
-      [rtkApiTokens.reducerPath]: rtkApiTokens.reducer,
+      [rtkApiTokens.reducerPath]: rtkApiTokens.reducer, // Добавить все api сюда и в middleware ниже
    };
 
    // Для удаления и добавления ассинхронный редьюсеров 5_1 14min
@@ -57,7 +56,6 @@ export function createReduxStore(
             //       extraArgument: extraArg,
             //    },
             // }
-            rtkApi.middleware,
             rtkApiTokens.middleware,
          ),
    });

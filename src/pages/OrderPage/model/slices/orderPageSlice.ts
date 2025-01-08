@@ -15,22 +15,6 @@ const orderPageSlice = createSlice({
       //    state.delivery = payload;
       // },
    },
-   extraReducers: (builder) => {
-      // builder
-      //    .addCase(fetchAdditionToOrder.pending, (state) => {
-      //       state.isLoading = true;
-      //    })
-      //    .addCase(
-      //       fetchAdditionToOrder.fulfilled,
-      //       (state, { payload }: PayloadAction<Product[]>) => {
-      //          state.isLoading = false;
-      //       },
-      //    )
-      //    .addCase(fetchAdditionToOrder.rejected, (state, action) => {
-      //       state.isLoading = false;
-      //       state.error = action.error.message;
-      //    });
-   },
 });
 
 export const { actions: orderPageActions } = orderPageSlice;

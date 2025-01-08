@@ -22,9 +22,9 @@ import { usePhoneValidator } from '@/shared/lib/hooks/usePhoneValidator';
 import { firebaseApi } from '@/entities/User';
 import { host } from '@/shared/const/host';
 import { yaClientId } from '@/shared/config/yandex/yandexConfig';
-import { fetchYandexId } from '../../../api/rtkApiYandex';
 import { useResize } from '@/shared/lib/hooks/useResize';
 import copyIcon from '@/shared/assets/icons/copy.svg';
+import { $api } from '@/shared/api/axiosApi';
 
 export const PhoneFormComponent = memo(() => {
    const dispatch = useAppDispatch();
@@ -105,7 +105,11 @@ export const PhoneFormComponent = memo(() => {
    // Переадресация через яндекс сессию не возвращает
    // ссылку <a></a> не использовал. При клике переходил на другой сайт раньше вызова функции
    const onLoginYa = async () => {
-      dispatch(fetchYandexId(stateToken));
+      $api.get(`${host}/yandex`, {
+         headers: { 'x-yandex-state': stateToken },
+      });
+      console.log('o');
+
       window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${yaClientId}&state=${stateToken}&force_confirm=yes&redirect_uri=${host}/yandex`;
    };
    // -----------------------------------------------------------------------------

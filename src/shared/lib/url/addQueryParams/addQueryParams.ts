@@ -1,11 +1,13 @@
 /* eslint-disable no-undef */
 // 9_3 34min
 
-export function getQueryParams(params: OptionalRecord<string, string>) {
+export function getQueryParams(
+   params: OptionalRecord<string, string | number>,
+) {
    const searchParams = new URLSearchParams(window.location.search);
    Object.entries(params).forEach(([name, value]) => {
       if (value !== undefined) {
-         searchParams.set(name, value);
+         searchParams.set(name, String(value));
       }
    });
    return `?${searchParams.toString()}`;
@@ -15,7 +17,8 @@ export function getQueryParams(params: OptionalRecord<string, string>) {
  * Функция добавления параметров строки запроса в URL
  * @param params
  */
-export function addQueryParams(params: OptionalRecord<string, string>) {
-   // 9_3 33min
+export function addQueryParams(
+   params: OptionalRecord<string, string | number>,
+) {
    window.history.pushState(null, '', getQueryParams(params));
 }

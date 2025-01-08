@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import cls from './ProductsSelection.module.scss';
@@ -18,16 +18,16 @@ import { useIngredients } from '../../lib/hooks/useIngredients';
 import {
    getDoughView,
    getSizePizza,
-   fetchAddBasket,
    BasketOneProduct,
+   useSetBasketAddDataMutation,
    basketActions,
 } from '@/entities/Basket';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { useCountPrice } from '../../lib/hooks/useCountPrice';
-import { SizePizza, ViewDough } from '@/shared/const/product_const';
 import { LOCALSTORAGE_USER_KEY } from '@/shared/const/localstorage';
 // eslint-disable-next-line ulbi-tv-plugin/layer-imports
 import { AuthByPhone } from '@/features/AuthByPhone';
+import { SizePizza, ViewDough } from '@/shared/const/product_const';
 
 interface ProductsSelectionProps {
    productInfo: Product;
@@ -48,6 +48,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
    const [isAuth, setIsAuth] = useState(false);
    const [isOpenModal, setIsOpenModal] = useState(false);
+   const [setBasketAddData, result] = useSetBasketAddDataMutation();
 
    const dataPizza =
       productInfo.type === 'pizzas'
@@ -57,6 +58,16 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
    const dataProduct = productInfo.ingredients
       ? `${dataPizza} ${ingredients.weight} г`
       : '';
+
+   useEffect(() => {
+      if (result.data) {
+         dispatch(basketActions.setBasket(result.data));
+         onCloseModal();
+         // сброс кнопок выбора
+         dispatch(basketActions.setSizePizza(SizePizza.SMALL));
+         dispatch(basketActions.setViewDough(ViewDough.TRADITIONAL));
+      }
+   }, [result.data]);
 
    const onSubmit = () => {
       if (userId) {
@@ -82,14 +93,7 @@ export const ProductsSelection = memo((props: ProductsSelectionProps) => {
             };
          }
 
-         dispatch(fetchAddBasket(order)).then((data) => {
-            if (data.payload) {
-               onCloseModal();
-               // сброс кнопок выбора
-               dispatch(basketActions.setSizePizza(SizePizza.SMALL));
-               dispatch(basketActions.setViewDough(ViewDough.TRADITIONAL));
-            }
-         });
+         setBasketAddData({ userId, order });
       } else {
          setIsAuth(false);
          setIsOpenModal(true);

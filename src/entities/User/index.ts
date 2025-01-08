@@ -19,13 +19,13 @@ export {
    getUserSettings,
    getLoadProducts,
 } from './model/selectors/userSettingsSelector';
-export { initAuthData } from './model/services/initAuthData';
-export { saveUserSettings } from './model/services/saveUserSettings';
-export { updateUserData } from './model/services/updateUserData';
 export { fetchSignupUser } from './model/services/fetchSignupUser';
 export { firebaseApi } from './api/firebaseApi';
-export { setCsrfToken } from './api/csrfApi';
-export { userLogout } from './api/userApi';
+export {
+   useGetUserDataByIdQuery,
+   useSetUpdateUserDataMutation,
+   useSetUserSettingsMutation,
+} from './api/userApi';
 export { csrfTokenReducer, csrfTokenActions } from './model/slice/tokenSlice';
 export { fetchCsrfToken } from './model/services/fetchCsrfToken';
 export { getTokenSelector } from './model/selectors/getTokenSelector';

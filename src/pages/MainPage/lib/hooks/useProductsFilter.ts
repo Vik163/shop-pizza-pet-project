@@ -6,11 +6,8 @@ import {
    getViewProducts,
    productActions,
 } from '@/entities/Product';
-import { useAppDispatch } from '../../../../shared/lib/hooks/useAppDispatch';
-// import { fetchMainList } from '../../model/services/fetchMainList/fetchMainList';
-// import { useDebounce } from './useDebounce/useDebounce';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
-// 16_6 18min
 export function useProductsFilters() {
    const viewProduct = useSelector(getViewProducts);
    const search = useSelector(getMainPageSearch);

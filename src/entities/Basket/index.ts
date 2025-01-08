@@ -15,6 +15,10 @@ export {
    getErrorBasket,
 } from './model/selectors/basketSelector';
 
-export { fetchAddBasket } from './model/services/fetchAddBasket';
-export { fetchBasket } from './model/services/fetchBasket';
 export { BasketItem, BasketVariant } from './ui/BasketItem/BasketItem';
+export {
+   useGetBasketQuery,
+   useSetBasketAddDataMutation,
+   useSetBasketDecreaseDataMutation,
+   useSetBasketDeleteDataMutation,
+} from './api/basketApi';

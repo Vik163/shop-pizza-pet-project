@@ -8,7 +8,8 @@ import { VStack } from '@/shared/ui/Stack';
 import { FlexJustify } from '@/shared/ui/Stack/Flex';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { basketActions } from '@/entities/Basket';
-import { firebaseApi, userAction, userLogout } from '@/entities/User';
+import { firebaseApi, userAction } from '@/entities/User';
+import { $api } from '@/shared/api/axiosApi';
 
 export const ErrorPage = memo(() => {
    const dispatch = useAppDispatch();
@@ -20,7 +21,7 @@ export const ErrorPage = memo(() => {
       dispatch(basketActions.setBasket({ basketProducts: [], totalPrice: 0 }));
 
       // выход из БД (возвращает булевое значение)
-      await dispatch(userLogout());
+      await $api.get('/signout');
 
       // выход из firebase
       await firebaseApi.signout();

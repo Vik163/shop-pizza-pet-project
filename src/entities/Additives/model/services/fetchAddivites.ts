@@ -1,17 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { IAdditives } from '../types/additives';
 import { type ThunkConfig } from '@/app/providers/StoreProvider';
-import { getAdditivesToProducts } from '../../api/additivesApi';
+import { $api } from '@/shared/api/axiosApi';
 
 export const fetchAdditives = createAsyncThunk<
    IAdditives[],
    void,
    ThunkConfig<string>
 >('orderProducts/fetchAdditives', async (_, thunkApi) => {
-   const { rejectWithValue, dispatch } = thunkApi;
+   const { rejectWithValue } = thunkApi;
 
    try {
-      const additives = await dispatch(getAdditivesToProducts()).unwrap();
+      const additives = (await $api.get('/products/additives')).data;
 
       if (!additives) rejectWithValue('Добавки не найдены');
 
