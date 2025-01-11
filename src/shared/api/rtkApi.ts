@@ -28,7 +28,7 @@ const checkToken = async () => {
 const openPageError = (error: string) => {
    localStorage.setItem('error', error);
 
-   window.location.href = '*';
+   document.location.href = '*'; // window.location.href работал не корректно
 };
 
 //* type ResponseHandler ===
@@ -68,13 +68,13 @@ const baseQueryWithError: BaseQueryFn<
    >;
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
    const isExpired = await checkToken();
+
    if (isExpired) {
       const refreshResult = await baseQuery(
          `/refresh/${userId}`,
          api,
          extraOptions,
       );
-
       if (refreshResult.data) {
          result = await baseQuery(args, api, extraOptions); // повторный запрос
          return result;
@@ -86,9 +86,9 @@ const baseQueryWithError: BaseQueryFn<
    result = await baseQuery(args, api, extraOptions); // повторный запрос
 
    // Ошибка запроса
-   if (result.error && result.error.status === 401) {
-      openPageError('Ошибка авторизации');
-   }
+   // if (result.error && result.error.status === 401) {
+   //    openPageError('Не авторизован');
+   // }
    return result;
 };
 

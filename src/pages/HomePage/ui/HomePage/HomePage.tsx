@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 
 import cls from './HomePage.module.scss';
@@ -28,26 +28,36 @@ export const HomePage = memo(() => {
 
    const userId = localStorage.getItem(LOCALSTORAGE_USER_KEY);
    const errAuth = localStorage.getItem('error');
-   const { currentData } = useGetUserDataByIdQuery(userId!);
-   const { data } = useGetBasketQuery(userId!);
+   const [skip, setSkip] = useState(Boolean(!userId));
+   const { currentData } = useGetUserDataByIdQuery(userId!, {
+      skip,
+   });
+   const { data } = useGetBasketQuery(userId!, {
+      skip,
+   });
 
    useEffect(() => {
       // Обновление сессии по пользователю
-      if (userId && !errAuth) {
-         if (currentData) {
-            dispatch(userAction.setAuthData(currentData));
-         }
+      if (userId) {
+         setSkip(false);
+      } else {
+         setSkip(true);
       }
-   }, [currentData, dispatch, errAuth, userId]);
+   }, [userId]);
 
    useEffect(() => {
       // Обновление сессии по пользователю
-      if (userId && !errAuth) {
-         if (data) {
-            dispatch(basketActions.setBasket(data));
-         }
+      if (currentData && !errAuth) {
+         dispatch(userAction.setAuthData(currentData));
       }
-   }, [data, dispatch, errAuth, userId]);
+   }, [currentData, dispatch, errAuth]);
+
+   useEffect(() => {
+      // Обновление сессии по пользователю
+      if (data && !errAuth) {
+         dispatch(basketActions.setBasket(data));
+      }
+   }, [data, dispatch, errAuth]);
 
    return (
       <div className={classNames(cls.home, { [cls.basket]: basketPage }, [])}>
