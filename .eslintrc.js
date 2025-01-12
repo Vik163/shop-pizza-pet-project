@@ -113,11 +113,7 @@ module.exports = {
          'error',
          {
             alias: '@',
-            testFilesPatterns: [
-               '**/*.test.*',
-               '**/*.story.*',
-               '**/StoreDecorator.tsx',
-            ], // 13_4 1min
+            testFilesPatterns: ['**/*.test.*'],
          },
       ],
       'linebreak-style': 'error', // LF
