@@ -108,7 +108,6 @@ export const PhoneFormComponent = memo(() => {
       $api.get(`${host}/yandex`, {
          headers: { 'x-yandex-state': stateToken },
       });
-      console.log('o');
 
       window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${yaClientId}&state=${stateToken}&force_confirm=yes&redirect_uri=${host}/yandex`;
    };

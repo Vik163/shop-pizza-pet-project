@@ -12,7 +12,7 @@ import {
    type StateSchemaKey,
 } from './StateSchema';
 
-// Для удаления и добавления ассинхронный редьюсеров 5_1
+// Для удаления и добавления ассинхронных редьюсеров 5_1
 export function createReducerManager(
    initialReducers: ReducersMapObject<StateSchema>,
 ): ReducerManager {

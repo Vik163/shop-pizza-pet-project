@@ -116,39 +116,3 @@ class FirebaseApi {
 }
 
 export const firebaseApi = new FirebaseApi();
-
-// function recaptchaVerifierVisible() {
-//    // [START auth_phone_recaptcha_verifier_visible]
-//    const appVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-//       size: 'normal',
-//       callback: (response: string) => {
-//          console.log(response);
-//          // reCAPTCHA solved, allow signInWithPhoneNumber.
-//          // ...
-//       },
-//       'expired-callback': () => {
-//          // Response expired. Ask user to solve reCAPTCHA again.
-//          // ...
-//       },
-//    });
-//    // [END auth_phone_recaptcha_verifier_visible]
-// }
-
-// function recaptchaVerifierSimple() {
-//    // [START auth_phone_recaptcha_verifier_simple]
-//    window.recaptchaVerifier = new RecaptchaVerifier(
-//       auth,
-//       'recaptcha-container',
-//    );
-//    // [END auth_phone_recaptcha_verifier_simple]
-// }
-
-// function recaptchaRender() {
-//    const recaptchaVerifier = window.recaptchaVerifier;
-
-//    // [START auth_phone_recaptcha_render]
-//    recaptchaVerifier.render().then((widgetId) => {
-//       window.recaptchaWidgetId = widgetId;
-//    });
-//    // [END auth_phone_recaptcha_render]
-// }
