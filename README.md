@@ -142,7 +142,7 @@ Feature-Sliced Design (FSD)
 
    -  стандартный набор: selector, slice (reducers, extraReducers), asyncThunk (для запросов axios)
    -  reselect - меняет массив названий добавок и их общую стоимость (добавляет, удаляет) `entities/Additives/model/selectors`
-   -  createEntityAdapter - использовал для карточек товара нормализацию (для ознакомления)
+   -  createEntityAdapter - использовал _нормализацию_ для карточек товара (ради ознакомления)
 
    -  <a id="rtk-query">rtk query</a> - для части запросов, в качестве ознакомления, применил rtk
       -  экземпляр `shared/api/rtkApi.ts`, в котором:
@@ -224,11 +224,29 @@ _react-router-dom: 6_
 
 #### <a id="ленивая-загрузка">Ленивая загрузка</a>
 
+-  компоненты - _lazy_
+-  reducers
+
+   -  в типах прописаны как необязательные,
+   -  создан файл `src\app\providers\StoreProvider\config\reducerManager.ts` с функцией _createReducerManager_, которая возвращает объект с методами управления редьюсерами (инициализация, добавление, удаление),
+   -  создал компонент обёртку _DynamicReducersLoader_ `src\shared\lib\components\DynamicReducersLoader.tsx`, для компонентов с ассинхронными редьсерами,
+   -  оборачиваю нужный компонент, куда пропсом передаю нужный редьюсер
+
+-  библиотеки - в этом проекте не нужно было, сделал для ознакомления на компоненте _Drower_ `src\shared\ui\Drawer\Drawer.tsx`
+   -  создал файл `src\shared\lib\components\AnimationProvider.tsx`
+   -  в нем создаю провайдер (не глобальный, для Drower), поэтому контекст там же
+   -  оборачиваю компонент провайдером. После загрузки библиотек возвращается компонент
+
 [_Вернуться к списку_](#goBack)
 
 ---
 
 #### <a id="анимация">Анимация</a>
+
+применил две библиотеки `@react-spring/web`, `@use-gesture/react`
+
+-  горизонтальный скроллинг - `src\features\HorizontalScrolling\ui\HorizontalScrolling.tsx`
+-  _Drower_ - `src\shared\ui\Drawer\Drawer.tsx`
 
 [_Вернуться к списку_](#goBack)
 
@@ -236,11 +254,21 @@ _react-router-dom: 6_
 
 #### <a id="скролл">Скролл</a>
 
+-  бесконечный скролл и сохранение положения скролла
+   -  использовал в компоненте `src\widgets\Page\Page.tsx` (обёртка для отображения страниц)
+   -  создал два хука:
+      -  `src\shared\lib\hooks\useInfiniteScroll.ts` - бесконечный скролл
+      -  `src\shared\lib\hooks\useMoveScroll.ts` - сохранение положения скролла
+
 [_Вернуться к списку_](#goBack)
 
 ---
 
 #### <a id="яндекс-карта">Яндекс карта</a>
+
+-  `config\build\buildPlugins.ts` - загрузка скрипта в _HtmlWebpackPlugin_
+-  `src\shared\lib\ymaps\ymaps.ts` - загрузка библиотеки
+-  `src\shared\ui\Maps\Maps.tsx` - переиспользуемый компонент
 
 [_Вернуться к списку_](#goBack)
 

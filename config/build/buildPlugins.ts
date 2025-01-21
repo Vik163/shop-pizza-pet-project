@@ -16,7 +16,7 @@ export function buildPlugins({
    apiUrl,
    project,
 }: BuildOptions): webpack.WebpackPluginInstance[] {
-   const isProd = !isDev; // 13_17 улучшаем сборку
+   const isProd = !isDev; 
    dotenv.config();
    const urlMap = `https://api-maps.yandex.ru/v3/?apikey=${process.env.REACT_APP_YA_MAP_KEY}&lang=ru_RU`;
 

@@ -62,7 +62,6 @@ export const NewProducts = memo(() => {
    }, [dispatch]);
 
    const onCard = useCallback((card: Product | undefined) => {
-      console.log('card:', card);
       if (card) childRef.current?.openModal(card);
    }, []);
 

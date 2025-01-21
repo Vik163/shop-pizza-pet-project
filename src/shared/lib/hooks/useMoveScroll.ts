@@ -35,20 +35,10 @@ export const useMoveScroll = (props: MoveScrollProps) => {
 
    //* === Отвечает за определение положения и направление скролла ===
    const [scrollPosition, setScrollPosition] = useState(0);
-   // let lastScrollTop = 0;
 
    // Направление скролла и его положение
    const onScroll = useTrottle(() => {
       setScrollPosition(window.pageYOffset);
-
-      // const st = window.pageYOffset;
-      // if (st < lastScrollTop) {
-      //    setScrollPosition({ position: window.pageYOffset, direction: 'up' });
-      // } else if (st > lastScrollTop) {
-      //    setScrollPosition({ position: window.pageYOffset, direction: 'down' });
-      // }
-
-      // lastScrollTop = st;
    }, 200);
 
    useEffect(() => {
