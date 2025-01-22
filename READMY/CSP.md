@@ -24,18 +24,26 @@
         set $CSP_FONT_SRC  "'self' fonts.gstatic.com";
         set $CSP_IMG_SRC "'self' data: localhost:8000 mc.yandex.ru";
         set $CSP_OBJECT_SRC "'none'"; // определяет разрешённые источники для плагинов, например Java и Flash, элементов <object>, <embed>, или <applet>
-        set $CSP_BASE_URI "'none'";
         set $CSP_FRAME_SRC "'self' https://www.google.com https://mc.yandex.ru";
-        set $CSP_MANIFEST_SRC "'none'";
-        set $CSP_MEDIA_SRC "'self'";
-        set $CSP_WORKER_SRC "'self' data:  blob:";
-        set $CSP_FRAME_ANCESTORS "'self'";
 
         location / {
             // установка Content-Security-Policy
-            add_header Content-Security-Policy "default-src 'none'; script-src $CSP_SCRIPT_SRC; style-src $CSP_STYLE_SRC; connect-src $CSP_CONNECT_SRC; font-src $CSP_FONT_SRC; img-src $CSP_IMG_SRC; object-src $CSP_OBJECT_SRC; base-uri $CSP_BASE_URI; frame-src $CSP_FRAME_SRC; manifest-src $CSP_MANIFEST_SRC; media-src $CSP_MEDIA_SRC; worker-src $CSP_WORKER_SRC; frame-ancestors $CSP_FRAME_ANCESTORS;";
+            add_header Content-Security-Policy `"default-src 'none';
+            script-src $CSP_SCRIPT_SRC;
+            style-src $CSP_STYLE_SRC;
+            connect-src $CSP_CONNECT_SRC;
+            font-src $CSP_FONT_SRC;
+            img-src $CSP_IMG_SRC;
+            object-src $CSP_OBJECT_SRC;
+            base-uri 'none';
+            frame-src $CSP_FRAME_SRC;
+            manifest-src 'none';
+            media-src 'self';
+            worker-src 'self' data:  blob:;
+            frame-ancestors 'self';"`;
+
             sub_filter_once off; // указывает следует ли искать каждую строку для замены один раз (off)
-            sub_filter "_NONCE_" $request_id; // задает строку для замены и строку замены (**CSP_NONCE** $request_id). Находит строку **CSP_NONCE** в статике, и заменяет ее на значение переменной $request_id
+            sub_filter "_NONCE_" $request_id; // задает строку для замены и строку замены (_NONCE_ $request_id). Находит строку _NONCE_ в статике, и заменяет ее на значение переменной $request_id
 
             root   html;
             index  index.html index.htm;
@@ -107,3 +115,7 @@
       ```
 
    -  добавить или изменить на `devtool: "cheap-module-source-map",` (убрал 'eval-cheap-module-source-map' из-за ошибки загрузки кода CSP)
+
+Проверить можно в ответе на запрос:
+
+<img src="images/nonce.png" alt="nonce"/>

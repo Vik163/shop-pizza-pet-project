@@ -24,6 +24,7 @@ export class NonceInjector {
           const { headTags } = compilationHTML;
 
           headTags.forEach((tag) => {
+            console.log('this.NONCE_PLACEHOLDER:', this.NONCE_PLACEHOLDER)
             tag.attributes.nonce = this.NONCE_PLACEHOLDER;
           });
           callback(null, compilationHTML);
