@@ -30,7 +30,7 @@ export function buildWebpackConfig(
     resolve: buildResolvers(options), // Чтобы не указывать расширение при импорте
     // Не срабатывают при production
     // devtool: isDev ? 'eval-cheap-module-source-map' : undefined, // позволяет видеть где в коде произошла ошибка
-    devtool: isDev ? "cheap-module-source-map" : undefined, // убрал eval из-за ошибки загрузки кода CSP
+    devtool: isDev ? "cheap-module-source-map" : false, // убрал eval из-за ошибки загрузки кода CSP
     devServer: isDev ? buildDevServer(options) : undefined,
   };
 }

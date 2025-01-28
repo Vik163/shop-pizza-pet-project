@@ -5,6 +5,7 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import dotenv from 'dotenv';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { type BuildOptions } from './types/config';
 import { NonceInjector } from './plugins/nonceInjector';
 
@@ -62,18 +63,19 @@ export function buildPlugins({
       }),
 
       new NonceInjector("_NONCE_"),
+      
    ];
 
    // CI (github actions) запускаются только при dev
    if (isDev) {
       plugins.push(new ReactRefreshWebpackPlugin());
       // В новой версии не нужен HotModuleReplacementPlugin если в devServere стоит hot: true,
-      // plugins.push(
-      //    new BundleAnalyzerPlugin({
-      //       // не открывается постоянно
-      //       openAnalyzer: true, // запуск по ссылке в терминале
-      //    }),
-      // ); // Анализирует размер бандла
+      plugins.push(
+         new BundleAnalyzerPlugin({
+            // не открывается постоянно
+            openAnalyzer: true, // запуск по ссылке в терминале
+         }),
+      ); // Анализирует размер бандла
    }
 
    if (isProd) {
